@@ -13,16 +13,15 @@ import usePagination from '../hooks/pagination'
 import {useParams} from 'react-router-dom';
 import SearchForm from '../components/SearchForm';
 import {onSelectHandler} from '../helpers/formHandlers';
-import { Item } from "../types"
 
 interface ServiceData {
     isLoading: boolean, 
     error?: any,
     foundCount: number,
-    items?: Item[]
+    items?: []
 }
 
-export default function Service() {
+const Service = () => {
     const params = useParams()
     const categoryId = params.categoryId ? parseInt(params.categoryId) : 0
     const [filters, setFilters] = useState({
@@ -43,7 +42,7 @@ export default function Service() {
     // ! continue working after creating backend API
     useEffect(() => {
         getImages()
-            .then((items: Item[]) => setData({isLoading: true, foundCount: items.length, items}))
+            .then((items: any) => setData({isLoading: true, foundCount: items.length, items}))
             .catch((error: any) => setData((prev) => ({...prev, isLoading: true, error})))
     }, [appliedFilters])
 
@@ -224,13 +223,13 @@ export default function Service() {
                     {
                         data.isLoading
                             ? data.items && data.items.length
-                                ? paginationItems.slice(0, 8).map((item: Item) => (
+                                ? paginationItems.slice(0, 8).map((item: any) => (
                                     <div className="col" key={item.id}>
                                         <AdvPreview
                                             // url={"adv-page"}
                                             imgURL={item.url}
                                             title={item.title}
-                                            sum={'400000'}
+                                            summ={'400000'}
                                             favorite={false}
                                         />
                                     </div>
@@ -255,13 +254,13 @@ export default function Service() {
                     </div>
                     {   data.items && 
                         data.items.length
-                            ? paginationItems.slice(8, paginationItems.length).map((item: Item) => (
+                            ? paginationItems.slice(8, paginationItems.length).map((item:any) => (
                                 <div className="col" key={item.id}>
                                     <AdvPreview
                                         // url={"adv-page"}
                                         imgURL={item.url}
                                         title={item.title}
-                                        sum={'400000'}
+                                        summ={'400000'}
                                         favorite={false}
                                     />
                                 </div>
@@ -434,3 +433,5 @@ export default function Service() {
         </main>
     );
 }
+
+export default Service

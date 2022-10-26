@@ -9,10 +9,10 @@ import Pagination from '../components/utils/Pagination'
 import Loader from '../components/utils/Loader';
 import {onSelectHandler} from '../helpers/formHandlers';
 
-export default function News() {
-    const [sorting, setSorting] = useState({byPublicationDate: 0})
-    const [showedCount, setShowedCount] = useState(24)
-    const [data, setData] = useState({
+const News = () => {
+    const [sorting, setSorting] = useState<any>({byPublicationDate: 0})
+    const [showedCount, setShowedCount] = useState<any>(24)
+    const [data, setData] = useState<any>({
         isLoading: false,
         error: null,
         items: []
@@ -33,7 +33,7 @@ export default function News() {
 
                 <section>
                     <div className="sort">
-                        <button onClick={handleClick}></button>
+                        {/*<button onClick={handleClick}/>*/}
                         <Pagination
                             nextLabel="❯"
                             onPageChange={handlePageClick}
@@ -65,7 +65,7 @@ export default function News() {
                                 {
                                     data.isLoading
                                         ? data.items.length
-                                            ? paginationItems.map(item => (
+                                            ? paginationItems.map((item:any) => (
                                                 <NewsMini
                                                     key={item.id}
                                                     className={'mb-3 mb-md-4'}
@@ -85,7 +85,7 @@ export default function News() {
                                     {
                                         data.isLoading
                                             ? data.items.length
-                                                ? paginationItems.map(item => (
+                                                ? paginationItems.map((item:any) => (
                                                     <div key={item.id}>
                                                         <NewsPreview
                                                             url={item.id}
@@ -118,7 +118,7 @@ export default function News() {
                             className="d-none d-lg-inline"> статьи и новости</span></div>
                         <button
                             className="btn_main btn_3"
-                            onClick={() => setShowedCount(prevShowedCount => prevShowedCount + 20)}
+                            onClick={() => setShowedCount((prevShowedCount:any) => prevShowedCount + 20)}
                         >
                             Смотреть еще 20
                         </button>
@@ -130,3 +130,5 @@ export default function News() {
         </main>
     );
 }
+
+export default News;

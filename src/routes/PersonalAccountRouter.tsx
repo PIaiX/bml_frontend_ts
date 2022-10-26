@@ -18,7 +18,7 @@ import AdvertisingSection from '../pages/profile/AdvertisingSection';
 import AccountMenu from '../pages/profile/AccountMenu';
 import {Route, useRoutes} from 'react-router-dom';
 
-const PersonalAccountRouter = ({isMobile}) => {
+const PersonalAccountRouter = ({isMobile}:any) => {
     const routes = [
         {
             path: '/',

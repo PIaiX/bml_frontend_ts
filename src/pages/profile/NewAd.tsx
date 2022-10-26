@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
 import {onImageHandler, onInputHandler, onSelectHandler} from "../../helpers/formHandlers";
 import {Link, NavLink} from 'react-router-dom';
 import {MdOutlineArrowBack} from "react-icons/md";
@@ -6,10 +6,10 @@ import {useImageViewer} from "../../hooks/imageViewer";
 import {useImagesViewer} from "../../hooks/imagesViewer";
 import CustomModal from "../../components/utils/CustomModal";
 
-export default function NewAd() {
+const NewAd = () => {
 
     const [category, setCategory] = useState('0');
-    const [data, setData] = useState({
+    const [data, setData] = useState<any>({
         category: 0,
         files: []
     })
@@ -17,10 +17,10 @@ export default function NewAd() {
     const photoInfo = useImageViewer(data?.file)
     const [dragActive, setDragActive] = useState(false)
     const inputRef = useRef(null)
-    const [files, setFiles] = useState([])
+    const [files, setFiles] = useState<any>([])
     const imageViewer = useImagesViewer(files)
 
-    const handleDrag = (e) => {
+    const handleDrag = (e:any) => {
         e.preventDefault()
         e.stopPropagation()
         if (e.type === "dragenter" || e.type === "dragover") {
@@ -32,12 +32,12 @@ export default function NewAd() {
 
     useEffect(() => {
         if (imageViewer.length !== 0) {
-            setData(prevState => ({...prevState, files: imageViewer}))
+            setData((prevState:any) => ({...prevState, files: imageViewer}))
             setFiles([])
         }
     }, [imageViewer])
 
-    const handleDrop = (e) => {
+    const handleDrop = (e:any) => {
         e.preventDefault();
         e.stopPropagation();
         setDragActive(false);
@@ -49,11 +49,11 @@ export default function NewAd() {
         }
     }
 
-    const deletePhoto = (name) => {
-        setData(prevData => ({...prevData, files: prevData?.files.filter((i) => (i?.info?.name !== name))}))
+    const deletePhoto = (name:any) => {
+        setData((prevData:any) => ({...prevData, files: prevData?.files.filter((i:any) => (i?.info?.name !== name))}))
     }
 
-    const validPhoto = (photo) => {
+    const validPhoto = (photo:any) => {
         if (photo?.height === undefined && photo?.width === undefined) {
             return <span>Фото не загружено</span>
         } else if (photo?.width === 600 && photo?.height === 400) {
@@ -125,7 +125,7 @@ export default function NewAd() {
                         </div>
                         <div className="col-sm-6 col-lg-8">
                             <textarea
-                                rows="4"
+                                rows={4}
                                 required={true}
                                 placeholder={
                                     (category === '0' || category === '1' || category === '2')
@@ -148,7 +148,7 @@ export default function NewAd() {
                                 </div>
                                 <div className="col-sm-6 col-lg-8">
                                     <textarea
-                                        rows="4"
+                                        rows={4}
                                         required={true}
                                         placeholder="Описание франшизы"
                                         name='descriptionFranchise'
@@ -161,7 +161,7 @@ export default function NewAd() {
                                 </div>
                                 <div className="col-sm-6 col-lg-8">
                                     <textarea
-                                        rows="4"
+                                        rows={4}
                                         placeholder="Преимущества франшизы"
                                         name='advantageFranchise'
                                         onChange={e => onInputHandler(e, setData)}
@@ -184,7 +184,7 @@ export default function NewAd() {
                         </div>
                         <div className="col-sm-6 col-lg-8">
                             <textarea
-                                rows="4"
+                                rows={4}
                                 required={(category !== '1')}
                                 placeholder={
                                     (category === '0' || category === '2' || category === '4')
@@ -206,7 +206,7 @@ export default function NewAd() {
                             </div>
                             <div className="col-sm-6 col-lg-8">
                                 <textarea
-                                    rows="4"
+                                    rows={4}
                                     required={(category === '4')}
                                     placeholder="Бизнес-план"
                                     name='business plan'
@@ -223,7 +223,7 @@ export default function NewAd() {
                             </div>
                             <div className="col-sm-6 col-lg-8">
                                 <textarea
-                                    rows="4"
+                                    rows={4}
                                     placeholder="О себе"
                                     name='aboutMe'
                                     onChange={e => onInputHandler(e, setData)}
@@ -285,9 +285,9 @@ export default function NewAd() {
                                                         type="file"
                                                         id="input-file-upload"
                                                         multiple
-                                                        onChange={(e) => {
+                                                        onChange={(e:any) => {
                                                             (e.target?.files?.length < 10)
-                                                                ? setFiles(prevState => ([...prevState, ...e.target.files]))
+                                                                ? setFiles((prevState:any) => ([...prevState, ...e.target.files]))
                                                                 : alert('Меньше 10 пж')
                                                         }
                                                         }
@@ -300,7 +300,7 @@ export default function NewAd() {
                                                     </label>
                                                 </div>
                                                 :
-                                                data?.files?.map((photos, index) => (
+                                                data?.files?.map((photos:any, index:any) => (
                                                     <div className='photos-window' key={index}>
                                                         <div className='photos-items'>
                                                             <img src={photos?.info?.data_url} className='for-photos-dragAndDrop'/>
@@ -330,9 +330,9 @@ export default function NewAd() {
                                                     <input
                                                         type="file"
                                                         multiple
-                                                        onChange={(e) => {
+                                                        onChange={(e:any) => {
                                                             (e.target?.files?.length < 10)
-                                                                ? setFiles(prevState => ([...prevState, ...e.target.files]))
+                                                                ? setFiles((prevState:any) => ([...prevState, ...e.target.files]))
                                                                 : alert('Меньше 10 пж')
                                                         }
                                                         }
@@ -734,7 +734,7 @@ export default function NewAd() {
                                             name="ad-type"
                                             type="radio"
                                             value='6000'
-                                            onChange={e => setData(prevState => ({...prevState, [e.target.name]: e.target.value}))}
+                                            onChange={e => setData((prevState:any) => ({...prevState, [e.target.name]: e.target.value}))}
                                         />
                                         <span className='ms-1 ms-sm-2 ms-xl-3'>Разместить</span>
                                     </label>
@@ -748,7 +748,7 @@ export default function NewAd() {
                                             name="ad-type"
                                             type="radio"
                                             value='11 000'
-                                            onChange={e => setData(prevState => ({...prevState, [e.target.name]: e.target.value}))}
+                                            onChange={e => setData((prevState:any) => ({...prevState, [e.target.name]: e.target.value}))}
                                         />
                                         <span className='ms-1 ms-sm-2 ms-xl-3'>Большое объявление (пример)</span>
                                     </label>
@@ -778,3 +778,5 @@ export default function NewAd() {
         </>
     );
 }
+
+export default NewAd

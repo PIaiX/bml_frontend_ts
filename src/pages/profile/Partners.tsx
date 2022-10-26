@@ -4,7 +4,7 @@ import { MdOutlineArrowBack } from "react-icons/md";
 import PartnerCard from './PartnerCard';
 import { BsPersonPlus } from "react-icons/bs";
 
-export default function Partners() {
+const Partners = () => {
     const [tab, setTab] = useState(0);
 
     return (
@@ -39,7 +39,7 @@ export default function Partners() {
                         <div className='f_13 fw_5 mt-3'>Находите бизнес-партнёров</div>
                         <div className='l-gray mt-3'>Здесь будут отображаться люди,<br/> которых Вы добавите в бизнес-партнёры</div>
                     </div>
-                    : <div class="mt-4 mt-xl-5">
+                    : <div className="mt-4 mt-xl-5">
                         <PartnerCard type={tab} imgURL={'/images/photo.png'} name={'Саша Петров'} agency={'Компания/деятельность'} />
                         <PartnerCard type={tab} imgURL={'/images/photo.png'} name={'Саша Петров'} agency={'Компания/деятельность'} />
                         <PartnerCard type={tab} imgURL={'/images/photo.png'} name={'Саша Петров'} agency={'Компания/деятельность'} />
@@ -51,3 +51,5 @@ export default function Partners() {
         </>
     );
 }
+
+export default Partners

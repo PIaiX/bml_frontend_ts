@@ -7,11 +7,11 @@ import usePagination from "../../hooks/pagination";
 import Pagination from "../../components/utils/Pagination";
 import Loader from "../../components/utils/Loader";
 
-export default function UserAds() {
+const UserAds = () => {
 
-    const [section, setSection] = useState('0');
-    const [tab, setTab] = useState('0');
-    const [data, setData] = useState({
+    const [section, setSection] = useState<any>('0');
+    const [tab, setTab] = useState<any>('0');
+    const [data, setData] = useState<any>({
         isLoading: false,
         error: null,
         items: []
@@ -70,7 +70,7 @@ export default function UserAds() {
                     {
                         data.isLoading
                             ? data.items.length
-                                ? paginationItems.map((i) => (
+                                ? paginationItems.map((i:any) => (
                                     <AdCard
                                         key={i.id}
                                         type={tab}
@@ -100,3 +100,5 @@ export default function UserAds() {
         </>
     );
 }
+
+export default UserAds

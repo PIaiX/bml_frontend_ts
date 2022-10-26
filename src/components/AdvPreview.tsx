@@ -6,7 +6,7 @@ import BtnFav from './utils/BtnFav';
 interface Props {
     imgURL: string,
     title: string,
-    sum: string,
+    summ: string,
     favorite?: boolean,
     url?: string
 
@@ -23,10 +23,10 @@ const AdvPreview: React.FC<Props> = (props) => {
                 <div className="layer2">
                     <div className="white d-flex align-items-center d-lg-block">
                         <div className="f_08 me-1 me-sm-3">Инвестиции от</div>
-                        <div>{props.sum} руб</div>
+                        <div>{props.summ} руб</div>
                     </div>
                     <div className='d-flex align-items-center'>
-                        <BtnFav checked={props.favorite || false} className={'f_20 mr-2 ms-2'}/>
+                        <BtnFav check={props.favorite || false} className={'f_20 mr-2 ms-2'}/>
                         <Link to='/adv-page' className="d-none d-lg-block btn_main btn_2 p-0 ms-2">
                             <MdDoubleArrow className='d-flex'/>
                         </Link>

@@ -5,10 +5,10 @@ import { User } from "../types"
 
 interface Props {
   authorizedUser: User;
-  onSubmit: () => (data: any) => void;
+  onSubmit: any
 }
 
-const EditProfileForm: React.FC<Props> = ({ authorizedUser, onSubmit }) => {
+const EditProfileForm: React.FC<Props> = ({ authorizedUser, onSubmit}) => {
   const {
     register,
     formState: { errors },

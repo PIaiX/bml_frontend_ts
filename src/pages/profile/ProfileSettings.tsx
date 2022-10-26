@@ -7,24 +7,24 @@ import {useSelector} from 'react-redux';
 import EditProfileForm from '../../components/EditProfileForm';
 import EditPasswordForm from '../../components/EditPasswordForm';
 
-export default function ProfileSettings() {
-    const authorizedUser = useSelector(state => state.authorizedUser)
-    const [personalData, setPersonalData] = useState({})
-    const [passwordData, setPasswordData] = useState({})
-    const [avatar, setAvatar] = useState(null)
+const ProfileSettings = () => {
+    const authorizedUser = useSelector((state:any) => state.authorizedUser)
+    const [personalData, setPersonalData] = useState<any>({})
+    const [passwordData, setPasswordData] = useState<any>({})
+    const [avatar, setAvatar] = useState<any>(null)
     const photo = useImageViewer(avatar)
 
-    const checkValidatePhoto = (photo, avatar) => {
+    const checkValidatePhoto = (photo:any, avatar:any) => {
         if (photo) {
             (photo.width >= 300 && photo.height >= 300)
-                ? setPersonalData(prevPersonalData => ({...prevPersonalData, avatar}))
-                : setPersonalData(prevPersonalData => ({...prevPersonalData, 'avatar': null}))
+                ? setPersonalData((prevPersonalData:any) => ({...prevPersonalData, avatar}))
+                : setPersonalData((prevPersonalData:any) => ({...prevPersonalData, 'avatar': null}))
         }
     }
 
-    const onSubmit = (setFunction) => {
-        return (data) => {
-            setFunction(prevData => ({...prevData, ...data}))
+    const onSubmit = (setFunction:any) => {
+        return (data:any) => {
+            setFunction((prevData:any) => ({...prevData, ...data}))
         }
     }
 
@@ -79,3 +79,5 @@ export default function ProfileSettings() {
         </div>
     );
 }
+
+export default ProfileSettings

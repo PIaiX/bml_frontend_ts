@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { MdOutlineArrowBack } from "react-icons/md";
 import CartItem from './CartItem';
 
-export default function ShoppingCart() {
+const ShoppingCart = () => {
     return (
         <>
             <Link to="/account" className='color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4'><MdOutlineArrowBack /> <span className='ms-2'>Назад</span></Link>
@@ -15,7 +15,7 @@ export default function ShoppingCart() {
             </div>
             <div className='row row-cols-sm-2 gy-2 gx-sm-4 gx-xl-5 gy-sm-4 mt-1'>
                 <div>
-                    <div class="acc-box p-3 p-md-4">
+                    <div className="acc-box p-3 p-md-4">
                         <div className='d-sm-flex align-items-center justify-content-between'>
                             <div>Рекламный баннер</div>
                             <div className='text-sm-end color-1 mt-2 mt-sm-0 ms-sm-4'>Стоимость: <span className='fw_9'>12314125&nbsp;₽</span></div>
@@ -24,7 +24,7 @@ export default function ShoppingCart() {
                     </div>
                 </div>
                 <div>
-                    <div class="acc-box p-3 p-md-4">
+                    <div className="acc-box p-3 p-md-4">
                         <div className='d-sm-flex align-items-center justify-content-between'>
                             <div>Рекламный баннер</div>
                             <div className='text-sm-end color-1 mt-2 mt-sm-0 ms-sm-4'>Стоимость: <span className='fw_9'>12314125&nbsp;₽</span></div>
@@ -42,7 +42,7 @@ export default function ShoppingCart() {
             <h4 className='mt-5'>Добавить баннер:</h4>
             <div className='row row-cols-sm-2 gy-2 gx-sm-4 gx-xl-5 gy-sm-4'>
                 <div>
-                    <div class="acc-box p-3 p-md-4">
+                    <div className="acc-box p-3 p-md-4">
                         <div className='d-sm-flex align-items-center justify-content-between'>
                             <div>Рекламный баннер</div>
                             <div className='text-sm-end color-1 mt-2 mt-sm-0 ms-sm-4'>Стоимость: <span className='fw_9'>12314125&nbsp;₽</span></div>
@@ -51,7 +51,7 @@ export default function ShoppingCart() {
                     </div>
                 </div>
                 <div>
-                    <div class="acc-box p-3 p-md-4">
+                    <div className="acc-box p-3 p-md-4">
                         <div className='d-sm-flex align-items-center justify-content-between'>
                             <div>Рекламный баннер</div>
                             <div className='text-sm-end color-1 mt-2 mt-sm-0 ms-sm-4'>Стоимость: <span className='fw_9'>12314125&nbsp;₽</span></div>
@@ -63,3 +63,5 @@ export default function ShoppingCart() {
         </>
     );
 }
+
+export default ShoppingCart

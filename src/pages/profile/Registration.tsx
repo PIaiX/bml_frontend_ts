@@ -4,8 +4,8 @@ import { onInputHandler } from "../../helpers/formHandlers";
 import { onSelectHandler } from "../../helpers/formHandlers";
 import { onCheckboxHandler } from "../../helpers/formHandlers";
 
-export default function Registration() {
-  const [profileType, setProfileType] = useState(0);
+const Registration = () => {
+  const [profileType, setProfileType] = useState<any>(0);
 
   const [data, setData] = useState({});
 
@@ -163,3 +163,5 @@ export default function Registration() {
     </main>
   );
 }
+
+export default Registration

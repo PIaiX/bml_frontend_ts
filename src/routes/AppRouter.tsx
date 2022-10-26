@@ -37,7 +37,7 @@ export const routeList = [
 ];
 
 export default function AppRouter() {
-  const Wrapper = ({ children }) => {
+  const Wrapper = ({ children }:any) => {
     const {pathname} = useLocation();
     useLayoutEffect(() => document.documentElement.scrollTo(0, 0), [pathname])
     return children

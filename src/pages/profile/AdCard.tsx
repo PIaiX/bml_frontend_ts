@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function AdCard(props) {
+const AdCard = (props:any) => {
     return (
         <div className={"ad-preview "+props.className}>
             <div className="d-flex flex-column flex-sm-row align-items-stretch flex-1">
@@ -39,3 +39,5 @@ export default function AdCard(props) {
         </div>
     );
 }
+
+export default AdCard

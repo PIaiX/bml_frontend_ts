@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-export default function AdvPrice(props) {
+const AdvPrice = (props:any) => {
 
     const getSelectedBannerPath = () => {
         if(props.selected && props.bigBanner && props.bigPicture){
@@ -35,3 +35,5 @@ export default function AdvPrice(props) {
         </div>
     );
 }
+
+export default AdvPrice;

@@ -3,9 +3,9 @@ import Breadcrumbs from '../components/utils/Breadcrumbs';
 import Partners from '../components/Partners';
 import {useLocation} from "react-router-dom";
 
-export default function Contacts() {
+const Contacts = () => {
 
-    const loc = useLocation()
+    const loc: any = useLocation()
 
     useEffect(() => {
         loc?.state?.fromHeader && window.scroll(0, 550)
@@ -36,7 +36,7 @@ export default function Contacts() {
                 <label htmlFor="email" className="mb-1">Ваша почта</label>
                 <input type="email" id="email" placeholder="почта" className="mb-3"/>
                 <label htmlFor="question" className="mb-1">Ваш вопрос</label>
-                <textarea id="question" rows="3" placeholder="Ваш вопрос" className="mb-3"></textarea>
+                <textarea id="question" rows={3} placeholder="Ваш вопрос" className="mb-3"/>
                 <label className="mt-2 mb-2">
                     <input type="checkbox" id="yes-register" required={true}/>
                     <span className='f_08 ms-2'>Я соглашаюсь с правилами сайта и даю согласие на <a href="/politic.php" target="_blank" className="bb_1">обработку персональных данных</a>.</span>
@@ -49,3 +49,5 @@ export default function Contacts() {
     </main>
     );
 }
+
+export default Contacts

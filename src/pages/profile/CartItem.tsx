@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-function CartItem(props) {
+const CartItem = (props:any) => {
     const [variant, setVariant] = useState(props.variant);
 
     return (

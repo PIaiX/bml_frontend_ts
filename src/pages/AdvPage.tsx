@@ -14,7 +14,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 
-export default function AdvPage() {
+const AdvPage = () => {
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
@@ -197,7 +197,7 @@ export default function AdvPage() {
 
                             <section className="anchor_block mb-4" id="anchor_6">
                                 <h4 className="fw_7">Фотогалерея</h4>
-                                <PhotoProvider maskOpacity={'.75'}>
+                                <PhotoProvider maskOpacity={0.75}>
                                     <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
                                         <div>
                                             <PhotoView src="/images/photogallery/1.jpg">
@@ -325,3 +325,5 @@ export default function AdvPage() {
         </main>
     );
 }
+
+export default AdvPage;

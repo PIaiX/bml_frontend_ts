@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import {MdOutlineArrowBack} from "react-icons/md";
 import AdvPrice from './AdvPrice';
@@ -239,19 +239,19 @@ const banners = [
     }
 ]
 
-export default function Premium() {
+const Premium: FC = () => {
 
-    const loc = useLocation()
-    const [data, setData] = useState({littleBanner: null, dateLifeAd: '1', sum: 5000})
+    const loc:any = useLocation()
+    const [data, setData] = useState<any>({littleBanner: null, dateLifeAd: '1', sum: 5000})
     const lookBigPicture = useImageViewer(data?.bigBanner)
     const lookLittleBanner = useImageViewer(data?.littleBanner)
     const [idPost, setIdPost] = useState()
 
     useEffect(() => {
-        setData(prevState => ({...prevState, ...loc?.state?.data}))
+        setData((prevState:any) => ({...prevState, ...loc?.state?.data}))
     }, [loc])
 
-    const validLittlePhoto = (little) => {
+    const validLittlePhoto:any = (little:any) => {
         if (little?.width === undefined && little?.height === undefined) {
             return <span>Фото не загружено</span>
         } else if (little?.width === 250 && little?.height === 160) {
@@ -261,7 +261,7 @@ export default function Premium() {
         } else return false
     }
 
-    const validBigPhoto = (big) => {
+    const validBigPhoto:any = (big:any) => {
         if (big?.width === undefined && big?.height === undefined) {
             return <span>Фото не загружено</span>
         } else if (big?.width === 1200 && big?.height === 280) {
@@ -271,11 +271,11 @@ export default function Premium() {
         } else return false
     }
 
-    const currentId = (id) => {
+    const currentId = (id:any) => {
         setIdPost(prevState => prevState !== id && id)
     }
 
-    const filterType = (statusPost, id) => {
+    const filterType = (statusPost:any, id:any) => {
         return !(statusPost === 'blocked' || statusPost === 'zanato') && idPost === id
     }
 
@@ -304,7 +304,7 @@ export default function Premium() {
                             key={i.id}
                             onClick={() => {
                                 currentId(i.id)
-                                setData(prevState => ({...prevState, 'placeInSite': prevState === i.id ? '' : i.id}))
+                                setData((prevState:any) => ({...prevState, 'placeInSite': prevState === i.id ? '' : i.id}))
                             }}
                         >
                             <AdvPrice
@@ -489,7 +489,7 @@ export default function Premium() {
                             defaultValue={1}
                             name='dateLifeAd'
                             onChange={e =>
-                                setData(prevState => (
+                                setData((prevState:any) => (
                                     {...prevState,
                                         dateLifeAd: e.target.value,
                                         sum: (e.target.value === '1') && 5000 || (e.target.value === '2') && 7000,
@@ -524,3 +524,5 @@ export default function Premium() {
         </>
     );
 }
+
+export default Premium

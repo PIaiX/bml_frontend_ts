@@ -9,11 +9,10 @@ import {
     onRadioHandler,
     onSelectHandler
 } from "../../helpers/formHandlers";
-import {logDOM} from "@testing-library/react";
 
-export default function AdvertisingSection() {
+const AdvertisingSection = () => {
 
-    const [data, setData] = useState(
+    const [data, setData] = useState<any>(
         {
             lifeAd: 1,
             sum: 6000,
@@ -22,7 +21,7 @@ export default function AdvertisingSection() {
 
     const viewPhoto = useImageViewer(data?.photo)
 
-    const validLittlePhoto = (photo) => {
+    const validLittlePhoto = (photo:any) => {
         if (photo.width === undefined && photo.height === undefined) {
             return <span>Фото не загружено</span>
         } else if (photo.width === 250 && photo.height === 160 && data?.adv === 1) {
@@ -35,7 +34,7 @@ export default function AdvertisingSection() {
         }
     }
 
-    const validBigPhoto = (photo) => {
+    const validBigPhoto = (photo:any) => {
         if (photo.width === undefined && photo.height === undefined) {
             return <span>Фото не загружено</span>
         } else if (photo?.width === 1200 && photo?.height === 800 && data?.adv === 0) {
@@ -150,7 +149,7 @@ export default function AdvertisingSection() {
                             name='lifeAd'
                             defaultValue={1}
                             onChange={e => {
-                                setData(prevState => (
+                                setData((prevState:any) => (
                                     {
                                         ...prevState,
                                         lifeAd: e.target.value,
@@ -177,3 +176,5 @@ export default function AdvertisingSection() {
         </>
     );
 }
+
+export default AdvertisingSection

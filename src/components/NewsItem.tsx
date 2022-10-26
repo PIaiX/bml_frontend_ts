@@ -4,29 +4,22 @@ import Breadcrumbs from './utils/Breadcrumbs';
 import { MdDateRange, MdOutlineVisibility, MdArrowBack } from "react-icons/md";
 import {getImage} from '../API/temp';
 import Loader from './utils/Loader';
-import { NewsItem } from "../types"
 
-interface NewsItemState {
-    isLoading: boolean,
-    error?: any,
-    item: NewsItem | null
-}
+const NewsItem = () => {
 
-export default function NewsItem() {
     const { newsId } = useParams()
-    const [newsItem, setNewsItem] = useState<NewsItemState>({
+    const [newsItem, setNewsItem] = useState({
         isLoading: false,
         error: null,
         item: null
     })
 
-    console.log(newsId)
-    useEffect(() => {
+    /*useEffect(() => {
         if(!newsId) return
         getImage(newsId)
-            .then((item: NewsItem) => setNewsItem({isLoading: true, item}))
+            .then((item: string) => setNewsItem({isLoading: true, item}))
             .catch(error => setNewsItem({isLoading: true, error, item: null}))
-    }, [newsId])
+    }, [newsId])*/
 
     useEffect(() => console.log(newsItem), [newsItem])
 
@@ -35,12 +28,11 @@ export default function NewsItem() {
         <main>
             <div className="container py-3 py-sm-4">
                 <Breadcrumbs />
-
                 {
                     newsItem.isLoading
                         ? newsItem.item
                             ? <article className="full">
-                                <h1 className="h3 fw_5 rob my-3 my-sm-4 my-sm-5">{newsItem?.item?.title}</h1>
+                                <h1 className="h3 fw_5 rob my-3 my-sm-4 my-sm-5">{/*{newsItem?.item?.title}*/}</h1>
                                 <div className="short-info justify-content-start">
                                     <time className="d-flex align-items-center">
                                         <MdDateRange />
@@ -72,3 +64,5 @@ export default function NewsItem() {
         </main>
     );
 }
+
+export default NewsItem;

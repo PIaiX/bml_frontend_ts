@@ -148,7 +148,7 @@ const HomeCategoriesContainer = () => {
                                             url={`adv-page/${item.id}`}
                                             imgURL={item.url}
                                             title={item.title}
-                                            sum={'400000'}
+                                            summ={'400000'}
                                             favorite={true}
                                         />
                                     </div>
@@ -179,7 +179,7 @@ const HomeCategoriesContainer = () => {
                                             url={`adv-page/${item.id}`}
                                             imgURL={item.url}
                                             title={item.title}
-                                            sum={'400000'}
+                                            summ={'400000'}
                                         />
                                     </div>
                                 ))
@@ -209,7 +209,7 @@ const HomeCategoriesContainer = () => {
                                             url={`adv-page/${item.id}`}
                                             imgURL={item.url}
                                             title={item.title}
-                                            sum={'400000'}
+                                            summ={'400000'}
                                         />
                                     </div>
                                 ))
@@ -239,7 +239,7 @@ const HomeCategoriesContainer = () => {
                                             url={`adv-page/${item.id}`}
                                             imgURL={item.url}
                                             title={item.title}
-                                            sum={'400000'}
+                                            summ={'400000'}
                                         />
                                     </div>
                                 ))
@@ -269,7 +269,7 @@ const HomeCategoriesContainer = () => {
                                             url={`adv-page/${item.id}`}
                                             imgURL={item.url}
                                             title={item.title}
-                                            sum={'400000'}
+                                            summ={'400000'}
                                         />
                                     </div>
                                 ))
