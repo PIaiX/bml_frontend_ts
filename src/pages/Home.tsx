@@ -8,7 +8,7 @@ import {Link} from 'react-router-dom'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import HomeCategoriesContainer from '../components/HomeCategoriesContainer'
-import {getUnsplashImages} from '../API/temp'
+import {getUnsplashImages} from '../services/temp'
 import Loader from '../components/utils/Loader'
 
 const Home = () => {

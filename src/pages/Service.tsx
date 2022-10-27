@@ -6,7 +6,7 @@ import {Swiper, SwiperSlide} from 'swiper/react'
 import {Pagination} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import {getImages} from '../API/temp'
+import {getImages} from '../services/temp'
 import Loader from '../components/utils/Loader'
 import ServicePagination from '../components/utils/Pagination'
 import usePagination from '../hooks/pagination'
@@ -40,7 +40,7 @@ const Service = () => {
 
     const onApplyFilters = () => setAppliedFilters(filters)
 
-    // ! continue working after creating backend API
+    // ! continue working after creating backend services
     useEffect(() => {
         getImages()
             .then((items: any) => setData({isLoading: true, foundCount: items.length, items}))
