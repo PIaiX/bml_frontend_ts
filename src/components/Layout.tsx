@@ -1,13 +1,14 @@
-import React from 'react';
+import React, {FC} from 'react'
 import Header from './Header'
 import Footer from './Footer'
-import { Outlet } from 'react-router-dom'
+import {Outlet, ScrollRestoration} from 'react-router-dom'
 
-const Layout = () => {
+const Layout: FC = () => {
     return (
-        <div className='root-wrapper'>
+        <div className="root-wrapper">
+            <ScrollRestoration />
             <Header />
-            <div className='content-wrapper'>
+            <div className="content-wrapper">
                 <Outlet />
             </div>
             <Footer />
