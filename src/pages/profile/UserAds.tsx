@@ -16,7 +16,7 @@ const UserAds = () => {
         items: [],
     })
 
-    const {paginationItems, pageCount, handlePageClick} = usePagination(data.items, 5)
+    const {paginationItems, pageCount, handlePageClick} = usePagination(data.items, 5, 6)
 
     useEffect(() => {
         getImages()

@@ -1,70 +1,79 @@
 import React, {useEffect, useState} from 'react'
 import {NavLink, useParams} from 'react-router-dom'
 import Breadcrumbs from './utils/Breadcrumbs'
-import {MdDateRange, MdOutlineVisibility, MdArrowBack} from 'react-icons/md'
-import {getImage} from '../services/temp'
+import {MdOutlineVisibility, MdArrowBack} from 'react-icons/md'
 import Loader from './utils/Loader'
+import {IOneNews} from '../types/news'
+import {convertLocaleDate} from '../helpers/convertLocaleDate'
+import {useGetOneNewQuery} from '../services/RTK/newsApi'
 
 const NewsItem = () => {
-    const {newsId} = useParams()
-    const [newsItem, setNewsItem] = useState({
-        isLoading: false,
-        error: null,
-        item: null,
+    const {slug} = useParams()
+    const [newsItem, setNewsItem] = useState<IOneNews>({
+        id: undefined,
+        slug: undefined,
+        title: undefined,
+        description: undefined,
+        viewsCount: undefined,
+        suptitle: undefined,
+        image: undefined,
+        readingTimeFrom: undefined,
+        readingTimeTo: undefined,
+        createdAt: undefined,
+        updatedAt: undefined,
     })
 
-    /*useEffect(() => {
-        if(!newsId) return
-        getImage(newsId)
-            .then((item: string) => setNewsItem({isLoading: true, item}))
-            .catch(error => setNewsItem({isLoading: true, error, item: null}))
-    }, [newsId])*/
+    const {data, error, isLoading} = useGetOneNewQuery(slug)
 
-    useEffect(() => console.log(newsItem), [newsItem])
+    useEffect(() => {
+        !isLoading &&
+            data &&
+            setNewsItem({
+                id: data?.body?.id,
+                slug: data?.body?.slug,
+                title: data?.body?.title,
+                description: data?.body?.description,
+                viewsCount: data?.body?.viewsCount,
+                suptitle: data?.body?.suptitle,
+                image: data?.body?.image,
+                readingTimeFrom: data?.body?.readingTimeFrom,
+                readingTimeTo: data?.body?.readingTimeTo,
+                createdAt: data?.body?.createdAt,
+                updatedAt: data?.body?.updatedAt,
+            })
+    }, [data, isLoading])
 
     return (
         <main>
             <div className="container py-3 py-sm-4">
                 <Breadcrumbs />
-                {newsItem.isLoading ? (
-                    newsItem.item ? (
+                {!isLoading ? (
+                    newsItem ? (
                         <article className="full">
-                            <h1 className="h3 fw_5 rob my-3 my-sm-4 my-sm-5">{/*{newsItem?.item?.title}*/}</h1>
+                            <h1 className="h3 fw_5 rob my-3 my-sm-4 my-sm-5">{newsItem?.title}</h1>
                             <div className="short-info justify-content-start">
                                 <time className="d-flex align-items-center">
-                                    <MdDateRange />
-                                    <span className="ms-1 ms-sm-2">12.10.2020</span>
+                                    {/*<MdDateRange />*/}
+                                    <span className="ms-1 ms-sm-2">
+                                        {newsItem?.createdAt && convertLocaleDate(newsItem?.createdAt)}
+                                    </span>
                                 </time>
                                 <div className="d-flex align-items-center ms-3 ms-sm-4">
                                     <MdOutlineVisibility />
-                                    <span className="ms-1 ms-sm-2">120 просмотров</span>
+                                    <span className="ms-1 ms-sm-2">{newsItem?.viewsCount}</span>
                                 </div>
                             </div>
                             <hr />
                             <div className="text">
-                                <img
-                                    className="new-page-img"
-                                    src="/images/news/n1.jpg"
-                                    alt="Как малому бизнесу выживать в условиях коронавируса"
-                                />
-                                <p>
-                                    Сейчас бесконтактные бизнес-процедуры — оптимальный вариант ведения бизнеса. В
-                                    минувший четверг, 12 марта, на фоне пандемии коронавируса произошло эпичное падение
-                                    индекса Dow Jones и обрушение мировых рынков, от которого инвестиционный мир будет
-                                    оправляться еще долго. Такого мощного потрясения биржи не знали со времен «черного
-                                    понедельника» 1987 года.
-                                </p>
-                                <p>
-                                    Вирус COVID-2019 поразил «иммунную систему» мировой экономики и в течение 24 часов
-                                    сократил совокупное состояние 20 богатейших людей мира на $78 млрд. К примеру,
-                                    капитализация компаний Марка Цукерберга потеряла $5,7 млрд. Еще сильнее пострадали
-                                    авиаперевозчики, туристические компании, европейские и азиатские ретейлеры.
-                                </p>
-                                <p>
-                                    Как в этой сложной ситуации не только сохранить деньги и удержать на плаву свой
-                                    бизнес, но и развивать его в кризис? Одна из лучших рекомендаций — переводить все
-                                    процессы в онлайн.
-                                </p>
+                                <img className="new-page-img" src={newsItem?.image} />
+                                <div className="time">
+                                    <div className="lh_1">
+                                        {newsItem?.readingTimeFrom} - {newsItem?.readingTimeTo}
+                                    </div>
+                                    <div className="lh_1 gray">мин</div>
+                                </div>
+                                <h3>{newsItem?.suptitle}</h3>
+                                <p>{newsItem?.description}</p>
                             </div>
                             <NavLink className="return" to="/news">
                                 <MdArrowBack />

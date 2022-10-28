@@ -1,30 +1,37 @@
-import React, {useEffect, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import NewsPreview from '../components/NewsPreview'
 import NewsMini from '../components/NewsMini'
 import Partners from '../components/Partners'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import usePagination from '../hooks/pagination'
-import {getImages} from '../services/temp'
 import Pagination from '../components/utils/Pagination'
 import Loader from '../components/utils/Loader'
 import {onSelectHandler} from '../helpers/formHandlers'
+import {INewsItems, INewsUseState} from '../types/news'
+import {useGetAllNewsQuery} from '../services/RTK/newsApi'
 
-const News = () => {
-    const [sorting, setSorting] = useState<any>({byPublicationDate: 0})
-    const [showedCount, setShowedCount] = useState<any>(24)
-    const [data, setData] = useState<any>({
-        isLoading: false,
-        error: null,
-        items: [],
+const News: FC = () => {
+    const [sorting, setSorting] = useState<any>({byPublicationDate: 'desc'})
+    const [showedCount, setShowedCount] = useState<number>(24)
+    const [news, setNews] = useState<INewsUseState>({
+        items: null,
+        meta: null,
     })
-    const {paginationItems, pageCount, selectedPage, handlePageClick} = usePagination(data.items, showedCount)
+    const {paginationItems, pageCount, selectedPage, setSelectedPage, handlePageClick} = usePagination(
+        news?.items,
+        showedCount,
+        news?.meta?.total
+    )
 
-    // ! continue working after creating backend services
+    const {data, error, isLoading} = useGetAllNewsQuery({
+        page: selectedPage + 1,
+        limit: showedCount,
+        orderBy: sorting?.byPublicationDate,
+    })
+
     useEffect(() => {
-        getImages()
-            .then((items) => setData({isLoading: true, foundCount: items.length, items}))
-            .catch((error) => setData({isLoading: true, error}))
-    }, [sorting])
+        !isLoading && data && setNews({meta: data?.body?.meta, items: data?.body?.data})
+    }, [isLoading, data])
 
     return (
         <main>
@@ -44,7 +51,7 @@ const News = () => {
                             previousLabel="❮"
                         />
                         <div className="mr-2 mr-sm-0">
-                            Показано {paginationItems.length}
+                            Показано {paginationItems?.length}
                             <span className="d-none d-lg-inline"> статьи и новости</span>
                         </div>
                         <div className="d-flex align-items-center">
@@ -55,9 +62,6 @@ const News = () => {
                                 value={sorting['byPublicationDate']}
                                 onChange={(e) => onSelectHandler(e, setSorting)}
                             >
-                                <option value={0} disabled hidden>
-                                    по дате публикации
-                                </option>
                                 <option value={'desc'}>сначала новые</option>
                                 <option value={'asc'}>сначала старые</option>
                             </select>
@@ -66,15 +70,15 @@ const News = () => {
                     <div className="mt-5" id="block_4">
                         <div className="row">
                             <div className="col-md-4 col-lg-3 mb-4 mb-md-0">
-                                {data.isLoading ? (
-                                    data.items.length ? (
-                                        paginationItems.map((item: any) => (
+                                {!isLoading ? (
+                                    news?.items?.length ? (
+                                        paginationItems?.map((item: INewsItems) => (
                                             <NewsMini
                                                 key={item.id}
                                                 className={'mb-3 mb-md-4'}
-                                                url={item.id}
-                                                date={'28.09.2020'}
-                                                title={item.title}
+                                                url={item?.slug}
+                                                date={item?.createdAt}
+                                                title={item?.title}
                                             />
                                         ))
                                     ) : (
@@ -88,17 +92,17 @@ const News = () => {
                             </div>
                             <div className="col-md-8 col-lg-9">
                                 <div className="row row-cols-sm-2 row-cols-lg-3 g-3 g-xl-4">
-                                    {data.isLoading ? (
-                                        data.items.length ? (
-                                            paginationItems.map((item: any) => (
-                                                <div key={item.id}>
+                                    {!isLoading ? (
+                                        news?.items?.length ? (
+                                            paginationItems?.map((item: INewsItems) => (
+                                                <div key={item?.id}>
                                                     <NewsPreview
-                                                        url={item.id}
-                                                        imgUrl={item.url}
-                                                        title={item.title}
-                                                        text={
-                                                            'Сейчас бесконтактные бизнес-процедуры — оптимальный вариант ведения бизнеса.'
-                                                        }
+                                                        url={item?.slug}
+                                                        imgUrl={item?.image}
+                                                        title={item?.title}
+                                                        text={item?.description}
+                                                        readingTimeTo={item?.readingTimeTo}
+                                                        readingTimeFrom={item?.readingTimeFrom}
                                                     />
                                                 </div>
                                             ))
@@ -125,12 +129,15 @@ const News = () => {
                             previousLabel="❮"
                         />
                         <div className="me-2 me-sm-0">
-                            Показано {paginationItems.length}
+                            Показано {paginationItems?.length}
                             <span className="d-none d-lg-inline"> статьи и новости</span>
                         </div>
                         <button
                             className="btn_main btn_3"
-                            onClick={() => setShowedCount((prevShowedCount: any) => prevShowedCount + 20)}
+                            onClick={() => {
+                                setShowedCount((prevShowedCount: number) => prevShowedCount + 20)
+                                setSelectedPage(0)
+                            }}
                         >
                             Смотреть еще 20
                         </button>

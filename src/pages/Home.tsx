@@ -1,29 +1,13 @@
-import React, {useEffect, useState} from 'react'
+import React, {FC} from 'react'
 import Partners from '../components/Partners'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import {Pagination} from 'swiper'
-import NewsPreview from '../components/NewsPreview'
-import NewsMini from '../components/NewsMini'
-import {Link} from 'react-router-dom'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import HomeCategoriesContainer from '../components/HomeCategoriesContainer'
-import {getUnsplashImages} from '../services/temp'
-import Loader from '../components/utils/Loader'
+import NewsContainer from '../components/NewsContainer'
 
-const Home = () => {
-    const [news, setNews] = useState<any>({
-        isLoading: false,
-        error: null,
-        items: [],
-    })
-
-    useEffect(() => {
-        getUnsplashImages(1, 6)
-            .then((items) => setNews({isLoading: true, items}))
-            .catch((error) => setNews({isLoading: true, error}))
-    }, [])
-
+const Home: FC = () => {
     return (
         <main>
             <Swiper className="swiper-1" modules={[Pagination]} slidesPerView={1} pagination={{clickable: true}}>
@@ -72,6 +56,7 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
+
                     <div>
                         <div className="white_box box_shad info_in_nums">
                             <div>
@@ -100,6 +85,7 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
+
                     <div>
                         <div className="white_box box_shad info_in_nums">
                             <div>
@@ -138,82 +124,7 @@ const Home = () => {
 
             <HomeCategoriesContainer />
 
-            <section className="container" id="block_4">
-                <h2>Новости и статьи</h2>
-                <div className="row">
-                    <div className="col-md-4 col-lg-3 mb-sm-3 mb-md-0 pt-3">
-                        {news.isLoading ? (
-                            news.items.length ? (
-                                news.items
-                                    .slice(0, 3)
-                                    .map((item: any) => (
-                                        <NewsMini
-                                            key={item?.id}
-                                            className="mb-3 mb-md-4"
-                                            url={`news/${item?.id}`}
-                                            date={'28.09.2020'}
-                                            title={item?.user?.name}
-                                        />
-                                    ))
-                            ) : (
-                                <h6 className="w-100 p-5 text-center">Ничего нет</h6>
-                            )
-                        ) : (
-                            <div className="p-5 w-100 d-flex justify-content-center">
-                                <Loader color="#343434" />
-                            </div>
-                        )}
-                        <div className="color-1">
-                            <Link to="/news" className="bb_1 fw_5 link">
-                                Все новости
-                            </Link>
-                        </div>
-                    </div>
-                    <div className="col-md-8 col-lg-9">
-                        <Swiper
-                            className="pt-3 pb-5"
-                            modules={[Pagination]}
-                            slidesPerView={1}
-                            spaceBetween={16}
-                            pagination={{
-                                clickable: true,
-                                dynamicBullets: true,
-                            }}
-                            breakpoints={{
-                                576: {
-                                    slidesPerView: 2,
-                                    spaceBetween: 16,
-                                },
-                                992: {
-                                    slidesPerView: 3,
-                                    spaceBetween: 16,
-                                },
-                            }}
-                        >
-                            {news.isLoading ? (
-                                news.items.length ? (
-                                    news.items.map((item: any) => (
-                                        <SwiperSlide key={item.id}>
-                                            <NewsPreview
-                                                url={`news/${item?.id}`}
-                                                imgUrl={item?.urls?.full}
-                                                title={item?.user?.name}
-                                                text={item?.sponsorship?.tagline}
-                                            />
-                                        </SwiperSlide>
-                                    ))
-                                ) : (
-                                    <h6 className="w-100 p-5 text-center">Ничего нет</h6>
-                                )
-                            ) : (
-                                <div className="p-5 w-100 d-flex justify-content-center">
-                                    <Loader color="#343434" />
-                                </div>
-                            )}
-                        </Swiper>
-                    </div>
-                </div>
-            </section>
+            <NewsContainer />
 
             <Partners />
         </main>
