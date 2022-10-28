@@ -1,7 +1,5 @@
-import React, {useEffect, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import AdvPreview from '../components/AdvPreview'
-import NewsPreview from '../components/NewsPreview'
-import NewsMini from '../components/NewsMini'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import {Pagination} from 'swiper'
 import 'swiper/css'
@@ -13,8 +11,8 @@ import usePagination from '../hooks/pagination'
 import {useParams} from 'react-router-dom'
 import SearchForm from '../components/SearchForm'
 import {onSelectHandler} from '../helpers/formHandlers'
-import Breadcrumbs from '../components/utils/Breadcrumbs'
-
+import Partners from '../components/Partners'
+import NewsContainer from '../components/NewsContainer'
 interface ServiceData {
     isLoading: boolean
     error?: any
@@ -22,7 +20,7 @@ interface ServiceData {
     items?: []
 }
 
-const Service = () => {
+const Service: FC = () => {
     const params = useParams()
     const categoryId = params.categoryId ? parseInt(params.categoryId) : 0
     const [filters, setFilters] = useState({
@@ -30,21 +28,21 @@ const Service = () => {
         byPublicationDate: 0,
     })
     const [appliedFilters, setAppliedFilters] = useState(filters)
-    const [data, setData] = useState<ServiceData>({
+    const [dataHZ, setDataHZ] = useState<ServiceData>({
         isLoading: false,
         error: null,
         foundCount: 0,
         items: [],
     })
-    const {paginationItems, pageCount, selectedPage, handlePageClick} = usePagination(data.items, 16)
+    const {paginationItems, pageCount, selectedPage, handlePageClick} = usePagination(dataHZ.items, 16, 6)
 
     const onApplyFilters = () => setAppliedFilters(filters)
 
     // ! continue working after creating backend services
     useEffect(() => {
         getImages()
-            .then((items: any) => setData({isLoading: true, foundCount: items.length, items}))
-            .catch((error: any) => setData((prev) => ({...prev, isLoading: true, error})))
+            .then((items: any) => setDataHZ({isLoading: true, foundCount: items.length, items}))
+            .catch((error: any) => setDataHZ((prev) => ({...prev, isLoading: true, error})))
     }, [appliedFilters])
 
     return (
@@ -149,7 +147,7 @@ const Service = () => {
                 </h1>
                 {categoryId === 1 && (
                     <SearchForm
-                        foundCount={data.foundCount}
+                        foundCount={dataHZ.foundCount}
                         filters={filters}
                         setFilters={setFilters}
                         onApplyFilters={onApplyFilters}
@@ -158,7 +156,7 @@ const Service = () => {
                 )}
                 {categoryId === 2 && (
                     <SearchForm
-                        foundCount={data.foundCount}
+                        foundCount={dataHZ.foundCount}
                         filters={filters}
                         setFilters={setFilters}
                         onApplyFilters={onApplyFilters}
@@ -167,7 +165,7 @@ const Service = () => {
                 )}
                 {categoryId === 3 && (
                     <SearchForm
-                        foundCount={data.foundCount}
+                        foundCount={dataHZ.foundCount}
                         filters={filters}
                         setFilters={setFilters}
                         onApplyFilters={onApplyFilters}
@@ -176,7 +174,7 @@ const Service = () => {
                 )}
                 {categoryId === 4 && (
                     <SearchForm
-                        foundCount={data.foundCount}
+                        foundCount={dataHZ.foundCount}
                         filters={filters}
                         setFilters={setFilters}
                         onApplyFilters={onApplyFilters}
@@ -185,7 +183,7 @@ const Service = () => {
                 )}
                 {categoryId === 5 && (
                     <SearchForm
-                        foundCount={data.foundCount}
+                        foundCount={dataHZ.foundCount}
                         filters={filters}
                         setFilters={setFilters}
                         onApplyFilters={onApplyFilters}
@@ -205,7 +203,7 @@ const Service = () => {
                     <div className="mr-2 mr-sm-0">
                         Показано {paginationItems && paginationItems.length}{' '}
                         <span className="d-none d-xl-inline">предложений из</span>
-                        <span className="d-inline d-xl-none">/</span> {data.items && data.items.length}
+                        <span className="d-inline d-xl-none">/</span> {dataHZ?.items && dataHZ?.items?.length}
                     </div>
                     <div className="d-flex align-items-center">
                         <span className="f_09 d-none d-lg-block">Сортировать:</span>
@@ -234,8 +232,8 @@ const Service = () => {
                 </div>
 
                 <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
-                    {data.isLoading ? (
-                        data.items && data.items.length ? (
+                    {dataHZ?.isLoading ? (
+                        dataHZ?.items && dataHZ?.items?.length ? (
                             paginationItems.slice(0, 8).map((item: any) => (
                                 <div className="col" key={item.id}>
                                     <AdvPreview
@@ -271,7 +269,7 @@ const Service = () => {
                             </SwiperSlide>
                         </Swiper>
                     </div>
-                    {data.items && data.items.length
+                    {dataHZ?.items && dataHZ?.items?.length
                         ? paginationItems.slice(8, paginationItems.length).map((item: any) => (
                               <div className="col" key={item.id}>
                                   <AdvPreview
@@ -300,7 +298,7 @@ const Service = () => {
                     <div className="mr-2 mr-sm-0">
                         Показано {paginationItems && paginationItems.length}{' '}
                         <span className="d-none d-xl-inline">предложений из</span>
-                        <span className="d-inline d-xl-none">/</span> {data.items && data.items.length}
+                        <span className="d-inline d-xl-none">/</span> {dataHZ?.items && dataHZ?.items?.length}
                     </div>
                     <div className="d-flex align-items-center">
                         <span className="f_09 d-none d-lg-block">Сортировать:</span>
@@ -329,190 +327,9 @@ const Service = () => {
                 </div>
             </section>
 
-            <section className="container" id="block_4">
-                <h2>Новости и статьи</h2>
-                <div className="row">
-                    <div className="col-md-4 col-lg-3 mb-sm-3 mb-md-0 pt-3">
-                        <NewsMini
-                            className={'mb-3 mb-md-4'}
-                            url={'/news-0'}
-                            date={'28.09.2020'}
-                            title={'Как малому бизнесу выживать в условиях коронавируса'}
-                        />
-                        <NewsMini
-                            className={'mb-3 mb-md-4'}
-                            url={'/news-0'}
-                            date={'28.09.2020'}
-                            title={'Как малому бизнесу выживать в условиях коронавируса'}
-                        />
-                        <NewsMini
-                            className={'mb-3 mb-md-4'}
-                            url={'/news-0'}
-                            date={'28.09.2020'}
-                            title={'Как малому бизнесу выживать в условиях коронавируса'}
-                        />
-                        <div className="color-1">
-                            <a href="news.html" className="bb_1 fw_5 link">
-                                Все новости
-                            </a>
-                        </div>
-                    </div>
-                    <div className="col-md-8 col-lg-9">
-                        <Swiper
-                            className="pt-3 pb-5"
-                            modules={[Pagination]}
-                            slidesPerView={1}
-                            spaceBetween={16}
-                            pagination={{
-                                clickable: true,
-                                dynamicBullets: true,
-                            }}
-                            breakpoints={{
-                                576: {
-                                    slidesPerView: 2,
-                                    spaceBetween: 16,
-                                },
-                                992: {
-                                    slidesPerView: 3,
-                                    spaceBetween: 16,
-                                },
-                            }}
-                        >
-                            <SwiperSlide>
-                                <NewsPreview
-                                    url={'/news-0'}
-                                    imgUrl={'/images/news/n1.jpg'}
-                                    title={'Как малому бизнесу выживать в условиях коронавируса'}
-                                    text={
-                                        'Сейчас бесконтактные бизнес-процедуры — оптимальный вариант ведения бизнеса.'
-                                    }
-                                />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <NewsPreview
-                                    url={'/news-0'}
-                                    imgUrl={'/images/news/n1.jpg'}
-                                    title={'Как малому бизнесу выживать в условиях коронавируса'}
-                                    text={
-                                        'Сейчас бесконтактные бизнес-процедуры — оптимальный вариант ведения бизнеса.'
-                                    }
-                                />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <NewsPreview
-                                    url={'/news-0'}
-                                    imgUrl={'/images/news/n1.jpg'}
-                                    title={'Как малому бизнесу выживать в условиях коронавируса'}
-                                    text={
-                                        'Сейчас бесконтактные бизнес-процедуры — оптимальный вариант ведения бизнеса.'
-                                    }
-                                />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <NewsPreview
-                                    url={'/news-0'}
-                                    imgUrl={'/images/news/n1.jpg'}
-                                    title={'Как малому бизнесу выживать в условиях коронавируса'}
-                                    text={
-                                        'Сейчас бесконтактные бизнес-процедуры — оптимальный вариант ведения бизнеса.'
-                                    }
-                                />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <NewsPreview
-                                    url={'/news-0'}
-                                    imgUrl={'/images/news/n1.jpg'}
-                                    title={'Как малому бизнесу выживать в условиях коронавируса'}
-                                    text={
-                                        'Сейчас бесконтактные бизнес-процедуры — оптимальный вариант ведения бизнеса.'
-                                    }
-                                />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <NewsPreview
-                                    url={'/news-0'}
-                                    imgUrl={'/images/news/n1.jpg'}
-                                    title={'Как малому бизнесу выживать в условиях коронавируса'}
-                                    text={
-                                        'Сейчас бесконтактные бизнес-процедуры — оптимальный вариант ведения бизнеса.'
-                                    }
-                                />
-                            </SwiperSlide>
-                        </Swiper>
-                    </div>
-                </div>
-            </section>
+            <NewsContainer />
 
-            <section className="bg_l_blue">
-                <div id="block_5" className="container">
-                    <h2 className="mt-2">Наши партнёры</h2>
-                    <Swiper
-                        className="pt-3 pb-5"
-                        modules={[Pagination]}
-                        slidesPerView={2}
-                        spaceBetween={6}
-                        pagination={{
-                            clickable: true,
-                            dynamicBullets: true,
-                        }}
-                        breakpoints={{
-                            576: {
-                                slidesPerView: 3,
-                                spaceBetween: 15,
-                            },
-                            768: {
-                                slidesPerView: 5,
-                                spaceBetween: 10,
-                            },
-                            992: {
-                                slidesPerView: 6,
-                                spaceBetween: 15,
-                            },
-                            1200: {
-                                slidesPerView: 6,
-                                spaceBetween: 30,
-                            },
-                        }}
-                    >
-                        <SwiperSlide>
-                            <img src="/images/partners/image 10.jpg" alt="partners" />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img src="/images/partners/image 11.jpg" alt="partners" />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img src="/images/partners/image 12.jpg" alt="partners" />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img src="/images/partners/image 13.jpg" alt="partners" />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img src="/images/partners/image 14.jpg" alt="partners" />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img src="/images/partners/image 15.jpg" alt="partners" />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img src="/images/partners/image 10.jpg" alt="partners" />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img src="/images/partners/image 11.jpg" alt="partners" />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img src="/images/partners/image 12.jpg" alt="partners" />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img src="/images/partners/image 13.jpg" alt="partners" />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img src="/images/partners/image 14.jpg" alt="partners" />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img src="/images/partners/image 15.jpg" alt="partners" />
-                        </SwiperSlide>
-                    </Swiper>
-                </div>
-            </section>
+            <Partners />
         </main>
     )
 }

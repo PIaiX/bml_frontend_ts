@@ -42,7 +42,7 @@ const router = createBrowserRouter([
                 handle: {crumb: () => <span>Новости</span>},
             },
             {
-                path: 'news/:newsId',
+                path: 'news/:slug',
                 element: <NewsItem />,
                 handle: {crumb: () => <span>Новость</span>},
             },

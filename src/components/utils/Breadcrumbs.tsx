@@ -7,8 +7,6 @@ const Breadcrumbs: FC = () => {
         .filter((match: any) => Boolean(match?.handle?.crumb))
         .map((match: any) => match?.handle?.crumb(match.data))
 
-    console.log(matches)
-    console.log(crumbs)
     return (
         <nav className="breadcrumbs">
             <ul className="list-unstyled">
