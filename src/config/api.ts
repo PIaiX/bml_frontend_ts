@@ -8,6 +8,9 @@ const apiRoutes: ApiRoutesTypes = {
 
     //banner
     GET_BANNER: 'banner',
+
+    //feedback
+    SEND_FEEDBACK: 'feedback',
 }
 
 const BASE_URL: string | undefined = process.env.REACT_APP_BASE_URL
