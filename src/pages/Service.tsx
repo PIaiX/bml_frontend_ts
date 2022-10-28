@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC, useEffect, useRef, useState} from 'react'
 import AdvPreview from '../components/AdvPreview'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import {Pagination} from 'swiper'
@@ -14,6 +14,7 @@ import {onSelectHandler} from '../helpers/formHandlers'
 import Partners from '../components/Partners'
 import NewsContainer from '../components/NewsContainer'
 import BannerContainer from '../components/BannerContainer'
+import BlocksContainer from '../components/BlocksContainer'
 interface ServiceData {
     isLoading: boolean
     error?: any
@@ -38,6 +39,13 @@ const Service: FC = () => {
     const {paginationItems, pageCount, selectedPage, handlePageClick} = usePagination(dataHZ.items, 16, 6)
 
     const onApplyFilters = () => setAppliedFilters(filters)
+    const ref = useRef<HTMLElement>(null)
+
+    useEffect(() => {
+        if (ref.current !== null) {
+            window.scrollTo(0, ref?.current?.offsetTop - 130)
+        }
+    }, [categoryId])
 
     // ! continue working after creating backend services
     useEffect(() => {
@@ -50,66 +58,9 @@ const Service: FC = () => {
         <main>
             <BannerContainer />
 
-            <section id="block_2" className="container">
-                <div className="row row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center g-4">
-                    <div>
-                        <div className="white_box box_shad info_in_nums">
-                            <div>
-                                <div className="fw_5 mb-4">Поиск инвесторов</div>
-                                <div className="f_09 pt">
-                                    <span className="color-2 fw_7">2650</span> зарегестрированных инвесторов
-                                </div>
-                            </div>
-                            <div>
-                                <img src="/images/icons/icon-1.svg" alt="Поиск инвесторов" />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div className="white_box box_shad info_in_nums">
-                            <div>
-                                <div className="fw_5 mb-4">Поиск бизнес парнёров</div>
-                                <div className="f_09 pt">
-                                    <span className="color-2 fw_7">1650</span> будущих
-                                    <br />
-                                    партнёров по бизнесу
-                                </div>
-                            </div>
-                            <div>
-                                <img src="/images/icons/icon-2.svg" alt="Поиск бизнес парнёров" />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div className="white_box box_shad info_in_nums">
-                            <div>
-                                <div className="fw_5 mb-4">Поиск бизнес проектов</div>
-                                <div className="f_09 pt">
-                                    <span className="color-2 fw_7">180</span> готовых бизнес проектов
-                                </div>
-                            </div>
-                            <div>
-                                <img src="/images/icons/icon-3.svg" alt="Поиск инвесторов" />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div className="white_box box_shad info_in_nums">
-                            <div>
-                                <div className="fw_5 mb-4">Поиск франшиз</div>
-                                <div className="f_09 pt">
-                                    <span className="color-2 fw_7">265</span> размещенных франшиз
-                                </div>
-                            </div>
-                            <div>
-                                <img src="/images/icons/icon-4.svg" alt="Поиск инвесторов" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <BlocksContainer />
 
-            <section className="block_3 container">
+            <section className="block_3 container" ref={ref}>
                 <h1 className="inner mt-4">
                     {categoryId === 1 && 'Поиск инвесторов'}
                     {categoryId === 2 && 'Предложения инвесторов'}
