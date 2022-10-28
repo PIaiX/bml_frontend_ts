@@ -1,45 +1,15 @@
 import React, {FC} from 'react'
 import Partners from '../components/Partners'
-import {Swiper, SwiperSlide} from 'swiper/react'
-import {Pagination} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import HomeCategoriesContainer from '../components/HomeCategoriesContainer'
 import NewsContainer from '../components/NewsContainer'
+import BannerContainer from '../components/BannerContainer'
 
 const Home: FC = () => {
     return (
         <main>
-            <Swiper className="swiper-1" modules={[Pagination]} slidesPerView={1} pagination={{clickable: true}}>
-                <SwiperSlide>
-                    <img src="/images/main_slider/slider.jpg" alt="Быстрый сервис поиска и подбора инвестиций" />
-                    <div className="container white">
-                        <div className="row">
-                            <div className="col-md-9 col-lg-7">
-                                <h2>Быстрый сервис поиска и подбора инвестиций</h2>
-                                <h5>
-                                    Мы собрали у себя лучшие предложения на рынке бизнеса, чтобы вы могли сравнить
-                                    предложения и выбрать то, что действительно вам подходит
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img src="/images/main_slider/slider.jpg" alt="Быстрый сервис поиска и подбора инвестиций" />
-                    <div className="container white">
-                        <div className="row">
-                            <div className="col-md-9 col-lg-7">
-                                <h2>Быстрый сервис поиска и подбора инвестиций</h2>
-                                <h5>
-                                    Мы собрали у себя лучшие предложения на рынке бизнеса, чтобы вы могли сравнить
-                                    предложения и выбрать то, что действительно вам подходит
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </SwiperSlide>
-            </Swiper>
+            <BannerContainer />
 
             <section id="block_2" className="container">
                 <div className="row row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center g-4">
