@@ -2,6 +2,7 @@ import React, {FC, useEffect, useRef} from 'react'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import Partners from '../components/Partners'
 import {useLocation} from 'react-router-dom'
+import FeedbackForm from '../components/FeedbackForm'
 
 const Contacts: FC = () => {
     const loc: any = useLocation()
@@ -38,33 +39,7 @@ const Contacts: FC = () => {
                     </div>
                 </div>
                 <h2 ref={ref}>ФОРМА ОБРАТНОЙ СВЯЗИ</h2>
-                <form>
-                    <label htmlFor="client-name" className="mb-1">
-                        Ваше имя
-                    </label>
-                    <input type="text" id="client-name" placeholder="имя" className="mb-3" />
-                    <label htmlFor="email" className="mb-1">
-                        Ваша почта
-                    </label>
-                    <input type="email" id="email" placeholder="почта" className="mb-3" />
-                    <label htmlFor="question" className="mb-1">
-                        Ваш вопрос
-                    </label>
-                    <textarea id="question" rows={3} placeholder="Ваш вопрос" className="mb-3" />
-                    <label className="mt-2 mb-2">
-                        <input type="checkbox" id="yes-register" required={true} />
-                        <span className="f_08 ms-2">
-                            Я соглашаюсь с правилами сайта и даю согласие на{' '}
-                            <a href="/politic.php" target="_blank" className="bb_1">
-                                обработку персональных данных
-                            </a>
-                            .
-                        </span>
-                    </label>
-                    <button type="submit" className="btn_main btn_1 mt-3">
-                        Отправить
-                    </button>
-                </form>
+                <FeedbackForm />
             </section>
 
             <Partners />

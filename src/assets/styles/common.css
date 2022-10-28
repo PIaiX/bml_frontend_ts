@@ -282,11 +282,6 @@ button {
     display: block;
     font-size: inherit;
 }
-button:hover,
-button:focus,
-button:active {
-    cursor: pointer;
-}
 
 .btn_main {
     border-radius: 3px;
@@ -301,11 +296,7 @@ button:active {
     font-weight: 500;
     transition: var(--transition);
 }
-.btn_main:hover,
-.btn_main:focus,
-.btn_main:active {
-    cursor: pointer;
-}
+
 .btn_1 {
     color: #fff;
     background-color: rgb(var(--color-1));
@@ -388,6 +379,13 @@ button:active {
     text-transform: uppercase;
     border-radius: 20px;
 }
+
+.btn_disabled {
+    background-color: gray;
+    color: white;
+    cursor: default;
+}
+
 @media (max-width: 991px) {
     .btn-5, .btn-6 {
         border: 2px solid var(--color-3);

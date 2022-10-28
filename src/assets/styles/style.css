@@ -2062,6 +2062,10 @@ footer {
     border-color: red;
 }
 
+.validate-wrapper_error > textarea {
+    border-color: red;
+}
+
 .validate-error {
     position: absolute;
     left: 20px;
