@@ -723,3 +723,36 @@ ul.simple_list>li::before {
     z-index: 10;
     opacity: 0;
 }
+
+
+
+.alert {
+    position: fixed;
+    bottom: 20px;
+    right: 35px;
+    z-index: 100000;
+    width: 200px;
+    transition: opacity 1s ease;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    word-break: break-word;
+}
+
+@keyframes ani {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.alert.good {
+    background: #00BD39;
+}
+
+.alert.bad {
+    background: #FF2300;
+}

@@ -1,9 +1,23 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect} from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import {Outlet, ScrollRestoration} from 'react-router-dom'
+import Alert from './utils/Alert'
+import {useAppDispatch, useAppSelector} from '../hooks/store'
+import {resetAlert} from '../store/reducers/alertSlice'
 
 const Layout: FC = () => {
+    const alertState = useAppSelector((state) => state.alert)
+    const dispatch = useAppDispatch()
+
+    // useEffect(() => {
+    //     if (alertState?.isShow) {
+    //         setTimeout(() => {
+    //             dispatch(resetAlert())
+    //         }, 2000)
+    //     }
+    // }, [alertState?.isShow])
+
     return (
         <div className="root-wrapper">
             <ScrollRestoration />
@@ -11,6 +25,7 @@ const Layout: FC = () => {
             <div className="content-wrapper">
                 <Outlet />
             </div>
+            <Alert />
             <Footer />
         </div>
     )

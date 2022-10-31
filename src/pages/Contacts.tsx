@@ -2,7 +2,7 @@ import React, {FC, useEffect, useRef} from 'react'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import Partners from '../components/Partners'
 import {useLocation} from 'react-router-dom'
-import FeedbackForm from '../components/FeedbackForm'
+import FeedbackForm from '../components/forms/FeedbackForm'
 
 const Contacts: FC = () => {
     const loc: any = useLocation()

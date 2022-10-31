@@ -2056,6 +2056,7 @@ footer {
 /* Form-validate */
 .validate-wrapper {
     position: relative;
+    width: 100%;
 }
 
 .validate-wrapper_error > input {
@@ -2086,4 +2087,15 @@ footer {
 
 .for-photos-dragAndDrop {
     object-fit: contain;
+}
+
+.confirm_email {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: baseline;
+}
+
+.email_input {
+    width: 100%;
 }
