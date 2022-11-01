@@ -13,7 +13,7 @@ type State = {
 }
 
 const initialState: InitialStateAlert = {
-    isShow: true,
+    isShow: false,
     message: null,
     typeAlert: null,
 }
@@ -23,15 +23,14 @@ export const alertSlice = createSlice({
     initialState,
     reducers: {
         showAlert: (state: Draft<State>, action) => {
-            console.log(action)
             state.isShow = true
             state.message = action.payload.message
             state.typeAlert = action.payload.typeAlert.toLowerCase()
         },
         resetAlert: (state) => {
             state.isShow = false
-            state.message = null
-            state.typeAlert = null
+            state.message = initialState.message
+            state.typeAlert = initialState.typeAlert
         },
     },
 })

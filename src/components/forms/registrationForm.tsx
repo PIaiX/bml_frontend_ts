@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FC, useEffect, useState} from 'react'
 import {onCheckboxHandler, onInputHandler, onSelectHandler} from '../../helpers/formHandlers'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../utils/ValidateWrapper'
 import {IRegistrationForm} from '../../types/registration'
@@ -10,6 +10,8 @@ import {setUser} from '../../store/reducers/userSlice'
 import CustomModal from '../utils/CustomModal'
 import {showAlert} from '../../store/reducers/alertSlice'
 import Alert from '../utils/Alert'
+import {useAppSelector} from '../../hooks/store'
+import {IUser} from '../../types/user'
 
 const RegistrationForm: FC = () => {
     const [profileType, setProfileType] = useState<number | string>('start')
@@ -17,6 +19,8 @@ const RegistrationForm: FC = () => {
     const [buttonText, setButtonText] = useState<string>('Подтвердить')
     const [errorsFromServ, setErrorsFromServ] = useState<any>({})
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const {user}: IUser = useAppSelector((state) => state?.user)
 
     const {
         register,
@@ -55,15 +59,12 @@ const RegistrationForm: FC = () => {
 
     const onSubmit = (data: IRegistrationForm) => {
         registration(data, profileType)
-            .then((res) => {
-                localStorage.setItem('token', `${res?.token}`)
-                dispatch(setUser(res?.user))
-                dispatch(
-                    showAlert({message: 'Вы успешно зарегистрировались, переход в ваш аккаунт...', typeAlert: 'good'})
-                )
+            .then(() => {
+                dispatch(showAlert({message: 'Вы успешно зарегистрировались', typeAlert: 'good'}))
                 reset()
+                navigate(`/enter`)
             })
-            .catch((error) => {
+            .catch(() => {
                 dispatch(showAlert({message: 'Произошла ошибка, попробуйте позже.', typeAlert: 'bad'}))
             })
     }
@@ -226,7 +227,7 @@ const RegistrationForm: FC = () => {
                                     message: 'Максимум 15 символов',
                                 },
                                 pattern: {
-                                    value: /([A-Z])([0-9])/,
+                                    value: /(.*[0-9].*[A-Z])|(.*[A-Z].*[0-9])/gm,
                                     message: 'Отсутствует заглавная буква или цифра',
                                 },
                             })}

@@ -160,7 +160,7 @@ input.simple, textarea.simple {
     padding: .5em 1em;
 }
 input.input-price {
-    background: url(bg-imgs/rouble.svg) no-repeat;
+    background: url(/src/assets/images/backgrounds/rouble.svg) no-repeat;
     background-size: auto;
     background-position: calc(100% - .75em) 50%;
 } 
@@ -186,7 +186,7 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     -ms-appearance: none;
-    background-image: url(bg-imgs/down.svg);
+    background-image: url(/src/assets/images/backgrounds/down.svg);
     background-repeat: no-repeat;
     background-position: 95% 50%;
     background-size: auto 7px;
@@ -228,7 +228,7 @@ input[type="checkbox"] {
 }
 input[type="checkbox"].type-2 {border: 1px solid rgb(var(--color-2));}
 input[type="checkbox"]:checked {
-    /* background-image: url(bg-imgs/mark.svg);
+    /* background-image: url(backgrounds/mark.svg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain; */
@@ -692,7 +692,7 @@ ul.simple_list>li::before {
     left: 0px;
     width: 1.5em;
     height: 100%;
-    background: url(bg-imgs/next.svg) no-repeat center 60%;
+    background: url(/src/assets/images/backgrounds/next.svg) no-repeat center 60%;
     background-size: .3em .6em;
 }
 .breadcrumbs a {
@@ -750,9 +750,9 @@ ul.simple_list>li::before {
 }
 
 .alert.good {
-    background: #00BD39;
+    background: #40D600;
 }
 
 .alert.bad {
-    background: #FF2300;
+    background: #FF002D;
 }

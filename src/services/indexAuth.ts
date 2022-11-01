@@ -8,7 +8,6 @@ const apiBody = {
         Accept: 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
-        'User-Agent': 'business-my-life',
         'User-Fingerprint': String(localStorage.getItem('fingerprint')),
     },
 }
@@ -16,41 +15,31 @@ const apiBody = {
 const $api = axios.create(apiBody)
 const $authApi = axios.create(apiBody)
 
-$authApi.interceptors.request.use(async (config: any) => {
-    const token = await localStorage.getItem('token')
+$api.interceptors.request.use((config: any) => {
+    config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+    return config
+})
 
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
-    } else {
-        console.log('No token!')
-    }
+$authApi.interceptors.request.use((config: any) => {
+    config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
     return config
 })
 
 $authApi.interceptors.response.use(
-    async (config) => {
+    (config) => {
         return config
     },
     async (error) => {
-        const userId = localStorage.getItem('userId')
-
         const originalRequest = error.config
-        if (error?.response?.status === 401 && originalRequest && !originalRequest._isRetry) {
+        if (error.response.status === 400 && originalRequest && !originalRequest._isRetry) {
+            originalRequest._isRetry = true
             try {
-                const token = await $api.post(`${URL}${apiRoutes?.AUTH_REFRESH}/${userId}`)
-
-                if (!token) {
-                    return
-                } else {
-                    await localStorage.setItem('token', `Bearer ${token}`)
-                }
-
-                return $authApi.request(originalRequest)
+                const response = await $api.get(`${apiRoutes.REFRESH_TOKEN}`)
+                localStorage.setItem('token', response?.data?.body?.token)
             } catch (e) {
-                console.log('Unauthorized')
+                console.log('No auth')
             }
         }
-        throw error
     }
 )
 

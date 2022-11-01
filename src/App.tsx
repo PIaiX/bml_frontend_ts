@@ -8,8 +8,12 @@ import './assets/styles/style.css'
 import fingerprint from '@fingerprintjs/fingerprintjs'
 
 import AppRouter from './routes/AppRouter'
+import {useAppDispatch} from './hooks/store'
+import {checkAuth} from './store/reducers/userSlice'
 
 function App() {
+    const dispatch = useAppDispatch()
+
     useEffect(() => {
         fingerprint
             .load()
@@ -17,6 +21,12 @@ function App() {
             .then((result) => {
                 localStorage.setItem('fingerprint', result.visitorId)
             })
+    }, [])
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            dispatch(checkAuth())
+        }
     }, [])
 
     return <AppRouter />
