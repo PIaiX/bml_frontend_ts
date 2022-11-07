@@ -297,6 +297,7 @@ button {
     transition: var(--transition);
 }
 
+
 .btn_1 {
     color: #fff;
     background-color: rgb(var(--color-1));

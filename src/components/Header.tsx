@@ -1,9 +1,13 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {NavLink, Link} from 'react-router-dom'
 import {MdStarOutline, MdOutlineShoppingCart, MdLogin, MdSearch, MdMenu, MdClose} from 'react-icons/md'
 import {IconContext} from 'react-icons'
+import {useAppSelector} from '../hooks/store'
+import {IUser} from '../types/user'
 
 const Header: FC = () => {
+    const {user}: IUser = useAppSelector((state) => state?.user)
+
     return (
         <>
             <header>
@@ -33,10 +37,16 @@ const Header: FC = () => {
                             <MdOutlineShoppingCart />
                             <span className="count">3</span>
                         </a>
-                        <Link to="/enter" className="link d-flex align-items-center">
-                            <span className="d-none d-sm-inline f_12 me-2">Войти</span>
-                            <MdLogin className="f_15" />
-                        </Link>
+                        {localStorage.getItem('token') ? (
+                            <NavLink to={`/account/profile/${user?.id}`}>
+                                <img src="/images/icons/profile.svg" />
+                            </NavLink>
+                        ) : (
+                            <Link to="/enter" className="link d-flex align-items-center">
+                                <span className="d-none d-sm-inline f_12 me-2">Войти</span>
+                                <MdLogin className="f_15" />
+                            </Link>
+                        )}
                     </div>
                 </section>
                 <section className="bottom">

@@ -5,6 +5,7 @@ import {login} from '../../services/auth'
 import {useAppDispatch} from '../../hooks/store'
 import {setUser} from '../../store/reducers/userSlice'
 import {showAlert} from '../../store/reducers/alertSlice'
+import ValidateWrapper from '../../components/utils/ValidateWrapper'
 
 const Entrance: FC = () => {
     const dispatch = useAppDispatch()
@@ -41,8 +42,25 @@ const Entrance: FC = () => {
                     <div className="col-md-8 col-lg-6">
                         <form className="pt fw_4" onSubmit={handleSubmit(onSubmit)}>
                             <h1 className="f_50 mb-4 mb-sm-5">ВХОД</h1>
-                            <input type="email" placeholder="E-mail" {...register('email')} />
-                            <input type="password" placeholder="Пароль" className="mt-3" {...register('password')} />
+                            <ValidateWrapper error={errors.email}>
+                                <input
+                                    type="email"
+                                    placeholder="E-mail"
+                                    {...register('email', {
+                                        required: 'Введите email',
+                                    })}
+                                />
+                            </ValidateWrapper>
+                            <ValidateWrapper error={errors.password}>
+                                <input
+                                    type="password"
+                                    placeholder="Пароль"
+                                    className="mt-3"
+                                    {...register('password', {
+                                        required: 'Введите пароль',
+                                    })}
+                                />
+                            </ValidateWrapper>
                             <button className="btn_main btn_2 px-5 mx-auto mt-3 mt-sm-4">Войти</button>
                             <div className="mt-3">
                                 Ещё нет аккаунта?{' '}

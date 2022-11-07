@@ -83,6 +83,18 @@ const RegistrationForm: FC = () => {
             })
     }
 
+    const classReturner = () => {
+        if (buttonText.includes('Проверьте почту')) {
+            return 'btn_disabled'
+        } else if (buttonText.includes('Произошла ошибка')) {
+            return 'btn_disabled'
+        } else if (buttonText.includes('Значение уже занято')) {
+            return 'btn_disabled'
+        } else {
+            return 'btn_1'
+        }
+    }
+
     return (
         <form className="pt fw_4" autoComplete="disabled" onSubmit={handleSubmit(onSubmit)}>
             <h1 className="f_50 mb-4 mb-sm-5">РЕГИСТРАЦИЯ</h1>
@@ -184,10 +196,7 @@ const RegistrationForm: FC = () => {
                         <button
                             style={{width: 100 + '%'}}
                             type="button"
-                            className={`btn_main btn_1 ms-4 
-                            ${buttonText.includes('Проверьте почту') && 'btn_disabled'} 
-                            ${buttonText.includes('Значение уже занято') && 'btn_disabled'}
-                            ${buttonText.includes('Произошла ошибка') && 'btn_disabled'}`}
+                            className={`btn_main btn_1 ms-4 ${classReturner()}`}
                             disabled={
                                 buttonText.includes('Проверьте почту') ||
                                 buttonText.includes('Значение уже занято') ||
