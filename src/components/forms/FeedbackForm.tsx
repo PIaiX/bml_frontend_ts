@@ -1,8 +1,8 @@
 import React, {FC, useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
-import {IFeedBackForm} from '../types/feedback'
-import {sendFeedBack} from '../services/feedback'
-import ValidateWrapper from './utils/ValidateWrapper'
+import {IFeedBackForm} from '../../types/feedback'
+import {sendFeedBack} from '../../services/feedback'
+import ValidateWrapper from '../utils/ValidateWrapper'
 
 type AlertState = {
     isShow: boolean

@@ -10,7 +10,7 @@ import Entrance from '../pages/profile/Entrance'
 import Registration from '../pages/profile/Registration'
 import ResetPassword from '../pages/profile/ResetPassword'
 import PersonalAccount from '../pages/profile/PersonalAccount'
-import Layout from '../components/Layout'
+import Layout from '../layouts/Layout'
 import NotFound from '../pages/NotFound'
 import {Link} from 'react-router-dom'
 

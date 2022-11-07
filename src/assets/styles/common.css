@@ -160,7 +160,7 @@ input.simple, textarea.simple {
     padding: .5em 1em;
 }
 input.input-price {
-    background: url(bg-imgs/rouble.svg) no-repeat;
+    background: url(/src/assets/images/backgrounds/rouble.svg) no-repeat;
     background-size: auto;
     background-position: calc(100% - .75em) 50%;
 } 
@@ -186,7 +186,7 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     -ms-appearance: none;
-    background-image: url(bg-imgs/down.svg);
+    background-image: url(/src/assets/images/backgrounds/down.svg);
     background-repeat: no-repeat;
     background-position: 95% 50%;
     background-size: auto 7px;
@@ -228,7 +228,7 @@ input[type="checkbox"] {
 }
 input[type="checkbox"].type-2 {border: 1px solid rgb(var(--color-2));}
 input[type="checkbox"]:checked {
-    /* background-image: url(bg-imgs/mark.svg);
+    /* background-image: url(backgrounds/mark.svg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain; */
@@ -296,6 +296,7 @@ button {
     font-weight: 500;
     transition: var(--transition);
 }
+
 
 .btn_1 {
     color: #fff;
@@ -692,7 +693,7 @@ ul.simple_list>li::before {
     left: 0px;
     width: 1.5em;
     height: 100%;
-    background: url(bg-imgs/next.svg) no-repeat center 60%;
+    background: url(/src/assets/images/backgrounds/next.svg) no-repeat center 60%;
     background-size: .3em .6em;
 }
 .breadcrumbs a {
@@ -722,4 +723,37 @@ ul.simple_list>li::before {
     height: 100%;
     z-index: 10;
     opacity: 0;
+}
+
+
+
+.alert {
+    position: fixed;
+    bottom: 20px;
+    right: 35px;
+    z-index: 100000;
+    width: 200px;
+    transition: opacity 1s ease;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    word-break: break-word;
+}
+
+@keyframes ani {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.alert.good {
+    background: #40D600;
+}
+
+.alert.bad {
+    background: #FF002D;
 }

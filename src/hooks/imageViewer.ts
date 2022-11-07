@@ -1,25 +1,24 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState} from 'react'
 
 export const useImageViewer = (file: File) => {
-
     const [info, setInfo] = useState<any>({})
 
     useEffect(() => {
         let fileReader
         if (file) {
-            fileReader = new FileReader();
+            fileReader = new FileReader()
             fileReader.onload = (e) => {
-                const { result }: any = e?.target;
+                const {result}: any = e.target
                 if (result) {
                     setInfo((prevState: any) => {
                         return {
                             ...prevState,
-                            data_url: result
+                            data_url: result,
                         }
                     })
                 }
             }
-            fileReader.readAsDataURL(file);
+            fileReader.readAsDataURL(file)
         }
     }, [file])
 
@@ -30,7 +29,7 @@ export const useImageViewer = (file: File) => {
                 return {
                     ...prevState,
                     width: img.width,
-                    height:img.height
+                    height: img.height,
                 }
             })
         }
