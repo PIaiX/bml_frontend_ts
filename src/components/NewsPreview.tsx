@@ -1,5 +1,6 @@
 import React, {FC} from 'react'
 import {NavLink} from 'react-router-dom'
+import {checkPhotoPath} from '../helpers/photoLoader'
 
 type Props = {
     imgUrl: string
@@ -13,7 +14,7 @@ type Props = {
 const NewsPreview: FC<Props> = (props) => {
     return (
         <article className="news-preview">
-            <img src={props.imgUrl} alt={props.title} />
+            <img src={checkPhotoPath(props.imgUrl)} alt={props.title} />
             <div className="time">
                 <div className="lh_1">
                     {props?.readingTimeFrom} - {props?.readingTimeTo}

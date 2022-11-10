@@ -36,8 +36,6 @@ const AdvertisingSection = () => {
             return <span>Фото загружено</span>
         } else if (photo?.width !== 1200 && photo?.height !== 800) {
             return <span>Размеры не подходят</span>
-        } else {
-            return false
         }
     }
 

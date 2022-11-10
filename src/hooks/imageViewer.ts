@@ -1,14 +1,18 @@
 import {useEffect, useState} from 'react'
 
 export const useImageViewer = (file: File) => {
-    const [info, setInfo] = useState<any>({})
+    const [info, setInfo] = useState<any>({
+        data_url: null,
+        height: null,
+        width: null,
+    })
 
     useEffect(() => {
         let fileReader
         if (file) {
             fileReader = new FileReader()
             fileReader.onload = (e) => {
-                const {result}: any = e.target
+                const result = e.target?.result
                 if (result) {
                     setInfo((prevState: any) => {
                         return {

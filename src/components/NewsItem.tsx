@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import {NavLink, useParams} from 'react-router-dom'
 import Breadcrumbs from './utils/Breadcrumbs'
-import {MdOutlineVisibility, MdArrowBack} from 'react-icons/md'
+import {MdOutlineVisibility, MdArrowBack, MdDateRange} from 'react-icons/md'
 import Loader from './utils/Loader'
 import {IOneNews} from '../types/news'
 import {convertLocaleDate} from '../helpers/convertLocaleDate'
 import {useGetOneNewQuery} from '../services/RTK/newsApi'
+import {checkPhotoPath} from '../helpers/photoLoader'
 
 const NewsItem = () => {
     const {slug} = useParams()
@@ -53,7 +54,7 @@ const NewsItem = () => {
                             <h1 className="h3 fw_5 rob my-3 my-sm-4 my-sm-5">{newsItem?.title}</h1>
                             <div className="short-info justify-content-start">
                                 <time className="d-flex align-items-center">
-                                    {/*<MdDateRange />*/}
+                                    <MdDateRange />
                                     <span className="ms-1 ms-sm-2">
                                         {newsItem?.createdAt && convertLocaleDate(newsItem?.createdAt)}
                                     </span>
@@ -65,7 +66,7 @@ const NewsItem = () => {
                             </div>
                             <hr />
                             <div className="text">
-                                <img className="new-page-img" src={newsItem?.image} />
+                                <img className="new-page-img" src={checkPhotoPath(newsItem?.image)} />
                                 <div className="time">
                                     <div className="lh_1">
                                         {newsItem?.readingTimeFrom} - {newsItem?.readingTimeTo}

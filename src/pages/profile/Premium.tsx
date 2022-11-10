@@ -256,8 +256,7 @@ const Premium: FC = () => {
         if (little?.width === undefined && little?.height === undefined) {
             return <span>Фото не загружено</span>
         } else if (little?.width === 250 && little?.height === 160) {
-            // eslint-disable-next-line react/jsx-key
-            return [<span>Фото загружено</span>, lookLittleBanner.data_url]
+            return [<span key={1}>Фото загружено</span>, lookLittleBanner?.data_url]
         } else if (little?.width !== 250 && little?.height !== 160) {
             return <span>Размеры не подходят</span>
         } else return false
