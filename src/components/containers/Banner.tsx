@@ -1,15 +1,25 @@
 import React, {FC} from 'react'
 import {Swiper, SwiperSlide} from 'swiper/react'
-import {Pagination} from 'swiper'
-import {useGetBannerQuery} from '../services/RTK/bannerApi'
-import Loader from './utils/Loader'
-import {checkPhotoPath} from '../helpers/photoLoader'
+import {Pagination, Autoplay} from 'swiper'
+import {useGetBannerQuery} from '../../services/RTK/bannerApi'
+import Loader from '../utils/Loader'
+import {checkPhotoPath} from '../../helpers/photoLoader'
 
-const BannerContainer: FC = () => {
+type Props = {
+    swiperDelay?: number
+}
+
+const BannerContainer: FC<Props> = ({swiperDelay}) => {
     const {data, error, isLoading} = useGetBannerQuery()
 
     return (
-        <Swiper className="swiper-1" modules={[Pagination]} slidesPerView={1} pagination={{clickable: true}}>
+        <Swiper
+            className="swiper-1"
+            modules={[Pagination, Autoplay]}
+            slidesPerView={1}
+            pagination={{clickable: true}}
+            autoplay={{delay: swiperDelay}}
+        >
             {!isLoading ? (
                 data ? (
                     data?.body?.map((item) => (

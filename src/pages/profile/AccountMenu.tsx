@@ -9,7 +9,7 @@ export default function AccountMenu() {
     const [auth, setAuth] = useState(false)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const userState: IUser = useAppSelector((state) => state?.user)
+    const userState: IUser = useAppSelector((state) => state?.user?.user)
 
     const onSubmitLogout = () => {
         logout()
@@ -39,7 +39,7 @@ export default function AccountMenu() {
             {auth ? (
                 <ul className="list-unstyled mb-0">
                     <li>
-                        <NavLink to={`profile/${userState?.user?.id}`}>Профиль</NavLink>
+                        <NavLink to={`profile/${userState?.id}`}>Профиль</NavLink>
                     </li>
                     <li>
                         <NavLink to="instructions">Как загрузить объявление</NavLink>

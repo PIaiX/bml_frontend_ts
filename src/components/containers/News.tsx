@@ -1,12 +1,12 @@
 import React, {FC, useEffect, useState} from 'react'
-import NewsMini from './NewsMini'
-import Loader from './utils/Loader'
+import NewsMini from '../NewsMini'
+import Loader from '../utils/Loader'
 import {Link} from 'react-router-dom'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import {Pagination} from 'swiper'
-import NewsPreview from './NewsPreview'
-import {useGetAllNewsQuery} from '../services/RTK/newsApi'
-import {INewsUseState} from '../types/news'
+import NewsPreview from '../NewsPreview'
+import {useGetAllNewsQuery} from '../../services/RTK/newsApi'
+import {INewsUseState} from '../../types/news'
 
 const NewsContainer: FC = () => {
     const [news, setNews] = useState<INewsUseState>({

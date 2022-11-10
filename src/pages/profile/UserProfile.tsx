@@ -6,7 +6,7 @@ import {IUser} from '../../types/user'
 import {checkPhotoPath} from '../../helpers/photoLoader'
 
 const UserProfile: FC = () => {
-    const {user}: IUser = useAppSelector((state) => state?.user)
+    const user: IUser = useAppSelector((state) => state?.user?.user)
 
     return (
         <>

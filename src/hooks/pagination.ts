@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 
-const usePagination = (items: any, limit: number, total: any) => {
+const usePagination = (items: any, limit: number, total: number | undefined) => {
     const [paginationItems, setPaginationItems] = useState([])
     const [pageCount, setPageCount] = useState<number>(0)
     const [itemOffset, setItemOffset] = useState<number>(0)
@@ -10,7 +10,9 @@ const usePagination = (items: any, limit: number, total: any) => {
         const endOffset = itemOffset + limit
 
         setPaginationItems(items?.slice(itemOffset, endOffset))
-        setPageCount(Math.ceil(total / limit))
+        if ((total && limit) || (total === 0 && limit)) {
+            setPageCount(Math.ceil(total / limit))
+        }
     }, [itemOffset, limit, items, total])
 
     const handlePageClick = ({selected}: any) => {
