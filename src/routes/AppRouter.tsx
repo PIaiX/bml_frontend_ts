@@ -32,7 +32,7 @@ const router = createBrowserRouter([
                 handle: {crumb: () => <span>Категории</span>},
             },
             {
-                path: 'adv-page',
+                path: 'adv-page/:id',
                 element: <AdvPage />,
                 handle: {crumb: () => <span>Пост</span>},
             },

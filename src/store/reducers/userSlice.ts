@@ -17,6 +17,7 @@ export const checkAuth = createAsyncThunk('auth/refreshToken', async (_, {reject
             new Error('Refresh error')
         }
     } catch (error: any) {
+        localStorage.removeItem('token')
         return rejectWithValue(error.message)
     }
 })
@@ -25,7 +26,7 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setUser: (state: Draft<IUser>, action) => {
+        setUser: (state, action) => {
             state.user = action.payload
         },
         resetUser: (state) => {

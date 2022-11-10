@@ -1,6 +1,14 @@
 import React, {FC} from 'react'
+import {IOffersItem, IOffersMeta} from '../../types/offers'
 
-const BlocksContainer: FC = () => {
+type Props = {
+    investors?: IOffersMeta
+    businessPartners?: IOffersMeta
+    saleBusiness?: IOffersMeta
+    franchise?: IOffersMeta
+}
+
+const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, franchise}) => {
     return (
         <section id="block_2" className="container">
             <div className="row row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center g-4">
@@ -9,7 +17,8 @@ const BlocksContainer: FC = () => {
                         <div>
                             <div className="fw_5 mb-4">Поиск инвесторов</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">2650</span> зарегестрированных инвесторов
+                                <span className="color-2 fw_7">{investors?.total || 0}</span> зарегистрированных
+                                инвесторов
                             </div>
                         </div>
                         <div>
@@ -22,7 +31,7 @@ const BlocksContainer: FC = () => {
                         <div>
                             <div className="fw_5 mb-4">Поиск бизнес парнёров</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">1650</span> будущих
+                                <span className="color-2 fw_7">{businessPartners?.total || 0}</span> будущих
                                 <br />
                                 партнёров по бизнесу
                             </div>
@@ -37,7 +46,7 @@ const BlocksContainer: FC = () => {
                         <div>
                             <div className="fw_5 mb-4">Поиск бизнес проектов</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">180</span> готовых бизнес проектов
+                                <span className="color-2 fw_7">{saleBusiness?.total || 0}</span> готовых бизнес проектов
                             </div>
                         </div>
                         <div>
@@ -50,7 +59,7 @@ const BlocksContainer: FC = () => {
                         <div>
                             <div className="fw_5 mb-4">Поиск франшиз</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">265</span> размещенных франшиз
+                                <span className="color-2 fw_7">{franchise?.total || 0}</span> размещенных франшиз
                             </div>
                         </div>
                         <div>

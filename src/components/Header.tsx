@@ -6,7 +6,7 @@ import {useAppSelector} from '../hooks/store'
 import {IUser} from '../types/user'
 
 const Header: FC = () => {
-    const {user}: IUser = useAppSelector((state) => state?.user)
+    const user: IUser = useAppSelector((state) => state?.user?.user)
 
     return (
         <>
@@ -54,27 +54,27 @@ const Header: FC = () => {
                         <nav id="main-menu" className="d-none d-lg-block">
                             <ul className="mt-3 mt-md-0 ml-auto mr-auto">
                                 <li className="nav-item">
-                                    <NavLink to="category/1" className="nav-link">
+                                    <NavLink to="category/0" className="nav-link">
                                         Поиск инвестора
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink to="category/2" className="nav-link">
+                                    <NavLink to="category/1" className="nav-link">
                                         Предложения инвесторов
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink to="category/3" className="nav-link">
+                                    <NavLink to="category/2" className="nav-link">
                                         Поиск бизнес парнёров
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink to="category/4" className="nav-link">
+                                    <NavLink to="category/3" className="nav-link">
                                         Продажа бизнеса
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink to="category/5" className="nav-link">
+                                    <NavLink to="category/4" className="nav-link">
                                         Франшизы
                                     </NavLink>
                                 </li>

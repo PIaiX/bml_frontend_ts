@@ -1,40 +1,121 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import Partners from '../components/Partners'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import HomeCategoriesContainer from '../components/HomeCategoriesContainer'
-import NewsContainer from '../components/NewsContainer'
-import BannerContainer from '../components/BannerContainer'
-import BlocksContainer from '../components/BlocksContainer'
+import HomeCategoriesContainer from '../components/containers/HomeCategories'
+import NewsContainer from '../components/containers/News'
+import BannerContainer from '../components/containers/Banner'
+import BlocksContainer from '../components/containers/Blocks'
+import {
+    useGetBusinessPartnersCategoryQuery,
+    useGetFranchiseCategoryQuery,
+    useGetInvestorsCategoryQuery,
+    useGetSaleBusinessCategoryQuery,
+    useGetSuggestionsInvestorsCategoryQuery,
+} from '../services/RTK/offersApi'
+import MainTitle from '../components/containers/MainTitle'
+import {getMainTitle} from '../services/mainTitle'
+import {IUseStateItem} from '../types'
+import {IMainTitle} from '../types/mainTitle'
 
 const Home: FC = () => {
+    const [mainTitle, setMainTitle] = useState<IUseStateItem<IMainTitle>>({
+        isLoaded: false,
+        item: null,
+    })
+
+    const {investors, isLoadingInvestors} = useGetInvestorsCategoryQuery(
+        {
+            page: 1,
+            limit: 8,
+            category: 0,
+            orderBy: 'desc',
+        },
+        {selectFromResult: ({data}) => ({investors: data?.body, isLoadingInvestors: !!data?.status})}
+    )
+
+    const {suggestionsInvestors, isLoadingSuggestionsInvestors} = useGetSuggestionsInvestorsCategoryQuery(
+        {
+            page: 1,
+            limit: 8,
+            category: 1,
+            orderBy: 'desc',
+        },
+        {
+            selectFromResult: ({data}) => ({
+                suggestionsInvestors: data?.body,
+                isLoadingSuggestionsInvestors: !!data?.status,
+            }),
+        }
+    )
+    const {businessPartners, isLoadingBusinessPartners} = useGetBusinessPartnersCategoryQuery(
+        {
+            page: 1,
+            limit: 8,
+            category: 2,
+            orderBy: 'desc',
+        },
+        {
+            selectFromResult: ({data}) => ({
+                businessPartners: data?.body,
+                isLoadingBusinessPartners: !!data?.status,
+            }),
+        }
+    )
+    const {saleBusiness, isLoadingSaleBusiness} = useGetSaleBusinessCategoryQuery(
+        {
+            page: 1,
+            limit: 8,
+            category: 3,
+            orderBy: 'desc',
+        },
+        {selectFromResult: ({data}) => ({saleBusiness: data?.body, isLoadingSaleBusiness: !!data?.status})}
+    )
+    const {franchise, isLoadingFranchise} = useGetFranchiseCategoryQuery(
+        {
+            page: 1,
+            limit: 8,
+            category: 4,
+            orderBy: 'desc',
+        },
+        {selectFromResult: ({data}) => ({franchise: data?.body, isLoadingFranchise: !!data?.status})}
+    )
+
+    useEffect(() => {
+        getMainTitle()
+            .then((res) => res && setMainTitle({isLoaded: true, item: res}))
+            .catch(() => setMainTitle({isLoaded: true, item: null}))
+    }, [])
+
     return (
         <main>
-            <BannerContainer />
+            <BannerContainer swiperDelay={mainTitle?.item?.bannersDelay} />
 
-            <BlocksContainer />
+            <BlocksContainer
+                investors={investors?.meta}
+                businessPartners={businessPartners?.meta}
+                saleBusiness={saleBusiness?.meta}
+                franchise={franchise?.meta}
+            />
 
-            <section className="bg_l_blue">
-                <div className="container" id="block_3">
-                    <h1>Главный заголовок</h1>
-                    <div className="row align-items-center">
-                        <div className="col-12 col-md-4 mb-4 mb-md-0">
-                            <video controls>
-                                <source src="/bml/video/video.mp4" type="video/mp4" />
-                            </video>
-                        </div>
-                        <div className="col-12 col-md-8 col-xl-7 col-xxl-6">
-                            <p className="f_12 pt">
-                                Посмотрите видео о работе портала: для инвесторов и партнеров, с помощью которого, не
-                                отрываясь от бизнес процессов, можно рассматривать перспективные проекты и узнавать о
-                                трендах рынка
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <MainTitle
+                title={mainTitle?.item?.title}
+                description={mainTitle?.item?.description}
+                videoPath={mainTitle?.item?.videoPath}
+            />
 
-            <HomeCategoriesContainer />
+            <HomeCategoriesContainer
+                isLoadingInvestors={isLoadingInvestors}
+                investors={investors?.data}
+                isLoadingSuggestionsInvestors={isLoadingSuggestionsInvestors}
+                suggestionsInvestors={suggestionsInvestors?.data}
+                isLoadingBusinessPartners={isLoadingBusinessPartners}
+                businessPartners={businessPartners?.data}
+                isLoadingSaleBusiness={isLoadingSaleBusiness}
+                saleBusiness={saleBusiness?.data}
+                isLoadingFranchise={isLoadingFranchise}
+                franchise={franchise?.data}
+            />
 
             <NewsContainer />
 
