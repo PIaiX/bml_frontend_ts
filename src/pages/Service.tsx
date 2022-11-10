@@ -9,7 +9,7 @@ import ServicePagination from '../components/utils/Pagination'
 import usePagination from '../hooks/pagination'
 import {useParams} from 'react-router-dom'
 import SearchForm from '../components/forms/SearchForm'
-import Partners from '../components/Partners'
+import PartnersSite from '../components/PartnersSite'
 import NewsContainer from '../components/containers/News'
 import BannerContainer from '../components/containers/Banner'
 import BlocksContainer from '../components/containers/Blocks'
@@ -303,7 +303,7 @@ const Service: FC = () => {
 
             <NewsContainer />
 
-            <Partners />
+            <PartnersSite />
         </main>
     )
 }

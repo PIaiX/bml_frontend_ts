@@ -3,7 +3,7 @@ import NotFound from '../pages/NotFound'
 import PersonalAccountLayout from '../components/PersonalAccountLayout'
 import UserProfile from '../pages/profile/UserProfile'
 import ViewProfile from '../pages/profile/ViewProfile'
-import Partners from '../components/Partners'
+import PartnersSite from '../components/PartnersSite'
 import Instructions from '../pages/profile/Instructions'
 import ProfileSettings from '../pages/profile/ProfileSettings'
 import UserAds from '../pages/profile/UserAds'
@@ -17,6 +17,7 @@ import ShoppingCart from '../pages/profile/ShoppingCart'
 import AdvertisingSection from '../pages/profile/AdvertisingSection'
 import AccountMenu from '../pages/profile/AccountMenu'
 import {Route, useRoutes} from 'react-router-dom'
+import Partners from '../pages/profile/Partners'
 
 const PersonalAccountRouter = ({isMobile}: any) => {
     const routes = [
@@ -26,7 +27,7 @@ const PersonalAccountRouter = ({isMobile}: any) => {
             children: [
                 {index: true, element: isMobile ? <AccountMenu /> : <UserProfile />},
                 {path: 'profile/:id', element: <UserProfile />},
-                {path: 'profile/view', element: <ViewProfile />},
+                {path: 'profile/user/:id', element: <ViewProfile />},
                 {path: 'profile/partners', element: <Partners />},
                 {path: 'instructions', element: <Instructions />},
                 {path: 'settings', element: <ProfileSettings />},

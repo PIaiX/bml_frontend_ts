@@ -1,4 +1,4 @@
-import {$api} from './indexAuth'
+import {$api, $authApi} from './indexAuth'
 import {apiRoutes} from '../config/api'
 import {
     IOfferBodyRequest,
@@ -63,6 +63,17 @@ export const getOffers = async (
 export const getOneOffer = async (id: string) => {
     try {
         const response = await $api.get<IOfferBodyRequest>(`${apiRoutes.ACTIONS_OFFER}/${id}`)
+        return response?.data?.body
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getUsersOffers = async (userId: number, page: number = 1, limit: number, orderBy: string = 'desc') => {
+    try {
+        const response = await $api.get<IOffersBodyRequest>(
+            `${apiRoutes.GET_NOT_ARCHIVED_USERS_OFFERS}/${userId}?page=${page}&limit=${limit}&orderBy=${orderBy}`
+        )
         return response?.data?.body
     } catch (error) {
         console.log(error)

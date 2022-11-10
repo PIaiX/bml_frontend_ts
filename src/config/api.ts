@@ -44,6 +44,11 @@ const apiRoutes: ApiRoutesTypes = {
 
     //mainTitle
     GET_MAIN_TITLE: 'projectData',
+
+    //user-profile
+    ACTIONS_FRIEND: 'user/friend',
+    GET_REQUESTS_FRIENDS: 'user/friend/requests',
+    GET_CURRENT_FRIENDS: 'user/friend/friends',
 }
 
 const BASE_URL: string | undefined = process.env.REACT_APP_BASE_URL

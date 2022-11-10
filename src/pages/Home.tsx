@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
-import Partners from '../components/Partners'
+import PartnersSite from '../components/PartnersSite'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import HomeCategoriesContainer from '../components/containers/HomeCategories'
@@ -119,7 +119,7 @@ const Home: FC = () => {
 
             <NewsContainer />
 
-            <Partners />
+            <PartnersSite />
         </main>
     )
 }
