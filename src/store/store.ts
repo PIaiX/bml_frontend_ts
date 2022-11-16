@@ -4,6 +4,7 @@ import {bannerApi} from '../services/RTK/bannerApi'
 import {userSlice} from './reducers/userSlice'
 import {alertSlice} from './reducers/alertSlice'
 import {offersApi} from '../services/RTK/offersApi'
+import {citySlice} from './reducers/citySlice'
 
 const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
         [offersApi.reducerPath]: offersApi.reducer,
         user: userSlice.reducer,
         alert: alertSlice.reducer,
+        cities: citySlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(newsApi.middleware).concat(bannerApi.middleware).concat(offersApi.middleware),

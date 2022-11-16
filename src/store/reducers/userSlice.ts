@@ -1,9 +1,7 @@
-import {createAsyncThunk, createSlice, Draft} from '@reduxjs/toolkit'
-import {$api, $authApi} from '../../services/indexAuth'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import {$api} from '../../services/indexAuth'
 import {apiRoutes} from '../../config/api'
 import {IRegister} from '../../models/auth'
-import {IUser} from '../../types/user'
-
 const initialState: any = {
     user: null,
 }

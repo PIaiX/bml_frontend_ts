@@ -3,32 +3,18 @@ import {Link} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import {useImageViewer} from '../../hooks/imageViewer'
 import {onImageHandler} from '../../helpers/formHandlers'
-import {useSelector} from 'react-redux'
 import EditProfileForm from '../../components/forms/EditProfileForm'
 import EditPasswordForm from '../../components/forms/EditPasswordForm'
+import {IUser} from '../../types/user'
+import {useAppSelector} from '../../hooks/store'
+import {checkPhotoPath} from '../../helpers/photoLoader'
+import EditProfileFormForIe from '../../components/forms/EditProfileFormForIE'
+import EditProfileFormForOoo from '../../components/forms/EditProfileFormForOOO'
 
 const ProfileSettings = () => {
-    const authorizedUser = useSelector((state: any) => state.authorizedUser)
-    const [personalData, setPersonalData] = useState<any>({})
-    const [passwordData, setPasswordData] = useState<any>({})
+    const user: IUser = useAppSelector((state) => state?.user?.user)
     const [avatar, setAvatar] = useState<any>(null)
-    const photo = useImageViewer(avatar)
-
-    const checkValidatePhoto = (photo: any, avatar: any) => {
-        if (photo) {
-            photo.width >= 300 && photo.height >= 300
-                ? setPersonalData((prevPersonalData: any) => ({...prevPersonalData, avatar}))
-                : setPersonalData((prevPersonalData: any) => ({...prevPersonalData, avatar: null}))
-        }
-    }
-
-    const onSubmit = (setFunction: any) => {
-        return (data: any) => {
-            setFunction((prevData: any) => ({...prevData, ...data}))
-        }
-    }
-
-    useEffect(() => checkValidatePhoto(photo, avatar), [photo, avatar])
+    let photo = useImageViewer(avatar)
 
     return (
         <div>
@@ -45,8 +31,8 @@ const ProfileSettings = () => {
                 <div className="row align-items-center">
                     <div className="col-md-4 mb-4 mb-md-0">
                         <img
-                            src={personalData?.avatar ? photo.data_url : '/images/photo-replacer.jpg'}
-                            alt="Анна Петрова"
+                            src={avatar ? photo?.data_url : checkPhotoPath(user?.avatar)}
+                            alt={user?.fullName}
                             className="user-photo"
                         />
                     </div>
@@ -60,21 +46,18 @@ const ProfileSettings = () => {
                             <br />
                             Рекомендуем загружать фото не менее 300px в ширину и высоту.)
                         </div>
-                        <div className="photo-upload__desc">
-                            {avatar && personalData?.avatar && <span>Фото загружено</span>}
-                            {avatar && !personalData?.avatar && (
-                                <span>Ошибка при загрузке. Попробуйте загрузить другое фото</span>
-                            )}
-                        </div>
+                        {avatar && photo && <span>Фото загружено</span>}
                     </div>
                 </div>
             </div>
 
             <h6 className="f_11 mb-2 mt-4 mb-sm-3 mt-sm-5">Личные данные профиля</h6>
-            <EditProfileForm authorizedUser={authorizedUser} onSubmit={onSubmit(setPersonalData)} />
+            {user?.type === 0 && <EditProfileForm avatar={avatar} />}
+            {user?.type === 1 && <EditProfileFormForIe avatar={avatar} />}
+            {user?.type === 2 && <EditProfileFormForOoo avatar={avatar} />}
 
             <h6 className="f_11 mb-2 mt-4 mb-sm-3 mt-sm-5">Сменить пароль</h6>
-            <EditPasswordForm onSubmit={onSubmit(setPasswordData)} />
+            <EditPasswordForm />
         </div>
     )
 }

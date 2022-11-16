@@ -49,6 +49,8 @@ const apiRoutes: ApiRoutesTypes = {
     ACTIONS_FRIEND: 'user/friend',
     GET_REQUESTS_FRIENDS: 'user/friend/requests',
     GET_CURRENT_FRIENDS: 'user/friend/friends',
+    UPDATE_PASSWORD: 'user/updatePassword',
+    ACTIONS_USER: 'user',
 }
 
 const BASE_URL: string | undefined = process.env.REACT_APP_BASE_URL

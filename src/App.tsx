@@ -10,6 +10,8 @@ import fingerprint from '@fingerprintjs/fingerprintjs'
 import AppRouter from './routes/AppRouter'
 import {useAppDispatch} from './hooks/store'
 import {checkAuth} from './store/reducers/userSlice'
+import {getCity} from './services/city'
+import {setCity} from './store/reducers/citySlice'
 
 function App() {
     const dispatch = useAppDispatch()
@@ -21,6 +23,10 @@ function App() {
             .then((result) => {
                 localStorage.setItem('fingerprint', result.visitorId)
             })
+    }, [])
+
+    useEffect(() => {
+        getCity().then((res) => res && dispatch(setCity(res)))
     }, [])
 
     useEffect(() => {
