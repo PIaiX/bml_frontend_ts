@@ -49,7 +49,7 @@ const AdCard: FC<Props> = (props: any) => {
                         <button
                             className="btn_main btn_3 w-100 px-1 px-sm-2 px-xl-3"
                             onClick={() => {
-                                props?.callbackSeter(props?.id)
+                                props?.offerIdSeterForUnArchive(props?.id)
                             }}
                         >
                             Опубликовать
