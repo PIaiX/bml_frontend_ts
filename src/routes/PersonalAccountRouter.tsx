@@ -33,6 +33,7 @@ const PersonalAccountRouter = ({isMobile}: any) => {
                 {path: 'settings', element: <ProfileSettings />},
                 {path: 'my-ads', element: <UserAds />},
                 {path: 'my-ads/new-ad', element: <NewAd />},
+                {path: 'my-ads/new-ad/:id', element: <NewAd />},
                 {path: 'my-ads/premium', element: <Premium />},
                 {path: 'favorites', element: <Favorites />},
                 {path: 'chat', element: <Chat />},

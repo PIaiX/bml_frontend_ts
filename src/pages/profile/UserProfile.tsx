@@ -8,7 +8,7 @@ import {getCurrentFriends} from '../../services/friends'
 import {IUseStateItems} from '../../types'
 import {IFriendsItem, IFriendsMeta} from '../../types/friends'
 import Loader from '../../components/utils/Loader'
-import {getUsersOffers} from '../../services/offers'
+import {getUsersOffersNotArchive} from '../../services/offers'
 import {IOffersItem, IOffersMeta} from '../../types/offers'
 
 const UserProfile: FC = () => {
@@ -34,7 +34,7 @@ const UserProfile: FC = () => {
 
     useEffect(() => {
         if (user?.id) {
-            getUsersOffers(user?.id, 1, 6, 'desc')
+            getUsersOffersNotArchive(user?.id, 1, 6, 'desc')
                 .then((res) => res && setUserOffers({isLoaded: true, items: res.data, meta: res.meta}))
                 .catch((error) => setUserOffers({isLoaded: true, items: null, meta: null}))
         }
@@ -100,10 +100,10 @@ const UserProfile: FC = () => {
                             <Link to="/account/settings" className="d-block blue f_09 mb-2 mb-sm-4">
                                 Редактировать информацию
                             </Link>
-                            <div className={`table-responsive ${user ? '' : 'is-loading'}`}>
-                                <table className="table table-borderless acc-table mb-0">
-                                    {user ? (
-                                        (user?.type === 0 && (
+                            <div className={`table-responsive`}>
+                                {user ? (
+                                    <table className="table table-borderless acc-table mb-0">
+                                        {user?.type === 0 && (
                                             <tbody>
                                                 <tr>
                                                     <td className="l-gray">Дата рождения:</td>
@@ -130,8 +130,8 @@ const UserProfile: FC = () => {
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                        )) ||
-                                        (user?.type === 1 && (
+                                        )}
+                                        {user?.type === 1 && (
                                             <tbody>
                                                 <tr>
                                                     <td className="l-gray">Компания:</td>
@@ -166,8 +166,8 @@ const UserProfile: FC = () => {
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                        )) ||
-                                        (user?.type === 2 && (
+                                        )}
+                                        {user?.type === 2 && (
                                             <tbody>
                                                 <tr>
                                                     <td className="l-gray">Компания:</td>
@@ -208,13 +208,13 @@ const UserProfile: FC = () => {
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                        ))
-                                    ) : (
-                                        <div className="p-5 w-100 d-flex justify-content-center">
-                                            <Loader color="#343434" />
-                                        </div>
-                                    )}
-                                </table>
+                                        )}
+                                    </table>
+                                ) : (
+                                    <div className="p-5 w-100 d-flex justify-content-center">
+                                        <Loader color="#343434" />
+                                    </div>
+                                )}
                             </div>
                         </div>
 

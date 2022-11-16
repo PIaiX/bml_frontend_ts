@@ -1,3 +1,6 @@
+import {IOffersItem} from './offers'
+import {Dispatch, SetStateAction} from 'react'
+
 export interface User {
     firstName: string
     lastName: string
@@ -27,4 +30,12 @@ export type IUseStateItems<items, meta> = {
 export type IUseStateItem<item> = {
     isLoaded: boolean
     item: item | null
+}
+
+export type IPagination<item> = {
+    paginationItems: Array<item>
+    pageCount: number
+    selectedPage: number
+    setSelectedPage: Dispatch<SetStateAction<number>>
+    handlePageClick: ({selected}: {selected: number}) => void
 }

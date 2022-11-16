@@ -40,6 +40,7 @@ $authApi.interceptors.response.use(
                 console.log('No auth')
             }
         }
+        return Promise.reject(error)
     }
 )
 

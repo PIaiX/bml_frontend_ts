@@ -29,13 +29,15 @@ export const useImageViewer = (file: File) => {
     useEffect(() => {
         const img = new Image()
         img.onload = () => {
-            setInfo((prevState: any) => {
-                return {
-                    ...prevState,
-                    width: img.width,
-                    height: img.height,
-                }
-            })
+            if (img?.width && img?.height) {
+                setInfo((prevState: any) => {
+                    return {
+                        ...prevState,
+                        width: img.width,
+                        height: img.height,
+                    }
+                })
+            }
         }
         img.src = info?.data_url
     }, [info?.data_url])

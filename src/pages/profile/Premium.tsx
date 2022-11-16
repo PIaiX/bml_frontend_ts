@@ -448,7 +448,7 @@ const Premium: FC = () => {
                             <button type="button" className="btn_main btn_2 fw_4">
                                 Загрузить
                             </button>
-                            <input type="file" onChange={(e) => onImageHandler(e, 'bigBanner', setData)} />
+                            <input type="file" onChange={(e) => onImageHandler(e, setData, 'bigBanner')} />
                             {validBigPhoto(lookBigPicture)[0] === undefined
                                 ? validBigPhoto(lookBigPicture)
                                 : validBigPhoto(lookBigPicture)[0]}
@@ -464,7 +464,7 @@ const Premium: FC = () => {
                             <button type="button" className="btn_main btn_2 fw_4">
                                 Загрузить
                             </button>
-                            <input type="file" onChange={(e) => onImageHandler(e, 'littleBanner', setData)} />
+                            <input type="file" onChange={(e) => onImageHandler(e, setData, 'littleBanner')} />
                             {validLittlePhoto(lookLittleBanner)[0] === undefined
                                 ? validLittlePhoto(lookLittleBanner)
                                 : validLittlePhoto(lookLittleBanner)[0]}

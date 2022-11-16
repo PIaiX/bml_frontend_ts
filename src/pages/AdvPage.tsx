@@ -171,7 +171,7 @@ const AdvPage: FC = () => {
                                         {offer?.item?.category !== 3 ? 'Инвестиции' : 'Стоимость'}:
                                     </span>
                                     <span className="f_15 fw_5">
-                                        {offer?.item?.category !== 3 ? offer?.item?.price : offer?.item?.investments} ₽
+                                        {offer?.item?.category !== 3 ? offer?.item?.investments : offer?.item?.price}₽
                                     </span>
                                 </div>
                                 {offer?.item?.category !== 1 && (
