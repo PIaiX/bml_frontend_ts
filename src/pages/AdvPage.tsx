@@ -6,7 +6,7 @@ import {MdDateRange, MdInfoOutline, MdOutlinePlace, MdOutlineVisibility} from 'r
 import BtnFav from '../components/utils/BtnFav'
 import {PhotoProvider, PhotoView} from 'react-photo-view'
 import 'react-photo-view/dist/react-photo-view.css'
-import Partners from '../components/Partners'
+import PartnersSite from '../components/PartnersSite'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import {Pagination} from 'swiper'
 import 'swiper/css'
@@ -171,7 +171,7 @@ const AdvPage: FC = () => {
                                         {offer?.item?.category !== 3 ? 'Инвестиции' : 'Стоимость'}:
                                     </span>
                                     <span className="f_15 fw_5">
-                                        {offer?.item?.category !== 3 ? offer?.item?.price : offer?.item?.investments} ₽
+                                        {offer?.item?.category !== 3 ? offer?.item?.investments : offer?.item?.price}₽
                                     </span>
                                 </div>
                                 {offer?.item?.category !== 1 && (
@@ -443,7 +443,7 @@ const AdvPage: FC = () => {
                     </form>
                 </div>
             </CustomModal>
-            <Partners />
+            <PartnersSite />
         </main>
     )
 }

@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
-import Partners from '../components/Partners'
+import PartnersSite from '../components/PartnersSite'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import HomeCategoriesContainer from '../components/containers/HomeCategories'
@@ -17,6 +17,11 @@ import MainTitle from '../components/containers/MainTitle'
 import {getMainTitle} from '../services/mainTitle'
 import {IUseStateItem} from '../types'
 import {IMainTitle} from '../types/mainTitle'
+import {useQuery} from 'react-query'
+import {getUsersOffersArchive} from '../services/offers'
+import {$api} from '../services/indexAuth'
+import {IOffersBodyRequest} from '../models/offers'
+import {apiRoutes} from '../config/api'
 
 const Home: FC = () => {
     const [mainTitle, setMainTitle] = useState<IUseStateItem<IMainTitle>>({
@@ -87,6 +92,23 @@ const Home: FC = () => {
             .catch(() => setMainTitle({isLoaded: true, item: null}))
     }, [])
 
+    const res = useQuery({
+        queryKey: '123',
+        queryFn: async () => {
+            try {
+                const response = await $api.get<IOffersBodyRequest>(
+                    `${apiRoutes.GET_ARCHIVED_USERS_OFFERS}/${23}?page=${1}&limit=${5}&orderBy=${'desc'}&category=${0} 
+                    `
+                )
+                return response
+            } catch (error) {
+                console.log(error)
+            }
+        },
+    })
+
+    console.log(res)
+
     return (
         <main>
             <BannerContainer swiperDelay={mainTitle?.item?.bannersDelay} />
@@ -119,7 +141,7 @@ const Home: FC = () => {
 
             <NewsContainer />
 
-            <Partners />
+            <PartnersSite />
         </main>
     )
 }

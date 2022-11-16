@@ -1,4 +1,4 @@
-import {$api} from './indexAuth'
+import {$api, $authApi} from './indexAuth'
 import {apiRoutes} from '../config/api'
 import {
     IOfferBodyRequest,
@@ -66,5 +66,83 @@ export const getOneOffer = async (id: string) => {
         return response?.data?.body
     } catch (error) {
         console.log(error)
+    }
+}
+
+export const getUsersOffersNotArchive = async (
+    userId: number,
+    page: number = 1,
+    limit: number,
+    orderBy: string = 'desc',
+    category?: number
+) => {
+    try {
+        const response = await $api.get<IOffersBodyRequest>(
+            `${apiRoutes.GET_NOT_ARCHIVED_USERS_OFFERS}/${userId}?page=${page}&limit=${limit}&orderBy=${orderBy}${
+                category || category === 0 ? `&category=${category}` : ''
+            }`
+        )
+        return response?.data?.body
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getUsersOffersArchive = async (
+    userId: number,
+    page: number = 1,
+    limit: number,
+    orderBy: string = 'desc',
+    category?: number
+) => {
+    try {
+        const response = await $api.get<IOffersBodyRequest>(
+            `${apiRoutes.GET_ARCHIVED_USERS_OFFERS}/${userId}?page=${page}&limit=${limit}&orderBy=${orderBy}${
+                category || category === 0 ? `&category=${category}` : ''
+            }`
+        )
+        return response?.data?.body
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const createOffer = async (payloads: any) => {
+    try {
+        await $authApi.post(`${apiRoutes.ACTIONS_OFFER}`, payloads)
+    } catch (error) {
+        throw error
+    }
+}
+
+export const updateOffer = async (offerId: undefined | string, payloads: any) => {
+    try {
+        const response = await $authApi.patch(`${apiRoutes.ACTIONS_OFFER}/${offerId}`, payloads)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const addInArchive = async (id: number | null) => {
+    try {
+        const response = await $api.patch(`${apiRoutes.PATCH_ARCHIVE_OFFER}/${id}`)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const deleteWithArchive = async (id: number | null) => {
+    try {
+        return await $api.delete(`${apiRoutes.DELETE_ARCHIVE_OFFER}/${id}`)
+    } catch (error) {
+        throw error
+    }
+}
+
+export const deleteImageOffer = async (imageId: number) => {
+    try {
+        const response = await $authApi.delete(`${apiRoutes?.DELETE_OFFER_IMAGE}/${imageId}`)
+    } catch (error) {
+        throw error
     }
 }

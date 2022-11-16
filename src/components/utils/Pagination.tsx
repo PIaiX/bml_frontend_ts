@@ -1,17 +1,15 @@
-import React from 'react';
-import ReactPaginate from 'react-paginate';
+import React from 'react'
+import ReactPaginate from 'react-paginate'
 
 interface Props {
-    color?: string,
-    pageCount: number,
-    nextLabel: string,
-    onPageChange: ({ selected }: {
-        selected: any;
-    }) => void,
-    forcePage?: number,
-    pageRangeDisplayed?: number,
-    marginPagesDisplayed?: number,
-    previousLabel?: string,
+    color?: string
+    pageCount: number
+    nextLabel: string
+    onPageChange: ({selected}: {selected: number}) => void
+    forcePage?: number
+    pageRangeDisplayed?: number
+    marginPagesDisplayed?: number
+    previousLabel?: string
 }
 
 const Pagination: React.FC<Props> = (props) => {
@@ -30,7 +28,7 @@ const Pagination: React.FC<Props> = (props) => {
                 {...props}
             />
         </nav>
-    );
-};
+    )
+}
 
-export default Pagination;
+export default Pagination

@@ -149,6 +149,7 @@ export type IOfferItem = {
     }
     subsectionId: number
     createdAt: string
+    video: string
     updatedAt: string
     images: [
         {
@@ -167,4 +168,29 @@ export type IOfferItem = {
     projectStageForUser: string
     createdAtForUser: string
     archiveExpire: string
+}
+
+export type IOfferForm = {
+    about: string
+    area: string | number
+    businessPlan: string
+    category: string | number
+    city: string
+    cooperationTerms: string | number
+    description: string
+    investments: string | number
+    paybackTime: string | number
+    profitPerMonth: string | number
+    projectStage: string | number
+    subsectionId: string | number
+    title: string
+    aboutCompany: string
+    benefits: string
+    branchCount: string | number
+    dateOfCreation: string
+    price: string | number
+    pricePerMonth: string | number
+    soldBranchCount: string | number
+    video: string
+    profit: string | number
 }

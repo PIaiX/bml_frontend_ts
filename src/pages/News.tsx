@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react'
 import NewsPreview from '../components/NewsPreview'
 import NewsMini from '../components/NewsMini'
-import Partners from '../components/Partners'
+import PartnersSite from '../components/PartnersSite'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import usePagination from '../hooks/pagination'
 import Pagination from '../components/utils/Pagination'
@@ -145,7 +145,7 @@ const News: FC = () => {
                 </section>
             </div>
 
-            <Partners />
+            <PartnersSite />
         </main>
     )
 }
