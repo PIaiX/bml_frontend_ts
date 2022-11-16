@@ -120,7 +120,7 @@ const NewAd = () => {
                         setValue('investments', res?.investments)
                         setValue('paybackTime', res?.paybackTime)
                         setValue('profitPerMonth', res?.profitPerMonth)
-                        setValue('projectStage', res?.projectStage || '')
+                        setValue('projectStage', res?.projectStage)
                         setValue('subsectionId', res?.subsectionId)
                         setValue('aboutCompany', res?.aboutCompany || '')
                         setValue('benefits', res?.benefits || '')
@@ -891,19 +891,21 @@ const NewAd = () => {
                                 </div>
                             </div>
                             <div className="col-sm-6 col-lg-8">
-                                <select
-                                    defaultValue={''}
-                                    {...register('projectStage', {
-                                        required: 'Обязательное поле',
-                                    })}
-                                >
-                                    <option value={''} disabled>
-                                        Стадия проекта
-                                    </option>
-                                    <option value={0}>Идея</option>
-                                    <option value={1}>В стадии создания</option>
-                                    <option value={2}>Готовый бизнес</option>
-                                </select>
+                                <ValidateWrapper error={errors?.projectStage}>
+                                    <select
+                                        defaultValue={''}
+                                        {...register('projectStage', {
+                                            required: 'Обязательное поле',
+                                        })}
+                                    >
+                                        <option value={''} disabled>
+                                            Стадия проекта
+                                        </option>
+                                        <option value={0}>Идея</option>
+                                        <option value={1}>В стадии создания</option>
+                                        <option value={2}>Готовый бизнес</option>
+                                    </select>
+                                </ValidateWrapper>
                             </div>
                         </div>
                     )}

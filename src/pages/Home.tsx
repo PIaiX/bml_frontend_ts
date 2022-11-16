@@ -92,23 +92,6 @@ const Home: FC = () => {
             .catch(() => setMainTitle({isLoaded: true, item: null}))
     }, [])
 
-    const res = useQuery({
-        queryKey: '123',
-        queryFn: async () => {
-            try {
-                const response = await $api.get<IOffersBodyRequest>(
-                    `${apiRoutes.GET_ARCHIVED_USERS_OFFERS}/${23}?page=${1}&limit=${5}&orderBy=${'desc'}&category=${0} 
-                    `
-                )
-                return response
-            } catch (error) {
-                console.log(error)
-            }
-        },
-    })
-
-    console.log(res)
-
     return (
         <main>
             <BannerContainer swiperDelay={mainTitle?.item?.bannersDelay} />

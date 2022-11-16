@@ -27,7 +27,7 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
                 <h4 className="fw_7">Краткая информация</h4>
                 <ul>
                     <li>Инвестиции: {props?.investments} ₽</li>
-                    <li>Предполагаемая прибыль: {props?.profit} ₽</li>
+                    <li>Предполагаемая прибыль: {props?.profitPerMonth || 0} ₽</li>
                     <li>
                         Окупаемость: {props?.payback !== null ? props?.paybackForUser?.toLowerCase() : 'не установлено'}
                     </li>
