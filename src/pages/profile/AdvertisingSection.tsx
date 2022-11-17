@@ -19,18 +19,18 @@ const AdvertisingSection = () => {
     const viewPhoto = useImageViewer(data?.photo)
 
     const validLittlePhoto = (photo: any) => {
-        if (photo.width === undefined && photo.height === undefined) {
+        if (photo?.width === undefined && photo?.height === undefined) {
             return <span>Фото не загружено</span>
-        } else if (photo.width === 250 && photo.height === 160 && data?.adv === 1) {
+        } else if (photo?.width === 250 && photo?.height === 160 && data?.adv === 1) {
             return <span>Фото загружено</span>
-        } else if (photo.width !== 250 && photo.height !== 160) {
+        } else if (photo?.width !== 250 && photo?.height !== 160) {
             delete data?.photo
             return <span>Размеры не подходят</span>
         }
     }
 
     const validBigPhoto = (photo: any) => {
-        if (photo.width === undefined && photo.height === undefined) {
+        if (photo?.width === undefined && photo?.height === undefined) {
             return <span>Фото не загружено</span>
         } else if (photo?.width === 1200 && photo?.height === 800 && data?.adv === 0) {
             return <span>Фото загружено</span>

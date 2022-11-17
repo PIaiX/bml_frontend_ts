@@ -12,7 +12,8 @@ export const updatePasswordUser = async (userId: number, payloads: Passwords) =>
 
 export const updateUserInfo = async (userId: number, payloads: any) => {
     try {
-        return await $authApi.patch(`${apiRoutes.ACTIONS_USER}/${userId}`, payloads)
+        const response = await $authApi.patch(`${apiRoutes.ACTIONS_USER}/${userId}`, payloads)
+        return response?.data?.body
     } catch (error) {
         throw error
     }

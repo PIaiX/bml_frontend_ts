@@ -140,7 +140,7 @@ const UserProfile: FC = () => {
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td className="l-gray">ОГРН:</td>
+                                                    <td className="l-gray">ОГРНИП:</td>
                                                     <td className="color-1">
                                                         {user?.mainStateRegistrationNumber
                                                             ? user?.mainStateRegistrationNumber

@@ -74,12 +74,15 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
         }
         updateUserInfo(user?.id, formData)
             .then((res) => {
+                dispatch(setUser(res))
                 dispatch(showAlert({message: 'Информация успешно изменена', typeAlert: 'good'}))
             })
             .catch((error) => {
                 error?.response?.data?.body?.errors?.forEach((i: any) => {
-                    if (i?.field === 'phone') {
-                        setError('phone', {type: 'custom', message: i?.message})
+                    if (i?.field === 'phone' && i?.message?.toLowerCase().includes('должно быть в формате телефона')) {
+                        setError('phone', {type: 'custom', message: 'Должно быть в формате телефона'})
+                    } else if (i?.field === 'phone' && i?.message?.toLowerCase().includes('значение уже занято')) {
+                        setError('phone', {type: 'custom', message: 'Значение уже занято'})
                     }
                 })
             })
@@ -185,6 +188,10 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                                 maxLength: {
                                     value: 12,
                                     message: 'Максимальная длина 12 символов',
+                                },
+                                pattern: {
+                                    value: /\+[7][0-9]{10}/,
+                                    message: 'Не верный формат',
                                 },
                             })}
                         />

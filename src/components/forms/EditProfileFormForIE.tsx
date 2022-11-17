@@ -6,6 +6,7 @@ import {convertLocaleDate} from '../../helpers/convertLocaleDate'
 import {updateUserInfo} from '../../services/profileSettings'
 import {showAlert} from '../../store/reducers/alertSlice'
 import ValidateWrapper from '../utils/ValidateWrapper'
+import {setUser} from '../../store/reducers/userSlice'
 
 type Props = {
     avatar: File
@@ -74,12 +75,15 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
             formData.append(key, req[key])
         }
         updateUserInfo(user?.id, formData)
-            .then(() => {
-                dispatch(showAlert({message: 'Информация успешно изменена'}))
+            .then((res) => {
+                dispatch(setUser(res))
+                dispatch(showAlert({message: 'Информация успешно изменена', typeAlert: 'good'}))
             })
             .catch((error) => {
                 error?.response?.data?.body?.errors?.forEach((i: any) => {
-                    if (i?.field === 'phone') {
+                    if (i?.field === 'phone' && i?.message?.toLowerCase().includes('должно быть в формате телефона')) {
+                        setError('phone', {type: 'custom', message: 'Должно быть в формате телефона'})
+                    } else if (i?.field === 'phone' && i?.message?.toLowerCase().includes('значение уже занято')) {
                         setError('phone', {type: 'custom', message: 'Значение уже занято'})
                     }
                     if (i?.field === 'mainStateRegistrationNumber') {
@@ -246,9 +250,17 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                             placeholder="+79000000000"
                             {...register('phone', {
                                 required: 'поле обязательно к заполнению',
+                                minLength: {
+                                    value: 12,
+                                    message: 'Минимальная длина 12 символов',
+                                },
+                                maxLength: {
+                                    value: 12,
+                                    message: 'Максимальная длина 12 символов',
+                                },
                                 pattern: {
-                                    value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im,
-                                    message: 'укажите правильный формат номера',
+                                    value: /\+[7][0-9]{10}/,
+                                    message: 'Не верный формат',
                                 },
                             })}
                         />
