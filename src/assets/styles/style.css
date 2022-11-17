@@ -2103,3 +2103,7 @@ footer {
 .email_input {
     width: 100%;
 }
+
+.acc-video-block > a{
+    color: #0c63e4;
+}
