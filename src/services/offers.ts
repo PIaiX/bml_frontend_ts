@@ -60,9 +60,9 @@ export const getOffers = async (
     }
 }
 
-export const getOneOffer = async (id: string) => {
+export const getOneOffer = async (id: string, userId: number | string = '') => {
     try {
-        const response = await $api.get<IOfferBodyRequest>(`${apiRoutes.ACTIONS_OFFER}/${id}`)
+        const response = await $api.get<IOfferBodyRequest>(`${apiRoutes.ACTIONS_OFFER}/${id}/${userId}`)
         return response?.data?.body
     } catch (error) {
         console.log(error)

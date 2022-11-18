@@ -3,12 +3,15 @@ import {apiRoutes, BASE_URL} from '../../config/api'
 import {INewsBodyRequest, IOneNewsBodyRequest} from '../../models/news'
 import {IOneNews} from '../../types/news'
 import {IOffersBodyRequest} from '../../models/offers'
+import {useAppSelector} from '../../hooks/store'
+import {$api, $authApi} from '../indexAuth'
 
 type Payloads = {
     page: number
     limit: number
     orderBy: string
     category: number
+    userId?: number | string
 }
 
 export const offersApi = createApi({
@@ -17,40 +20,25 @@ export const offersApi = createApi({
     refetchOnFocus: true,
     keepUnusedDataFor: 300,
     endpoints: (build) => ({
-        getInvestorsCategory: build.query<
-            IOffersBodyRequest,
-            {page: number; limit: number; orderBy: string; category: number}
-        >({
+        getInvestorsCategory: build.query<IOffersBodyRequest, Payloads>({
             query: (payload: Payloads) =>
-                `${apiRoutes.GET_OFFER_PAGINATE}?page=${payload.page}&limit=${payload.limit}&orderBy=${payload.orderBy}&category=${payload.category}`,
+                `${apiRoutes.GET_OFFER_PAGINATE}/${payload.userId}?page=${payload.page}&limit=${payload.limit}&orderBy=${payload.orderBy}&category=${payload.category}`,
         }),
-        getSuggestionsInvestorsCategory: build.query<
-            IOffersBodyRequest,
-            {page: number; limit: number; orderBy: string; category: number}
-        >({
+        getSuggestionsInvestorsCategory: build.query<IOffersBodyRequest, Payloads>({
             query: (payload: Payloads) =>
-                `${apiRoutes.GET_OFFER_PAGINATE}?page=${payload.page}&limit=${payload.limit}&orderBy=${payload.orderBy}&category=${payload.category}`,
+                `${apiRoutes.GET_OFFER_PAGINATE}/${payload.userId}?page=${payload.page}&limit=${payload.limit}&orderBy=${payload.orderBy}&category=${payload.category}`,
         }),
-        getBusinessPartnersCategory: build.query<
-            IOffersBodyRequest,
-            {page: number; limit: number; orderBy: string; category: number}
-        >({
+        getBusinessPartnersCategory: build.query<IOffersBodyRequest, Payloads>({
             query: (payload: Payloads) =>
-                `${apiRoutes.GET_OFFER_PAGINATE}?page=${payload.page}&limit=${payload.limit}&orderBy=${payload.orderBy}&category=${payload.category}`,
+                `${apiRoutes.GET_OFFER_PAGINATE}/${payload.userId}?page=${payload.page}&limit=${payload.limit}&orderBy=${payload.orderBy}&category=${payload.category}`,
         }),
-        getSaleBusinessCategory: build.query<
-            IOffersBodyRequest,
-            {page: number; limit: number; orderBy: string; category: number}
-        >({
+        getSaleBusinessCategory: build.query<IOffersBodyRequest, Payloads>({
             query: (payload: Payloads) =>
-                `${apiRoutes.GET_OFFER_PAGINATE}?page=${payload.page}&limit=${payload.limit}&orderBy=${payload.orderBy}&category=${payload.category}`,
+                `${apiRoutes.GET_OFFER_PAGINATE}/${payload.userId}?page=${payload.page}&limit=${payload.limit}&orderBy=${payload.orderBy}&category=${payload.category}`,
         }),
-        getFranchiseCategory: build.query<
-            IOffersBodyRequest,
-            {page: number; limit: number; orderBy: string; category: number}
-        >({
+        getFranchiseCategory: build.query<IOffersBodyRequest, Payloads>({
             query: (payload: Payloads) =>
-                `${apiRoutes.GET_OFFER_PAGINATE}?page=${payload.page}&limit=${payload.limit}&orderBy=${payload.orderBy}&category=${payload.category}`,
+                `${apiRoutes.GET_OFFER_PAGINATE}/${payload.userId}?page=${payload.page}&limit=${payload.limit}&orderBy=${payload.orderBy}&category=${payload.category}`,
         }),
     }),
 })

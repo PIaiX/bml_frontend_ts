@@ -20,7 +20,7 @@ const RegistrationForm: FC = () => {
     const [errorsFromServ, setErrorsFromServ] = useState<any>({})
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
 
     const {
         register,

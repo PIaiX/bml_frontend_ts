@@ -1,24 +1,27 @@
-import {createAsyncThunk, createSlice, Draft} from '@reduxjs/toolkit'
-import {$api, $authApi} from '../../services/indexAuth'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import {$api} from '../../services/indexAuth'
 import {apiRoutes} from '../../config/api'
 import {IRegister} from '../../models/auth'
 import {IUser} from '../../types/user'
 
-const initialState: any = {
-    user: null,
+type InitialState = {
+    user: IUser | null
+    isLoading: boolean
 }
 
-export const checkAuth = createAsyncThunk('auth/refreshToken', async (_, {rejectWithValue}) => {
+const initialState: InitialState = {
+    user: null,
+    isLoading: true,
+}
+
+export const checkAuth = createAsyncThunk('auth/refreshToken', async (_, thunkAPI) => {
     try {
         const response = await $api.get<IRegister>(`${apiRoutes.REFRESH_TOKEN}`)
         if (response.status === 200) {
             return response?.data?.body
-        } else {
-            new Error('Refresh error')
         }
     } catch (error: any) {
-        localStorage.removeItem('token')
-        return rejectWithValue(error.message)
+        return thunkAPI.rejectWithValue(error.message)
     }
 })
 
@@ -34,9 +37,15 @@ export const userSlice = createSlice({
         },
     },
     extraReducers: {
-        [checkAuth.fulfilled.type]: (state: any, action: {payload: {token: string; user: any}}) => {
+        [checkAuth.fulfilled.type]: (state: InitialState, action: {payload: {token: string; user: any}}) => {
             localStorage.setItem('token', action?.payload?.token)
             state.user = action?.payload?.user
+            state.isLoading = false
+        },
+        [checkAuth.rejected.type]: (state: InitialState, action) => {
+            localStorage.removeItem('token')
+            state.user = null
+            state.isLoading = false
         },
     },
 })

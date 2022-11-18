@@ -33,7 +33,7 @@ const AdvPage: FC = () => {
         isLoaded: false,
         item: null,
     })
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [isShowModalReport, setIsShowModalReport] = useState<boolean>(false)
     const [similarOffers, setSimilarOffers] = useState<IUseStateItems<IOffersItem, IOffersMeta>>({
         isLoaded: false,
@@ -57,7 +57,7 @@ const AdvPage: FC = () => {
 
     useEffect(() => {
         if (id) {
-            getOneOffer(id)
+            getOneOffer(id, user?.id)
                 .then((res) => {
                     res && setOffer({isLoaded: true, item: res})
                 })
@@ -65,7 +65,7 @@ const AdvPage: FC = () => {
                     setOffer({isLoaded: true, item: null})
                 })
         }
-    }, [id])
+    }, [id, user?.id])
 
     useEffect(() => {
         getOfferReportType()
@@ -76,9 +76,11 @@ const AdvPage: FC = () => {
     useEffect(() => {
         if (offer?.item) {
             const payloads = {}
-            getOffers(1, 10, offer?.item?.category, user?.id, payloads, true)
-                .then((res) => setSimilarOffers({isLoaded: true, items: res?.data, meta: res?.meta}))
-                .catch(() => setSimilarOffers({isLoaded: true, items: null, meta: null}))
+            if (user) {
+                getOffers(1, 10, offer?.item?.category, user?.id, payloads, true)
+                    .then((res) => setSimilarOffers({isLoaded: true, items: res?.data, meta: res?.meta}))
+                    .catch(() => setSimilarOffers({isLoaded: true, items: null, meta: null}))
+            }
         }
     }, [offer?.item, user?.id])
 
@@ -162,7 +164,11 @@ const AdvPage: FC = () => {
                                         </div>
                                     </NavLink>
                                     <div className="d-flex align-items-center">
-                                        <BtnFav check={false} className={'color-2 f_20'} />
+                                        <BtnFav
+                                            check={offer?.item?.isFavorite}
+                                            className={'color-2 f_20'}
+                                            offerId={offer?.item?.id}
+                                        />
                                     </div>
                                 </div>
 
@@ -210,7 +216,7 @@ const AdvPage: FC = () => {
                 <div className="row">
                     <div className="col-md-4 col-lg-3 position-relative">
                         <div className="left_menu">
-                            <LeftMenuInOfferContainer category={offer?.item?.category} />
+                            <LeftMenuInOfferContainer category={offer?.item?.category} video={offer?.item?.video} />
 
                             <div className="row justify-content-center g-4">
                                 <div className="col-8 col-sm-6 col-md-12 promo">
@@ -308,6 +314,27 @@ const AdvPage: FC = () => {
                                 <MdInfoOutline className="f_11 gray" />
                                 <span className="ms-2 fw_7 f_09">Пожаловаться</span>
                             </button>
+
+                            {offer?.item?.video && (
+                                <section className="anchor_block mb-4" id="anchor_video">
+                                    <h4 className="fw_7">Видео</h4>
+                                    <PhotoProvider maskOpacity={0.75}>
+                                        <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
+                                            <div>
+                                                <div className="acc-video">
+                                                    <iframe
+                                                        src={offer?.item?.video}
+                                                        title="YouTube video player"
+                                                        frameBorder="0"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowFullScreen
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </PhotoProvider>
+                                </section>
+                            )}
 
                             <section className="anchor_block mb-4" id="anchor_photo">
                                 <h4 className="fw_7">Фотогалерея</h4>
@@ -433,7 +460,9 @@ const AdvPage: FC = () => {
                                 type="submit"
                                 className="btn_main btn_1"
                                 onClick={() => {
-                                    setValue('userId', user?.id)
+                                    if (user) {
+                                        setValue('userId', user?.id)
+                                    }
                                     setValue('offerId', id)
                                 }}
                             >

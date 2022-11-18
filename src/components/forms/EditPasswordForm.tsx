@@ -1,63 +1,99 @@
-import React from 'react'
+import React, {FC} from 'react'
 import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../utils/ValidateWrapper'
+import {useAppDispatch, useAppSelector} from '../../hooks/store'
+import {IUser} from '../../types/user'
+import {updatePasswordUser} from '../../services/profileSettings'
+import {showAlert} from '../../store/reducers/alertSlice'
 
-interface Props {
-    onSubmit: (data: any) => void
+export type Passwords = {
+    oldPassword: string
+    password: string
+    passwordConfirm: string
 }
 
-const EditPasswordForm: React.FC<Props> = ({onSubmit}) => {
+const EditPasswordForm: FC = () => {
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const dispatch = useAppDispatch()
     const {
         register,
         formState: {errors},
         handleSubmit,
         watch,
-    } = useForm({
+        reset,
+    } = useForm<Passwords>({
         mode: 'onSubmit',
-        reValidateMode: 'onSubmit',
+        reValidateMode: 'onChange',
         defaultValues: {
-            oldPass: '',
-            newPass: '',
-            repeatNewPass: '',
+            oldPassword: '',
+            password: '',
+            passwordConfirm: '',
         },
     })
 
+    const submitUpdatePassword = (data: Passwords) => {
+        if (user) {
+            updatePasswordUser(user?.id, data)
+                .then(() => {
+                    dispatch(showAlert({message: 'Пароль успешно изменен', typeAlert: 'good'}))
+                    reset()
+                })
+                .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
+        }
+    }
+
     return (
-        <form className="acc-box" noValidate onSubmit={handleSubmit(onSubmit)}>
+        <form className="acc-box" noValidate onSubmit={handleSubmit(submitUpdatePassword)}>
             <div className="row">
                 <div className="col-sm-8">
                     <h6>Старый пароль</h6>
-                    <ValidateWrapper error={errors?.oldPass}>
+                    <ValidateWrapper error={errors?.oldPassword}>
                         <input
                             type="password"
                             className="mt-2"
                             placeholder="Введите старый пароль"
-                            {...register('oldPass', {
-                                required: 'поле обязательно к заполнению',
+                            {...register('oldPassword', {
+                                required: 'Поле обязательно к заполнению',
+                                pattern: {
+                                    value: /(.*[0-9].*[A-Z])|(.*[A-Z].*[0-9])/gm,
+                                    message: 'Отсутствует заглавная буква или цифра',
+                                },
+                                minLength: {
+                                    value: 8,
+                                    message: 'Минимальная длина 8 символов',
+                                },
                             })}
                         />
                     </ValidateWrapper>
                     <h6 className="mt-3">Новый пароль</h6>
-                    <ValidateWrapper error={errors?.newPass}>
+                    <ValidateWrapper error={errors?.password}>
                         <input
                             type="password"
                             className="mt-2"
                             placeholder="Придумайте новый пароль"
-                            {...register('newPass', {
-                                required: 'поле обязательно к заполнению',
+                            {...register('password', {
+                                required: 'Поле обязательно к заполнению',
+                                pattern: {
+                                    value: /(.*[0-9].*[A-Z])|(.*[A-Z].*[0-9])/gm,
+                                    message: 'Отсутствует заглавная буква или цифра',
+                                },
+                                minLength: {
+                                    value: 8,
+                                    message: 'Минимальная длина 8 символов',
+                                },
                             })}
                         />
                     </ValidateWrapper>
                     <h6 className="mt-3">Повторите пароль</h6>
-                    <ValidateWrapper error={errors?.repeatNewPass}>
+                    <ValidateWrapper error={errors?.passwordConfirm}>
                         <input
                             type="password"
                             className="mt-2"
                             placeholder="Повторите пароль"
-                            {...register('repeatNewPass', {
-                                required: 'поле обязательно к заполнению',
+                            {...register('passwordConfirm', {
+                                required: 'Поле обязательно к заполнению',
                                 validate: (value) => {
-                                    if (watch('newPass') !== value) {
+                                    if (watch('password') !== value) {
                                         return 'пароли не совпадают'
                                     }
                                 },

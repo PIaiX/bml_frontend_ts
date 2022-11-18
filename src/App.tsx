@@ -8,11 +8,15 @@ import './assets/styles/style.css'
 import fingerprint from '@fingerprintjs/fingerprintjs'
 
 import AppRouter from './routes/AppRouter'
-import {useAppDispatch} from './hooks/store'
+import {useAppDispatch, useAppSelector} from './hooks/store'
 import {checkAuth} from './store/reducers/userSlice'
+import {getCity} from './services/city'
+import {setCity} from './store/reducers/citySlice'
+import {setInitialCount} from './store/reducers/favoriteCountSlice'
 
 function App() {
     const dispatch = useAppDispatch()
+    const isLoadingRefresh = useAppSelector((state) => state?.user?.isLoading)
 
     useEffect(() => {
         fingerprint
@@ -24,12 +28,18 @@ function App() {
     }, [])
 
     useEffect(() => {
+        getCity().then((res) => res && dispatch(setCity(res)))
+    }, [])
+
+    useEffect(() => {
         if (localStorage.getItem('token')) {
+            dispatch(checkAuth())
+        } else {
             dispatch(checkAuth())
         }
     }, [])
 
-    return <AppRouter />
+    return isLoadingRefresh ? <></> : <AppRouter />
 }
 
 export default App

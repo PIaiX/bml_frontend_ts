@@ -3,9 +3,10 @@ import {Link} from 'react-scroll'
 
 type Props = {
     category?: number
+    video?: string
 }
 
-const LeftMenuInOfferContainer: FC<Props> = ({category}) => {
+const LeftMenuInOfferContainer: FC<Props> = ({category, video}) => {
     if (category === 0) {
         return (
             <nav className="anchor-menu d-none d-md-block">
@@ -486,6 +487,22 @@ const LeftMenuInOfferContainer: FC<Props> = ({category}) => {
                             Краткая информация
                         </Link>
                     </li>
+                    {video && (
+                        <li>
+                            <Link
+                                activeClass="active"
+                                to="anchor_video"
+                                spy={true}
+                                smooth={true}
+                                hashSpy={true}
+                                offset={-130}
+                                duration={300}
+                                isDynamic={true}
+                            >
+                                Видео
+                            </Link>
+                        </li>
+                    )}
                     <li>
                         <Link
                             activeClass="active"

@@ -2,11 +2,20 @@ import React, {FC, useEffect, useState} from 'react'
 import {NavLink, Link} from 'react-router-dom'
 import {MdStarOutline, MdOutlineShoppingCart, MdLogin, MdSearch, MdMenu, MdClose} from 'react-icons/md'
 import {IconContext} from 'react-icons'
-import {useAppSelector} from '../hooks/store'
+import {useAppDispatch, useAppSelector} from '../hooks/store'
 import {IUser} from '../types/user'
+import {decrement, increment, setInitialCount} from '../store/reducers/favoriteCountSlice'
 
 const Header: FC = () => {
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const count = useAppSelector((state) => state?.user?.user?.id)
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (count) {
+            dispatch(setInitialCount(count))
+        }
+    }, [])
 
     return (
         <>
@@ -16,12 +25,7 @@ const Header: FC = () => {
                         <Link to="/" className="logo">
                             <img src="/images/logo.svg" alt="Бизнес My Life" />
                         </Link>
-                        <form action="" className="header_search d-none d-lg-flex">
-                            <input type="search" placeholder="Поиск по сайту" />
-                            <button type="submit" className="btn_main">
-                                <MdSearch />
-                            </button>
-                        </form>
+
                         <NavLink
                             to="/contacts"
                             state={{fromHeader: true}}
@@ -29,15 +33,15 @@ const Header: FC = () => {
                         >
                             Обратная связь
                         </NavLink>
-                        <a href="/" className="btn-icon">
+                        <NavLink to={user ? '/account/favorites' : '/enter'} className="btn-icon">
                             <MdStarOutline />
-                            <span className="count">3</span>
-                        </a>
+                            {user && <span className="count">{count}</span>}
+                        </NavLink>
                         <a href="/" className="btn-icon">
                             <MdOutlineShoppingCart />
                             <span className="count">3</span>
                         </a>
-                        {localStorage.getItem('token') ? (
+                        {user?.id ? (
                             <NavLink to={`/account/profile/${user?.id}`}>
                                 <img src="/images/icons/profile.svg" />
                             </NavLink>
@@ -95,12 +99,6 @@ const Header: FC = () => {
                                 <MdMenu />
                             </IconContext.Provider>
                         </button>
-                        <form action="" className="header_search d-flex d-lg-none">
-                            <input type="search" placeholder="Поиск по сайту" className="py-2 px-2 px-sm-3" />
-                            <button type="submit" className="btn_main">
-                                <MdSearch />
-                            </button>
-                        </form>
                     </div>
                 </section>
             </header>

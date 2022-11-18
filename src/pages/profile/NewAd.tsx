@@ -29,7 +29,7 @@ const NewAd = () => {
     const [formInfo, setFormInfo] = useState<any>({
         category: 0,
     })
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [loadPhotoModal, setLoadPhotoModal] = useState<boolean>(false)
     const photoInfo = useImageViewer(formInfo?.image)
     const [dragActive, setDragActive] = useState<boolean>(false)
@@ -120,7 +120,7 @@ const NewAd = () => {
                         setValue('investments', res?.investments)
                         setValue('paybackTime', res?.paybackTime)
                         setValue('profitPerMonth', res?.profitPerMonth)
-                        setValue('projectStage', res?.projectStage)
+                        setValue('projectStage', res?.projectStage == null ? '' : res?.projectStage)
                         setValue('subsectionId', res?.subsectionId)
                         setValue('aboutCompany', res?.aboutCompany || '')
                         setValue('benefits', res?.benefits || '')
@@ -219,7 +219,7 @@ const NewAd = () => {
             .then(() => {
                 dispatch(
                     showAlert({
-                        message: 'Объявление успешно создано! Переход на страницу объявлений...',
+                        message: 'Объявление успешно создано! Ждите одобрения модерации...',
                         typeAlert: 'good',
                     })
                 )

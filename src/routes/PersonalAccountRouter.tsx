@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import NotFound from '../pages/NotFound'
 import PersonalAccountLayout from '../components/PersonalAccountLayout'
 import UserProfile from '../pages/profile/UserProfile'
@@ -16,18 +16,22 @@ import MyWallet from '../pages/profile/MyWallet'
 import ShoppingCart from '../pages/profile/ShoppingCart'
 import AdvertisingSection from '../pages/profile/AdvertisingSection'
 import AccountMenu from '../pages/profile/AccountMenu'
-import {Route, useRoutes} from 'react-router-dom'
+import {useRoutes} from 'react-router-dom'
 import Partners from '../pages/profile/Partners'
 
-const PersonalAccountRouter = ({isMobile}: any) => {
+type Props = {
+    isMobile: boolean
+}
+
+const PersonalAccountRouter: FC<Props> = ({isMobile}) => {
     const routes = [
         {
             path: '/',
             element: <PersonalAccountLayout isMobile={isMobile} />,
             children: [
                 {index: true, element: isMobile ? <AccountMenu /> : <UserProfile />},
-                {path: 'profile/:id', element: <UserProfile />},
                 {path: 'profile/user/:id', element: <ViewProfile />},
+                {path: 'profile/:id', element: <UserProfile />},
                 {path: 'profile/partners', element: <Partners />},
                 {path: 'instructions', element: <Instructions />},
                 {path: 'settings', element: <ProfileSettings />},

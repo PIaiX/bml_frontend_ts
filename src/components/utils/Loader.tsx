@@ -1,22 +1,22 @@
-import React from 'react';
+import React from 'react'
 
 interface Props {
-    color: string
+    color?: string
 }
 
 const Loader: React.FC<Props> = ({color}) => {
     const styles = {
-        backgroundColor: color ?? '#FFF'
+        backgroundColor: color ?? '#FFF',
     }
 
     return (
         <div className="lds-ellipsis">
-            <div style={styles}/>
-            <div style={styles}/>
-            <div style={styles}/>
-            <div style={styles}/>
+            <div style={styles} />
+            <div style={styles} />
+            <div style={styles} />
+            <div style={styles} />
         </div>
-    );
-};
+    )
+}
 
-export default Loader;
+export default Loader

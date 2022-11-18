@@ -23,6 +23,8 @@ export const useImageViewer = (file: File) => {
                 }
             }
             fileReader.readAsDataURL(file)
+        } else {
+            setInfo(null)
         }
     }, [file])
 

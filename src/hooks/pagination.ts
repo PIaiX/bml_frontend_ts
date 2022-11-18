@@ -17,7 +17,7 @@ const usePagination = (items: any, limit: number, total: number | undefined, cur
 
     const handlePageClick = ({selected}: {selected: number}) => {
         const newOffset = (selected * limit) % items?.length
-        currPage(selected)
+        currPage && currPage(selected)
         setSelectedPage(selected)
         setItemOffset(newOffset)
     }

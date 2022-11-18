@@ -9,7 +9,9 @@ const MainTitle: FC<IMainTitle> = ({title, description, videoPath}) => {
                 <h1>{title}</h1>
                 <div className="row align-items-center">
                     <div className="col-12 col-md-4 mb-4 mb-md-0">
-                        <video controls src={videoPath && checkPhotoPath(videoPath)} />
+                        <video controls playsInline>
+                            <source src={videoPath && checkPhotoPath(videoPath)} />
+                        </video>
                     </div>
                     <div className="col-12 col-md-8 col-xl-7 col-xxl-6">
                         <div

@@ -1,32 +1,32 @@
 import React, {FC, useEffect} from 'react'
-import {useForm} from 'react-hook-form'
-import ValidateWrapper from '../utils/ValidateWrapper'
-import {User} from '../../types'
 import {IUser} from '../../types/user'
 import {useAppDispatch, useAppSelector} from '../../hooks/store'
-import {updateUserInfo} from '../../services/profileSettings'
-import {getValue} from '@testing-library/user-event/dist/utils'
+import {useForm} from 'react-hook-form'
 import {convertLocaleDate} from '../../helpers/convertLocaleDate'
+import {updateUserInfo} from '../../services/profileSettings'
 import {showAlert} from '../../store/reducers/alertSlice'
+import ValidateWrapper from '../utils/ValidateWrapper'
 import {setUser} from '../../store/reducers/userSlice'
 
 type Props = {
     avatar: File
 }
 
-type UserForm = {
+type FormInfo = {
+    companyName: string
     firstName: string
     lastName: string
-    birthday: string
+    taxpayerIdentificationNumber: number | null
+    mainStateRegistrationNumber: number | null
     email: string
     phone: string
     city: string
-    isShowEmail: boolean
-    isShowPhone: boolean
-    type: number
+    isShowEmail: false
+    isShowPhone: false
+    type: 1
 }
 
-const EditProfileForm: FC<Props> = ({avatar}) => {
+const EditProfileFormForIe: FC<Props> = ({avatar}) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const cities: Array<string> = useAppSelector((state) => state?.cities?.cities)
     const dispatch = useAppDispatch()
@@ -35,39 +35,41 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
         formState: {errors},
         handleSubmit,
         setValue,
-        watch,
         setError,
         getValues,
-    } = useForm<UserForm>({
+    } = useForm<FormInfo>({
         mode: 'onSubmit',
         reValidateMode: 'onChange',
         defaultValues: {
+            companyName: '',
             firstName: '',
             lastName: '',
-            birthday: '',
+            taxpayerIdentificationNumber: null,
+            mainStateRegistrationNumber: null,
             email: '',
             phone: '',
             city: '',
             isShowEmail: false,
             isShowPhone: false,
-            type: 0,
+            type: 1,
         },
     })
 
     useEffect(() => {
         if (user) {
+            setValue('companyName', user?.companyName)
             setValue('firstName', user?.firstName)
             setValue('lastName', user?.lastName)
+            setValue('taxpayerIdentificationNumber', user?.taxpayerIdentificationNumber)
+            setValue('mainStateRegistrationNumber', user?.mainStateRegistrationNumber)
             setValue('phone', user?.phone)
             setValue('email', user?.email)
             setValue('city', user?.city)
-            setValue('birthday', user?.birthday)
         }
     }, [user])
 
     const submitUpadateUserInfo = (data: any) => {
-        const newDate = getValues('birthday') ? convertLocaleDate(getValues('birthday')) : ''
-        const req = {...data, birthday: newDate, avatar: avatar ? avatar : ''}
+        const req = {...data, avatar: avatar ? avatar : ''}
         const formData = new FormData()
         for (const key in req) {
             formData.append(key, req[key])
@@ -88,6 +90,12 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                         } else if (i?.field === 'phone' && i?.message?.toLowerCase().includes('значение уже занято')) {
                             setError('phone', {type: 'custom', message: 'Значение уже занято'})
                         }
+                        if (i?.field === 'mainStateRegistrationNumber') {
+                            setError('mainStateRegistrationNumber', {type: 'custom', message: 'Значение уже занято'})
+                        }
+                        if (i?.field === 'taxpayerIdentificationNumber') {
+                            setError('taxpayerIdentificationNumber', {type: 'custom', message: 'Значение уже занято'})
+                        }
                     })
                 })
         }
@@ -98,14 +106,62 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
             <div className="row  align-items-center g-3">
                 <div className="col-sm-4">
                     <h6>
-                        Фамилия<span className="red">*</span>
+                        Название ИП<span className="red">*</span>
+                    </h6>
+                </div>
+                <div className="col-sm-8">
+                    <ValidateWrapper error={errors?.companyName}>
+                        <input
+                            type="text"
+                            placeholder="Название ИП"
+                            {...register('companyName', {
+                                required: 'поле обязательно к заполнению',
+                                minLength: {
+                                    value: 1,
+                                    message: 'необходимо ввести минимум 1 символ',
+                                },
+                                maxLength: {
+                                    value: 50,
+                                    message: 'максимальное количество символов - 50',
+                                },
+                            })}
+                        />
+                    </ValidateWrapper>
+                </div>
+                <div className="col-sm-4">
+                    <h6>
+                        Имя ответственного лица<span className="red">*</span>
+                    </h6>
+                </div>
+                <div className="col-sm-8">
+                    <ValidateWrapper error={errors?.firstName}>
+                        <input
+                            type="text"
+                            placeholder="Имя ответственного лица"
+                            {...register('firstName', {
+                                required: 'поле обязательно к заполнению',
+                                minLength: {
+                                    value: 1,
+                                    message: 'необходимо ввести минимум 1 символ',
+                                },
+                                maxLength: {
+                                    value: 50,
+                                    message: 'максимальное количество символов - 50',
+                                },
+                            })}
+                        />
+                    </ValidateWrapper>
+                </div>
+                <div className="col-sm-4">
+                    <h6>
+                        Фамилия ответственного лица<span className="red">*</span>
                     </h6>
                 </div>
                 <div className="col-sm-8">
                     <ValidateWrapper error={errors?.lastName}>
                         <input
                             type="text"
-                            placeholder="Фамилия"
+                            placeholder="Фамилия ответственного лица"
                             {...register('lastName', {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
@@ -122,34 +178,47 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                 </div>
                 <div className="col-sm-4">
                     <h6>
-                        Имя<span className="red">*</span>
+                        ОГРНИП<span className="red">*</span>
                     </h6>
                 </div>
                 <div className="col-sm-8">
-                    <ValidateWrapper error={errors?.firstName}>
+                    <ValidateWrapper error={errors?.mainStateRegistrationNumber}>
                         <input
                             type="text"
-                            placeholder="Имя"
-                            {...register('firstName', {
+                            placeholder="ОГРНИП"
+                            {...register('mainStateRegistrationNumber', {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
-                                    value: 1,
-                                    message: 'необходимо ввести минимум 1 символ',
+                                    value: 13,
+                                    message: 'Необходимо ввести минимум 13 символ',
                                 },
                                 maxLength: {
-                                    value: 50,
-                                    message: 'максимальное количество символов - 50',
+                                    value: 13,
+                                    message: 'Максимальное количество символов 13',
                                 },
                             })}
                         />
                     </ValidateWrapper>
                 </div>
                 <div className="col-sm-4">
-                    <h6>Дата рождения</h6>
+                    <h6>ИНН</h6>
                 </div>
                 <div className="col-sm-8">
-                    <ValidateWrapper error={errors?.birthday}>
-                        <input type="date" min="1950-01-01" {...register('birthday')} />
+                    <ValidateWrapper error={errors?.taxpayerIdentificationNumber}>
+                        <input
+                            type="text"
+                            placeholder="ИНН"
+                            {...register('taxpayerIdentificationNumber', {
+                                minLength: {
+                                    value: 10,
+                                    message: 'Минимум 10 символов',
+                                },
+                                maxLength: {
+                                    value: 12,
+                                    message: 'Максимальное количество символов 12',
+                                },
+                            })}
+                        />
                     </ValidateWrapper>
                 </div>
                 <div className="col-sm-4">
@@ -229,4 +298,4 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
     )
 }
 
-export default EditProfileForm
+export default EditProfileFormForIe

@@ -43,7 +43,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         image={item.image}
                                         title={item.title}
                                         investments={item.investments}
-                                        favorite={false}
+                                        favorite={item?.isFavorite}
                                     />
                                 </div>
                             ))
@@ -71,7 +71,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         image={item.image}
                                         title={item.title}
                                         investments={item.investments}
-                                        favorite={false}
+                                        favorite={item?.isFavorite}
                                     />
                                 </div>
                             ))
@@ -99,7 +99,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         image={item.image}
                                         title={item.title}
                                         investments={item.investments}
-                                        favorite={false}
+                                        favorite={item?.isFavorite}
                                     />
                                 </div>
                             ))
@@ -127,7 +127,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         image={item.image}
                                         title={item.title}
                                         investments={item.investments}
-                                        favorite={false}
+                                        favorite={item?.isFavorite}
                                     />
                                 </div>
                             ))
@@ -155,7 +155,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         image={item.image}
                                         title={item.title}
                                         investments={item.investments}
-                                        favorite={false}
+                                        favorite={item?.isFavorite}
                                     />
                                 </div>
                             ))
