@@ -12,7 +12,7 @@ import {getUsersOffersNotArchive} from '../../services/offers'
 import {IOffersItem, IOffersMeta} from '../../types/offers'
 
 const UserProfile: FC = () => {
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [currentFriends, setCurrentFriends] = useState<IUseStateItems<IFriendsItem, IFriendsMeta>>({
         isLoaded: false,
         meta: null,

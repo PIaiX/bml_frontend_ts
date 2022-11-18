@@ -13,7 +13,7 @@ export type Passwords = {
 }
 
 const EditPasswordForm: FC = () => {
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const dispatch = useAppDispatch()
     const {
         register,
@@ -32,12 +32,14 @@ const EditPasswordForm: FC = () => {
     })
 
     const submitUpdatePassword = (data: Passwords) => {
-        updatePasswordUser(user?.id, data)
-            .then(() => {
-                dispatch(showAlert({message: 'Пароль успешно изменен', typeAlert: 'good'}))
-                reset()
-            })
-            .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
+        if (user) {
+            updatePasswordUser(user?.id, data)
+                .then(() => {
+                    dispatch(showAlert({message: 'Пароль успешно изменен', typeAlert: 'good'}))
+                    reset()
+                })
+                .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
+        }
     }
 
     return (

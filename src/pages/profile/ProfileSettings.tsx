@@ -12,7 +12,7 @@ import EditProfileFormForIe from '../../components/forms/EditProfileFormForIE'
 import EditProfileFormForOoo from '../../components/forms/EditProfileFormForOOO'
 
 const ProfileSettings = () => {
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [avatar, setAvatar] = useState<any>(null)
     let photo = useImageViewer(avatar)
 

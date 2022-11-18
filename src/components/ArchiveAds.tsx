@@ -20,7 +20,7 @@ type Props = {
 }
 
 const ArchiveAds: FC<Props> = ({tab, section}) => {
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const queryClient = useQueryClient()
     const [currentPage, setCurrentPage] = useState(0)

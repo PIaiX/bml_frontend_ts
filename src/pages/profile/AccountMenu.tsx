@@ -9,7 +9,7 @@ export default function AccountMenu() {
     const [auth, setAuth] = useState(false)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const userState: IUser = useAppSelector((state) => state?.user?.user)
+    const userState: IUser | null = useAppSelector((state) => state?.user?.user)
 
     const onSubmitLogout = () => {
         logout()

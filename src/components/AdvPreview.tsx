@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {FC} from 'react'
 import {Link, useParams} from 'react-router-dom'
 import {MdDoubleArrow} from 'react-icons/md'
 import BtnFav from './utils/BtnFav'
@@ -12,9 +12,10 @@ interface Props {
     url?: string
     id?: number
     investments?: number
+    callbackClick?: () => void
 }
 
-const AdvPreview: React.FC<Props> = (props) => {
+const AdvPreview: FC<Props> = (props) => {
     return (
         <div className="preview-small">
             <img src={checkPhotoPath(props?.image)} alt={props.title} />
@@ -30,7 +31,12 @@ const AdvPreview: React.FC<Props> = (props) => {
                         <div>{props.investments} руб</div>
                     </div>
                     <div className="d-flex align-items-center">
-                        <BtnFav check={props.favorite} className={'f_20 mr-2 ms-2'} />
+                        <BtnFav
+                            check={props.favorite}
+                            className={'f_20 mr-2 ms-2'}
+                            offerId={props?.id}
+                            callbackClick={props?.callbackClick}
+                        />
                         <Link to={`/adv-page/${props.id}`} className="d-none d-lg-block btn_main btn_2 p-0 ms-2">
                             <MdDoubleArrow className="d-flex" />
                         </Link>

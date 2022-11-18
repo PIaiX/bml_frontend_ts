@@ -17,17 +17,19 @@ import MainTitle from '../components/containers/MainTitle'
 import {getMainTitle} from '../services/mainTitle'
 import {IUseStateItem} from '../types'
 import {IMainTitle} from '../types/mainTitle'
+import {IUser} from '../types/user'
+import {useAppSelector} from '../hooks/store'
+import {util} from 'prettier'
 import {useQuery} from 'react-query'
-import {getUsersOffersArchive} from '../services/offers'
-import {$api} from '../services/indexAuth'
-import {IOffersBodyRequest} from '../models/offers'
 import {apiRoutes} from '../config/api'
+import {$api, $authApi} from '../services/indexAuth'
 
 const Home: FC = () => {
     const [mainTitle, setMainTitle] = useState<IUseStateItem<IMainTitle>>({
         isLoaded: false,
         item: null,
     })
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
 
     const {investors, isLoadingInvestors} = useGetInvestorsCategoryQuery(
         {
@@ -35,8 +37,11 @@ const Home: FC = () => {
             limit: 8,
             category: 0,
             orderBy: 'desc',
+            userId: user ? user?.id : '',
         },
-        {selectFromResult: ({data}) => ({investors: data?.body, isLoadingInvestors: !!data?.status})}
+        {
+            selectFromResult: ({data}) => ({investors: data?.body, isLoadingInvestors: !!data?.status}),
+        }
     )
 
     const {suggestionsInvestors, isLoadingSuggestionsInvestors} = useGetSuggestionsInvestorsCategoryQuery(
@@ -45,6 +50,7 @@ const Home: FC = () => {
             limit: 8,
             category: 1,
             orderBy: 'desc',
+            userId: user ? user?.id : '',
         },
         {
             selectFromResult: ({data}) => ({
@@ -59,6 +65,7 @@ const Home: FC = () => {
             limit: 8,
             category: 2,
             orderBy: 'desc',
+            userId: user ? user?.id : '',
         },
         {
             selectFromResult: ({data}) => ({
@@ -73,8 +80,11 @@ const Home: FC = () => {
             limit: 8,
             category: 3,
             orderBy: 'desc',
+            userId: user ? user?.id : '',
         },
-        {selectFromResult: ({data}) => ({saleBusiness: data?.body, isLoadingSaleBusiness: !!data?.status})}
+        {
+            selectFromResult: ({data}) => ({saleBusiness: data?.body, isLoadingSaleBusiness: !!data?.status}),
+        }
     )
     const {franchise, isLoadingFranchise} = useGetFranchiseCategoryQuery(
         {
@@ -82,6 +92,7 @@ const Home: FC = () => {
             limit: 8,
             category: 4,
             orderBy: 'desc',
+            userId: user ? user?.id : '',
         },
         {selectFromResult: ({data}) => ({franchise: data?.body, isLoadingFranchise: !!data?.status})}
     )

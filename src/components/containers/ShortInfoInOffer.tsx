@@ -97,7 +97,7 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
                     <li>
                         Окупаемость: {props?.payback !== null ? props?.paybackForUser?.toLowerCase() : 'не установлено'}
                     </li>
-                    <li>Предполагаемая прибыль: {props?.profit} ₽</li>
+                    <li>Предполагаемая прибыль: {props?.profitPerMonth} ₽</li>
                     <li>Дата основания компании: {convertLocaleDate(props?.dateOfCreation)}</li>
                     <li>Количество собственных точек: {props?.branchCount} шт.</li>
                     <li>Количество проданных франшиз: {props?.soldBranchCount} шт.</li>

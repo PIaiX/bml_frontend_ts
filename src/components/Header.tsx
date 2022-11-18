@@ -6,7 +6,7 @@ import {useAppSelector} from '../hooks/store'
 import {IUser} from '../types/user'
 
 const Header: FC = () => {
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
 
     return (
         <>

@@ -27,7 +27,7 @@ type UserForm = {
 }
 
 const EditProfileForm: FC<Props> = ({avatar}) => {
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const cities: Array<string> = useAppSelector((state) => state?.cities?.cities)
     const dispatch = useAppDispatch()
     const {
@@ -72,20 +72,25 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
         for (const key in req) {
             formData.append(key, req[key])
         }
-        updateUserInfo(user?.id, formData)
-            .then((res) => {
-                dispatch(setUser(res))
-                dispatch(showAlert({message: 'Информация успешно изменена', typeAlert: 'good'}))
-            })
-            .catch((error) => {
-                error?.response?.data?.body?.errors?.forEach((i: any) => {
-                    if (i?.field === 'phone' && i?.message?.toLowerCase().includes('должно быть в формате телефона')) {
-                        setError('phone', {type: 'custom', message: 'Должно быть в формате телефона'})
-                    } else if (i?.field === 'phone' && i?.message?.toLowerCase().includes('значение уже занято')) {
-                        setError('phone', {type: 'custom', message: 'Значение уже занято'})
-                    }
+        if (user) {
+            updateUserInfo(user?.id, formData)
+                .then((res) => {
+                    dispatch(setUser(res))
+                    dispatch(showAlert({message: 'Информация успешно изменена', typeAlert: 'good'}))
                 })
-            })
+                .catch((error) => {
+                    error?.response?.data?.body?.errors?.forEach((i: any) => {
+                        if (
+                            i?.field === 'phone' &&
+                            i?.message?.toLowerCase().includes('должно быть в формате телефона')
+                        ) {
+                            setError('phone', {type: 'custom', message: 'Должно быть в формате телефона'})
+                        } else if (i?.field === 'phone' && i?.message?.toLowerCase().includes('значение уже занято')) {
+                            setError('phone', {type: 'custom', message: 'Значение уже занято'})
+                        }
+                    })
+                })
+        }
     }
 
     return (

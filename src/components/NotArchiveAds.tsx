@@ -20,7 +20,7 @@ type Props = {
 }
 
 const NotArchiveAds: FC<Props> = ({tab, section}) => {
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const [currentPage, setCurrentPage] = useState(0)
     const [offerId, setOfferId] = useState<number | null>(null)

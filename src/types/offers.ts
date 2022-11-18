@@ -132,6 +132,7 @@ export type IOfferItem = {
     blockDescription: null
     user: IUser
     userId: number
+    isFavorite: boolean
     subsection: {
         area: {
             createdAt: string

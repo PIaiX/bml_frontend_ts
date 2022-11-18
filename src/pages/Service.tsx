@@ -35,7 +35,7 @@ const Service: FC = () => {
         items: null,
         meta: null,
     })
-    const user: IUser = useAppSelector((state) => state?.user?.user)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const {paginationItems, pageCount, selectedPage, handlePageClick, setSelectedPage} = usePagination(
         offers?.items,
         limit,
@@ -94,18 +94,24 @@ const Service: FC = () => {
     const onApplyFilters = (data: IPayloadsFilter) => {
         setFilters(data)
         setSelectedPage(0)
-        getOffers(1, limit, categoryId, user?.id, data, false)
-            .then((res) => {
-                res && setOffers({isLoaded: true, items: res?.data, meta: res?.meta})
-            })
-            .catch((error) => {
-                setOffers({isLoaded: true, items: null, meta: null})
-            })
+        if (user) {
+            getOffers(1, limit, categoryId, user?.id, data, false)
+                .then((res) => {
+                    res && setOffers({isLoaded: true, items: res?.data, meta: res?.meta})
+                })
+                .catch((error) => {
+                    setOffers({isLoaded: true, items: null, meta: null})
+                })
+        }
     }
 
     const onReset = (data: IPayloadsFilter) => {
         setFilters(data)
     }
+
+    useEffect(() => {
+        setSelectedPage(0)
+    }, [categoryId])
 
     return (
         <main>
