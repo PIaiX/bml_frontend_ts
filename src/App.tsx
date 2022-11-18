@@ -12,6 +12,7 @@ import {useAppDispatch, useAppSelector} from './hooks/store'
 import {checkAuth} from './store/reducers/userSlice'
 import {getCity} from './services/city'
 import {setCity} from './store/reducers/citySlice'
+import {setInitialCount} from './store/reducers/favoriteCountSlice'
 
 function App() {
     const dispatch = useAppDispatch()

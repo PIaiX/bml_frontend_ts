@@ -1,4 +1,4 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import {Pagination, Autoplay} from 'swiper'
 import {useGetBannerQuery} from '../../services/RTK/bannerApi'
@@ -18,7 +18,7 @@ const BannerContainer: FC<Props> = ({swiperDelay}) => {
             modules={[Pagination, Autoplay]}
             slidesPerView={1}
             pagination={{clickable: true}}
-            autoplay={{delay: swiperDelay}}
+            autoplay={{delay: swiperDelay && swiperDelay * 1000}}
         >
             {!isLoading ? (
                 data ? (
