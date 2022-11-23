@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 type InitialState = {
-    count: number | null
+    count?: number | null
 }
 
 const initialState: InitialState = {

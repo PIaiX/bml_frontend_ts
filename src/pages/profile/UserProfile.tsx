@@ -13,6 +13,7 @@ import {IOffersItem, IOffersMeta} from '../../types/offers'
 
 const UserProfile: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const [sliceNumber, setSliceNumber] = useState(6)
     const [currentFriends, setCurrentFriends] = useState<IUseStateItems<IFriendsItem, IFriendsMeta>>({
         isLoaded: false,
         meta: null,
@@ -34,7 +35,7 @@ const UserProfile: FC = () => {
 
     useEffect(() => {
         if (user?.id) {
-            getUsersOffersNotArchive(user?.id, 1, 6, 'desc')
+            getUsersOffersNotArchive(user?.id, 1, 100, 'desc')
                 .then((res) => res && setUserOffers({isLoaded: true, items: res.data, meta: res.meta}))
                 .catch((error) => setUserOffers({isLoaded: true, items: null, meta: null}))
         }
@@ -223,9 +224,11 @@ const UserProfile: FC = () => {
                                 <div>
                                     Объявления <span className="l-gray">{userOffers?.meta?.total || 0}</span>
                                 </div>
-                                <a href="/" className="color-1">
-                                    Показать все
-                                </a>
+                                {userOffers?.meta && userOffers?.meta?.total > 6 ? (
+                                    <button onClick={() => setSliceNumber(100)}>Показать все</button>
+                                ) : (
+                                    ''
+                                )}
                             </div>
                             <div
                                 className={
@@ -236,7 +239,7 @@ const UserProfile: FC = () => {
                             >
                                 {userOffers?.isLoaded ? (
                                     userOffers?.meta?.total && userOffers?.meta?.total > 0 ? (
-                                        userOffers?.items?.map((offer) => (
+                                        userOffers?.items?.slice(0, sliceNumber).map((offer) => (
                                             <div key={offer?.id}>
                                                 <div className="acc-box ads">
                                                     <img

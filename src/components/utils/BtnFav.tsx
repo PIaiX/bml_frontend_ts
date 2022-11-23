@@ -4,6 +4,7 @@ import {createFavorite, deleteWithFavorite} from '../../services/favorites'
 import {useAppDispatch, useAppSelector} from '../../hooks/store'
 import {IUser} from '../../types/user'
 import {showAlert} from '../../store/reducers/alertSlice'
+import {decrement, increment} from '../../store/reducers/favoriteCountSlice'
 
 interface Props {
     className: string
@@ -28,6 +29,7 @@ const BtnFav: FC<Props> = (props) => {
             if (checked) {
                 deleteWithFavorite({userId: user?.id, offerId: props?.offerId})
                     .then(() => {
+                        dispatch(decrement())
                         setChecked(!checked)
                         props?.callbackClick && props?.callbackClick()
                         dispatch(showAlert({message: 'Успешно удалено из избранных', typeAlert: 'good'}))
@@ -39,6 +41,7 @@ const BtnFav: FC<Props> = (props) => {
                 createFavorite({userId: user?.id, offerId: props?.offerId})
                     .then(() => {
                         setChecked(!checked)
+                        dispatch(increment())
                         dispatch(showAlert({message: 'Успешно добавлено в избранные', typeAlert: 'good'}))
                     })
                     .catch(() => {

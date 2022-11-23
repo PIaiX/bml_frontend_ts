@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react'
+import React, {FC, useEffect, useMemo} from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import {Outlet, ScrollRestoration} from 'react-router-dom'
