@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react'
 import {Link, useParams} from 'react-router-dom'
-import {MdMoreHoriz, MdOutlineArrowBack, MdOutlineQuestionAnswer, MdReply} from 'react-icons/md'
+import {MdOutlineArrowBack, MdOutlineQuestionAnswer} from 'react-icons/md'
 import {IUseStateItem, IUseStateItems} from '../../types'
 import {IUser} from '../../types/user'
 import {getUserInfo} from '../../services/users'
@@ -8,9 +8,13 @@ import {IOffersItem, IOffersMeta} from '../../types/offers'
 import {getUsersOffersNotArchive} from '../../services/offers'
 import {checkPhotoPath} from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'
+import {createFriend, deleteFriend} from '../../services/friends'
+import {useAppSelector} from '../../hooks/store'
 
 const ViewProfile: FC = () => {
     const {id} = useParams()
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const [sliceNumber, setSliceNumber] = useState(6)
     const [userInfo, setUserInfo] = useState<IUseStateItem<IUser>>({
         isLoaded: false,
         item: null,
@@ -37,6 +41,22 @@ const ViewProfile: FC = () => {
         }
     }, [id])
 
+    const onSubmitCreateFriend = () => {
+        if (user && id) {
+            createFriend({fromId: user?.id, toId: +id})
+                .then(() => console.log())
+                .catch(() => console.log())
+        }
+    }
+
+    const onSubmitRemoveFromFriend = () => {
+        if (user && id) {
+            deleteFriend({fromId: user?.id, toId: +id})
+                .then(() => console.log())
+                .catch(() => console.log())
+        }
+    }
+
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -57,18 +77,31 @@ const ViewProfile: FC = () => {
                                 <span className="ms-1 ms-sm-3 text-start">Написать сообщение</span>
                             </button>
                             <hr className="my-3" />
-                            <button type="button" className="text-start color-1 f_09">
-                                Добавить в бизнес-партнёры
-                            </button>
-                            <hr className="my-3" />
-                            <button type="button" className="l-gray d-flex align-items-center">
-                                <MdReply className="f_17" />
-                                <span className="f_09 text-start ms-3">Поделиться</span>
-                            </button>
-                            <button type="button" className="l-gray mt-3">
-                                <MdMoreHoriz className="f_17" />
-                                <span className="f_09 text-start ms-3">Еще</span>
-                            </button>
+                            {userInfo?.item?.friendStatus ? (
+                                <button
+                                    type="button"
+                                    className="text-start color-1 f_09"
+                                    onClick={() => onSubmitCreateFriend()}
+                                >
+                                    Удалить из партнеров
+                                </button>
+                            ) : userInfo?.item?.requestStatus ? (
+                                <button
+                                    type="button"
+                                    className="text-start color-1 f_09"
+                                    onClick={() => onSubmitCreateFriend()}
+                                >
+                                    Добавить в бизнес-партнёры
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className="text-start color-1 f_09"
+                                    onClick={() => onSubmitRemoveFromFriend()}
+                                >
+                                    Отменить запрос
+                                </button>
+                            )}
                         </div>
                     </div>
                     <div className="col-md-8">
@@ -176,9 +209,11 @@ const ViewProfile: FC = () => {
                                 <div>
                                     Объявления <span className="l-gray">{userOffers?.meta?.total || 0}</span>
                                 </div>
-                                <a href="/" className="color-1">
-                                    Показать все
-                                </a>
+                                {userOffers?.meta && userOffers?.meta?.total > 6 ? (
+                                    <button onClick={() => setSliceNumber(100)}>Показать все</button>
+                                ) : (
+                                    ''
+                                )}
                             </div>
                             <div
                                 className={
@@ -189,7 +224,7 @@ const ViewProfile: FC = () => {
                             >
                                 {userOffers?.isLoaded ? (
                                     userOffers?.meta?.total && userOffers?.meta?.total > 0 ? (
-                                        userOffers?.items?.map((offer) => (
+                                        userOffers?.items?.slice(0, sliceNumber).map((offer) => (
                                             <div key={offer?.id}>
                                                 <div className="acc-box ads">
                                                     <img

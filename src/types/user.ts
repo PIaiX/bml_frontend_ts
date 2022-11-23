@@ -29,4 +29,7 @@ export type IUser = {
     birthdayForUser: string
     roleForUser: string
     typeForUser: string
+    favoriteOffersCount: string
+    friendStatus: boolean
+    requestStatus: boolean
 }

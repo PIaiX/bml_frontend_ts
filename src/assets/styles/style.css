@@ -1082,7 +1082,7 @@ how to upload
 .form_search {
     display: flex;
     align-items: center;
-    width: 350px;
+    width: 300px;
 }
 .form_search input {
     background-color: #EBEDF0;
@@ -1095,7 +1095,7 @@ how to upload
 .form_search button {
     display: none;
 }
-.form_search input:focus + button {display: block;}
+
 @media (max-width: 576px){
     .form_search {width: 100%;}
 }
@@ -1801,8 +1801,8 @@ footer {
     }
     footer nav a .count {
         position: absolute;
-        top: 0%;
-        right: 0%;
+        top: 0;
+        right: 0;
         background-color: rgb(var(--color-2));
         color: #fff;
         font-size: 8px;

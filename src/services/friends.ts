@@ -10,15 +10,15 @@ export const createFriend = async (payloads: any) => {
     }
 }
 
-export const deleteFriend = async (payload: any) => {
+export const deleteFriend = async (payload: {fromId?: number; toId: number}) => {
     try {
-        return await $authApi.delete(`${apiRoutes.ACTIONS_FRIEND}`, payload)
+        return await $authApi.delete(`${apiRoutes.ACTIONS_FRIEND}`, {data: payload})
     } catch (error) {
         throw error
     }
 }
 
-export const getRequestsFriends = async (
+export const getIncomingFriends = async (
     currentUserId: number,
     page: number = 1,
     limit: number,
@@ -26,7 +26,23 @@ export const getRequestsFriends = async (
 ) => {
     try {
         const response = await $authApi.get<IFriendsBodyRequest>(
-            `${apiRoutes.GET_REQUESTS_FRIENDS}/${currentUserId}?page=${page}&limit=${limit}&orderBy=${orderBy}`
+            `${apiRoutes.GET_INCOMING_FRIENDS}/${currentUserId}?page=${page}&limit=${limit}&orderBy=${orderBy}`
+        )
+        return response?.data?.body
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getOutgoingFriends = async (
+    currentUserId: number,
+    page: number = 1,
+    limit: number,
+    orderBy: string = 'desc'
+) => {
+    try {
+        const response = await $authApi.get<IFriendsBodyRequest>(
+            `${apiRoutes.GET_OUTGOING_FRIENDS}/${currentUserId}?page=${page}&limit=${limit}&orderBy=${orderBy}`
         )
         return response?.data?.body
     } catch (error) {

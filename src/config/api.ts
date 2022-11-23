@@ -47,7 +47,8 @@ const apiRoutes: ApiRoutesTypes = {
 
     //user-profile
     ACTIONS_FRIEND: 'user/friend',
-    GET_REQUESTS_FRIENDS: 'user/friend/requests',
+    GET_INCOMING_FRIENDS: 'user/friend/incomings',
+    GET_OUTGOING_FRIENDS: 'user/friend/outgoings',
     GET_CURRENT_FRIENDS: 'user/friend/friends',
     UPDATE_PASSWORD: 'user/updatePassword',
     ACTIONS_USER: 'user',

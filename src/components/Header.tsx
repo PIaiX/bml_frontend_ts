@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC, memo, useEffect, useState} from 'react'
 import {NavLink, Link} from 'react-router-dom'
 import {MdStarOutline, MdOutlineShoppingCart, MdLogin, MdSearch, MdMenu, MdClose} from 'react-icons/md'
 import {IconContext} from 'react-icons'
@@ -8,14 +8,14 @@ import {decrement, increment, setInitialCount} from '../store/reducers/favoriteC
 
 const Header: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
-    const count = useAppSelector((state) => state?.user?.user?.id)
+    const count = useAppSelector((state) => state?.favoritesCount?.count)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (count) {
-            dispatch(setInitialCount(count))
+        if (user) {
+            dispatch(setInitialCount(+user?.favoriteOffersCount))
         }
-    }, [])
+    }, [user])
 
     return (
         <>
