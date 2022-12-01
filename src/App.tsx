@@ -12,11 +12,13 @@ import {useAppDispatch, useAppSelector} from './hooks/store'
 import {checkAuth} from './store/reducers/userSlice'
 import {getCity} from './services/city'
 import {setCity} from './store/reducers/citySlice'
-import {setInitialCount} from './store/reducers/favoriteCountSlice'
+import {IUser} from './types/user'
+import {setSocketConnection, socketInstance} from './services/sockets/socketInstance'
 
 function App() {
     const dispatch = useAppDispatch()
     const isLoadingRefresh = useAppSelector((state) => state?.user?.isLoading)
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
 
     useEffect(() => {
         fingerprint
@@ -30,6 +32,10 @@ function App() {
     useEffect(() => {
         getCity().then((res) => res && dispatch(setCity(res)))
     }, [])
+
+    useEffect(() => {
+        user && setSocketConnection(user?.id)
+    }, [user])
 
     useEffect(() => {
         if (localStorage.getItem('token')) {

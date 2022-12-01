@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {BaseSyntheticEvent, FC, useEffect, useState} from 'react'
 import {Link, useParams} from 'react-router-dom'
 import {MdOutlineArrowBack, MdOutlineQuestionAnswer} from 'react-icons/md'
 import {IUseStateItem, IUseStateItems} from '../../types'
@@ -9,7 +9,10 @@ import {getUsersOffersNotArchive} from '../../services/offers'
 import {checkPhotoPath} from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'
 import {createFriend, deleteFriend} from '../../services/friends'
-import {useAppSelector} from '../../hooks/store'
+import {useAppDispatch, useAppSelector} from '../../hooks/store'
+import {emitCreateWithOfferTopicMessage, emitCreateWithoutTopicMessage} from '../../services/sockets/messages'
+import {showAlert} from '../../store/reducers/alertSlice'
+import CustomModal from '../../components/utils/CustomModal'
 
 const ViewProfile: FC = () => {
     const {id} = useParams()
@@ -24,14 +27,20 @@ const ViewProfile: FC = () => {
         meta: null,
         items: null,
     })
+    const [messagePayload, setMessagePayload] = useState({
+        text: '',
+        conversationId: 0,
+    })
+    const [isShowMessageModal, setIsShowMessageModal] = useState(false)
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (id) {
-            getUserInfo(+id)
+        if (id && user?.id) {
+            getUserInfo(+id, user?.id)
                 .then((res) => res && setUserInfo({isLoaded: true, item: res}))
                 .catch((error) => setUserInfo({isLoaded: true, item: null}))
         }
-    }, [id])
+    }, [id, user?.id])
 
     useEffect(() => {
         if (id) {
@@ -44,7 +53,13 @@ const ViewProfile: FC = () => {
     const onSubmitCreateFriend = () => {
         if (user && id) {
             createFriend({fromId: user?.id, toId: +id})
-                .then(() => console.log())
+                .then(() => {
+                    if (id && user?.id) {
+                        getUserInfo(+id, user?.id)
+                            .then((res) => res && setUserInfo({isLoaded: true, item: res}))
+                            .catch((error) => setUserInfo({isLoaded: true, item: null}))
+                    }
+                })
                 .catch(() => console.log())
         }
     }
@@ -52,8 +67,24 @@ const ViewProfile: FC = () => {
     const onSubmitRemoveFromFriend = () => {
         if (user && id) {
             deleteFriend({fromId: user?.id, toId: +id})
-                .then(() => console.log())
+                .then(() => {
+                    if (id && user?.id) {
+                        getUserInfo(+id, user?.id)
+                            .then((res) => res && setUserInfo({isLoaded: true, item: res}))
+                            .catch((error) => setUserInfo({isLoaded: true, item: null}))
+                    }
+                })
                 .catch(() => console.log())
+        }
+    }
+
+    const createWithTopicMessage = (e: BaseSyntheticEvent) => {
+        e.preventDefault()
+        if (id) {
+            emitCreateWithoutTopicMessage(id, messagePayload).then((res) => {
+                res?.status === 200 && dispatch(showAlert({message: 'Сообщение успешно отправлено', typeAlert: 'good'}))
+                setIsShowMessageModal(false)
+            })
         }
     }
 
@@ -72,36 +103,67 @@ const ViewProfile: FC = () => {
                             className="user-photo"
                         />
                         <div className="acc-box mt-3 mt-xl-4">
-                            <button type="button" className="d-flex align-items-center blue fw_6">
+                            <button
+                                type="button"
+                                className="d-flex align-items-center blue fw_6"
+                                onClick={() => setIsShowMessageModal(true)}
+                            >
                                 <MdOutlineQuestionAnswer className="f_17" />
                                 <span className="ms-1 ms-sm-3 text-start">Написать сообщение</span>
                             </button>
                             <hr className="my-3" />
-                            {userInfo?.item?.friendStatus ? (
-                                <button
-                                    type="button"
-                                    className="text-start color-1 f_09"
-                                    onClick={() => onSubmitCreateFriend()}
-                                >
-                                    Удалить из партнеров
-                                </button>
-                            ) : userInfo?.item?.requestStatus ? (
-                                <button
-                                    type="button"
-                                    className="text-start color-1 f_09"
-                                    onClick={() => onSubmitCreateFriend()}
-                                >
-                                    Добавить в бизнес-партнёры
-                                </button>
-                            ) : (
-                                <button
-                                    type="button"
-                                    className="text-start color-1 f_09"
-                                    onClick={() => onSubmitRemoveFromFriend()}
-                                >
-                                    Отменить запрос
-                                </button>
-                            )}
+                            {userInfo?.item?.friendStatus &&
+                                !userInfo?.item?.outgoingStatus &&
+                                !userInfo?.item?.incomingStatus && (
+                                    <button
+                                        type="button"
+                                        className="text-start color-1 f_09"
+                                        onClick={() => {
+                                            onSubmitRemoveFromFriend()
+                                        }}
+                                    >
+                                        Удалить из партнеров
+                                    </button>
+                                )}
+                            {!userInfo?.item?.friendStatus &&
+                                !userInfo?.item?.outgoingStatus &&
+                                !userInfo?.item?.incomingStatus && (
+                                    <button
+                                        type="button"
+                                        className="text-start color-1 f_09"
+                                        onClick={() => {
+                                            onSubmitCreateFriend()
+                                        }}
+                                    >
+                                        Добавить в бизнес-партнеры
+                                    </button>
+                                )}
+                            {!userInfo?.item?.friendStatus &&
+                                userInfo?.item?.outgoingStatus &&
+                                !userInfo?.item?.incomingStatus && (
+                                    <button
+                                        type="button"
+                                        className="text-start color-1 f_09"
+                                        onClick={() => {
+                                            onSubmitRemoveFromFriend()
+                                        }}
+                                    >
+                                        Отменить заявку
+                                    </button>
+                                )}
+                            {!userInfo?.item?.friendStatus &&
+                                !userInfo?.item?.outgoingStatus &&
+                                userInfo?.item?.incomingStatus && (
+                                    <button
+                                        type="button"
+                                        className="text-start color-1 f_09"
+                                        onClick={() => {
+                                            onSubmitCreateFriend()
+                                        }}
+                                    >
+                                        Принять заявку
+                                    </button>
+                                )}
                         </div>
                     </div>
                     <div className="col-md-8">
@@ -254,6 +316,41 @@ const ViewProfile: FC = () => {
                     </div>
                 </div>
             </div>
+            <CustomModal
+                isShow={isShowMessageModal}
+                setIsShow={setIsShowMessageModal}
+                centered={false}
+                closeButton={true}
+                className="modal__messages"
+            >
+                <form>
+                    <div className="m-3">
+                        <label>Текст сообщения:</label>
+                        <textarea
+                            placeholder="Введите сообщение..."
+                            value={messagePayload.text || ''}
+                            onChange={(e) => setMessagePayload((prevState) => ({...prevState, text: e.target.value}))}
+                        />
+                        {messagePayload?.text?.length === 0 ? (
+                            <span className="gray-text">
+                                <sup>*</sup>Минимум 1 знак
+                            </span>
+                        ) : null}
+                    </div>
+                    <div className="d-flex justify-content-center mt-5">
+                        <button
+                            className="btn_main btn_1"
+                            onClick={(event: BaseSyntheticEvent) =>
+                                messagePayload?.text?.length >= 1
+                                    ? createWithTopicMessage(event)
+                                    : event.preventDefault()
+                            }
+                        >
+                            Отправить
+                        </button>
+                    </div>
+                </form>
+            </CustomModal>
         </>
     )
 }

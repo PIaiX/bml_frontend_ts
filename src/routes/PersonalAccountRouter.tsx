@@ -41,7 +41,7 @@ const PersonalAccountRouter: FC<Props> = ({isMobile}) => {
                 {path: 'my-ads/premium', element: <Premium />},
                 {path: 'favorites', element: <Favorites />},
                 {path: 'chat', element: <Chat />},
-                {path: 'chat/window', element: <ChatWindow />},
+                {path: 'chat/window/:id', element: <ChatWindow />},
                 {path: 'wallet', element: <MyWallet />},
                 {path: 'cart', element: <ShoppingCart />},
                 {path: 'advertising-section', element: <AdvertisingSection />},

@@ -59,5 +59,6 @@ const apiRoutes: ApiRoutesTypes = {
 }
 
 const BASE_URL: string | undefined = process.env.REACT_APP_BASE_URL
+const BASE_URL_SOCKET: string | undefined = process.env.REACT_APP_BASE_URL_FOR_SOCKET
 
-export {apiRoutes, BASE_URL}
+export {apiRoutes, BASE_URL, BASE_URL_SOCKET}
