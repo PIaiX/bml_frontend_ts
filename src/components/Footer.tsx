@@ -1,11 +1,24 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {useAppSelector} from '../hooks/store'
 import {IUser} from '../types/user'
+import {socketInstance} from '../services/sockets/socketInstance'
+import useSocketConnect from '../hooks/socketConnect'
 
 export default function Footer() {
     const count = useAppSelector((state) => state?.favoritesCount?.count)
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const [countNewMessage, setCountNewMessage] = useState<null | number | undefined>(null)
+    const {isConnected} = useSocketConnect()
+
+    useEffect(() => {
+        if (socketInstance && isConnected) {
+            socketInstance?.on('conversation:countNewMessages', (count) => {
+                setCountNewMessage(count)
+            })
+        }
+    }, [isConnected])
+
     return (
         <>
             <footer>
@@ -137,7 +150,7 @@ export default function Footer() {
                                     <div className="position-relative">
                                         <img src="/images/icons/messages.png" alt="Сообщения" />
                                         <div>Сообщения</div>
-                                        {user && <div className="count">3</div>}
+                                        {countNewMessage && user && <div className="count">{countNewMessage}</div>}
                                     </div>
                                 </Link>
                             </li>

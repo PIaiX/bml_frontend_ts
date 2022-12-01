@@ -1405,7 +1405,6 @@ CHAT
     padding: 1em 2em;
     font-size: .9em;
 }
-.chat-preview:nth-child(odd){background-color: rgb(231 232 236 / 25%);}
 .chat-preview .user {
     color: rgb(var(--color-1)/100%);
     text-align: center;
@@ -1435,6 +1434,10 @@ CHAT
     margin-left: 1em;
 }
 
+.new-message {
+    background-color: rgb(231 232 236 / 80%);
+}
+
 .chat-window {
     position: relative;
     overflow: hidden;
@@ -1447,8 +1450,10 @@ CHAT
 }
 .chat-window .middle {
     max-height: 700px;
-    overflow: auto;
-    overflow-anchor: revert;
+    overflow-y: scroll;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column-reverse;
     scrollbar-color: rgb(155 155 155 / 46%) transparent;
     scrollbar-width: thin;
 }
@@ -1929,6 +1934,11 @@ footer {
     background: #E2E8F3;
 }
 
+.modal__messages .modal-header {
+    height: 45px;
+    background: #E2E8F3;
+}
+
 .itemsModalPhotos {
     width: auto;
     height: 20em;
@@ -2106,4 +2116,14 @@ footer {
 
 .acc-video-block > a{
     color: #0c63e4;
+}
+
+.anchor {
+    overflow-anchor: auto;
+    height: 1px;
+}
+
+.gray-text {
+    font-size: 0.8em;
+    color: gray;
 }

@@ -32,4 +32,6 @@ export type IUser = {
     favoriteOffersCount: string
     friendStatus: boolean
     requestStatus: boolean
+    outgoingStatus: boolean
+    incomingStatus: boolean
 }

@@ -1,4 +1,12 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {
+    BaseSyntheticEvent,
+    ButtonHTMLAttributes,
+    DetailedHTMLProps,
+    FC,
+    MouseEventHandler,
+    useEffect,
+    useState,
+} from 'react'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import AdvPreview from '../components/AdvPreview'
 import {NavLink, useParams} from 'react-router-dom'
@@ -26,6 +34,7 @@ import CustomModal from '../components/utils/CustomModal'
 import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../components/utils/ValidateWrapper'
 import {resetAlert, showAlert} from '../store/reducers/alertSlice'
+import {emitCreateWithOfferTopicMessage, emitCreateWithoutTopicMessage} from '../services/sockets/messages'
 
 const AdvPage: FC = () => {
     const {id} = useParams()
@@ -54,6 +63,12 @@ const AdvPage: FC = () => {
         reset,
     } = useForm<PayloadsReport>({mode: 'onSubmit', reValidateMode: 'onChange'})
     const dispatch = useAppDispatch()
+    const [isShowMessageModal, setIsShowMessageModal] = useState<boolean>(false)
+    const [messagePayload, setMessagePayload] = useState({
+        text: '',
+        offerId: id,
+        conversationId: 0,
+    })
 
     useEffect(() => {
         if (id) {
@@ -118,6 +133,16 @@ const AdvPage: FC = () => {
                 reset()
             })
             .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
+    }
+
+    const createWithOfferTopicMessage = (e: BaseSyntheticEvent) => {
+        e.preventDefault()
+        if (offer.item) {
+            emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
+                res?.status === 200 && dispatch(showAlert({message: 'Сообщение успешно отправлено', typeAlert: 'good'}))
+                setIsShowMessageModal(false)
+            })
+        }
     }
 
     return (
@@ -193,10 +218,24 @@ const AdvPage: FC = () => {
                             </div>
 
                             <div>
-                                <button type="button" className="btn_main btn-5 f_11 w-100">
+                                <button
+                                    type="button"
+                                    className="btn_main btn-5 f_11 w-100"
+                                    onClick={() => {
+                                        setIsShowMessageModal(true)
+                                        setMessagePayload((prevState) => ({...prevState, text: 'Хочу питсы'}))
+                                    }}
+                                >
                                     ПОЛУЧИТЬ БИЗНЕС-ПЛАН
                                 </button>
-                                <button type="button" className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3">
+                                <button
+                                    type="button"
+                                    className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3"
+                                    onClick={() => {
+                                        setIsShowMessageModal(true)
+                                        setMessagePayload((prevState) => ({...prevState, text: ''}))
+                                    }}
+                                >
                                     НАПИСАТЬ СООБЩЕНИЕ
                                 </button>
                             </div>
@@ -414,6 +453,41 @@ const AdvPage: FC = () => {
                     </Swiper>
                 </div>
             </section>
+            <CustomModal
+                isShow={isShowMessageModal}
+                setIsShow={setIsShowMessageModal}
+                centered={false}
+                closeButton={true}
+                className="modal__messages"
+            >
+                <form>
+                    <div className="m-3">
+                        <label>Текст сообщения:</label>
+                        <textarea
+                            placeholder="Введите сообщение..."
+                            value={messagePayload.text || ''}
+                            onChange={(e) => setMessagePayload((prevState) => ({...prevState, text: e.target.value}))}
+                        />
+                        {messagePayload?.text?.length === 0 ? (
+                            <span className="gray-text">
+                                <sup>*</sup>Минимум 1 знак
+                            </span>
+                        ) : null}
+                    </div>
+                    <div className="d-flex justify-content-center mt-5">
+                        <button
+                            className="btn_main btn_1"
+                            onClick={(event: BaseSyntheticEvent) =>
+                                messagePayload?.text?.length >= 1
+                                    ? createWithOfferTopicMessage(event)
+                                    : event.preventDefault()
+                            }
+                        >
+                            Отправить
+                        </button>
+                    </div>
+                </form>
+            </CustomModal>
             <CustomModal
                 isShow={isShowModalReport}
                 setIsShow={setIsShowModalReport}

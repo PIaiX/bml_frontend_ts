@@ -10,9 +10,9 @@ export const paginateUsers = async () => {
     }
 }
 
-export const getUserInfo = async (userId: number) => {
+export const getUserInfo = async (userId: number, myId: number | string = '') => {
     try {
-        const response = await $api.get(`${apiRoutes.ACTIONS_USER}/${userId}`)
+        const response = await $api.get(`${apiRoutes.ACTIONS_USER}/${userId}/${myId}`)
         return response?.data?.body
     } catch (error) {
         console.log(error)

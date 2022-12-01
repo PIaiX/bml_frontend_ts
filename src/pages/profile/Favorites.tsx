@@ -12,6 +12,7 @@ import Loader from '../../components/utils/Loader'
 import Pagination from '../../components/utils/Pagination'
 
 const Favorites: FC = () => {
+    const token = localStorage.getItem('token')
     const [favoriteOffers, setFavoriteOffers] = useState<IUseStateItems<IOffersItem, IOffersMeta>>({
         isLoaded: false,
         items: null,
@@ -32,7 +33,7 @@ const Favorites: FC = () => {
                 })
                 .catch((error) => setFavoriteOffers({isLoaded: true, items: null, meta: null}))
         }
-    }, [user?.id, selectedPage, click])
+    }, [user?.id, selectedPage, click, token])
 
     const clickInDeleteFavorite = useCallback(() => {
         if (user) {
