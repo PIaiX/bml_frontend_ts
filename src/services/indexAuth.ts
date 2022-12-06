@@ -8,20 +8,21 @@ const apiBody = {
         Accept: 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
-        'User-Fingerprint': String(localStorage.getItem('fingerprint')),
     },
 }
 
 const $api = axios.create(apiBody)
+
 const $authApi = axios.create(apiBody)
 
 $api.interceptors.request.use((config: any) => {
-    config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+    config.headers['User-Fingerprint'] = localStorage.getItem('fingerprint')
     return config
 })
 
 $authApi.interceptors.request.use((config: any) => {
     config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+    config.headers['User-Fingerprint'] = localStorage.getItem('fingerprint')
     return config
 })
 

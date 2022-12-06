@@ -12,11 +12,11 @@ export default function Footer() {
     const {isConnected} = useSocketConnect()
 
     useEffect(() => {
-        if (socketInstance && isConnected) {
+        setTimeout(() => {
             socketInstance?.on('conversation:countNewMessages', (count) => {
                 setCountNewMessage(count)
             })
-        }
+        }, 100)
     }, [isConnected])
 
     return (

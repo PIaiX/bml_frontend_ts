@@ -23,6 +23,7 @@ import {util} from 'prettier'
 import {useQuery} from 'react-query'
 import {apiRoutes} from '../config/api'
 import {$api, $authApi} from '../services/indexAuth'
+import {useForm} from 'react-hook-form'
 
 const Home: FC = () => {
     const [mainTitle, setMainTitle] = useState<IUseStateItem<IMainTitle>>({

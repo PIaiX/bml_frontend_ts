@@ -59,6 +59,10 @@ const ChatWindow = () => {
     }, [id, pathname])
 
     useEffect(() => {
+        id && emitGetConversation(id)
+    }, [id])
+
+    useEffect(() => {
         if (id && isFetching) {
             setTimeout(() => {
                 emitPaginateMessages(+id, {page: currentPage, limit: 10, orderBy: 'desc'})
@@ -75,7 +79,6 @@ const ChatWindow = () => {
                     .catch(() => setMessages({isLoaded: true, items: null, meta: null}))
                     .finally(() => setIsFetching(false))
             }, 300)
-            emitGetConversation(id)
         }
     }, [isFetching])
 
