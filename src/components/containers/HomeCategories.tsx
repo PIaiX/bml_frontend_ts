@@ -54,7 +54,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                         </div>
                     )}
                 </div>
-                <NavLink to="category/1">
+                <NavLink to="category/0">
                     <button className="btn_main btn_1 mx-auto mt-4">Показать еще</button>
                 </NavLink>
             </section>
@@ -82,7 +82,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                         </div>
                     )}
                 </div>
-                <NavLink to="category/2">
+                <NavLink to="category/1">
                     <button className="btn_main btn_1 mx-auto mt-4">Показать еще</button>
                 </NavLink>
             </section>
@@ -110,7 +110,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                         </div>
                     )}
                 </div>
-                <NavLink to="category/3">
+                <NavLink to="category/2">
                     <button className="btn_main btn_1 mx-auto mt-4">Показать еще</button>
                 </NavLink>
             </section>
@@ -138,7 +138,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                         </div>
                     )}
                 </div>
-                <NavLink to="category/4">
+                <NavLink to="category/3">
                     <button className="btn_main btn_1 mx-auto mt-4">Показать еще</button>
                 </NavLink>
             </section>
@@ -166,7 +166,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                         </div>
                     )}
                 </div>
-                <NavLink to="category/5">
+                <NavLink to="category/4">
                     <button className="btn_main btn_1 mx-auto mt-4">Показать еще</button>
                 </NavLink>
             </section>

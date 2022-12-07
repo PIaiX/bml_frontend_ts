@@ -242,12 +242,18 @@ const UserProfile: FC = () => {
                                         userOffers?.items?.slice(0, sliceNumber).map((offer) => (
                                             <div key={offer?.id}>
                                                 <div className="acc-box ads">
-                                                    <img
-                                                        src={checkPhotoPath(offer?.image)}
-                                                        alt={offer?.categoryForUser}
-                                                        className="ads-img"
-                                                    />
-                                                    <div className="fw_5 f_09 mt-2">{offer?.categoryForUser}</div>
+                                                    <NavLink to={`/adv-page/${offer?.id}`}>
+                                                        <img
+                                                            src={checkPhotoPath(offer?.image)}
+                                                            alt={offer?.categoryForUser}
+                                                            className="ads-img"
+                                                        />
+                                                    </NavLink>
+                                                    <div className="fw_5 f_09 mt-2">
+                                                        <NavLink to={`/adv-page/${offer?.id}`}>
+                                                            {offer?.categoryForUser}
+                                                        </NavLink>
+                                                    </div>
                                                     <div className="gray f_09 mt-1">
                                                         {offer?.subsection?.area?.name}
                                                     </div>

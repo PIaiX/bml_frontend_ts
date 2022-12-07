@@ -15,6 +15,7 @@ import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../../components/utils/ValidateWrapper'
 import {IUseStateItems} from '../../types'
 import {IMessageItem, IMessageMeta} from '../../models/sockets/messages'
+import InfiniteScroll from 'react-infinite-scroller'
 
 const ChatWindow = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
@@ -42,10 +43,6 @@ const ChatWindow = () => {
     })
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [isFetching, setIsFetching] = useState<boolean>(true)
-    const [messagePayload, setMessagePayload] = useState<IPayloadsMessage>({
-        conversationId: null,
-        text: null,
-    })
 
     const [info, setInfo] = useOutletContext<any>()
 
@@ -63,26 +60,6 @@ const ChatWindow = () => {
     }, [id])
 
     useEffect(() => {
-        if (id && isFetching) {
-            setTimeout(() => {
-                emitPaginateMessages(+id, {page: currentPage, limit: 10, orderBy: 'desc'})
-                    .then((res) => {
-                        res &&
-                            messages.items &&
-                            setMessages({
-                                isLoaded: true,
-                                items: [...res.body.data.reverse(), ...messages.items],
-                                meta: res?.body?.meta,
-                            })
-                        setCurrentPage((prevState) => prevState + 1)
-                    })
-                    .catch(() => setMessages({isLoaded: true, items: null, meta: null}))
-                    .finally(() => setIsFetching(false))
-            }, 300)
-        }
-    }, [isFetching])
-
-    useEffect(() => {
         if (isConnected && socketInstance) {
             socketInstance?.on('message:create', (newMessage) => {
                 newMessage &&
@@ -90,14 +67,6 @@ const ChatWindow = () => {
                         ...prevState,
                         items: prevState.items ? [...prevState.items, newMessage] : [newMessage],
                     }))
-                id &&
-                    user?.id &&
-                    emitViewedMessage(id, user?.id).then(() => {
-                        setMessages((prevState) => ({
-                            ...prevState,
-                            items: prevState.items && prevState.items.map((i: any) => ({...i, isViewed: true})),
-                        }))
-                    })
             })
             id && user?.id && emitViewedMessage(id, user?.id)
             socketInstance?.on('message:viewed', () => {
@@ -110,7 +79,7 @@ const ChatWindow = () => {
         return () => {
             socketInstance?.removeAllListeners()
         }
-    }, [messages])
+    }, [])
 
     const groupBy = (arr: Array<IMessageItem> | null | undefined, key: string | number) => {
         const initialValue = {}
@@ -119,21 +88,6 @@ const ChatWindow = () => {
             acc[myAttribute] = [...(acc[myAttribute] || []), cval]
             return acc
         }, initialValue)
-    }
-
-    const scroller = () => {
-        const chatBody = document.getElementById('chatBody')
-
-        if (chatBody && messages.items && messages.meta) {
-            if (
-                !isFetching &&
-                Math.abs(chatBody.scrollTop) + chatBody.offsetHeight >= chatBody.scrollHeight &&
-                messages?.meta?.total > messages?.items?.length
-            ) {
-                chatBody.scrollTop = chatBody.scrollHeight
-                setIsFetching(true)
-            }
-        }
     }
 
     const createMessage = (payload: IPayloadsMessage) => {
@@ -147,6 +101,24 @@ const ChatWindow = () => {
                 reset()
             })
             .catch((e) => console.log(e))
+    }
+
+    const getMessages = () => {
+        if (id) {
+            emitPaginateMessages(+id, {page: currentPage, limit: 10, orderBy: 'desc'})
+                .then((res) => {
+                    res &&
+                        messages.items &&
+                        setMessages({
+                            isLoaded: true,
+                            items: [...res.body.data.reverse(), ...messages.items],
+                            meta: res?.body?.meta,
+                        })
+                    setCurrentPage(currentPage + 1)
+                })
+                .catch(() => setMessages({isLoaded: true, items: null, meta: null}))
+                .finally(() => setIsFetching(false))
+        }
     }
 
     return (
@@ -163,18 +135,18 @@ const ChatWindow = () => {
                     <img src={state?.avatar} alt={state?.userName} />
                 </Link>
             </div>
-            <div className="middle p-2 p-sm-4" id="chatBody" onScroll={scroller}>
-                <div>
-                    {messages.isLoaded ? (
-                        Object.entries(groupBy(messages?.items, 'createdAt')).map((key: any, index) => (
-                            <ChatMessage key={key} keyArr={key[0]} arr={key[1]} avatarUser={state?.avatar} />
-                        ))
-                    ) : (
-                        <div className="p-5 w-100 d-flex justify-content-center">
-                            <Loader color="#343434" />
-                        </div>
-                    )}
-                </div>
+            <div className="middle p-2 p-sm-4" id="chatBody">
+                <InfiniteScroll
+                    loadMore={getMessages}
+                    isReverse={true}
+                    hasMore={messages?.items && messages.meta ? messages.meta.total > messages.items.length : true}
+                    threshold={100}
+                    useWindow={false}
+                >
+                    {Object.entries(groupBy(messages?.items, 'createdAt')).map((key: any, index) => (
+                        <ChatMessage key={key} keyArr={key[0]} arr={key[1]} avatarUser={state?.avatar} />
+                    ))}
+                </InfiniteScroll>
             </div>
             <div className="bottom p-2 px-sm-4 py-sm-3">
                 <form onSubmit={handleSubmit(createMessage)}>

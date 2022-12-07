@@ -1452,7 +1452,7 @@ CHAT
     max-height: 700px;
     overflow-y: scroll;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     scrollbar-color: rgb(155 155 155 / 46%) transparent;
     scrollbar-width: thin;
 }
