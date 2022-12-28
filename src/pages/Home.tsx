@@ -19,11 +19,6 @@ import {IUseStateItem} from '../types'
 import {IMainTitle} from '../types/mainTitle'
 import {IUser} from '../types/user'
 import {useAppSelector} from '../hooks/store'
-import {util} from 'prettier'
-import {useQuery} from 'react-query'
-import {apiRoutes} from '../config/api'
-import {$api, $authApi} from '../services/indexAuth'
-import {useForm} from 'react-hook-form'
 
 const Home: FC = () => {
     const [mainTitle, setMainTitle] = useState<IUseStateItem<IMainTitle>>({

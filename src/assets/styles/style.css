@@ -293,7 +293,7 @@ block 3
     padding: 0 1em;
     transition: .3s ease;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 .layer1 h6 {

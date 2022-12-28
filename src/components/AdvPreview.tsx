@@ -1,8 +1,9 @@
 import React, {FC} from 'react'
-import {Link, useParams} from 'react-router-dom'
-import {MdDoubleArrow} from 'react-icons/md'
+import {Link} from 'react-router-dom'
 import BtnFav from './utils/BtnFav'
 import {checkPhotoPath} from '../helpers/photoLoader'
+// @ts-ignore
+import {ReactComponent as OfferIcon} from '../assets/images/icons/off.svg'
 
 interface Props {
     image?: string
@@ -38,7 +39,7 @@ const AdvPreview: FC<Props> = (props) => {
                             callbackClick={props?.callbackClick}
                         />
                         <Link to={`/adv-page/${props.id}`} className="d-none d-lg-block btn_main btn_2 p-0 ms-2">
-                            <MdDoubleArrow className="d-flex" />
+                            <OfferIcon />
                         </Link>
                     </div>
                 </div>

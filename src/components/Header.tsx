@@ -1,10 +1,10 @@
-import React, {FC, memo, useEffect, useState} from 'react'
-import {NavLink, Link} from 'react-router-dom'
-import {MdStarOutline, MdOutlineShoppingCart, MdLogin, MdSearch, MdMenu, MdClose} from 'react-icons/md'
+import React, {FC, useEffect, useLayoutEffect, useState} from 'react'
+import {Link, NavLink} from 'react-router-dom'
+import {MdClose, MdLogin, MdMenu, MdOutlineShoppingCart, MdSearch, MdStarOutline} from 'react-icons/md'
 import {IconContext} from 'react-icons'
 import {useAppDispatch, useAppSelector} from '../hooks/store'
 import {IUser} from '../types/user'
-import {decrement, increment, setInitialCount} from '../store/reducers/favoriteCountSlice'
+import {setInitialCount} from '../store/reducers/favoriteCountSlice'
 
 const Header: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
@@ -25,7 +25,12 @@ const Header: FC = () => {
                         <Link to="/" className="logo">
                             <img src="/images/logo.svg" alt="Бизнес My Life" />
                         </Link>
-
+                        <form action="" className="header_search d-none d-lg-flex">
+                            <input type="search" placeholder="Поиск по сайту" />
+                            <button type="submit" className="btn_main">
+                                <MdSearch />
+                            </button>
+                        </form>
                         <NavLink
                             to="/contacts"
                             state={{fromHeader: true}}
@@ -43,7 +48,14 @@ const Header: FC = () => {
                         </a>
                         {user?.id ? (
                             <NavLink to={`/account/profile/${user?.id}`}>
-                                <img src="/images/icons/profile.svg" />
+                                {window.innerWidth <= 400 ? (
+                                    <img src="/images/icons/profile.svg" />
+                                ) : (
+                                    <div>
+                                        <span>{user?.fullName}</span>
+                                        <img src="/images/icons/profile.svg" />
+                                    </div>
+                                )}
                             </NavLink>
                         ) : (
                             <Link to="/enter" className="link d-flex align-items-center">
