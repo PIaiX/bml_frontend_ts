@@ -5,6 +5,7 @@ import {IconContext} from 'react-icons'
 import {useAppDispatch, useAppSelector} from '../hooks/store'
 import {IUser} from '../types/user'
 import {setInitialCount} from '../store/reducers/favoriteCountSlice'
+const imgBottom = require('../assets/images/backgrounds/down.svg')
 
 const Header: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
@@ -71,7 +72,7 @@ const Header: FC = () => {
                             <ul className="mt-3 mt-md-0 ml-auto mr-auto">
                                 <li className="nav-item">
                                     <NavLink to="category/0" className="nav-link">
-                                        Поиск инвестора
+                                        Поиск инвесторов
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
@@ -81,7 +82,7 @@ const Header: FC = () => {
                                 </li>
                                 <li className="nav-item">
                                     <NavLink to="category/2" className="nav-link">
-                                        Поиск бизнес парнёров
+                                        Поиск бизнес партнёров
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
@@ -95,15 +96,43 @@ const Header: FC = () => {
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink to="/news" className="nav-link">
-                                        Новости
-                                    </NavLink>
+                                    <div className="dropdown">
+                                        <button className="dropbtn nav-link">
+                                            {'Информация '}
+                                            <svg
+                                                width="11"
+                                                height="6"
+                                                viewBox="0 0 11 6"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M0.607422 0.329102L5.60742 5.3291L10.6074 0.329102H0.607422Z"
+                                                    fill="#1F1F21"
+                                                />
+                                            </svg>
+                                        </button>
+                                        <div className="dropdown-content">
+                                            <NavLink to="news" className="nav-link">
+                                                Новости
+                                            </NavLink>
+                                            <NavLink to="contacts" className="nav-link">
+                                                Контакты
+                                            </NavLink>
+                                        </div>
+                                    </div>
                                 </li>
-                                <li className="nav-item">
-                                    <NavLink to="/contacts" className="nav-link">
-                                        Контакты
-                                    </NavLink>
-                                </li>
+
+                                {/*<li className="nav-item">*/}
+                                {/*    <NavLink to="/news" className="nav-link">*/}
+                                {/*        Новости*/}
+                                {/*    </NavLink>*/}
+                                {/*</li>*/}
+                                {/*<li className="nav-item">*/}
+                                {/*    <NavLink to="/contacts" className="nav-link">*/}
+                                {/*        Контакты*/}
+                                {/*    </NavLink>*/}
+                                {/*</li>*/}
                             </ul>
                         </nav>
                         <button className="d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu">
@@ -129,7 +158,7 @@ const Header: FC = () => {
                                 <NavLink to="category/2">Предложения инвесторов</NavLink>
                             </li>
                             <li>
-                                <NavLink to="category/3">Поиск бизнес парнёров</NavLink>
+                                <NavLink to="category/3">Поиск бизнес партнёров</NavLink>
                             </li>
                             <li>
                                 <NavLink to="category/4">Продажа бизнеса</NavLink>

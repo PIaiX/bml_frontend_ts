@@ -42,7 +42,7 @@ export default function Footer() {
                             <nav className="footer-nav d-md-none">
                                 <ul>
                                     <li>
-                                        <Link to="/category">Поиск инвесторов</Link>
+                                        <Link to="/category/0">Поиск инвесторов</Link>
                                     </li>
                                     <li>
                                         <Link to="/category">предложения инвесторов</Link>
@@ -74,19 +74,19 @@ export default function Footer() {
                                     <nav className="footer-nav">
                                         <ul>
                                             <li>
-                                                <Link to="/category">Поиск инвесторов</Link>
+                                                <Link to="/category/0">Поиск инвесторов</Link>
                                             </li>
                                             <li>
-                                                <Link to="/category">предложения инвесторов</Link>
+                                                <Link to="/category/1">предложения инвесторов</Link>
                                             </li>
                                             <li>
-                                                <Link to="/category">поиск бизнес партнёров</Link>
+                                                <Link to="/category/2">поиск бизнес партнёров</Link>
                                             </li>
                                             <li>
-                                                <Link to="/category">продажа бизнеса</Link>
+                                                <Link to="/category/3">продажа бизнеса</Link>
                                             </li>
                                             <li>
-                                                <Link to="/category">франшиза</Link>
+                                                <Link to="/category/4">франшиза</Link>
                                             </li>
                                             <li>
                                                 <Link to="/contacts">Контакты</Link>
