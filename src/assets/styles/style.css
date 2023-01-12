@@ -1952,6 +1952,9 @@ footer {
 .modal__photosAdd .modal-body {
     padding: 0;
 }
+.modal-body textarea{
+    min-height: 100px;
+}
 
 .modal__photosAdd .modal-content {
     border: none;

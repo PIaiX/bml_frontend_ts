@@ -156,7 +156,7 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                     <h6>
                         Адрес электронной почты<span className="red">*</span>
                     </h6>
-                    <div className="f_08 color-1">Не показывается в профиле</div>
+                    <div className="f_08 color-1">Не виден для других пользователей</div>
                 </div>
                 <div className="col-sm-8">
                     <ValidateWrapper error={errors?.email}>
@@ -177,7 +177,7 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                     <h6>
                         Номер телефона<span className="red">*</span>
                     </h6>
-                    <div className="f_08 color-1">Не показывается в профиле</div>
+                    <div className="f_08 color-1">Не виден для других пользователей</div>
                 </div>
                 <div className="col-sm-8">
                     <ValidateWrapper error={errors?.phone}>
