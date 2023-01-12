@@ -127,14 +127,6 @@ const RegistrationForm: FC = () => {
                         className="mt-3"
                         {...register('companyName', {
                             required: 'Поле обязательно к заполнению',
-                            minLength: {
-                                value: 5,
-                                message: 'Минимум 5 символов',
-                            },
-                            maxLength: {
-                                value: 15,
-                                message: 'Максимум 15 символов',
-                            },
                         })}
                     />
                 </ValidateWrapper>
@@ -149,10 +141,6 @@ const RegistrationForm: FC = () => {
                             placeholder={profileType === 1 ? 'Введите Имя' : 'Введите Имя ответственного лица'}
                             {...register('firstName', {
                                 required: 'Поле обязательно к заполнению',
-                                minLength: {
-                                    value: 5,
-                                    message: 'Минимум 5 символов',
-                                },
                                 maxLength: {
                                     value: 50,
                                     message: 'Максимум 50 символов',
@@ -167,10 +155,6 @@ const RegistrationForm: FC = () => {
                             placeholder={profileType === 1 ? 'Введите Фамилию' : 'Введите Фамилию ответственного лица'}
                             {...register('lastName', {
                                 required: 'Поле обязательно к заполнению',
-                                minLength: {
-                                    value: 5,
-                                    message: 'Минимум 5 символов',
-                                },
                                 maxLength: {
                                     value: 50,
                                     message: 'Максимум 50 символов',
@@ -236,8 +220,8 @@ const RegistrationForm: FC = () => {
                                     message: 'Максимум 15 символов',
                                 },
                                 pattern: {
-                                    value: /(.*[0-9].*[A-Z])|(.*[A-Z].*[0-9])/gm,
-                                    message: 'Отсутствует заглавная буква или цифра',
+                                    value: /(.*[0-9].*[A-z])|(.*[A-z].*[0-9])/gm,
+                                    message: 'Отсутствует буква или цифра',
                                 },
                             })}
                         />

@@ -96,10 +96,11 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
                     <li>Паушальный взнос: {FunctionForPrice(props?.price)} ₽</li>
                     <li>Роялти: {FunctionForPrice(props?.pricePerMonth)} ₽</li>
                     <li>
-                        Окупаемость: {props?.payback !== null ? props?.paybackForUser?.toLowerCase() : 'не установлено'}
+                        Срок окупаемости:{' '}
+                        {props?.payback !== null ? props?.paybackForUser?.toLowerCase() : 'не установлено'}
                     </li>
                     <li>Предполагаемая прибыль: {FunctionForPrice(props?.profitPerMonth)} ₽</li>
-                    <li>Дата основания компании: {convertLocaleDate(props?.dateOfCreation)}</li>
+                    <li>Год основания компании: {convertLocaleDate(props?.dateOfCreation)?.slice(-4)}</li>
                     <li>Количество собственных точек: {FunctionForPrice(props?.branchCount)} шт.</li>
                     <li>Количество проданных франшиз: {FunctionForPrice(props?.soldBranchCount)} шт.</li>
                 </ul>

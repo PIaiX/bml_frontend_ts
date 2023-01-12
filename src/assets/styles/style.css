@@ -769,6 +769,7 @@ article.full .return {
 .anchor-menu a:active,
 .anchor-menu a.active {
     background-color: rgb(var(--color-1) / 15%);
+    border-left: 5px solid #3C64B1;
     cursor: pointer;
 }
 .anchor-menu a.active {border-left: 5px solid rgb(var(--color-1));}

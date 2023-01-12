@@ -87,7 +87,6 @@ const ViewProfile: FC = () => {
             })
         }
     }
-
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -288,12 +287,15 @@ const ViewProfile: FC = () => {
                                     userOffers?.meta?.total && userOffers?.meta?.total > 0 ? (
                                         userOffers?.items?.slice(0, sliceNumber).map((offer) => (
                                             <div key={offer?.id}>
-                                                <div className="acc-box ads">
-                                                    <img
-                                                        src={checkPhotoPath(offer?.image)}
-                                                        alt={offer?.categoryForUser}
-                                                        className="ads-img"
-                                                    />
+                                                <div className="acc-box ads d-flex flex-column justify-content-between">
+                                                    <div></div>
+                                                    <div>
+                                                        <img
+                                                            src={checkPhotoPath(offer?.image)}
+                                                            alt={offer?.categoryForUser}
+                                                            className="ads-img"
+                                                        />
+                                                    </div>
                                                     <div className="fw_5 f_09 mt-2">{offer?.categoryForUser}</div>
                                                     <div className="gray f_09 mt-1">
                                                         {offer?.subsection?.area?.name}

@@ -1,6 +1,6 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC} from 'react'
 import {Swiper, SwiperSlide} from 'swiper/react'
-import {Pagination, Autoplay} from 'swiper'
+import {Autoplay, Pagination} from 'swiper'
 import {useGetBannerQuery} from '../../services/RTK/bannerApi'
 import Loader from '../utils/Loader'
 import {checkPhotoPath} from '../../helpers/photoLoader'

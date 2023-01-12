@@ -177,7 +177,10 @@ const AdvPage: FC = () => {
                         <div className="blue-box h-100 d-flex flex-column justify-content-between">
                             <div>
                                 <div className="d-flex justify-content-between align-items-center mb-2 mb-sm-4">
-                                    <NavLink to="/account/profile/view" className="user d-flex align-items-center">
+                                    <NavLink
+                                        to={'/account/profile/user/' + offer.item?.user.id}
+                                        className="user d-flex align-items-center"
+                                    >
                                         <img
                                             src={checkPhotoPath(offer?.item?.user?.avatar)}
                                             alt={offer?.item?.user?.fullName}

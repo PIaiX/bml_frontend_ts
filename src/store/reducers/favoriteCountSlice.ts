@@ -16,7 +16,7 @@ export const favoriteCountSlice = createSlice({
             state.count = action.payload
         },
         increment: (state) => {
-            if (state.count) {
+            if (state.count || state.count === 0) {
                 state.count += 1
             }
         },
