@@ -4,6 +4,7 @@ import BtnFav from './utils/BtnFav'
 import {checkPhotoPath} from '../helpers/photoLoader'
 // @ts-ignore
 import {ReactComponent as OfferIcon} from '../assets/images/icons/off.svg'
+import FunctionForPrice from '../services/FunctionForPrice'
 
 interface Props {
     image?: string
@@ -29,7 +30,7 @@ const AdvPreview: FC<Props> = (props) => {
                 <div className="layer2">
                     <div className="white d-flex align-items-center d-lg-block">
                         <div className="f_08 me-1 me-sm-3">Инвестиции от</div>
-                        <div>{props.investments} руб</div>
+                        <div>{FunctionForPrice(props.investments)} руб</div>
                     </div>
                     <div className="d-flex align-items-center">
                         <BtnFav

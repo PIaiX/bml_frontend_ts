@@ -249,6 +249,7 @@ block 2
 .dropdown {
     position: relative;
     display: inline-block;
+
 }
 
 .dropdown-content {
@@ -258,6 +259,7 @@ block 2
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+    border-radius: 4px;
 }
 
 .dropdown-content a {
@@ -265,13 +267,23 @@ block 2
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    background-color: white;
 }
 .dropdown:hover .dropdown-content {display: block;}
 /*********
 block 3
 блок с видео
 **********/
-#block_3 video {
+#imgForVideo img{
+    width: 100%;
+    height: 100%;
+}
+#imgForVideo{
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+}
+#block_3 video{
     width: 100%;
     height: 220px;
     object-fit: contain;
@@ -279,16 +291,16 @@ block 3
     padding: 2px;
 }
 @media (max-width: 1199px) {
-    #block_3 video {height: 180px;}
+    #block_3 video, #imgForVideo  {height: 180px;}
 }
 @media (max-width: 991px) {
-    #block_3 video {height: 140px;}
+    #block_3 video, #imgForVideo  {height: 140px;}
 }
 @media (max-width: 767px) {
-    #block_3 video {height: 300px;}
+    #block_3 video, #imgForVideo  {height: 300px;}
 }
 @media (max-width: 575px) {
-    #block_3 video {height: 55vw;}
+    #block_3 video, #imgForVideo {height: 55vw;}
 }
 
 

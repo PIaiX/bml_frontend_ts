@@ -11,13 +11,11 @@ const Header: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const count = useAppSelector((state) => state?.favoritesCount?.count)
     const dispatch = useAppDispatch()
-
     useEffect(() => {
         if (user) {
             dispatch(setInitialCount(+user?.favoriteOffersCount))
         }
     }, [user])
-
     return (
         <>
             <header>
@@ -122,17 +120,6 @@ const Header: FC = () => {
                                         </div>
                                     </div>
                                 </li>
-
-                                {/*<li className="nav-item">*/}
-                                {/*    <NavLink to="/news" className="nav-link">*/}
-                                {/*        Новости*/}
-                                {/*    </NavLink>*/}
-                                {/*</li>*/}
-                                {/*<li className="nav-item">*/}
-                                {/*    <NavLink to="/contacts" className="nav-link">*/}
-                                {/*        Контакты*/}
-                                {/*    </NavLink>*/}
-                                {/*</li>*/}
                             </ul>
                         </nav>
                         <button className="d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu">

@@ -106,7 +106,7 @@ const LeftMenuInOfferContainer: FC<Props> = ({category, video}) => {
                             duration={300}
                             isDynamic={true}
                         >
-                            Похожие франшизы
+                            Похожие объявления
                         </Link>
                     </li>
                 </ul>
@@ -141,7 +141,7 @@ const LeftMenuInOfferContainer: FC<Props> = ({category, video}) => {
                             duration={300}
                             isDynamic={true}
                         >
-                            Условия сотрудничества
+                            Предполагаемые условия сотрудничества
                         </Link>
                     </li>
                     <li>
@@ -197,7 +197,7 @@ const LeftMenuInOfferContainer: FC<Props> = ({category, video}) => {
                             duration={300}
                             isDynamic={true}
                         >
-                            Похожие франшизы
+                            Похожие объявления
                         </Link>
                     </li>
                 </ul>
@@ -302,7 +302,7 @@ const LeftMenuInOfferContainer: FC<Props> = ({category, video}) => {
                             duration={300}
                             isDynamic={true}
                         >
-                            Похожие франшизы
+                            Похожие объявления
                         </Link>
                     </li>
                 </ul>
@@ -393,7 +393,7 @@ const LeftMenuInOfferContainer: FC<Props> = ({category, video}) => {
                             duration={300}
                             isDynamic={true}
                         >
-                            Похожие франшизы
+                            Похожие объявления
                         </Link>
                     </li>
                 </ul>
@@ -528,7 +528,7 @@ const LeftMenuInOfferContainer: FC<Props> = ({category, video}) => {
                             duration={300}
                             isDynamic={true}
                         >
-                            Похожие франшизы
+                            Похожие объявления
                         </Link>
                     </li>
                 </ul>

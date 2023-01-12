@@ -35,6 +35,7 @@ import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../components/utils/ValidateWrapper'
 import {resetAlert, showAlert} from '../store/reducers/alertSlice'
 import {emitCreateWithOfferTopicMessage, emitCreateWithoutTopicMessage} from '../services/sockets/messages'
+import FunctionForPrice from '../services/FunctionForPrice'
 
 const AdvPage: FC = () => {
     const {id} = useParams()
@@ -182,7 +183,7 @@ const AdvPage: FC = () => {
                                             alt={offer?.item?.user?.fullName}
                                         />
                                         <div className="ms-2">
-                                            <div className="f_11">{offer?.item?.user?.fullName}</div>
+                                            <div className="f_11 font-weight-light">{offer?.item?.user?.fullName}</div>
                                             <div className="f_09">
                                                 {offer?.item?.user?.type ? offer?.item?.user?.typeForUser : ''}
                                             </div>
@@ -202,13 +203,18 @@ const AdvPage: FC = () => {
                                         {offer?.item?.category !== 3 ? 'Инвестиции' : 'Стоимость'}:
                                     </span>
                                     <span className="f_15 fw_5">
-                                        {offer?.item?.category !== 3 ? offer?.item?.investments : offer?.item?.price}₽
+                                        {offer?.item?.category !== 3
+                                            ? FunctionForPrice(offer?.item?.investments)
+                                            : FunctionForPrice(offer?.item?.price)}
+                                        ₽
                                     </span>
                                 </div>
                                 {offer?.item?.category !== 1 && (
                                     <div className="d-flex align-items-center mb-3">
                                         <span className="pt fw_7 gray f_11 me-2 me-sm-4">Прибыль в месяц:</span>
-                                        <span className="f_15 fw_5">{offer?.item?.profitPerMonth} ₽</span>
+                                        <span className="f_15 fw_5">
+                                            {FunctionForPrice(offer?.item?.profitPerMonth)} ₽
+                                        </span>
                                     </div>
                                 )}
                                 <div className="d-flex align-items-center mb-3">
@@ -246,7 +252,7 @@ const AdvPage: FC = () => {
                                 onClick={() => setIsShowModalReport(true)}
                             >
                                 <MdInfoOutline className="f_11 gray" />
-                                <span className="ms-2 fw_7 f_09">Пожаловаться</span>
+                                <span className="ms-2 fw_7 f_12">Пожаловаться</span>
                             </button>
                         </div>
                     </div>
@@ -351,7 +357,7 @@ const AdvPage: FC = () => {
                                 onClick={() => setIsShowModalReport(true)}
                             >
                                 <MdInfoOutline className="f_11 gray" />
-                                <span className="ms-2 fw_7 f_09">Пожаловаться</span>
+                                <span className="ms-2 fw_7 f_12">Пожаловаться</span>
                             </button>
 
                             {offer?.item?.video && (

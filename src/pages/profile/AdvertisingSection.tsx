@@ -9,6 +9,7 @@ import {
     onRadioHandler,
     onSelectHandler,
 } from '../../helpers/formHandlers'
+import FunctionForPrice from '../../services/FunctionForPrice'
 
 const AdvertisingSection = () => {
     const [data, setData] = useState<any>({
@@ -89,8 +90,8 @@ const AdvertisingSection = () => {
                             Статус: <span className="l-gray">свободен</span>
                         </div>
                         <div className="fw_5">Стоимость размещения:</div>
-                        <div>3 месяца – 6000 ₽</div>
-                        <div>6 месяцев – 8000 ₽</div>
+                        <div>3 месяца – {FunctionForPrice(6000)} ₽</div>
+                        <div>6 месяцев – {FunctionForPrice(8000)} ₽</div>
                         <div className="fw_5 mt-3 mt-sm-4 mt-md-5">Изображение</div>
                         <div className="f_09 l-gray mt-1">Размер баннера 1200*800</div>
                         <div className="file-upload mt-2">
@@ -126,8 +127,8 @@ const AdvertisingSection = () => {
                             Статус: <span className="l-gray">свободен</span>
                         </div>
                         <div className="fw_5">Стоимость размещения:</div>
-                        <div>3 месяца – 6000 ₽</div>
-                        <div>6 месяцев – 8000 ₽</div>
+                        <div>3 месяца – {FunctionForPrice(6000)} ₽</div>
+                        <div>6 месяцев – {FunctionForPrice(8000)} ₽</div>
                         <div className="fw_5 mt-3 mt-sm-4 mt-md-5">Изображение</div>
                         <div className="f_09 l-gray mt-1">Размер баннера 250х160</div>
                         <div className="file-upload mt-2">
@@ -171,7 +172,7 @@ const AdvertisingSection = () => {
                         <div className="f_12 fw_6">Сумма к оплате</div>
                     </div>
                     <div className="col-sm-8 col-md-4 col-xxl-3 mb-3 mb-sm-0">
-                        <span className="f_12 fw_6">{data?.sum} ₽</span>
+                        <span className="f_12 fw_6">{FunctionForPrice(data?.sum)} ₽</span>
                     </div>
                 </div>
                 <button type="button" className="btn_main btn_4 fw_4 mt-sm-5">

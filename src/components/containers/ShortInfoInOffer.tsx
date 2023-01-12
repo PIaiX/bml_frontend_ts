@@ -1,6 +1,7 @@
 import React, {FC} from 'react'
 import {MdInfoOutline} from 'react-icons/md'
 import {convertLocaleDate} from '../../helpers/convertLocaleDate'
+import FunctionForPrice from '../../services/FunctionForPrice'
 
 type Props = {
     category?: number
@@ -26,8 +27,8 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
             <section className="anchor_block" id="anchor_little_info">
                 <h4 className="fw_7">Краткая информация</h4>
                 <ul>
-                    <li>Инвестиции: {props?.investments} ₽</li>
-                    <li>Предполагаемая прибыль: {props?.profitPerMonth || 0} ₽</li>
+                    <li>Инвестиции: {FunctionForPrice(props?.investments)} ₽</li>
+                    <li>Предполагаемая прибыль: {FunctionForPrice(props?.profitPerMonth) || 0} ₽</li>
                     <li>
                         Окупаемость: {props?.payback !== null ? props?.paybackForUser?.toLowerCase() : 'не установлено'}
                     </li>
@@ -44,7 +45,7 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
             <section className="anchor_block" id="anchor_little_info">
                 <h4 className="fw_7">Краткая информация</h4>
                 <ul>
-                    <li>Инвестиции: {props?.investments} ₽</li>
+                    <li>Инвестиции: {FunctionForPrice(props?.investments)} ₽</li>
                     <li>
                         Окупаемость: {props?.payback !== null ? props?.paybackForUser?.toLowerCase() : 'не установлено'}
                     </li>
@@ -57,8 +58,8 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
             <section className="anchor_block" id="anchor_little_info">
                 <h4 className="fw_7">Краткая информация</h4>
                 <ul>
-                    <li>Инвестиции: {props?.investments} ₽</li>
-                    <li>Предполагаемая прибыль: {props?.profit} ₽</li>
+                    <li>Инвестиции: {FunctionForPrice(props?.investments)} ₽</li>
+                    <li>Предполагаемая прибыль: {FunctionForPrice(props?.profit)} ₽</li>
                     <li>
                         Окупаемость: {props?.payback !== null ? props?.paybackForUser?.toLowerCase() : 'не установлено'}
                     </li>
@@ -75,13 +76,13 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
             <section className="anchor_block" id="anchor_little_info">
                 <h4 className="fw_7">Краткая информация</h4>
                 <ul>
-                    <li>Стоимость бизнеса: {props?.price} ₽</li>
+                    <li>Стоимость бизнеса: {FunctionForPrice(props?.price)} ₽</li>
                     <li>
                         Окупаемость: {props?.payback !== null ? props?.paybackForUser?.toLowerCase() : 'не установлено'}
                     </li>
-                    <li>Оборот в месяц: {props?.profitPerMonth} ₽</li>
-                    <li>Чистая прибыль: {props?.profit} ₽</li>
-                    <li>Количество точек: {props?.branchCount} шт.</li>
+                    <li>Оборот в месяц: {FunctionForPrice(props?.profitPerMonth)} ₽</li>
+                    <li>Чистая прибыль: {FunctionForPrice(props?.profit)} ₽</li>
+                    <li>Количество точек: {FunctionForPrice(props?.branchCount)} шт.</li>
                     <li>Город: {props?.city}</li>
                 </ul>
             </section>
@@ -91,16 +92,16 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
             <section className="anchor_block" id="anchor_little_info">
                 <h4 className="fw_7">Краткая информация</h4>
                 <ul>
-                    <li>Стартовые инвестиции от: {props?.investments} ₽</li>
-                    <li>Паушальный взнос: {props?.price} ₽</li>
-                    <li>Роялти: {props?.pricePerMonth} ₽</li>
+                    <li>Стартовые инвестиции от: {FunctionForPrice(props?.investments)} ₽</li>
+                    <li>Паушальный взнос: {FunctionForPrice(props?.price)} ₽</li>
+                    <li>Роялти: {FunctionForPrice(props?.pricePerMonth)} ₽</li>
                     <li>
                         Окупаемость: {props?.payback !== null ? props?.paybackForUser?.toLowerCase() : 'не установлено'}
                     </li>
-                    <li>Предполагаемая прибыль: {props?.profitPerMonth} ₽</li>
+                    <li>Предполагаемая прибыль: {FunctionForPrice(props?.profitPerMonth)} ₽</li>
                     <li>Дата основания компании: {convertLocaleDate(props?.dateOfCreation)}</li>
-                    <li>Количество собственных точек: {props?.branchCount} шт.</li>
-                    <li>Количество проданных франшиз: {props?.soldBranchCount} шт.</li>
+                    <li>Количество собственных точек: {FunctionForPrice(props?.branchCount)} шт.</li>
+                    <li>Количество проданных франшиз: {FunctionForPrice(props?.soldBranchCount)} шт.</li>
                 </ul>
             </section>
         )

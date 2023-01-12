@@ -524,7 +524,7 @@ const NewAd = () => {
                                     className="btn_main btn_2 fw_4"
                                     onClick={() => setLoadPhotoModal(true)}
                                 >
-                                    Открыть
+                                    Загрузить
                                 </button>
                                 <CustomModal
                                     className="modal__photosAdd"

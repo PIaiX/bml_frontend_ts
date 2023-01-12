@@ -4,6 +4,7 @@ import {MdCached} from 'react-icons/md'
 import {IOffersAreaItem, IOffersSubSectionsItem, IPayloadsFilter} from '../../types/offers'
 import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../utils/ValidateWrapper'
+import FunctionForPrice from '../../services/FunctionForPrice'
 
 type Props = {
     foundCount?: number
@@ -184,7 +185,7 @@ const SearchForm: React.FC<Props> = ({
                                     <ValidateWrapper error={errors.investmentsFrom}>
                                         <input
                                             type="number"
-                                            placeholder="0"
+                                            placeholder={FunctionForPrice('0')}
                                             {...register('investmentsFrom', {
                                                 valueAsNumber: true,
                                             })}
@@ -193,7 +194,7 @@ const SearchForm: React.FC<Props> = ({
                                     <span className="mx-2">до</span>
                                     <ValidateWrapper error={errors.investmentsTo}>
                                         <input
-                                            type="number"
+                                            type="text"
                                             placeholder="100000000"
                                             {...register('investmentsTo', {
                                                 valueAsNumber: true,
