@@ -730,16 +730,33 @@ ul.simple_list>li::before {
 .alert {
     position: fixed;
     bottom: 20px;
-    right: 35px;
     z-index: 100000;
-    width: 200px;
-    transition: opacity 1s ease;
+    /*transition: opacity 1s ease;*/
     height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
     word-break: break-word;
 }
+@media (min-width: 1200px) {
+    .alert.good  {
+        width: 20%;
+        margin-left: 40%;
+    }
+}
+@media (max-width: 1199px) {
+    .alert.good  {
+        width: 30%;
+        margin-left: 35%;
+    }
+}
+@media (max-width: 575px) {
+    .alert.good  {
+        width: 60%;
+        margin-left: 20%;
+    }
+}
+
 
 @keyframes ani {
     from {

@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC, useEffect, useMemo, useState} from 'react'
 import PartnersSite from '../components/PartnersSite'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -98,7 +98,6 @@ const Home: FC = () => {
             .then((res) => res && setMainTitle({isLoaded: true, item: res}))
             .catch(() => setMainTitle({isLoaded: true, item: null}))
     }, [])
-
     return (
         <main>
             <BannerContainer swiperDelay={mainTitle?.item?.bannersDelay} />

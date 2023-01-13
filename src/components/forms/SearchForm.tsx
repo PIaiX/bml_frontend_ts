@@ -224,7 +224,7 @@ const SearchForm: React.FC<Props> = ({
                                     <ValidateWrapper error={errors.priceTo}>
                                         <input
                                             type="number"
-                                            placeholder="10000000"
+                                            placeholder="10 000 000"
                                             {...register('priceTo', {
                                                 valueAsNumber: true,
                                             })}

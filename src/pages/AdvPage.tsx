@@ -135,12 +135,13 @@ const AdvPage: FC = () => {
             })
             .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
     }
+    const [messageType, setMessageType] = useState<string>('0')
 
     const createWithOfferTopicMessage = (e: BaseSyntheticEvent) => {
         e.preventDefault()
         if (offer.item) {
             emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
-                res?.status === 200 && dispatch(showAlert({message: 'Сообщение успешно отправлено', typeAlert: 'good'}))
+                res?.status === 200 && dispatch(showAlert({message: messageType, typeAlert: 'good'}))
                 setIsShowMessageModal(false)
             })
         }
@@ -155,7 +156,7 @@ const AdvPage: FC = () => {
             <section id="offer-page" className="container">
                 <h1>{offer?.item?.title}</h1>
                 <div className="d-lg-flex justify-content-between align-items-center mb-2 mb-sm-4">
-                    <h2 className="mb-0">{offer?.item?.title}</h2>
+                    <h2 className="mb-0">{offer?.item?.description}</h2>
                     <div className="short-info ms-auto mt-3 mt-sm-4 mt-lg-0">
                         <span>ID: {offer?.item?.id}</span>
                         <time className="d-flex align-items-center ms-3 ms-sm-4">
@@ -188,7 +189,12 @@ const AdvPage: FC = () => {
                                         <div className="ms-2">
                                             <div className="f_11 font-weight-light">{offer?.item?.user?.fullName}</div>
                                             <div className="f_09">
-                                                {offer?.item?.user?.type ? offer?.item?.user?.typeForUser : ''}
+                                                {offer?.item?.user?.type
+                                                    ? offer?.item?.user?.typeForUser +
+                                                      ' «' +
+                                                      offer?.item?.user?.companyName +
+                                                      '»'
+                                                    : ''}
                                             </div>
                                         </div>
                                     </NavLink>
@@ -231,8 +237,11 @@ const AdvPage: FC = () => {
                                     type="button"
                                     className="btn_main btn-5 f_11 w-100"
                                     onClick={() => {
+                                        setMessageType(
+                                            'Запрос Бизнес Плана отправлен в онлайн чат собственнику объявления.'
+                                        )
                                         setIsShowMessageModal(true)
-                                        setMessagePayload((prevState) => ({...prevState, text: 'Хочу питсы'}))
+                                        setMessagePayload((prevState) => ({...prevState, text: ''}))
                                     }}
                                 >
                                     ПОЛУЧИТЬ БИЗНЕС-ПЛАН
@@ -241,6 +250,7 @@ const AdvPage: FC = () => {
                                     type="button"
                                     className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3"
                                     onClick={() => {
+                                        setMessageType('Сообщение успешно отправлено, в онлайн чат.')
                                         setIsShowMessageModal(true)
                                         setMessagePayload((prevState) => ({...prevState, text: ''}))
                                     }}
