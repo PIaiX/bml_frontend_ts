@@ -20,12 +20,16 @@ type Props = {
 }
 
 const NotArchiveAds: FC<Props> = ({tab, section}) => {
+    const typeForUser: string | undefined = useAppSelector((state) => state?.user?.user?.typeForUser)
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const [currentPage, setCurrentPage] = useState(0)
     const [offerId, setOfferId] = useState<number | null>(null)
     const dispatch = useAppDispatch()
     const queryClient = useQueryClient()
+    let text = 'Ничего нет'
+    if (tab === 4 && user?.typeForUser === 'Физ лицо')
+        text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const notArchiveOffers = useQuery({
         queryKey: ['notArchive', user?.id, tab, currentPage],
         queryFn: async () => {
@@ -108,7 +112,7 @@ const NotArchiveAds: FC<Props> = ({tab, section}) => {
                             />
                         ))
                     ) : (
-                        <h6 className="w-100 p-5 text-center">Ничего нет</h6>
+                        <h6 className="w-100 p-5 text-center">{text}</h6>
                     )
                 ) : (
                     <div className="p-5 w-100 d-flex justify-content-center">

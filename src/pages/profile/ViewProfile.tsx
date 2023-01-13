@@ -10,7 +10,7 @@ import {checkPhotoPath} from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'
 import {createFriend, deleteFriend} from '../../services/friends'
 import {useAppDispatch, useAppSelector} from '../../hooks/store'
-import {emitCreateWithOfferTopicMessage, emitCreateWithoutTopicMessage} from '../../services/sockets/messages'
+import {emitCreateWithoutTopicMessage} from '../../services/sockets/messages'
 import {showAlert} from '../../store/reducers/alertSlice'
 import CustomModal from '../../components/utils/CustomModal'
 
@@ -76,12 +76,90 @@ const ViewProfile: FC = () => {
                 .catch(() => console.log())
         }
     }
-
+    const getAddsContent = () => {
+        let content = []
+        if (userOffers?.items)
+            for (let i: number = 0; i < userOffers?.items?.length; i += 3) {
+                content.push(
+                    <div className={'row'}>
+                        {userOffers?.items[i] && (
+                            <div className="acc-box ads d-flex flex-column justify-content-between">
+                                <div></div>
+                                <div>
+                                    <img
+                                        src={checkPhotoPath(userOffers?.items[i]?.image)}
+                                        alt={userOffers?.items[i]?.categoryForUser}
+                                        className="ads-img"
+                                    />
+                                </div>
+                                <div className="fw_5 f_09 mt-2">{userOffers?.items[i]?.categoryForUser}</div>
+                                <div className="gray f_09 mt-1">{userOffers?.items[i]?.subsection?.area?.name}</div>
+                            </div>
+                        )}
+                        {userOffers?.items[i + 1] && (
+                            <div className="acc-box ads d-flex flex-column justify-content-between">
+                                <div></div>
+                                <div>
+                                    <img
+                                        src={checkPhotoPath(userOffers?.items[i + 1]?.image)}
+                                        alt={userOffers?.items[i + 1]?.categoryForUser}
+                                        className="ads-img"
+                                    />
+                                </div>
+                                <div className="fw_5 f_09 mt-2">{userOffers?.items[i + 1]?.categoryForUser}</div>
+                                <div className="gray f_09 mt-1">{userOffers?.items[i + 1]?.subsection?.area?.name}</div>
+                            </div>
+                        )}
+                        {userOffers?.items[i + 2] && (
+                            <div className="acc-box ads d-flex flex-column justify-content-between">
+                                <div></div>
+                                <div>
+                                    <img
+                                        src={checkPhotoPath(userOffers?.items[i + 2]?.image)}
+                                        alt={userOffers?.items[i + 2]?.categoryForUser}
+                                        className="ads-img"
+                                    />
+                                </div>
+                                <div className="fw_5 f_09 mt-2">{userOffers?.items[i + 2]?.categoryForUser}</div>
+                                <div className="gray f_09 mt-1">{userOffers?.items[i + 2]?.subsection?.area?.name}</div>
+                            </div>
+                        )}
+                    </div>
+                )
+            }
+        // (
+        //     userOffers?.items?.map((offer) => (
+        //         <div key={offer?.id}>
+        //             <div className="acc-box ads d-flex flex-column justify-content-between">
+        //                 <div></div>
+        //                 <div>
+        //                     <img
+        //                         src={checkPhotoPath(offer?.image)}
+        //                         alt={offer?.categoryForUser}
+        //                         className="ads-img"
+        //                     />
+        //                 </div>
+        //                 <div className="fw_5 f_09 mt-2">{offer?.categoryForUser}</div>
+        //                 <div className="gray f_09 mt-1">
+        //                     {offer?.subsection?.area?.name}
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     ))
+        // )
+        return content
+    }
     const createWithTopicMessage = (e: BaseSyntheticEvent) => {
         e.preventDefault()
         if (id) {
             emitCreateWithoutTopicMessage(id, messagePayload).then((res) => {
-                res?.status === 200 && dispatch(showAlert({message: 'Сообщение успешно отправлено', typeAlert: 'good'}))
+                res?.status === 200 &&
+                    dispatch(
+                        showAlert({
+                            message: 'Сообщение успешно отправлено',
+                            typeAlert: 'good',
+                        })
+                    )
                 setIsShowMessageModal(false)
             })
         }
@@ -252,11 +330,6 @@ const ViewProfile: FC = () => {
                                 <div>
                                     Объявления <span className="l-gray">{userOffers?.meta?.total || 0}</span>
                                 </div>
-                                {userOffers?.meta && userOffers?.meta?.total > 6 ? (
-                                    <button onClick={() => setSliceNumber(100)}>Показать все</button>
-                                ) : (
-                                    ''
-                                )}
                             </div>
                             <div
                                 className={
@@ -267,24 +340,7 @@ const ViewProfile: FC = () => {
                             >
                                 {userOffers?.isLoaded ? (
                                     userOffers?.meta?.total && userOffers?.meta?.total > 0 ? (
-                                        userOffers?.items?.slice(0, sliceNumber).map((offer) => (
-                                            <div key={offer?.id}>
-                                                <div className="acc-box ads d-flex flex-column justify-content-between">
-                                                    <div></div>
-                                                    <div>
-                                                        <img
-                                                            src={checkPhotoPath(offer?.image)}
-                                                            alt={offer?.categoryForUser}
-                                                            className="ads-img"
-                                                        />
-                                                    </div>
-                                                    <div className="fw_5 f_09 mt-2">{offer?.categoryForUser}</div>
-                                                    <div className="gray f_09 mt-1">
-                                                        {offer?.subsection?.area?.name}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))
+                                        getAddsContent()
                                     ) : (
                                         <div>
                                             <h5>Нет объявлений</h5>

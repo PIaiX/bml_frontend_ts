@@ -997,7 +997,7 @@ personal account
     height: 200px;
 }
 .acc-video video, .acc-video iframe{
-    width: 100% !important;
+    width: auto !important;
     height: 100% !important;
     object-fit: contain;
 }

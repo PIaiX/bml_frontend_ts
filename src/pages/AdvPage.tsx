@@ -378,16 +378,14 @@ const AdvPage: FC = () => {
                                     <h4 className="fw_7">Видео</h4>
                                     <PhotoProvider maskOpacity={0.75}>
                                         <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
-                                            <div>
-                                                <div className="acc-video">
-                                                    <iframe
-                                                        src={offer?.item?.video}
-                                                        title="YouTube video player"
-                                                        frameBorder="0"
-                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                        allowFullScreen
-                                                    />
-                                                </div>
+                                            <div className="acc-video">
+                                                <iframe
+                                                    src={offer?.item?.video}
+                                                    title="YouTube video player"
+                                                    frameBorder="0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowFullScreen
+                                                />
                                             </div>
                                         </div>
                                     </PhotoProvider>
@@ -419,7 +417,7 @@ const AdvPage: FC = () => {
 
             <section className="anchor_block mb-5" id="anchor_like">
                 <div className="container">
-                    <h2 className="mt-sm-4">Похожие франшизы</h2>
+                    <h2 className="mt-sm-4">Похожие объявления</h2>
                     <Swiper
                         className="pt-sm-4 pb-4 pb-sm-5"
                         modules={[Pagination]}

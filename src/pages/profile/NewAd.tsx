@@ -322,7 +322,7 @@ const NewAd = () => {
                             <option value={1}>Предложения инвесторов</option>
                             <option value={2}>Поиск бизнес партнёров</option>
                             <option value={3}>Продажа готового бизнеса</option>
-                            <option value={4}>Франшизы</option>
+                            {user?.typeForUser !== 'Физ лицо' && <option value={4}>Франшизы</option>}
                         </select>
                     </div>
                 </fieldset>
@@ -1044,7 +1044,7 @@ const NewAd = () => {
                                                 }))
                                             }
                                         />
-                                        <span className="ms-1 ms-sm-2 ms-xl-3">Большое объявление (пример)</span>
+                                        <span className="ms-1 ms-sm-2 ms-xl-3">Разместить</span>
                                     </label>
                                     <div className="fw_6 sky">6 мес. — 11 000 рублей</div>
                                 </div>
