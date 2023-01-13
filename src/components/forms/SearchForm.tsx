@@ -172,9 +172,11 @@ const SearchForm: React.FC<Props> = ({
                     </div>
                     <div className="row">
                         {modules.includes('query') && (
-                            <div className="col-sm-6 col-md-4 col-lg-6 mb-3 mb-lg-4 collapse-content__module collapse-content__module_word">
-                                <div className="d-none d-md-block mb-1">Содержит слова:</div>
-                                <input type="text" {...register('query')} placeholder="Введите поисковую фразу" />
+                            <div className=" mb-3 mb-lg-4 collapse-content__module collapse-content__module_word">
+                                <div className={'col-sm-6 mb-3 mb-lg-4 mb-3 mb-lg-4'}>
+                                    <div className="d-none d-md-block mb-1">Содержит слова:</div>
+                                    <input type="text" {...register('query')} placeholder="Введите поисковую фразу" />
+                                </div>
                             </div>
                         )}
                         {modules.includes('investments') && (
