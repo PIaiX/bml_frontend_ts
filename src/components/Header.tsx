@@ -9,7 +9,7 @@ const imgBottom = require('../assets/images/backgrounds/down.svg')
 
 const Header: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
-    const count = useAppSelector((state) => state?.favoritesCount?.count)
+    const count = useAppSelector((state) => state?.favoritesCount?.count || 0)
     const dispatch = useAppDispatch()
     useEffect(() => {
         if (user) {

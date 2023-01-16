@@ -1,7 +1,26 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
-    cities: [],
+    cities: [
+        'Москва',
+        'Казань',
+        'Aнапа',
+        'Харьков',
+        'Владимир',
+        'Чечня',
+        'Ереван',
+        'Boston',
+        'Meria',
+        'Москва',
+        'Казань',
+        'Aнапа',
+        'Харьков',
+        'Владимир',
+        'Чечня',
+        'Ереван',
+        'Boston',
+        'Meria',
+    ],
 }
 
 export const citySlice = createSlice({
@@ -9,7 +28,7 @@ export const citySlice = createSlice({
     initialState,
     reducers: {
         setCity: (state, action) => {
-            state.cities = action.payload
+            state.cities = action.payload.sort()
         },
     },
 })

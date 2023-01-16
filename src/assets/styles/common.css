@@ -739,19 +739,19 @@ ul.simple_list>li::before {
     word-break: break-word;
 }
 @media (min-width: 1200px) {
-    .alert.good  {
+    .alert.good, .alert.bad   {
         width: 20%;
         margin-left: 40%;
     }
 }
 @media (max-width: 1199px) {
-    .alert.good  {
+    .alert.good, .alert.bad  {
         width: 30%;
         margin-left: 35%;
     }
 }
 @media (max-width: 575px) {
-    .alert.good  {
+    .alert.good, .alert.bad  {
         width: 60%;
         margin-left: 20%;
     }

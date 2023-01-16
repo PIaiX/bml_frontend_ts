@@ -30,6 +30,7 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
+            console.log(JSON.stringify(action.payload))
             state.user = action.payload
         },
         resetUser: (state) => {

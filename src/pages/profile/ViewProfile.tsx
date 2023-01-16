@@ -55,6 +55,12 @@ const ViewProfile: FC = () => {
             createFriend({fromId: user?.id, toId: +id})
                 .then(() => {
                     if (id && user?.id) {
+                        dispatch(
+                            showAlert({
+                                message: 'Заявка успешно отправлена',
+                                typeAlert: 'good',
+                            })
+                        )
                         getUserInfo(+id, user?.id)
                             .then((res) => res && setUserInfo({isLoaded: true, item: res}))
                             .catch((error) => setUserInfo({isLoaded: true, item: null}))
@@ -68,6 +74,13 @@ const ViewProfile: FC = () => {
             deleteFriend({fromId: user?.id, toId: +id})
                 .then(() => {
                     if (id && user?.id) {
+                        dispatch(
+                            showAlert({
+                                message: 'Заявка успешно отменена',
+                                typeAlert: 'good',
+                            })
+                        )
+
                         getUserInfo(+id, user?.id)
                             .then((res) => res && setUserInfo({isLoaded: true, item: res}))
                             .catch((error) => setUserInfo({isLoaded: true, item: null}))

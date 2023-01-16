@@ -1,14 +1,13 @@
 import React, {FC, useEffect} from 'react'
 import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../utils/ValidateWrapper'
-import {User} from '../../types'
 import {IUser} from '../../types/user'
 import {useAppDispatch, useAppSelector} from '../../hooks/store'
 import {updateUserInfo} from '../../services/profileSettings'
-import {getValue} from '@testing-library/user-event/dist/utils'
 import {convertLocaleDate} from '../../helpers/convertLocaleDate'
 import {showAlert} from '../../store/reducers/alertSlice'
 import {setUser} from '../../store/reducers/userSlice'
+import {setCity} from '../../store/reducers/citySlice'
 
 type Props = {
     avatar: File
@@ -21,6 +20,7 @@ type UserForm = {
     email: string
     phone: string
     city: string
+    differentCity: string
     isShowEmail: boolean
     isShowPhone: boolean
     type: number
@@ -28,8 +28,12 @@ type UserForm = {
 
 const EditProfileForm: FC<Props> = ({avatar}) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
-    const cities: Array<string> = useAppSelector((state) => state?.cities?.cities)
     const dispatch = useAppDispatch()
+    useEffect(() => {
+        !cities.includes(watch('differentCity')) && dispatch(setCity([...cities, user?.city]))
+    }, [])
+    let cities: Array<string> = useAppSelector((state) => state?.cities?.cities)
+
     const {
         register,
         formState: {errors},
@@ -65,9 +69,16 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
         }
     }, [user])
 
-    const submitUpadateUserInfo = (data: any) => {
+    const cityFormName: string = 'Ввести город'
+
+    const submitUpdateUserInfo = (data: any) => {
+        let req
         const newDate = getValues('birthday') ? convertLocaleDate(getValues('birthday')) : ''
-        const req = {...data, birthday: newDate, avatar: avatar ? avatar : ''}
+        if (watch('differentCity') !== '' && watch('city') === cityFormName) {
+            !cities.includes(watch('differentCity')) && dispatch(setCity([...cities, watch('differentCity')]))
+            req = {...data, birthday: newDate, avatar: avatar ? avatar : '', city: watch('differentCity')}
+        } else req = {...data, birthday: newDate, avatar: avatar ? avatar : ''}
+
         const formData = new FormData()
         for (const key in req) {
             formData.append(key, req[key])
@@ -75,7 +86,7 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
         if (user) {
             updateUserInfo(user?.id, formData)
                 .then((res) => {
-                    dispatch(setUser(res))
+                    !cities.includes(watch('differentCity')) && dispatch(setUser(res))
                     dispatch(showAlert({message: 'Информация успешно изменена', typeAlert: 'good'}))
                 })
                 .catch((error) => {
@@ -92,9 +103,8 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                 })
         }
     }
-
     return (
-        <form className="acc-box" noValidate onSubmit={handleSubmit(submitUpadateUserInfo)}>
+        <form className="acc-box" noValidate onSubmit={handleSubmit(submitUpdateUserInfo)}>
             <div className="row  align-items-center g-3">
                 <div className="col-sm-4">
                     <h6>
@@ -209,12 +219,37 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                 </div>
                 <div className="col-sm-8">
                     <ValidateWrapper error={errors?.city}>
-                        <select defaultValue={''} {...register('city', {required: 'Обязательное поле'})}>
-                            <option value={''} disabled>
-                                Город
-                            </option>
+                        <input
+                            className={'inputCity'}
+                            placeholder={'Введите город'}
+                            autoComplete="off"
+                            style={{
+                                display: watch('city') === cityFormName ? 'inline-block' : 'none',
+                            }}
+                            {...register('differentCity')}
+                        />
+
+                        <select
+                            defaultValue={''}
+                            {...register('city', {
+                                required: 'Обязательное поле',
+                                validate: (value) => {
+                                    if (value === cityFormName && watch('differentCity') === '')
+                                        return 'Обязательное поле'
+                                    else return true
+                                },
+                            })}
+                        >
+                            <option>{cityFormName}</option>
+                            <option disabled></option>
+
                             {cities?.map((city, index) => (
-                                <option key={index} value={city} selected={user?.city === city}>
+                                <option
+                                    key={index}
+                                    value={city}
+                                    selected={user?.city === city}
+                                    style={{display: 'inline'}}
+                                >
                                     {city}
                                 </option>
                             ))}

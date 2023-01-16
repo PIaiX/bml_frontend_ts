@@ -14,7 +14,7 @@ function MyWallet() {
                 <button type="button" className="btn_main btn_1">
                     Пополнить
                 </button>
-                <div className="f_11 fw_7 pt mt-3">Баланс: {FunctionForPrice(0)} ₽</div>
+                <div className="f_11 fw_7 pt mt-3">Баланс: {FunctionForPrice('0')} ₽</div>
                 <form className="promo mt-3">
                     <input type="text" />
                     <button type="button" className="btn_main btn_3 w-100 mt-2">

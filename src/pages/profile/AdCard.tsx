@@ -1,6 +1,7 @@
 import React, {FC} from 'react'
 import {Link, NavLink} from 'react-router-dom'
 import {checkPhotoPath} from '../../helpers/photoLoader'
+import FunctionForPrice from '../../services/FunctionForPrice'
 
 type Props = {
     className?: string
@@ -32,7 +33,9 @@ const AdCard: FC<Props> = (props: any) => {
                         </NavLink>
                         <div className="l-gray f_08 mt-2">{props.scope}</div>
                     </div>
-                    {props.investments && <div className="fw_5 f_09 mt-2">{props.investments}&nbsp;₽</div>}
+                    {props.investments && (
+                        <div className="fw_5 f_09 mt-2">{FunctionForPrice(props.investments)}&nbsp;₽</div>
+                    )}
                     <div className="mt-2">
                         <span className="color-1 fw_5">{props?.archiveExpire}</span>
                     </div>

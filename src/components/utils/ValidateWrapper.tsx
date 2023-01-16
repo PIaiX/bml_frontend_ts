@@ -9,7 +9,11 @@ interface Props {
 const ValidateWrapper: React.FC<Props> = ({children, error}) => (
     <div className={`validate-wrapper ${error ? 'validate-wrapper_error' : ''}`}>
         {children}
-        {error && <div className="validate-error">{error?.message}</div>}
+        {error && (
+            <div className="validate-error" style={{zIndex: '10'}}>
+                {error?.message}
+            </div>
+        )}
     </div>
 )
 
