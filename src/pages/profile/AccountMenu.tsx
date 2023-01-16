@@ -33,7 +33,6 @@ export default function AccountMenu() {
             setAuth(true)
         }
     }, [])
-
     return (
         <nav className="acc-menu">
             {auth ? (
@@ -56,9 +55,11 @@ export default function AccountMenu() {
                     <li>
                         <NavLink to="wallet">Мой кошелек</NavLink>
                     </li>
-                    <li>
-                        <NavLink to="advertising-section">Рекламный раздел</NavLink>
-                    </li>
+                    {userState?.typeForUser !== 'Физ лицо' && (
+                        <li>
+                            <NavLink to="advertising-section">Рекламный раздел</NavLink>
+                        </li>
+                    )}
                     <li>
                         <NavLink to="cart">Мои покупки</NavLink>
                     </li>
