@@ -23,6 +23,8 @@ import {convertLocaleDate} from '../../helpers/convertLocaleDate'
 import {showAlert} from '../../store/reducers/alertSlice'
 import {IUseStateItem} from '../../types'
 import {checkPhotoPath} from '../../helpers/photoLoader'
+import {FromStringToNumber} from "../../services/FromStringToNumber";
+import FunctionForPrice from "../../services/FunctionForPrice";
 
 const NewAd = () => {
     const [category, setCategory] = useState<number | undefined>(0)
@@ -57,10 +59,9 @@ const NewAd = () => {
 
     const {
         register,
-        getValues,
         setValue,
+        watch,
         formState: {errors},
-        reset,
         handleSubmit,
     } = useForm<IOfferForm>({
         mode: 'onSubmit',
@@ -268,6 +269,20 @@ const NewAd = () => {
     }
 
     const filterFunc = (data: any) => {
+        let ValuesFroPrice:Array<Array<any>> = [
+            ['branchCount'], ['price'], ['investments'],  ['pricePerMonth'], ['profitPerMonth'], ['profit'], ['isoldBranchCount']
+        ]
+        ValuesFroPrice.forEach(i=>i.push(FromStringToNumber(watch(i[0]))))
+        data= {
+            ...data,
+            [ValuesFroPrice[0][0]]: ValuesFroPrice[0][1],
+            [ValuesFroPrice[1][0]]: ValuesFroPrice[1][1],
+            [ValuesFroPrice[2][0]]: ValuesFroPrice[2][1],
+            [ValuesFroPrice[3][0]]: ValuesFroPrice[3][1],
+            [ValuesFroPrice[4][0]]: ValuesFroPrice[4][1],
+            [ValuesFroPrice[5][0]]: ValuesFroPrice[5][1],
+            [ValuesFroPrice[6][0]]: ValuesFroPrice[6][1],
+        }
         if (id) {
             saveChanges(data)
         } else {
@@ -295,7 +310,10 @@ const NewAd = () => {
                 dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'}))
             })
     }
-
+    const GoodLook = (o: any) => {
+        let val = FromStringToNumber(o.target.value);
+        setValue(o.target.name, FunctionForPrice(val))
+    }
     return (
         <>
             <Link to="/account/my-ads" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -356,8 +374,8 @@ const NewAd = () => {
                                 {category === 0 || category === 1 || category === 2
                                     ? 'Описание объявления'
                                     : category === 3
-                                    ? 'Описание бизнеса'
-                                    : 'Описание компании'}
+                                        ? 'Описание бизнеса'
+                                        : 'Описание компании'}
                                 <span className="red">*</span>
                             </div>
                         </div>
@@ -369,8 +387,8 @@ const NewAd = () => {
                                         category === 0 || category === 1 || category === 2
                                             ? 'Описание объявления'
                                             : category === 3
-                                            ? 'Описание бизнеса'
-                                            : 'Описание компании'
+                                                ? 'Описание бизнеса'
+                                                : 'Описание компании'
                                     }
                                     {...register('description', {
                                         required: 'Обязательное поле',
@@ -443,8 +461,8 @@ const NewAd = () => {
                                         category === 0 || category === 2 || category === 4
                                             ? 'Условия сотрудничества'
                                             : category === 1
-                                            ? 'Предполагаемые условия сотрудничества'
-                                            : 'Условия продажи'
+                                                ? 'Предполагаемые условия сотрудничества'
+                                                : 'Условия продажи'
                                     }
                                     {...register('cooperationTerms', {
                                         required: 'Обязательное поле',
@@ -567,9 +585,9 @@ const NewAd = () => {
                                                         onChange={(e: any) => {
                                                             e.target?.files?.length <= 10
                                                                 ? setFiles((prevState: any) => [
-                                                                      ...prevState,
-                                                                      ...e.target.files,
-                                                                  ])
+                                                                    ...prevState,
+                                                                    ...e.target.files,
+                                                                ])
                                                                 : alert('Не более 10 шт.')
                                                         }}
                                                     />
@@ -742,12 +760,13 @@ const NewAd = () => {
                                 <div className="col-sm-6 col-lg-4">
                                     <ValidateWrapper error={errors?.branchCount}>
                                         <input
-                                            type="number"
+                                            type="text"
                                             placeholder="0"
                                             className="f_09"
                                             {...register('branchCount', {
                                                 required: 'Обязательное поле',
                                                 min: {value: 0, message: 'Минимум 0'},
+                                                onChange: event => GoodLook(event)
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -762,12 +781,13 @@ const NewAd = () => {
                                 <div className="col-sm-6 col-lg-4">
                                     <ValidateWrapper error={errors?.price}>
                                         <input
-                                            type="number"
+                                            type="text"
                                             placeholder="0"
                                             className="f_09"
                                             {...register('price', {
                                                 required: 'Обязательное поле',
                                                 min: {value: 0, message: 'Минимум 0'},
+                                                onChange: event => GoodLook(event)
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -782,20 +802,21 @@ const NewAd = () => {
                                     {category === 0 || category === 2
                                         ? 'Требуемые инвестиции'
                                         : category === 1
-                                        ? 'Возможные инвестиции'
-                                        : 'Стартовые инвестиции от'}
+                                            ? 'Возможные инвестиции'
+                                            : 'Стартовые инвестиции от'}
                                     <span className="red">*</span>
                                 </div>
                             </div>
                             <div className="col-sm-6 col-lg-4">
                                 <ValidateWrapper error={errors?.investments}>
                                     <input
-                                        type="number"
+                                        type="text"
                                         placeholder="0"
                                         className="f_09 input-price"
                                         {...register('investments', {
                                             required: 'Обязательное поле',
                                             min: {value: 0, message: 'Минимум 0'},
+                                            onChange: event => GoodLook(event)
                                         })}
                                     />
                                 </ValidateWrapper>
@@ -813,12 +834,13 @@ const NewAd = () => {
                                 <div className="col-sm-6 col-lg-4">
                                     <ValidateWrapper error={errors?.price}>
                                         <input
-                                            type="number"
+                                            type="text"
                                             placeholder="0"
                                             className="f_09"
                                             {...register('price', {
                                                 required: 'Обязательное поле',
                                                 min: {value: 0, message: 'Минимум 0'},
+                                                onChange: event => GoodLook(event)
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -833,12 +855,13 @@ const NewAd = () => {
                                 <div className="col-sm-6 col-lg-4">
                                     <ValidateWrapper error={errors?.pricePerMonth}>
                                         <input
-                                            type="number"
+                                            type="text"
                                             placeholder="0"
                                             className="f_09"
                                             {...register('pricePerMonth', {
                                                 required: 'Обязательное поле',
                                                 min: {value: 0, message: 'Минимум 0'},
+                                                onChange: event => GoodLook(event)
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -854,12 +877,13 @@ const NewAd = () => {
                             <div className="col-sm-6 col-lg-4">
                                 <ValidateWrapper error={errors?.profitPerMonth}>
                                     <input
-                                        type="number"
+                                        type="text"
                                         placeholder="0"
                                         className="f_09 input-price"
                                         {...register('profitPerMonth', {
                                             min: {value: 0, message: 'Минимум 0'},
                                             minLength: {value: 0, message: 'Минимальная длина 0 символа'},
+                                            onChange: event => GoodLook(event)
                                         })}
                                     />
                                 </ValidateWrapper>
@@ -918,12 +942,13 @@ const NewAd = () => {
                                 <div className="col-sm-6 col-lg-4">
                                     <ValidateWrapper error={errors?.profitPerMonth}>
                                         <input
-                                            type="number"
+                                            type="text"
                                             placeholder="0"
                                             className="f_09"
                                             {...register('profitPerMonth', {
                                                 min: {value: 0, message: 'Минимум 0'},
                                                 minLength: {value: 0, message: 'Минимальная длина 0 символа'},
+                                                onChange: event => GoodLook(event)
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -938,13 +963,14 @@ const NewAd = () => {
                                 <div className="col-sm-6 col-lg-4">
                                     <ValidateWrapper error={errors?.profit}>
                                         <input
-                                            type="number"
+                                            type="text"
                                             placeholder="0"
                                             className="f_09"
                                             {...register('profit', {
                                                 required: 'Обязательное поле',
                                                 min: {value: 0, message: 'Минимум 0'},
                                                 minLength: {value: 4, message: 'Минимальная длина 4 символа'},
+                                                onChange: event => GoodLook(event)
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -974,11 +1000,12 @@ const NewAd = () => {
                                 <div className="col-sm-6 col-lg-4">
                                     <ValidateWrapper error={errors?.branchCount}>
                                         <input
-                                            type="number"
+                                            type="text"
                                             placeholder="0"
                                             className="f_09"
                                             {...register('branchCount', {
                                                 min: {value: 0, message: 'Минимум 0'},
+                                                onChange: event => GoodLook(event)
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -991,11 +1018,12 @@ const NewAd = () => {
                                 <div className="col-sm-6 col-lg-4">
                                     <ValidateWrapper error={errors?.soldBranchCount}>
                                         <input
-                                            type="number"
+                                            type="text"
                                             placeholder="0"
                                             className="f_09"
                                             {...register('soldBranchCount', {
                                                 min: {value: 0, message: 'Минимум 0'},
+                                                onChange: event => GoodLook(event)
                                             })}
                                         />
                                     </ValidateWrapper>

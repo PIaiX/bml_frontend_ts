@@ -139,19 +139,19 @@ const Header: FC = () => {
                     <nav>
                         <ul className="list-unstyled">
                             <li>
-                                <NavLink to="category/1">Поиск инвестора</NavLink>
+                                <NavLink to="category/0">Поиск инвестора</NavLink>
                             </li>
                             <li>
-                                <NavLink to="category/2">Предложения инвесторов</NavLink>
+                                <NavLink to="category/1">Предложения инвесторов</NavLink>
                             </li>
                             <li>
-                                <NavLink to="category/3">Поиск бизнес партнёров</NavLink>
+                                <NavLink to="category/2">Поиск бизнес партнёров</NavLink>
                             </li>
                             <li>
-                                <NavLink to="category/4">Продажа бизнеса</NavLink>
+                                <NavLink to="category/3">Продажа бизнеса</NavLink>
                             </li>
                             <li>
-                                <NavLink to="category/5">Франшизы</NavLink>
+                                <NavLink to="category/4">Франшизы</NavLink>
                             </li>
                             <li>
                                 <NavLink to="news">Новости</NavLink>
