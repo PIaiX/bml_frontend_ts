@@ -23,8 +23,9 @@ import {convertLocaleDate} from '../../helpers/convertLocaleDate'
 import {showAlert} from '../../store/reducers/alertSlice'
 import {IUseStateItem} from '../../types'
 import {checkPhotoPath} from '../../helpers/photoLoader'
-import {FromStringToNumber} from "../../services/FromStringToNumber";
-import FunctionForPrice from "../../services/FunctionForPrice";
+import {FromStringToNumber} from '../../services/FromStringToNumber'
+import FunctionForPrice from '../../services/FunctionForPrice'
+import CitiesForm from '../../components/forms/CitiesForm'
 
 const NewAd = () => {
     const [category, setCategory] = useState<number | undefined>(0)
@@ -268,12 +269,29 @@ const NewAd = () => {
             })
     }
 
+    const [city, setCity] = useState<string>('')
+    const [cityEr, setCityEr] = useState<string>('')
+
+    const funcForCityEr = (city: string) => {
+        if (city === '') setCityEr('Обязательное поле')
+        else setCityEr('')
+        setCity(city)
+    }
+
     const filterFunc = (data: any) => {
-        let ValuesFroPrice:Array<Array<any>> = [
-            ['branchCount'], ['price'], ['investments'],  ['pricePerMonth'], ['profitPerMonth'], ['profit'], ['isoldBranchCount']
+        if (city === '') return 0
+
+        let ValuesFroPrice: Array<Array<any>> = [
+            ['branchCount'],
+            ['price'],
+            ['investments'],
+            ['pricePerMonth'],
+            ['profitPerMonth'],
+            ['profit'],
+            ['isoldBranchCount'],
         ]
-        ValuesFroPrice.forEach(i=>i.push(FromStringToNumber(watch(i[0]))))
-        data= {
+        ValuesFroPrice.forEach((i) => i.push(FromStringToNumber(watch(i[0]))))
+        data = {
             ...data,
             [ValuesFroPrice[0][0]]: ValuesFroPrice[0][1],
             [ValuesFroPrice[1][0]]: ValuesFroPrice[1][1],
@@ -282,6 +300,7 @@ const NewAd = () => {
             [ValuesFroPrice[4][0]]: ValuesFroPrice[4][1],
             [ValuesFroPrice[5][0]]: ValuesFroPrice[5][1],
             [ValuesFroPrice[6][0]]: ValuesFroPrice[6][1],
+            city: city,
         }
         if (id) {
             saveChanges(data)
@@ -311,7 +330,7 @@ const NewAd = () => {
             })
     }
     const GoodLook = (o: any) => {
-        let val = FromStringToNumber(o.target.value);
+        let val = FromStringToNumber(o.target.value)
         setValue(o.target.name, FunctionForPrice(val))
     }
     return (
@@ -374,8 +393,8 @@ const NewAd = () => {
                                 {category === 0 || category === 1 || category === 2
                                     ? 'Описание объявления'
                                     : category === 3
-                                        ? 'Описание бизнеса'
-                                        : 'Описание компании'}
+                                    ? 'Описание бизнеса'
+                                    : 'Описание компании'}
                                 <span className="red">*</span>
                             </div>
                         </div>
@@ -387,8 +406,8 @@ const NewAd = () => {
                                         category === 0 || category === 1 || category === 2
                                             ? 'Описание объявления'
                                             : category === 3
-                                                ? 'Описание бизнеса'
-                                                : 'Описание компании'
+                                            ? 'Описание бизнеса'
+                                            : 'Описание компании'
                                     }
                                     {...register('description', {
                                         required: 'Обязательное поле',
@@ -461,8 +480,8 @@ const NewAd = () => {
                                         category === 0 || category === 2 || category === 4
                                             ? 'Условия сотрудничества'
                                             : category === 1
-                                                ? 'Предполагаемые условия сотрудничества'
-                                                : 'Условия продажи'
+                                            ? 'Предполагаемые условия сотрудничества'
+                                            : 'Условия продажи'
                                     }
                                     {...register('cooperationTerms', {
                                         required: 'Обязательное поле',
@@ -585,9 +604,9 @@ const NewAd = () => {
                                                         onChange={(e: any) => {
                                                             e.target?.files?.length <= 10
                                                                 ? setFiles((prevState: any) => [
-                                                                    ...prevState,
-                                                                    ...e.target.files,
-                                                                ])
+                                                                      ...prevState,
+                                                                      ...e.target.files,
+                                                                  ])
                                                                 : alert('Не более 10 шт.')
                                                         }}
                                                     />
@@ -679,17 +698,8 @@ const NewAd = () => {
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-8">
-                            <ValidateWrapper error={errors?.city}>
-                                <select defaultValue={''} {...register('city', {required: 'Обязательное поле'})}>
-                                    <option value={''} disabled>
-                                        {formInfo?.city ? formInfo?.city : 'Город'}
-                                    </option>
-                                    {cities?.map((city, index) => (
-                                        <option key={index} value={city}>
-                                            {city}
-                                        </option>
-                                    ))}
-                                </select>
+                            <ValidateWrapper error={{message: cityEr}}>
+                                <CitiesForm setVal={funcForCityEr} />
                             </ValidateWrapper>
                         </div>
                     </div>
@@ -766,7 +776,7 @@ const NewAd = () => {
                                             {...register('branchCount', {
                                                 required: 'Обязательное поле',
                                                 min: {value: 0, message: 'Минимум 0'},
-                                                onChange: event => GoodLook(event)
+                                                onChange: (event) => GoodLook(event),
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -787,7 +797,7 @@ const NewAd = () => {
                                             {...register('price', {
                                                 required: 'Обязательное поле',
                                                 min: {value: 0, message: 'Минимум 0'},
-                                                onChange: event => GoodLook(event)
+                                                onChange: (event) => GoodLook(event),
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -802,8 +812,8 @@ const NewAd = () => {
                                     {category === 0 || category === 2
                                         ? 'Требуемые инвестиции'
                                         : category === 1
-                                            ? 'Возможные инвестиции'
-                                            : 'Стартовые инвестиции от'}
+                                        ? 'Возможные инвестиции'
+                                        : 'Стартовые инвестиции от'}
                                     <span className="red">*</span>
                                 </div>
                             </div>
@@ -816,7 +826,7 @@ const NewAd = () => {
                                         {...register('investments', {
                                             required: 'Обязательное поле',
                                             min: {value: 0, message: 'Минимум 0'},
-                                            onChange: event => GoodLook(event)
+                                            onChange: (event) => GoodLook(event),
                                         })}
                                     />
                                 </ValidateWrapper>
@@ -840,7 +850,7 @@ const NewAd = () => {
                                             {...register('price', {
                                                 required: 'Обязательное поле',
                                                 min: {value: 0, message: 'Минимум 0'},
-                                                onChange: event => GoodLook(event)
+                                                onChange: (event) => GoodLook(event),
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -861,7 +871,7 @@ const NewAd = () => {
                                             {...register('pricePerMonth', {
                                                 required: 'Обязательное поле',
                                                 min: {value: 0, message: 'Минимум 0'},
-                                                onChange: event => GoodLook(event)
+                                                onChange: (event) => GoodLook(event),
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -883,7 +893,7 @@ const NewAd = () => {
                                         {...register('profitPerMonth', {
                                             min: {value: 0, message: 'Минимум 0'},
                                             minLength: {value: 0, message: 'Минимальная длина 0 символа'},
-                                            onChange: event => GoodLook(event)
+                                            onChange: (event) => GoodLook(event),
                                         })}
                                     />
                                 </ValidateWrapper>
@@ -948,7 +958,7 @@ const NewAd = () => {
                                             {...register('profitPerMonth', {
                                                 min: {value: 0, message: 'Минимум 0'},
                                                 minLength: {value: 0, message: 'Минимальная длина 0 символа'},
-                                                onChange: event => GoodLook(event)
+                                                onChange: (event) => GoodLook(event),
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -970,7 +980,7 @@ const NewAd = () => {
                                                 required: 'Обязательное поле',
                                                 min: {value: 0, message: 'Минимум 0'},
                                                 minLength: {value: 4, message: 'Минимальная длина 4 символа'},
-                                                onChange: event => GoodLook(event)
+                                                onChange: (event) => GoodLook(event),
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -1005,7 +1015,7 @@ const NewAd = () => {
                                             className="f_09"
                                             {...register('branchCount', {
                                                 min: {value: 0, message: 'Минимум 0'},
-                                                onChange: event => GoodLook(event)
+                                                onChange: (event) => GoodLook(event),
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -1023,7 +1033,7 @@ const NewAd = () => {
                                             className="f_09"
                                             {...register('soldBranchCount', {
                                                 min: {value: 0, message: 'Минимум 0'},
-                                                onChange: event => GoodLook(event)
+                                                onChange: (event) => GoodLook(event),
                                             })}
                                         />
                                     </ValidateWrapper>

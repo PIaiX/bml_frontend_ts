@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../utils/ValidateWrapper'
 import {IUser} from '../../types/user'
@@ -7,6 +7,7 @@ import {updateUserInfo} from '../../services/profileSettings'
 import {convertLocaleDate} from '../../helpers/convertLocaleDate'
 import {showAlert} from '../../store/reducers/alertSlice'
 import {setUser} from '../../store/reducers/userSlice'
+import CitiesForm from './CitiesForm'
 import {setCity} from '../../store/reducers/citySlice'
 
 type Props = {
@@ -20,7 +21,6 @@ type UserForm = {
     email: string
     phone: string
     city: string
-    differentCity: string
     isShowEmail: boolean
     isShowPhone: boolean
     type: number
@@ -29,9 +29,6 @@ type UserForm = {
 const EditProfileForm: FC<Props> = ({avatar}) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const dispatch = useAppDispatch()
-    useEffect(() => {
-        !cities.includes(watch('differentCity')) && dispatch(setCity([...cities, user?.city]))
-    }, [])
     let cities: Array<string> = useAppSelector((state) => state?.cities?.cities)
 
     const {
@@ -64,19 +61,17 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
             setValue('lastName', user?.lastName)
             setValue('phone', user?.phone)
             setValue('email', user?.email)
-            setValue('city', user?.city)
+            // setValue('city', user?.city)
             setValue('birthday', user?.birthday)
         }
     }, [user])
 
-    const cityFormName: string = 'Ввести город'
-
     const submitUpdateUserInfo = (data: any) => {
         let req
         const newDate = getValues('birthday') ? convertLocaleDate(getValues('birthday')) : ''
-        if (watch('differentCity') !== '' && watch('city') === cityFormName) {
-            !cities.includes(watch('differentCity')) && dispatch(setCity([...cities, watch('differentCity')]))
-            req = {...data, birthday: newDate, avatar: avatar ? avatar : '', city: watch('differentCity')}
+
+        if (user?.city !== city) {
+            req = {...data, birthday: newDate, avatar: avatar ? avatar : '', city: city}
         } else req = {...data, birthday: newDate, avatar: avatar ? avatar : ''}
 
         const formData = new FormData()
@@ -86,7 +81,7 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
         if (user) {
             updateUserInfo(user?.id, formData)
                 .then((res) => {
-                    !cities.includes(watch('differentCity')) && dispatch(setUser(res))
+                    dispatch(setUser(res))
                     dispatch(showAlert({message: 'Информация успешно изменена', typeAlert: 'good'}))
                 })
                 .catch((error) => {
@@ -103,8 +98,20 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                 })
         }
     }
+    const [city, setCity] = useState(user?.city)
+    const [cityError, setCityError] = useState('')
+
+    useEffect(() => {
+        if (city === '') setCityError('поле обязательно к заполнению')
+        else setCityError('')
+    }, [city])
+
+    const beforeSubmit = (data: any) => {
+        if (cityError === '') submitUpdateUserInfo(data)
+    }
+
     return (
-        <form className="acc-box" noValidate onSubmit={handleSubmit(submitUpdateUserInfo)}>
+        <form className="acc-box" noValidate onSubmit={handleSubmit(beforeSubmit)}>
             <div className="row  align-items-center g-3">
                 <div className="col-sm-4">
                     <h6>
@@ -218,42 +225,8 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                     </h6>
                 </div>
                 <div className="col-sm-8">
-                    <ValidateWrapper error={errors?.city}>
-                        <input
-                            className={'inputCity'}
-                            placeholder={'Введите город'}
-                            autoComplete="off"
-                            style={{
-                                display: watch('city') === cityFormName ? 'inline-block' : 'none',
-                            }}
-                            {...register('differentCity')}
-                        />
-
-                        <select
-                            defaultValue={''}
-                            {...register('city', {
-                                required: 'Обязательное поле',
-                                validate: (value) => {
-                                    if (value === cityFormName && watch('differentCity') === '')
-                                        return 'Обязательное поле'
-                                    else return true
-                                },
-                            })}
-                        >
-                            <option>{cityFormName}</option>
-                            <option disabled></option>
-
-                            {cities?.map((city, index) => (
-                                <option
-                                    key={index}
-                                    value={city}
-                                    selected={user?.city === city}
-                                    style={{display: 'inline'}}
-                                >
-                                    {city}
-                                </option>
-                            ))}
-                        </select>
+                    <ValidateWrapper error={{message: cityError}}>
+                        <CitiesForm val={city} setVal={setCity} />
                     </ValidateWrapper>
                 </div>
             </div>

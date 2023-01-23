@@ -5,8 +5,9 @@ import {IOffersAreaItem, IOffersSubSectionsItem, IPayloadsFilter} from '../../ty
 import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../utils/ValidateWrapper'
 // import CitiesForm from "./CitiesForm";
-import FunctionForPrice from "../../services/FunctionForPrice";
-import {FromStringToNumber} from "../../services/FromStringToNumber";
+import FunctionForPrice from '../../services/FunctionForPrice'
+import {FromStringToNumber} from '../../services/FromStringToNumber'
+import CitiesForm from './CitiesForm'
 
 type Props = {
     foundCount?: number
@@ -21,15 +22,15 @@ type Props = {
 }
 
 const SearchForm: React.FC<Props> = ({
-                                         foundCount,
-                                         onApplyFilters,
-                                         modules = [],
-                                         areas,
-                                         cities,
-                                         subSections,
-                                         selectCurrentArea,
-                                         onReset,
-                                     }) => {
+    foundCount,
+    onApplyFilters,
+    modules = [],
+    areas,
+    cities,
+    subSections,
+    selectCurrentArea,
+    onReset,
+}) => {
     const [isShowCollapse, setIsShowCollapse] = useState(true)
     const {
         register,
@@ -60,17 +61,24 @@ const SearchForm: React.FC<Props> = ({
             profitPerMonthTo: null,
         },
     })
-
+    let [city, setCity] = useState<string>()
     const GoodLook = (o: any) => {
-        let val = FromStringToNumber(o.target.value);
+        let val = FromStringToNumber(o.target.value)
         setValue(o.target.name, FunctionForPrice(val))
     }
 
     const BeforeOnApplyFilters = (data: any) => {
-        let ValuesFroPrice:Array<Array<any>> = [
-            ['priceFrom'], ['priceTo'], ['profitFrom'],  ['profitTo'], ['profitPerMonthFrom'], ['profitPerMonthTo'], ['investmentsFrom'], ['investmentsTo']
+        let ValuesFroPrice: Array<Array<any>> = [
+            ['priceFrom'],
+            ['priceTo'],
+            ['profitFrom'],
+            ['profitTo'],
+            ['profitPerMonthFrom'],
+            ['profitPerMonthTo'],
+            ['investmentsFrom'],
+            ['investmentsTo'],
         ]
-        ValuesFroPrice.forEach(i=>i.push(FromStringToNumber(watch(i[0]))))
+        ValuesFroPrice.forEach((i) => i.push(FromStringToNumber(watch(i[0]))))
         onApplyFilters({
             ...data,
             [ValuesFroPrice[0][0]]: ValuesFroPrice[0][1],
@@ -79,8 +87,9 @@ const SearchForm: React.FC<Props> = ({
             [ValuesFroPrice[3][0]]: ValuesFroPrice[3][1],
             [ValuesFroPrice[4][0]]: ValuesFroPrice[4][1],
             [ValuesFroPrice[5][0]]: ValuesFroPrice[5][1],
-            [ValuesFroPrice[6][0]]:ValuesFroPrice[6][1],
-            [ValuesFroPrice[7][0]]:ValuesFroPrice[7][1]
+            [ValuesFroPrice[6][0]]: ValuesFroPrice[6][1],
+            [ValuesFroPrice[7][0]]: ValuesFroPrice[7][1],
+            city: city,
         })
     }
 
@@ -101,8 +110,7 @@ const SearchForm: React.FC<Props> = ({
             <Collapse className="collapse-filter" in={isShowCollapse} dimension="height">
                 <div id="collapse-content">
                     <div className="row">
-                        <div
-                            className="col-sm-6 col-md-4 mb-3 mb-lg-4 collapse-content__module collapse-content__module_business">
+                        <div className="col-sm-6 col-md-4 mb-3 mb-lg-4 collapse-content__module collapse-content__module_business">
                             <ValidateWrapper error={errors?.areaId}>
                                 <select
                                     {...register('areaId', {
@@ -131,8 +139,7 @@ const SearchForm: React.FC<Props> = ({
                                 </select>
                             </ValidateWrapper>
                         </div>
-                        <div
-                            className="col-sm-6 col-md-4 mb-3 mb-lg-4 collapse-content__module collapse-content__module_category">
+                        <div className="col-sm-6 col-md-4 mb-3 mb-lg-4 collapse-content__module collapse-content__module_category">
                             <ValidateWrapper error={errors?.subsectionId}>
                                 <select
                                     {...register('subsectionId', {
@@ -154,15 +161,12 @@ const SearchForm: React.FC<Props> = ({
                                 </select>
                             </ValidateWrapper>
                         </div>
-                        <div
-                            className="col-sm-6 col-md-4 mb-3 mb-lg-4 collapse-content__module collapse-content__module_city">
+                        <div className="col-sm-6 col-md-4 mb-3 mb-lg-4 collapse-content__module collapse-content__module_city">
                             {/*<CitiesForm/>*/}
-                            <input type={"text"} placeholder={"Город"} />
-
+                            <CitiesForm setVal={setCity} />
                         </div>
                         {modules.includes('projectStage') && (
-                            <div
-                                className="col-sm-6 mb-3 mb-lg-4 collapse-content__module collapse-content__module_project">
+                            <div className="col-sm-6 mb-3 mb-lg-4 collapse-content__module collapse-content__module_project">
                                 <select {...register('projectStage')}>
                                     <option value={''} disabled>
                                         Стадия реализации проекта
@@ -174,8 +178,7 @@ const SearchForm: React.FC<Props> = ({
                             </div>
                         )}
                         {modules.includes('paybackTime') && (
-                            <div
-                                className="col-sm-6 mb-3 mb-lg-4 collapse-content__module collapse-content__module_payback">
+                            <div className="col-sm-6 mb-3 mb-lg-4 collapse-content__module collapse-content__module_payback">
                                 <select {...register('paybackTime')}>
                                     <option value={''} disabled>
                                         Срок окупаемости
@@ -194,101 +197,114 @@ const SearchForm: React.FC<Props> = ({
                             <div className=" mb-3 mb-lg-4 collapse-content__module collapse-content__module_word">
                                 <div className={'col-sm-6 mb-3 mb-lg-4 mb-3 mb-lg-4'}>
                                     <div className="d-none d-md-block mb-1">Содержит слова:</div>
-                                    <input type="text" {...register('query')} placeholder="Введите поисковую фразу"/>
+                                    <input type="text" {...register('query')} placeholder="Введите поисковую фразу" />
                                 </div>
-                            </div>)}
+                            </div>
+                        )}
                         {modules.includes('investments') && (
-                            <div
-                                className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_investment">
+                            <div className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_investment">
                                 <div className="mb-1">Объем инвестиций, руб.:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
                                     <ValidateWrapper error={errors.investmentsFrom}>
-                                        <input type={"text"}
-                                               placeholder={FunctionForPrice("0")} {...register('investmentsFrom', {
-                                            onChange: event => GoodLook(event)
-                                        })}/>
+                                        <input
+                                            type={'text'}
+                                            placeholder={FunctionForPrice('0')}
+                                            {...register('investmentsFrom', {
+                                                onChange: (event) => GoodLook(event),
+                                            })}
+                                        />
                                     </ValidateWrapper>
                                     <span className="mx-2">до</span>
                                     <ValidateWrapper error={errors.investmentsTo}>
-                                        <input type={"text"}
-                                               placeholder={FunctionForPrice("100000000")} {...register('investmentsTo', {
-                                            onChange: event => GoodLook(event)
-                                        })}/>
+                                        <input
+                                            type={'text'}
+                                            placeholder={FunctionForPrice('100000000')}
+                                            {...register('investmentsTo', {
+                                                onChange: (event) => GoodLook(event),
+                                            })}
+                                        />
                                     </ValidateWrapper>
                                 </div>
                             </div>
                         )}
                         {modules.includes('price') && (
-                            <div
-                                className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_net">
+                            <div className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_net">
                                 <div className="mb-1">Стоимость бизнеса:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
                                     <ValidateWrapper error={errors.priceFrom}>
-                                        <input type={"text"}
-                                               placeholder={FunctionForPrice("0")}
-                                               {...register('priceFrom', {
-                                                   onChange: event => GoodLook(event)
-                                               })}
-                                        /> </ValidateWrapper>
+                                        <input
+                                            type={'text'}
+                                            placeholder={FunctionForPrice('0')}
+                                            {...register('priceFrom', {
+                                                onChange: (event) => GoodLook(event),
+                                            })}
+                                        />{' '}
+                                    </ValidateWrapper>
                                     <span className="mx-2">до</span>
                                     <ValidateWrapper error={errors.priceTo}>
-                                        <input type={"text"}
-                                               placeholder={FunctionForPrice("10000000")}
-                                               {...register('priceTo', {
-                                                   onChange: event => GoodLook(event)
-                                               })}
+                                        <input
+                                            type={'text'}
+                                            placeholder={FunctionForPrice('10000000')}
+                                            {...register('priceTo', {
+                                                onChange: (event) => GoodLook(event),
+                                            })}
                                         />
                                     </ValidateWrapper>
                                 </div>
                             </div>
                         )}
                         {modules.includes('profit') && (
-                            <div
-                                className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_net">
+                            <div className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_net">
                                 <div className="mb-1">Чистая прибыль, руб.:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
                                     <ValidateWrapper error={errors.profitFrom}>
-                                        <input type={"text"}
-                                               placeholder={FunctionForPrice("0")}
-                                               {...register('profitFrom', {
-                                                   onChange: event => GoodLook(event)
-                                               })}/>
+                                        <input
+                                            type={'text'}
+                                            placeholder={FunctionForPrice('0')}
+                                            {...register('profitFrom', {
+                                                onChange: (event) => GoodLook(event),
+                                            })}
+                                        />
                                     </ValidateWrapper>
                                     <span className="mx-2">до</span>
                                     <ValidateWrapper error={errors.profitTo}>
-                                        <input type={"text"}
-                                               placeholder={FunctionForPrice("10000000")}
-                                               {...register('profitTo', {
-                                                   onChange: event => GoodLook(event)
-                                               })}/>
+                                        <input
+                                            type={'text'}
+                                            placeholder={FunctionForPrice('10000000')}
+                                            {...register('profitTo', {
+                                                onChange: (event) => GoodLook(event),
+                                            })}
+                                        />
                                     </ValidateWrapper>
                                 </div>
                             </div>
                         )}
                         {modules.includes('profitPerMonth') && (
-                            <div
-                                className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_turnover">
+                            <div className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_turnover">
                                 <div className="mb-1">Оборот в месяц, руб.:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
                                     <ValidateWrapper error={errors.profitPerMonthFrom}>
-                                        <input type={"text"}
-                                               placeholder={FunctionForPrice("0")}
-                                               {...register('profitPerMonthFrom', {
-                                                   onChange: event => GoodLook(event)
-                                               })}/>
+                                        <input
+                                            type={'text'}
+                                            placeholder={FunctionForPrice('0')}
+                                            {...register('profitPerMonthFrom', {
+                                                onChange: (event) => GoodLook(event),
+                                            })}
+                                        />
                                     </ValidateWrapper>
                                     <span className="mx-2">до</span>
                                     <ValidateWrapper error={errors.profitPerMonthTo}>
-                                        <input type={"text"}
-                                               placeholder={FunctionForPrice("1000000000")}
-                                               {...register('profitPerMonthTo', {
-                                                   onChange: event => GoodLook(event)
-                                               })}/>
-
+                                        <input
+                                            type={'text'}
+                                            placeholder={FunctionForPrice('1000000000')}
+                                            {...register('profitPerMonthTo', {
+                                                onChange: (event) => GoodLook(event),
+                                            })}
+                                        />
                                     </ValidateWrapper>
                                 </div>
                             </div>
@@ -304,7 +320,7 @@ const SearchForm: React.FC<Props> = ({
                                 onReset(getValues())
                             }}
                         >
-                            <MdCached className="f_15"/>
+                            <MdCached className="f_15" />
                             <span className="f_09 ms-2">Очистить фильтр</span>
                         </button>
                         <button className="btn_main btn_2 ms-3 ms-sm-4" onClick={handleSubmit(BeforeOnApplyFilters)}>

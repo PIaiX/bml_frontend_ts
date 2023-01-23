@@ -1,26 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
-    cities: [
-        'Москва',
-        'Казань',
-        'Aнапа',
-        'Харьков',
-        'Владимир',
-        'Чечня',
-        'Ереван',
-        'Boston',
-        'Meria',
-        'Москва',
-        'Казань',
-        'Aнапа',
-        'Харьков',
-        'Владимир',
-        'Чечня',
-        'Ереван',
-        'Boston',
-        'Meria',
-    ],
+    cities: ['Москва', 'Казань', 'Анапа', 'Харьков', 'Владимир', 'Чечня', 'Ереван', 'Boston', 'Meria'],
 }
 
 export const citySlice = createSlice({

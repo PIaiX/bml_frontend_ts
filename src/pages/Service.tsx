@@ -92,7 +92,6 @@ const Service: FC = () => {
     }, [])
 
     const onApplyFilters = (data: IPayloadsFilter) => {
-        setFilters(data)
         setSelectedPage(0)
         if (user) {
             getOffers(1, limit, categoryId, user?.id, data, false)
