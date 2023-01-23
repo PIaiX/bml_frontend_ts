@@ -78,6 +78,7 @@ const UserProfile: FC = () => {
                                         currentFriends?.items?.map((friend) => (
                                             <div key={friend.id}>
                                                 <img src={checkPhotoPath(friend?.avatar)} alt={friend?.fullName} />
+                                                <br/>
                                                 <NavLink to={`/account/profile/user/${friend.id}`}>
                                                     {friend.fullName}
                                                 </NavLink>

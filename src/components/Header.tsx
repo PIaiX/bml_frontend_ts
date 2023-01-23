@@ -37,7 +37,7 @@ const Header: FC = () => {
                         >
                             Обратная связь
                         </NavLink>
-                        <NavLink to={user ? '/account/favorites' : '/enter'} className="btn-icon">
+                        <NavLink to={user ? '/account/favorites' : '/enter'} className="btn-icon d-none d-md-block">
                             <MdStarOutline />
                             {user && <span className="count">{count}</span>}
                         </NavLink>
@@ -46,7 +46,7 @@ const Header: FC = () => {
                             <span className="count">3</span>
                         </a>
                         {user?.id ? (
-                            <NavLink to={`/account/profile/${user?.id}`}>
+                            <NavLink to={`/account/profile/${user?.id}`} className={"d-none d-md-block"}>
                                 {window.innerWidth <= 400 ? (
                                     <img src="/images/icons/profile.svg" />
                                 ) : (
