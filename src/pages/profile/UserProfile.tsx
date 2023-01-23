@@ -130,6 +130,16 @@ const UserProfile: FC = () => {
                                                         {user?.email ? user?.email : 'Не установлено'}
                                                     </td>
                                                 </tr>
+                                                {user.typeForUser !== 'Физ лицо' && (
+                                                    <tr>
+                                                        <td className="l-gray">ИНН:</td>
+                                                        <td className="color-1">
+                                                            {user?.taxpayerIdentificationNumber
+                                                                ? user?.taxpayerIdentificationNumber
+                                                                : 'Не установлено'}
+                                                        </td>
+                                                    </tr>
+                                                )}
                                             </tbody>
                                         )}
                                         {user?.type === 1 && (
