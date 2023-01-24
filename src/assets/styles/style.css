@@ -2681,8 +2681,33 @@ footer {
     height: 3em;
 }
 
+.photos-items-preview img {
+    width: 10em;
+    height: 10em;
+    border: thin solid lightgray;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
 .photos-window button {
     color: #3670B3;
+}
+
+.photos-window.preview {
+    position: relative;
+}
+.photos-window.preview button {
+    position: absolute;
+    top: 1.5em;
+    right: 0.5em;
+    color: gray;
+}
+
+.photos-window.preview button div {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
 }
 
 /* Form-validate */
