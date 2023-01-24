@@ -1,9 +1,9 @@
-import React, {FC} from 'react'
-import {Link} from 'react-router-dom'
-import {MdOutlineArrowBack} from 'react-icons/md'
-import {useQuery} from 'react-query'
-import {getPartners, getTutorials} from '../../services/instructions'
-import {checkPhotoPath} from '../../helpers/photoLoader'
+import React, { FC } from 'react'
+import { Link } from 'react-router-dom'
+import { MdOutlineArrowBack } from 'react-icons/md'
+import { useQuery } from 'react-query'
+import { getPartners, getTutorials } from '../../services/instructions'
+import { checkPhotoPath } from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'
 
 const Instructions: FC = () => {
@@ -36,7 +36,6 @@ const Instructions: FC = () => {
                                         <iframe
                                             src={i?.media}
                                             title="YouTube video player"
-                                            frameBorder="0"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                             allowFullScreen
                                         />

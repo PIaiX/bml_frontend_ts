@@ -1,11 +1,11 @@
-import React, {FC, useEffect} from 'react'
-import {IUser} from '../../types/user'
-import {useAppDispatch, useAppSelector} from '../../hooks/store'
-import {useForm} from 'react-hook-form'
-import {updateUserInfo} from '../../services/profileSettings'
-import {showAlert} from '../../store/reducers/alertSlice'
+import React, { FC, useEffect } from 'react'
+import { IUser } from '../../types/user'
+import { useAppDispatch, useAppSelector } from '../../hooks/store'
+import { useForm } from 'react-hook-form'
+import { updateUserInfo } from '../../services/profileSettings'
+import { showAlert } from '../../store/reducers/alertSlice'
 import ValidateWrapper from '../utils/ValidateWrapper'
-import {setUser} from '../../store/reducers/userSlice'
+import { setUser } from '../../store/reducers/userSlice'
 
 type Props = {
     avatar: File
@@ -23,16 +23,16 @@ type FormInfo = {
     city: string
     isShowEmail: false
     isShowPhone: false
-    type: 1
+    type: number
 }
 
-const EditProfileFormForOoo: FC<Props> = ({avatar}) => {
+const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const cities: Array<string> = useAppSelector((state) => state?.cities?.cities)
     const dispatch = useAppDispatch()
     const {
         register,
-        formState: {errors},
+        formState: { errors },
         handleSubmit,
         setValue,
         setError,
@@ -52,7 +52,7 @@ const EditProfileFormForOoo: FC<Props> = ({avatar}) => {
             city: '',
             isShowEmail: false,
             isShowPhone: false,
-            type: 1,
+            type: 2,
         },
     })
 
@@ -71,7 +71,7 @@ const EditProfileFormForOoo: FC<Props> = ({avatar}) => {
     }, [user])
 
     const submitUpadateUserInfo = (data: any) => {
-        const req = {...data, avatar: avatar ? avatar : ''}
+        const req = { ...data, avatar: avatar ? avatar : '' }
         const formData = new FormData()
         for (const key in req) {
             formData.append(key, req[key])
@@ -80,7 +80,7 @@ const EditProfileFormForOoo: FC<Props> = ({avatar}) => {
             updateUserInfo(user?.id, formData)
                 .then((res) => {
                     dispatch(setUser(res))
-                    dispatch(showAlert({message: 'Информация успешно изменена', typeAlert: 'good'}))
+                    dispatch(showAlert({ message: 'Информация успешно изменена', typeAlert: 'good' }))
                 })
                 .catch((error) => {
                     error?.response?.data?.body?.errors?.forEach((i: any) => {
@@ -88,15 +88,15 @@ const EditProfileFormForOoo: FC<Props> = ({avatar}) => {
                             i?.field === 'phone' &&
                             i?.message?.toLowerCase().includes('должно быть в формате телефона')
                         ) {
-                            setError('phone', {type: 'custom', message: 'Должно быть в формате телефона'})
+                            setError('phone', { type: 'custom', message: 'Должно быть в формате телефона' })
                         } else if (i?.field === 'phone' && i?.message?.toLowerCase().includes('значение уже занято')) {
-                            setError('phone', {type: 'custom', message: 'Значение уже занято'})
+                            setError('phone', { type: 'custom', message: 'Значение уже занято' })
                         }
                         if (i?.field === 'mainStateRegistrationNumber') {
-                            setError('mainStateRegistrationNumber', {type: 'custom', message: 'Значение уже занято'})
+                            setError('mainStateRegistrationNumber', { type: 'custom', message: 'Значение уже занято' })
                         }
                         if (i?.field === 'taxpayerIdentificationNumber') {
-                            setError('taxpayerIdentificationNumber', {type: 'custom', message: 'Значение уже занято'})
+                            setError('taxpayerIdentificationNumber', { type: 'custom', message: 'Значение уже занято' })
                         }
                     })
                 })
@@ -301,12 +301,12 @@ const EditProfileFormForOoo: FC<Props> = ({avatar}) => {
                 </div>
                 <div className="col-sm-8">
                     <ValidateWrapper error={errors?.city}>
-                        <select defaultValue={''} {...register('city', {required: 'Обязательное поле'})}>
+                        <select defaultValue={user?.city ?? ''} {...register('city', { required: 'Обязательное поле' })}>
                             <option value={''} disabled>
                                 Город
                             </option>
                             {cities?.map((city, index) => (
-                                <option key={index} value={city} selected={user?.city === city}>
+                                <option key={index} value={city}>
                                     {city}
                                 </option>
                             ))}

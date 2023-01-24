@@ -1,15 +1,15 @@
-import React, {FC, useEffect, useState} from 'react'
-import {Link, NavLink} from 'react-router-dom'
-import {MdAddCircle, MdOutlineArrowBack} from 'react-icons/md'
-import {useAppSelector} from '../../hooks/store'
-import {IUser} from '../../types/user'
-import {checkPhotoPath} from '../../helpers/photoLoader'
-import {getCurrentFriends} from '../../services/friends'
-import {IUseStateItems} from '../../types'
-import {IFriendsItem, IFriendsMeta} from '../../types/friends'
+import React, { FC, useEffect, useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import { MdAddCircle, MdOutlineArrowBack } from 'react-icons/md'
+import { useAppSelector } from '../../hooks/store'
+import { IUser } from '../../types/user'
+import { checkPhotoPath } from '../../helpers/photoLoader'
+import { getCurrentFriends } from '../../services/friends'
+import { IUseStateItems } from '../../types'
+import { IFriendsItem, IFriendsMeta } from '../../types/friends'
 import Loader from '../../components/utils/Loader'
-import {getUsersOffersNotArchive} from '../../services/offers'
-import {IOffersItem, IOffersMeta} from '../../types/offers'
+import { getUsersOffersNotArchive } from '../../services/offers'
+import { IOffersItem, IOffersMeta } from '../../types/offers'
 
 const UserProfile: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
@@ -28,16 +28,16 @@ const UserProfile: FC = () => {
     useEffect(() => {
         if (user?.id) {
             getCurrentFriends(user?.id, 1, 6, 'desc')
-                .then((res) => res && setCurrentFriends({isLoaded: true, items: res.data, meta: res.meta}))
-                .catch((error) => setCurrentFriends({isLoaded: true, items: null, meta: null}))
+                .then((res) => res && setCurrentFriends({ isLoaded: true, items: res.data, meta: res.meta }))
+                .catch((error) => setCurrentFriends({ isLoaded: true, items: null, meta: null }))
         }
     }, [user?.id])
 
     useEffect(() => {
         if (user?.id) {
             getUsersOffersNotArchive(user?.id, 1, 100, 'desc')
-                .then((res) => res && setUserOffers({isLoaded: true, items: res.data, meta: res.meta}))
-                .catch((error) => setUserOffers({isLoaded: true, items: null, meta: null}))
+                .then((res) => res && setUserOffers({ isLoaded: true, items: res.data, meta: res.meta }))
+                .catch((error) => setUserOffers({ isLoaded: true, items: null, meta: null }))
         }
     }, [user?.id])
 
@@ -150,6 +150,14 @@ const UserProfile: FC = () => {
                                                     </td>
                                                 </tr>
                                                 <tr>
+                                                    <td className="l-gray">ИНН:</td>
+                                                    <td className="color-1">
+                                                        {user?.taxpayerIdentificationNumber
+                                                            ? user?.taxpayerIdentificationNumber
+                                                            : 'Не установлено'}
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <td className="l-gray">Город:</td>
                                                     <td className="color-1">
                                                         {user?.city ? user?.city : 'Не установлено'}
@@ -182,6 +190,14 @@ const UserProfile: FC = () => {
                                                     <td className="color-1">
                                                         {user?.mainStateRegistrationNumber
                                                             ? user?.mainStateRegistrationNumber
+                                                            : 'Не установлено'}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="l-gray">ИНН:</td>
+                                                    <td className="color-1">
+                                                        {user?.taxpayerIdentificationNumber
+                                                            ? user?.taxpayerIdentificationNumber
                                                             : 'Не установлено'}
                                                     </td>
                                                 </tr>
