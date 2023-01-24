@@ -582,6 +582,12 @@ ul.simple_list>li::before {
 .swiper_8 .swiper-slide {
     height: calc((100% - 20px) / 2);
 }
+.swiper-slide a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
 @media (max-width: 1399px) {.swiper_8 {height: 480px;}}
 @media (max-width: 1199px) {
     .swiper_8 {height: 424px;}

@@ -1,11 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react'
-import {onImageHandler} from '../../helpers/formHandlers'
-import {Link, NavLink, useNavigate, useParams} from 'react-router-dom'
-import {MdOutlineArrowBack} from 'react-icons/md'
-import {useImageViewer} from '../../hooks/imageViewer'
-import {useImagesViewer} from '../../hooks/imagesViewer'
+import React, { useEffect, useRef, useState } from 'react'
+import { onImageHandler } from '../../helpers/formHandlers'
+import { Link, NavLink, useNavigate, useParams } from 'react-router-dom'
+import { MdOutlineArrowBack } from 'react-icons/md'
+import { useImageViewer } from '../../hooks/imageViewer'
+import { useImagesViewer } from '../../hooks/imagesViewer'
 import CustomModal from '../../components/utils/CustomModal'
-import {getCity} from '../../services/city'
+import { getCity } from '../../services/city'
 import {
     createOffer,
     deleteImageOffer,
@@ -14,16 +14,16 @@ import {
     getOneOffer,
     updateOffer,
 } from '../../services/offers'
-import {IOfferForm, IOfferItem, IOffersAreaItem, IOffersSubSectionsItem} from '../../types/offers'
-import {useAppDispatch, useAppSelector} from '../../hooks/store'
-import {IUser} from '../../types/user'
+import { IOfferForm, IOfferItem, IOffersAreaItem, IOffersSubSectionsItem } from '../../types/offers'
+import { useAppDispatch, useAppSelector } from '../../hooks/store'
+import { IUser } from '../../types/user'
 import ValidateWrapper from '../../components/utils/ValidateWrapper'
-import {useForm} from 'react-hook-form'
-import {convertLocaleDate} from '../../helpers/convertLocaleDate'
-import {showAlert} from '../../store/reducers/alertSlice'
-import {IUseStateItem} from '../../types'
-import {checkPhotoPath} from '../../helpers/photoLoader'
-import {FromStringToNumber} from '../../services/FromStringToNumber'
+import { useForm } from 'react-hook-form'
+import { convertLocaleDate } from '../../helpers/convertLocaleDate'
+import { showAlert } from '../../store/reducers/alertSlice'
+import { IUseStateItem } from '../../types'
+import { checkPhotoPath } from '../../helpers/photoLoader'
+import { FromStringToNumber } from '../../services/FromStringToNumber'
 import FunctionForPrice from '../../services/FunctionForPrice'
 import CitiesForm from '../../components/forms/CitiesForm'
 
@@ -39,13 +39,15 @@ const NewAd = () => {
     const inputRef = useRef(null)
     const [files, setFiles] = useState<any>([])
     const imageViewer = useImagesViewer(files)
+    const [adCover, setAdCover] = useState<any>([])
+    const adCoverViewer = useImagesViewer(adCover)
     const [cities, setCities] = useState<Array<string> | undefined>([])
     const [areas, setAreas] = useState<Array<IOffersAreaItem | undefined>>([])
     const [subSections, setSubSections] = useState<Array<IOffersSubSectionsItem | undefined>>([])
     const [currentArea, setCurrentArea] = useState<number | undefined>(undefined)
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const {id} = useParams()
+    const { id } = useParams()
     const [textPhoto, setTextPhoto] = useState({
         text: '',
         size: '',
@@ -62,7 +64,7 @@ const NewAd = () => {
         register,
         setValue,
         watch,
-        formState: {errors},
+        formState: { errors },
         handleSubmit,
     } = useForm<IOfferForm>({
         mode: 'onSubmit',
@@ -111,7 +113,7 @@ const NewAd = () => {
             getOneOffer(id)
                 .then((res) => {
                     if (res) {
-                        setCurrentOffer({isLoaded: true, item: res})
+                        setCurrentOffer({ isLoaded: true, item: res })
                         setValue('title', res?.title)
                         setValue('about', res?.about || '')
                         setValue('area', res?.subsection?.area?.id)
@@ -196,7 +198,7 @@ const NewAd = () => {
         }
     }, [formInfo?.image, photoInfo])
 
-    useEffect(() => {}, [textPhoto?.isInValidSize, textPhoto?.isInValidSizeMB])
+    useEffect(() => { }, [textPhoto?.isInValidSize, textPhoto?.isInValidSizeMB])
 
     const createNewOffer = (data: IOfferForm) => {
         const formData = new FormData()
@@ -230,7 +232,7 @@ const NewAd = () => {
                 }, 1000)
             })
             .catch((error) => {
-                dispatch(showAlert({message: 'Произошла ошибка!', typeAlert: 'bad'}))
+                dispatch(showAlert({ message: 'Произошла ошибка!', typeAlert: 'bad' }))
             })
     }
 
@@ -265,7 +267,7 @@ const NewAd = () => {
                 }, 1000)
             })
             .catch((error) => {
-                dispatch(showAlert({message: 'Произошла ошибка!', typeAlert: 'bad'}))
+                dispatch(showAlert({ message: 'Произошла ошибка!', typeAlert: 'bad' }))
             })
     }
 
@@ -324,16 +326,22 @@ const NewAd = () => {
         deleteImageOffer(id)
             .then(() => {
                 setImagesFromServer(imagesFromServer?.filter((i: any) => i?.id !== id))
-                dispatch(showAlert({message: 'Фото успешно удалено', typeAlert: 'good'}))
+                dispatch(showAlert({ message: 'Фото успешно удалено', typeAlert: 'good' }))
             })
             .catch(() => {
-                dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'}))
+                dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))
             })
     }
     const GoodLook = (o: any) => {
         let val = FromStringToNumber(o.target.value)
         setValue(o.target.name, FunctionForPrice(val))
     }
+
+
+    useEffect(() => {
+        formInfo.image && setAdCover([formInfo.image])
+    }, [formInfo])
+
 
     return (
         <>
@@ -353,7 +361,7 @@ const NewAd = () => {
                             {...register('category', {
                                 onChange: (e) => {
                                     setCategory(+e?.target?.value)
-                                    setFormInfo({category: +e.target.value})
+                                    setFormInfo({ category: +e.target.value })
                                 },
                             })}
                         >
@@ -381,7 +389,7 @@ const NewAd = () => {
                                     type="text"
                                     {...register('title', {
                                         required: 'Обязательное поле',
-                                        minLength: {value: 2, message: 'Минимальная длина 2 символа'},
+                                        minLength: { value: 2, message: 'Минимальная длина 2 символа' },
                                     })}
                                     placeholder="Например, продажа офисных помещений"
                                 />
@@ -395,8 +403,8 @@ const NewAd = () => {
                                 {category === 0 || category === 1 || category === 2
                                     ? 'Описание объявления'
                                     : category === 3
-                                    ? 'Описание бизнеса'
-                                    : 'Описание компании'}
+                                        ? 'Описание бизнеса'
+                                        : 'Описание компании'}
                                 <span className="red">*</span>
                             </div>
                         </div>
@@ -408,12 +416,12 @@ const NewAd = () => {
                                         category === 0 || category === 1 || category === 2
                                             ? 'Описание объявления'
                                             : category === 3
-                                            ? 'Описание бизнеса'
-                                            : 'Описание компании'
+                                                ? 'Описание бизнеса'
+                                                : 'Описание компании'
                                     }
                                     {...register('description', {
                                         required: 'Обязательное поле',
-                                        minLength: {value: 4, message: 'Минимальная длина 4 символа'},
+                                        minLength: { value: 4, message: 'Минимальная длина 4 символа' },
                                     })}
                                 />
                             </ValidateWrapper>
@@ -434,7 +442,7 @@ const NewAd = () => {
                                             placeholder="Описание франшизы"
                                             {...register('aboutCompany', {
                                                 required: 'Обязательное поле',
-                                                minLength: {value: 4, message: 'Минимальная длина 4 символа'},
+                                                minLength: { value: 4, message: 'Минимальная длина 4 символа' },
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -450,7 +458,7 @@ const NewAd = () => {
                                             rows={4}
                                             placeholder="Преимущества франшизы"
                                             {...register('benefits', {
-                                                minLength: {value: 4, message: 'Минимальная длина 4 символа'},
+                                                minLength: { value: 4, message: 'Минимальная длина 4 символа' },
                                             })}
                                         />
                                     </ValidateWrapper>
@@ -482,12 +490,12 @@ const NewAd = () => {
                                         category === 0 || category === 2 || category === 4
                                             ? 'Условия сотрудничества'
                                             : category === 1
-                                            ? 'Предполагаемые условия сотрудничества'
-                                            : 'Условия продажи'
+                                                ? 'Предполагаемые условия сотрудничества'
+                                                : 'Условия продажи'
                                     }
                                     {...register('cooperationTerms', {
                                         required: 'Обязательное поле',
-                                        minLength: {value: 4, message: 'Минимальная длина 4 символа'},
+                                        minLength: { value: 4, message: 'Минимальная длина 4 символа' },
                                     })}
                                 />
                             </ValidateWrapper>
@@ -505,7 +513,7 @@ const NewAd = () => {
                                         placeholder="Бизнес-план"
                                         {...register('businessPlan', {
                                             required: 'Обязательное поле',
-                                            minLength: {value: 4, message: 'Минимальная длина 4 символа'},
+                                            minLength: { value: 4, message: 'Минимальная длина 4 символа' },
                                         })}
                                     />
                                 </ValidateWrapper>
@@ -523,7 +531,7 @@ const NewAd = () => {
                                         rows={4}
                                         placeholder="О себе"
                                         {...register('about', {
-                                            minLength: {value: 4, message: 'Минимальная длина 4 символа'},
+                                            minLength: { value: 4, message: 'Минимальная длина 4 символа' },
                                         })}
                                     />
                                 </ValidateWrapper>
@@ -547,6 +555,14 @@ const NewAd = () => {
                                     }}
                                 />
                             </div>
+                            {adCoverViewer?.length > 0 &&
+                                <div className="photos-window">
+                                    <div className="photos-items-preview">
+                                        <img
+                                            src={adCoverViewer[0]?.info?.data_url}
+                                        />
+                                    </div>
+                                </div>}
                             {textPhoto?.text}
                             {textPhoto?.size}
                         </div>
@@ -565,6 +581,29 @@ const NewAd = () => {
                                 >
                                     Загрузить
                                 </button>
+                                {id ? (
+                                    imagesFromServer?.map((i: any, index: number) => (
+                                        <div className="photos-window preview" key={index}>
+                                            <div className="photos-items-preview">
+                                                <img src={checkPhotoPath(i?.image)} />
+                                            </div>
+                                            <button type='button' onClick={() => deletePhotosChanges(i?.id)}>
+                                                <div>x</div>
+                                            </button>
+                                        </div>
+                                    ))
+                                ) : (
+                                    imageViewer?.length > 0 && imageViewer?.map((photos: any, index: any) => (
+                                        <div className="photos-window preview" key={index}>
+                                            <div className="photos-items-preview">
+                                                <img src={photos?.info?.data_url} />
+                                            </div>
+                                            <button type='button' onClick={() => deletePhoto(photos?.info?.name)} >
+                                                <div>x</div>
+                                            </button>
+                                        </div>
+                                    ))
+                                )}
                                 <CustomModal
                                     className="modal__photosAdd"
                                     isShow={loadPhotoModal}
@@ -575,9 +614,8 @@ const NewAd = () => {
                                 >
                                     <div className="mainModalPhotos">
                                         <div
-                                            className={`itemsModalPhotos ${
-                                                imageViewer?.length !== 0 ? 'view-items' : ''
-                                            } ${id ? 'view-items' : ''}`}
+                                            className={`itemsModalPhotos ${imageViewer?.length !== 0 ? 'view-items' : ''
+                                                } ${id ? 'view-items' : ''}`}
                                             onDragEnter={handleDrag}
                                             onSubmit={(e) => e.preventDefault()}
                                         >
@@ -606,9 +644,9 @@ const NewAd = () => {
                                                         onChange={(e: any) => {
                                                             e.target?.files?.length <= 10
                                                                 ? setFiles((prevState: any) => [
-                                                                      ...prevState,
-                                                                      ...e.target.files,
-                                                                  ])
+                                                                    ...prevState,
+                                                                    ...e.target.files,
+                                                                ])
                                                                 : alert('Не более 10 шт.')
                                                         }}
                                                     />
@@ -700,7 +738,7 @@ const NewAd = () => {
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-8">
-                            <ValidateWrapper error={{message: cityEr}}>
+                            <ValidateWrapper error={{ message: cityEr }}>
                                 <CitiesForm setVal={funcForCityEr} />
                             </ValidateWrapper>
                         </div>
@@ -777,7 +815,7 @@ const NewAd = () => {
                                             className="f_09"
                                             {...register('branchCount', {
                                                 required: 'Обязательное поле',
-                                                min: {value: 0, message: 'Минимум 0'},
+                                                min: { value: 0, message: 'Минимум 0' },
                                                 onChange: (event) => GoodLook(event),
                                             })}
                                         />
@@ -798,7 +836,7 @@ const NewAd = () => {
                                             className="f_09"
                                             {...register('price', {
                                                 required: 'Обязательное поле',
-                                                min: {value: 0, message: 'Минимум 0'},
+                                                min: { value: 0, message: 'Минимум 0' },
                                                 onChange: (event) => GoodLook(event),
                                             })}
                                         />
@@ -814,8 +852,8 @@ const NewAd = () => {
                                     {category === 0 || category === 2
                                         ? 'Требуемые инвестиции'
                                         : category === 1
-                                        ? 'Возможные инвестиции'
-                                        : 'Стартовые инвестиции от'}
+                                            ? 'Возможные инвестиции'
+                                            : 'Стартовые инвестиции от'}
                                     <span className="red">*</span>
                                 </div>
                             </div>
@@ -827,7 +865,7 @@ const NewAd = () => {
                                         className="f_09 input-price"
                                         {...register('investments', {
                                             required: 'Обязательное поле',
-                                            min: {value: 0, message: 'Минимум 0'},
+                                            min: { value: 0, message: 'Минимум 0' },
                                             onChange: (event) => GoodLook(event),
                                         })}
                                     />
@@ -851,7 +889,7 @@ const NewAd = () => {
                                             className="f_09"
                                             {...register('price', {
                                                 required: 'Обязательное поле',
-                                                min: {value: 0, message: 'Минимум 0'},
+                                                min: { value: 0, message: 'Минимум 0' },
                                                 onChange: (event) => GoodLook(event),
                                             })}
                                         />
@@ -872,7 +910,7 @@ const NewAd = () => {
                                             className="f_09"
                                             {...register('pricePerMonth', {
                                                 required: 'Обязательное поле',
-                                                min: {value: 0, message: 'Минимум 0'},
+                                                min: { value: 0, message: 'Минимум 0' },
                                                 onChange: (event) => GoodLook(event),
                                             })}
                                         />
@@ -893,8 +931,8 @@ const NewAd = () => {
                                         placeholder="0"
                                         className="f_09 input-price"
                                         {...register('profitPerMonth', {
-                                            min: {value: 0, message: 'Минимум 0'},
-                                            minLength: {value: 0, message: 'Минимальная длина 0 символа'},
+                                            min: { value: 0, message: 'Минимум 0' },
+                                            minLength: { value: 0, message: 'Минимальная длина 0 символа' },
                                             onChange: (event) => GoodLook(event),
                                         })}
                                     />
@@ -958,8 +996,8 @@ const NewAd = () => {
                                             placeholder="0"
                                             className="f_09"
                                             {...register('profitPerMonth', {
-                                                min: {value: 0, message: 'Минимум 0'},
-                                                minLength: {value: 0, message: 'Минимальная длина 0 символа'},
+                                                min: { value: 0, message: 'Минимум 0' },
+                                                minLength: { value: 0, message: 'Минимальная длина 0 символа' },
                                                 onChange: (event) => GoodLook(event),
                                             })}
                                         />
@@ -980,8 +1018,8 @@ const NewAd = () => {
                                             className="f_09"
                                             {...register('profit', {
                                                 required: 'Обязательное поле',
-                                                min: {value: 0, message: 'Минимум 0'},
-                                                minLength: {value: 4, message: 'Минимальная длина 4 символа'},
+                                                min: { value: 0, message: 'Минимум 0' },
+                                                minLength: { value: 4, message: 'Минимальная длина 4 символа' },
                                                 onChange: (event) => GoodLook(event),
                                             })}
                                         />
@@ -1016,7 +1054,7 @@ const NewAd = () => {
                                             placeholder="0"
                                             className="f_09"
                                             {...register('branchCount', {
-                                                min: {value: 0, message: 'Минимум 0'},
+                                                min: { value: 0, message: 'Минимум 0' },
                                                 onChange: (event) => GoodLook(event),
                                             })}
                                         />
@@ -1034,7 +1072,7 @@ const NewAd = () => {
                                             placeholder="0"
                                             className="f_09"
                                             {...register('soldBranchCount', {
-                                                min: {value: 0, message: 'Минимум 0'},
+                                                min: { value: 0, message: 'Минимум 0' },
                                                 onChange: (event) => GoodLook(event),
                                             })}
                                         />
@@ -1092,7 +1130,7 @@ const NewAd = () => {
                             <div className="col-12 col-md-4 mt-2 mt-sm-3 mt-md-0">
                                 <NavLink
                                     to="/account/my-ads/premium"
-                                    state={{data: formInfo}}
+                                    state={{ data: formInfo }}
                                     className="btn_main btn_5 f_13 w-100 h-100"
                                 >
                                     Premium-размещение
