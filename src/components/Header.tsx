@@ -37,7 +37,7 @@ const Header: FC = () => {
                         >
                             Обратная связь
                         </NavLink>
-                        <NavLink to={user ? '/account/favorites' : '/enter'} className="btn-icon">
+                        <NavLink to={user ? '/account/favorites' : '/enter'} className={user? "btn-icon":"btn-icon2"}>
                             <MdStarOutline />
                             {user && <span className="count">{count}</span>}
                         </NavLink>

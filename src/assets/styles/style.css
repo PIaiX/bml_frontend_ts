@@ -48,7 +48,7 @@ header .logo img {
     font-size: 1.5em;
 }
 
-header .btn-icon {
+header .btn-icon, header .btn-icon2 {
     position: relative;
     display: block;
     font-size: 2em;
