@@ -10,6 +10,7 @@ import {useAppSelector} from '../../hooks/store'
 import usePagination from '../../hooks/pagination'
 import Loader from '../../components/utils/Loader'
 import Pagination from '../../components/utils/Pagination'
+import AccountMenu from "./AccountMenu";
 
 const Favorites: FC = () => {
     const token = localStorage.getItem('token')
@@ -52,7 +53,7 @@ const Favorites: FC = () => {
     }, [paginationItems?.length])
 
     return (
-        <>
+        <>{user?<>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
                 <MdOutlineArrowBack /> <span className="ms-2">Назад</span>
             </Link>
@@ -74,8 +75,7 @@ const Favorites: FC = () => {
                     ) : (
                         <h6 className="w-100 p-5 text-center">Ничего нет</h6>
                     )
-                ) : (
-                    <div className="p-5 w-100 d-flex justify-content-center">
+                ) : (<div className="p-5 w-100 d-flex justify-content-center">
                         <Loader color="#343434" />
                     </div>
                 )}
@@ -95,6 +95,8 @@ const Favorites: FC = () => {
             ) : (
                 ''
             )}
+        </>:<AccountMenu></AccountMenu>}
+
         </>
     )
 }

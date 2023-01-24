@@ -293,6 +293,7 @@ const NewAd = () => {
             ['isoldBranchCount'],
         ]
         ValuesFroPrice.forEach((i) => i.push(FromStringToNumber(watch(i[0]))))
+        ValuesFroPrice.forEach((i) => {if(i[1]==undefined) i[1]=''})
         data = {
             ...data,
             [ValuesFroPrice[0][0]]: ValuesFroPrice[0][1],
@@ -336,9 +337,11 @@ const NewAd = () => {
         setValue(o.target.name, FunctionForPrice(val))
     }
 
+
     useEffect(() => {
         formInfo.image && setAdCover([formInfo.image])
     }, [formInfo])
+
 
     return (
         <>
@@ -1136,7 +1139,7 @@ const NewAd = () => {
                         </div>
                     </fieldset>
                 )}
-                <button className={`btn_main btn_1 fw_4 mt-4`} type="submit">
+                <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={()=>funcForCityEr(city)}>
                     {returnText()}
                 </button>
             </form>

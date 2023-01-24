@@ -37,11 +37,15 @@ const Header: FC = () => {
                         >
                             Обратная связь
                         </NavLink>
-                        <NavLink to={user ? '/account/favorites' : '/enter'} className="btn-icon d-none d-md-block">
+
+                        <NavLink to={user ? '/account/favorites' : '/enter'} className={user?
+                            "btn-icon d-none d-md-block":
+                            "btn-icon2 d-none d-md-block"}>
+
                             <MdStarOutline />
                             {user && <span className="count">{count}</span>}
                         </NavLink>
-                        <a href="/" className="btn-icon">
+                        <a href="/" className="btn-icon d-none d-md-block">
                             <MdOutlineShoppingCart />
                             <span className="count">3</span>
                         </a>
@@ -137,9 +141,9 @@ const Header: FC = () => {
                         <MdClose />
                     </button>
                     <nav>
-                        <ul className="list-unstyled">
+                        <ul className="list-unstyled" data-bs-dismiss="offcanvas">
                             <li>
-                                <NavLink to="category/0">Поиск инвестора</NavLink>
+                                <NavLink to="category/0">Поиск инвестоов</NavLink>
                             </li>
                             <li>
                                 <NavLink to="category/1">Предложения инвесторов</NavLink>
