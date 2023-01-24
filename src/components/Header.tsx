@@ -38,8 +38,8 @@ const Header: FC = () => {
                             Обратная связь
                         </NavLink>
                         <NavLink to={user ? '/account/favorites' : '/enter'} className={user?
-                            "btn-icon d-none d-md-block btn-icon":
-                            "btn-icon2 btn-icon d-none d-md-block"}>
+                            "btn-icon d-none d-md-block":
+                            "btn-icon2 d-none d-md-block"}>
                             <MdStarOutline />
                             {user && <span className="count">{count}</span>}
                         </NavLink>
