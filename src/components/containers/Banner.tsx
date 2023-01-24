@@ -20,7 +20,7 @@ const BannerContainer: FC<Props> = ({ swiperDelay }) => {
             modules={[Pagination, Autoplay]}
             slidesPerView={1}
             pagination={{ clickable: true }}
-            autoplay={{ delay: swiperDelay && swiperDelay * 1000 }}
+            autoplay={{ delay: swiperDelay * 1000 }}
         >
             {!isLoading ? (
                 data ? (
