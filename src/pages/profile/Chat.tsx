@@ -1,12 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import ChatPreview from './ChatPreview'
-import {Link} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
-import {
-    emitDeleteConversation,
-    emitGetConversation,
-    emitPaginateConversation,
-} from '../../services/sockets/conversations'
+import {emitDeleteConversation, emitPaginateConversation,} from '../../services/sockets/conversations'
 import {IPagination, IUseStateItems} from '../../types'
 import {IConversationsItem, IConversationsMeta} from '../../models/sockets/conversations'
 import useSocketConnect from '../../hooks/socketConnect'
@@ -17,6 +13,7 @@ import Loader from '../../components/utils/Loader'
 import {socketInstance} from '../../services/sockets/socketInstance'
 import {useAppDispatch} from '../../hooks/store'
 import {showAlert} from '../../store/reducers/alertSlice'
+import AccountMenu from "./AccountMenu";
 
 export default function Chat() {
     const {isConnected} = useSocketConnect()
@@ -49,15 +46,15 @@ export default function Chat() {
 
     useEffect(() => {
         isFetching &&
-            setTimeout(() => {
-                emitPaginateConversation({page: selectedPage + 1, limit: generalLimit, orderBy: 'desc'})
-                    .then(
-                        (res) =>
-                            res && setConversations({isLoaded: true, items: res?.body?.data, meta: res?.body?.meta})
-                    )
-                    .catch(() => setConversations({isLoaded: true, items: null, meta: null}))
-                    .finally(() => setIsFetching(false))
-            }, 500)
+        setTimeout(() => {
+            emitPaginateConversation({page: selectedPage + 1, limit: generalLimit, orderBy: 'desc'})
+                .then(
+                    (res) =>
+                        res && setConversations({isLoaded: true, items: res?.body?.data, meta: res?.body?.meta})
+                )
+                .catch(() => setConversations({isLoaded: true, items: null, meta: null}))
+                .finally(() => setIsFetching(false))
+        }, 500)
     }, [isFetching])
 
     const getIdConversation = useCallback((converId: number) => {
@@ -105,55 +102,60 @@ export default function Chat() {
 
     return (
         <>
-            <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
-                <MdOutlineArrowBack /> <span className="ms-2">Назад</span>
-            </Link>
-            <div className="acc-box p-0">
-                {conversations.isLoaded ? (
-                    paginationItems?.length > 0 ? (
-                        paginationItems?.map((i) => (
-                            <ChatPreview
-                                getIdConver={getIdConversation}
-                                converId={i.id}
-                                userId={i?.user?.id}
-                                offerId={i?.offerId}
-                                lastMessUserId={i?.lastMessage?.userId}
-                                key={i?.id}
-                                imgURL={checkPhotoPath(i.user?.avatar)}
-                                userName={i?.user?.fullName}
-                                title={i?.offer?.title}
-                                adURL={`/adv-page/${i?.offerId}`}
-                                message={i.lastMessage?.text}
-                                isViewed={i?.lastMessage?.isViewed}
-                            />
-                        ))
-                    ) : (
-                        <h6 className="w-100 p-5 text-center">Ничего нет</h6>
-                    )
-                ) : (
-                    <div className="p-5 w-100 d-flex justify-content-center">
-                        <Loader color="#343434" />
-                    </div>
-                )}
+            {conversations.isLoaded ?
+                <>
+                    <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
+                        <MdOutlineArrowBack/> <span className="ms-2">Назад</span>
+                    </Link>
+                    <div className="acc-box p-0">
+                        {conversations.isLoaded ? (
+                            paginationItems?.length > 0 ? (
+                                paginationItems?.map((i) => (
+                                    <ChatPreview
+                                        getIdConver={getIdConversation}
+                                        converId={i.id}
+                                        userId={i?.user?.id}
+                                        offerId={i?.offerId}
+                                        lastMessUserId={i?.lastMessage?.userId}
+                                        key={i?.id}
+                                        imgURL={checkPhotoPath(i.user?.avatar)}
+                                        userName={i?.user?.fullName}
+                                        title={i?.offer?.title}
+                                        adURL={`/adv-page/${i?.offerId}`}
+                                        message={i.lastMessage?.text}
+                                        isViewed={i?.lastMessage?.isViewed}
+                                    />
+                                ))
+                            ) : (
+                                <h6 className="w-100 p-5 text-center">Ничего нет</h6>
+                            )
+                        ) : (
+                            <div className="p-5 w-100 d-flex justify-content-center">
+                                <Loader color="#343434"/>
+                            </div>
+                        )}
 
-                <div className="p-4">
-                    {paginationItems?.length > 0 ? (
-                        <div className="acc-box p-0 mt-3 d-flex justify-content-center">
-                            <Pagination
-                                nextLabel="❯"
-                                onPageChange={handlePageClick}
-                                pageRangeDisplayed={3}
-                                marginPagesDisplayed={1}
-                                pageCount={pageCount}
-                                previousLabel="❮"
-                                forcePage={selectedPage}
-                            />
+                        <div className="p-4">
+                            {paginationItems?.length > 0 ? (
+                                <div className="acc-box p-0 mt-3 d-flex justify-content-center">
+                                    <Pagination
+                                        nextLabel="❯"
+                                        onPageChange={handlePageClick}
+                                        pageRangeDisplayed={3}
+                                        marginPagesDisplayed={1}
+                                        pageCount={pageCount}
+                                        previousLabel="❮"
+                                        forcePage={selectedPage}
+                                    />
+                                </div>
+                            ) : (
+                                ''
+                            )}
                         </div>
-                    ) : (
-                        ''
-                    )}
-                </div>
-            </div>
+                    </div>
+                </> :<AccountMenu></AccountMenu>
+
+            }
         </>
     )
 }
