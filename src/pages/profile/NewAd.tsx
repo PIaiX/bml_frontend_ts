@@ -292,7 +292,7 @@ const NewAd = () => {
             ['profit'],
             ['isoldBranchCount'],
         ]
-        ValuesFroPrice.forEach((i) => i.push(FromStringToNumber(watch(i[0]))))
+        ValuesFroPrice.forEach((i) => i.push(FromStringToNumber(watch(i[0])) ?? ''))
         data = {
             ...data,
             [ValuesFroPrice[0][0]]: ValuesFroPrice[0][1],
@@ -305,8 +305,10 @@ const NewAd = () => {
             city: city,
         }
         if (id) {
+            console.log(data)
             saveChanges(data)
         } else {
+            console.log(data)
             createNewOffer(data)
         }
     }
