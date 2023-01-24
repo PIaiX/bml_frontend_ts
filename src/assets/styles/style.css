@@ -423,6 +423,7 @@ block 3
     height: 225px;
     object-fit: cover;
     display: block;
+    cursor: pointer;
 }
 
 .preview-small .text {
