@@ -76,13 +76,15 @@ const UserProfile: FC = () => {
                                 {currentFriends?.isLoaded ? (
                                     currentFriends?.meta && currentFriends?.meta?.total > 0 ? (
                                         currentFriends?.items?.map((friend) => (
-                                            <div key={friend.id}>
-                                                <img src={checkPhotoPath(friend?.avatar)} alt={friend?.fullName} />
-                                                <NavLink to={`/account/profile/user/${friend.id}`}>
+                                            <NavLink key={friend.id} to={`/account/profile/user/${friend.id}`}>
+                                                <div>
+                                                    <img src={checkPhotoPath(friend?.avatar)} alt={friend?.fullName} />
+                                                    <br/>
                                                     {friend.fullName}
-                                                </NavLink>
-                                            </div>
-                                        ))
+                                                </div>
+                                            </NavLink>
+
+                                    ))
                                     ) : (
                                         <div>
                                             <h5>Нет партнеров</h5>

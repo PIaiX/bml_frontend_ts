@@ -291,6 +291,7 @@ const NewAd = () => {
             ['isoldBranchCount'],
         ]
         ValuesFroPrice.forEach((i) => i.push(FromStringToNumber(watch(i[0]))))
+        ValuesFroPrice.forEach((i) => {if(i[1]==undefined) i[1]=''})
         data = {
             ...data,
             [ValuesFroPrice[0][0]]: ValuesFroPrice[0][1],
@@ -333,6 +334,7 @@ const NewAd = () => {
         let val = FromStringToNumber(o.target.value)
         setValue(o.target.name, FunctionForPrice(val))
     }
+
     return (
         <>
             <Link to="/account/my-ads" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -1099,7 +1101,7 @@ const NewAd = () => {
                         </div>
                     </fieldset>
                 )}
-                <button className={`btn_main btn_1 fw_4 mt-4`} type="submit">
+                <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={()=>funcForCityEr(city)}>
                     {returnText()}
                 </button>
             </form>
