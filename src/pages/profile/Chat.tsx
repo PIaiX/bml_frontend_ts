@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import ChatPreview from './ChatPreview'
-import {Link, NavLink} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import {emitDeleteConversation, emitPaginateConversation,} from '../../services/sockets/conversations'
 import {IPagination, IUseStateItems} from '../../types'
@@ -11,12 +11,14 @@ import Pagination from '../../components/utils/Pagination'
 import {checkPhotoPath} from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'
 import {socketInstance} from '../../services/sockets/socketInstance'
-import {useAppDispatch} from '../../hooks/store'
+import {useAppDispatch, useAppSelector} from '../../hooks/store'
 import {showAlert} from '../../store/reducers/alertSlice'
 import AccountMenu from "./AccountMenu";
+import {IUser} from "../../types/user";
 
 export default function Chat() {
     const {isConnected} = useSocketConnect()
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 6
     const [conversations, setConversations] = useState<IUseStateItems<IConversationsItem, IConversationsMeta>>({
         isLoaded: false,
@@ -102,7 +104,7 @@ export default function Chat() {
 
     return (
         <>
-            {conversations.isLoaded ?
+            {user?
                 <>
                     <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
                         <MdOutlineArrowBack/> <span className="ms-2">Назад</span>
