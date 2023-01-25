@@ -179,18 +179,22 @@ const ViewProfile: FC = () => {
                             alt={userInfo?.item?.fullName}
                             className="user-photo"
                         />
-                        {user?.id != id && !userInfo?.item?.friendStatus && (
+                        {user?.id != id && userInfo?.item && (
                             <div className="acc-box mt-3 mt-xl-4">
-                                <button
-                                    type="button"
-                                    className="d-flex align-items-center blue fw_6"
-                                    onClick={() => setIsShowMessageModal(true)}
-                                >
-                                    <MdOutlineQuestionAnswer className="f_17" />
-                                    <span className="ms-1 ms-sm-3 text-start">Написать сообщение</span>
-                                </button>
-                                <hr className="my-3" />
-                                {!userInfo?.item?.outgoingStatus && !userInfo?.item?.incomingStatus && true && (
+                                {userInfo?.item?.friendStatus &&
+                                    <>
+                                    <button
+                                        type="button"
+                                        className="d-flex align-items-center blue fw_6"
+                                        onClick={() => setIsShowMessageModal(true)}
+                                    >
+                                        <MdOutlineQuestionAnswer className="f_17" />
+                                        <span className="ms-1 ms-sm-3 text-start">Написать сообщение</span>
+                                    </button>
+                                    <hr className="my-3" />
+                                    </>
+                                }
+                                {!userInfo?.item?.outgoingStatus && !userInfo?.item?.incomingStatus && !userInfo?.item?.friendStatus && (
                                     <button
                                         type="button"
                                         className="text-start color-1 f_09"
@@ -201,7 +205,7 @@ const ViewProfile: FC = () => {
                                         Добавить в бизнес-партнеры
                                     </button>
                                 )}
-                                {userInfo?.item?.outgoingStatus && !userInfo?.item?.incomingStatus && true && (
+                                {userInfo?.item?.outgoingStatus && !userInfo?.item?.incomingStatus && (
                                     <button
                                         type="button"
                                         className="text-start color-1 f_09"
@@ -212,7 +216,7 @@ const ViewProfile: FC = () => {
                                         Отменить заявку
                                     </button>
                                 )}
-                                {!userInfo?.item?.outgoingStatus && userInfo?.item?.incomingStatus && true && (
+                                {!userInfo?.item?.outgoingStatus && userInfo?.item?.incomingStatus && (
                                     <button
                                         type="button"
                                         className="text-start color-1 f_09"
@@ -221,6 +225,16 @@ const ViewProfile: FC = () => {
                                         }}
                                     >
                                         Принять заявку
+                                    </button>
+                                )}
+                                {userInfo?.item?.friendStatus && (
+                                    <button
+                                        type="button"
+                                        className="text-start color-1 f_09"
+                                        onClick={() => {onSubmitRemoveFromFriend()
+                                        }}
+                                    >
+                                        Удалить из партнёров
                                     </button>
                                 )}
                             </div>
