@@ -20,21 +20,24 @@ type Props = {
 
 const AdCard: FC<Props> = (props: any) => {
     return (
-        <div className={'ad-preview ' + props.className}>
+        <div className={'mx-sm-4 my-md-5 my-sm-3 py-1 ad-preview ' + props.className}>
             <div className="d-flex flex-column flex-sm-row align-items-stretch flex-1">
                 <div className="img acc-box">
                     <NavLink to={`/adv-page/${props?.id}`}>
-                        <img src={checkPhotoPath(props?.imgURL)} alt={props.title} />
+                        <img src={checkPhotoPath(props?.imgURL)} alt={props.title}/>
                     </NavLink>
                 </div>
-                <div className="text">
+                <div className="text mx-md-4 mx-sm-4">
                     <div>
                         <NavLink to={`/adv-page/${props?.id}`}>
-                            <div className="blue">{props.title}</div>
+                            <div>
+                                {props.title.slice(0,15)}
+                                {props.title.length>15 && '...'}
+                            </div>
                         </NavLink>
-                        <div style={{color:"red"}}>
+                        <div style={{color: "red"}}>
                             {!props.isVerified &&
-                                <div style={{color:"red"}}>
+                                <div style={{color: "red"}}>
                                     На модерации
                                 </div>}
                         </div>
@@ -48,7 +51,7 @@ const AdCard: FC<Props> = (props: any) => {
                     </div>
                 </div>
             </div>
-            <div className="btns row gx-2 mt-3 mt-md-0">
+            <div className="btns row gx-2 mt-3 mt-md-0 mt-sm-4">
                 <div className="col-6">
                     <NavLink to={`new-ad/${props?.id}`} className="btn_main btn_4 w-100 px-2 px-sm-3">
                         Редактировать

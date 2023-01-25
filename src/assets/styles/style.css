@@ -1657,6 +1657,14 @@ how to upload
         margin-right: 0;
         margin-bottom: 1em;
     }
+    .ad-preview .img a{
+        width:100%;
+        height:100%;
+    }
+    .ad-preview .img a img{
+        width:100%;
+        height:100%;
+    }
 }
 
 .ad-price {
