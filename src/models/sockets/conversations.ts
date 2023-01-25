@@ -1,5 +1,5 @@
-import {IOfferItem} from '../../types/offers'
-import {IUser} from '../../types/user'
+import { IOfferItem } from '../../types/offers'
+import { IUser } from '../../types/user'
 
 export type IConversationsItem = {
     createdAt: string
@@ -20,6 +20,7 @@ export type IConversationsItem = {
     updatedAt: string
     user: IUser
     isNew: boolean
+    newMessagesCount: string
 }
 
 export type IConversationsMeta = {
