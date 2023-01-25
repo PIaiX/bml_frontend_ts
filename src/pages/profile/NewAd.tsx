@@ -113,6 +113,7 @@ const NewAd = () => {
             getOneOffer(id)
                 .then((res) => {
                     if (res) {
+                        setCity(res.city)
                         setCurrentOffer({ isLoaded: true, item: res })
                         setValue('title', res?.title)
                         setValue('about', res?.about || '')
@@ -121,20 +122,20 @@ const NewAd = () => {
                         setValue('category', res?.category)
                         setValue('cooperationTerms', res?.cooperationTerms)
                         setValue('description', res?.description)
-                        setValue('investments', res?.investments)
-                        setValue('paybackTime', res?.paybackTime)
-                        setValue('profitPerMonth', res?.profitPerMonth)
+                        setValue('investments', FunctionForPrice(res?.investments))
+                        setValue('paybackTime', FunctionForPrice(res?.paybackTime))
+                        setValue('profitPerMonth', FunctionForPrice(res?.profitPerMonth))
                         setValue('projectStage', res?.projectStage == null ? '' : res?.projectStage)
                         setValue('subsectionId', res?.subsectionId)
                         setValue('aboutCompany', res?.aboutCompany || '')
                         setValue('benefits', res?.benefits || '')
-                        setValue('branchCount', res?.branchCount || '')
+                        setValue('branchCount', FunctionForPrice(res?.branchCount) || '')
                         setValue('dateOfCreation', res?.dateOfCreation)
-                        setValue('price', res?.price || '')
-                        setValue('pricePerMonth', res?.pricePerMonth || '')
-                        setValue('soldBranchCount', res?.soldBranchCount || '')
+                        setValue('price', FunctionForPrice(res?.price) || '')
+                        setValue('pricePerMonth', FunctionForPrice(res?.pricePerMonth) || '')
+                        setValue('soldBranchCount', FunctionForPrice(res?.soldBranchCount) || '')
                         setValue('video', res?.video || '')
-                        setValue('profit', res?.profit || '')
+                        setValue('profit', FunctionForPrice(res?.profit) || '')
                         setValue('city', res?.city || '')
                         setCurrentArea(res?.subsection?.area?.id)
                     }
@@ -306,11 +307,10 @@ const NewAd = () => {
             [ValuesFroPrice[6][0]]: ValuesFroPrice[6][1],
             city: city,
         }
+        console.log(data);
         if (id) {
-            console.log(data)
             saveChanges(data)
         } else {
-            console.log(data)
             createNewOffer(data)
         }
     }
@@ -742,7 +742,7 @@ const NewAd = () => {
                         </div>
                         <div className="col-sm-6 col-lg-8">
                             <ValidateWrapper error={{ message: cityEr }}>
-                                <CitiesForm setVal={funcForCityEr} />
+                                <CitiesForm val={city} setVal={funcForCityEr} />
                             </ValidateWrapper>
                         </div>
                     </div>
