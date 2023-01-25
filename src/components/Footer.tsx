@@ -4,12 +4,30 @@ import { useAppSelector } from '../hooks/store'
 import { IUser } from '../types/user'
 import { socketInstance } from '../services/sockets/socketInstance'
 import useSocketConnect from '../hooks/socketConnect'
+import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { showAlert } from '../store/reducers/alertSlice'
 
 export default function Footer() {
     const count = useAppSelector((state) => state?.favoritesCount?.count)
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [countNewMessage, setCountNewMessage] = useState<null | number | undefined>(null)
     const { isConnected } = useSocketConnect()
+    const dispatch = useDispatch()
+
+    const {
+        register,
+        setValue,
+        reset,
+        formState: { errors },
+        handleSubmit,
+    } = useForm({
+        mode: 'onSubmit',
+        reValidateMode: 'onChange',
+        defaultValues: {
+            email: ''
+        },
+    })
 
     useEffect(() => {
         setTimeout(() => {
@@ -18,6 +36,23 @@ export default function Footer() {
             })
         }, 100)
     }, [isConnected])
+
+    useEffect(() => {
+        if (user) {
+            setValue('email', user.email)
+        }
+    }, [])
+
+    const submitSubscrition = (data: { email: string }) => {
+        console.log(data)
+        // .then(() => {
+        dispatch(showAlert({ message: 'Вы успешно подписались', typeAlert: 'good' }))
+        reset()
+        // })
+        // .catch(() => {
+        //     dispatch(showAlert({message: 'Произошла ошибка, попробуйте позже.', typeAlert: 'bad'}))
+        // })
+    }
 
     return (
         <>
@@ -104,9 +139,19 @@ export default function Footer() {
                                     <div className="text-uppercase mb-3">
                                         Подпишитесь на новости: выгодные бизнес предложения, лучшие франшизы и проекты
                                     </div>
-                                    <form action="" className="mailing-form">
+                                    <form className="mailing-form" onSubmit={handleSubmit(submitSubscrition)}>
                                         <div className="d-flex mb-2">
-                                            <input type="text" className="white" placeholder="Введите e-mail" />
+                                            <input
+                                                type="email"
+                                                placeholder="Введите e-mail"
+                                                {...register('email', {
+                                                    required: 'Поле обязательно к заполнению',
+                                                    pattern: {
+                                                        value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                                        message: 'Введен некорректный email',
+                                                    },
+                                                })}
+                                            />
                                             <button type="submit" className="btn_main btn_2">
                                                 OK
                                             </button>
