@@ -1,24 +1,29 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import ChatPreview from './ChatPreview'
-import {Link} from 'react-router-dom'
-import {MdOutlineArrowBack} from 'react-icons/md'
-import {emitDeleteConversation, emitPaginateConversation,} from '../../services/sockets/conversations'
-import {IPagination, IUseStateItems} from '../../types'
-import {IConversationsItem, IConversationsMeta} from '../../models/sockets/conversations'
+
+import { Link } from 'react-router-dom'
+import { MdOutlineArrowBack } from 'react-icons/md'
+import {
+    emitDeleteConversation,
+    emitGetConversation,
+    emitPaginateConversation,
+} from '../../services/sockets/conversations'
+import { IPagination, IUseStateItems } from '../../types'
+import { IConversationsItem, IConversationsMeta } from '../../models/sockets/conversations'
+
 import useSocketConnect from '../../hooks/socketConnect'
 import usePagination from '../../hooks/pagination'
 import Pagination from '../../components/utils/Pagination'
-import {checkPhotoPath} from '../../helpers/photoLoader'
+import { checkPhotoPath } from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'
-import {socketInstance} from '../../services/sockets/socketInstance'
-import {useAppDispatch, useAppSelector} from '../../hooks/store'
-import {showAlert} from '../../store/reducers/alertSlice'
-import AccountMenu from "./AccountMenu";
-import {IUser} from "../../types/user";
+
+import { socketInstance } from '../../services/sockets/socketInstance'
+import { useAppDispatch } from '../../hooks/store'
+import { showAlert } from '../../store/reducers/alertSlice'
 
 export default function Chat() {
-    const {isConnected} = useSocketConnect()
-    const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const { isConnected } = useSocketConnect()
+
     const generalLimit = 6
     const [conversations, setConversations] = useState<IUseStateItems<IConversationsItem, IConversationsMeta>>({
         isLoaded: false,
@@ -36,6 +41,7 @@ export default function Chat() {
     }: IPagination<IConversationsItem> = usePagination(conversations?.items, generalLimit, conversations?.meta?.total)
     const [conversationId, setConversationId] = useState<number | null>(null)
     const [isFetching, setIsFetching] = useState<boolean>(true)
+
     useEffect(() => {
         if (isConnected && socketInstance) {
             socketInstance?.on('conversation:update', onConversationUpdate)
@@ -48,6 +54,7 @@ export default function Chat() {
 
     useEffect(() => {
         isFetching &&
+
         setTimeout(() => {
             emitPaginateConversation({page: selectedPage + 1, limit: generalLimit, orderBy: 'desc'})
                 .then(
@@ -88,54 +95,57 @@ export default function Chat() {
         if (conversationId) {
             emitDeleteConversation(conversationId)
                 .then(() => {
-                    emitPaginateConversation({page: selectedPage + 1, limit: generalLimit, orderBy: 'desc'})
+                    emitPaginateConversation({ page: selectedPage + 1, limit: generalLimit, orderBy: 'desc' })
                         .then(
                             (res) =>
-                                res && setConversations({isLoaded: true, items: res?.body?.data, meta: res?.body?.meta})
+                                res && setConversations({ isLoaded: true, items: res?.body?.data, meta: res?.body?.meta })
                         )
-                        .catch(() => setConversations({isLoaded: true, items: null, meta: null}))
-                    dispatch(showAlert({message: 'Беседа успешно удалена', typeAlert: 'good'}))
+                        .catch(() => setConversations({ isLoaded: true, items: null, meta: null }))
+                    dispatch(showAlert({ message: 'Беседа успешно удалена', typeAlert: 'good' }))
                 })
                 .catch(() => {
-                    dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'}))
+                    dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))
                 })
         }
     }, [conversationId])
 
     return (
         <>
-            {user?
-                <>
-                    <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
-                        <MdOutlineArrowBack/> <span className="ms-2">Назад</span>
-                    </Link>
-                    <div className="acc-box p-0">
-                        {conversations.isLoaded ? (
-                            paginationItems?.length > 0 ? (
-                                paginationItems?.map((i) => (
-                                    <ChatPreview
-                                        getIdConver={getIdConversation}
-                                        converId={i.id}
-                                        userId={i?.user?.id}
-                                        offerId={i?.offerId}
-                                        lastMessUserId={i?.lastMessage?.userId}
-                                        key={i?.id}
-                                        imgURL={checkPhotoPath(i.user?.avatar)}
-                                        userName={i?.user?.fullName}
-                                        title={i?.offer?.title}
-                                        adURL={`/adv-page/${i?.offerId}`}
-                                        message={i.lastMessage?.text}
-                                        isViewed={i?.lastMessage?.isViewed}
-                                    />
-                                ))
-                            ) : (
-                                <h6 className="w-100 p-5 text-center">Ничего нет</h6>
+
+            <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
+                <MdOutlineArrowBack /> <span className="ms-2">Назад</span>
+            </Link>
+            <div className="acc-box p-0">
+                {conversations.isLoaded ? (
+                    paginationItems?.length > 0 ? (
+                        paginationItems?.map((i) => {
+                            return (
+                                <ChatPreview
+                                    getIdConver={getIdConversation}
+                                    converId={i.id}
+                                    userId={i?.user?.id}
+                                    offerId={i?.offerId}
+                                    lastMessUserId={i?.lastMessage?.userId}
+                                    key={i?.id}
+                                    imgURL={checkPhotoPath(i.user?.avatar)}
+                                    userName={i?.user?.fullName}
+                                    title={i?.offer?.title}
+                                    adURL={`/adv-page/${i?.offerId}`}
+                                    message={i.lastMessage?.text}
+                                    isViewed={i?.lastMessage?.isViewed}
+                                    newMessagesCount={i?.newMessagesCount}
+                                />
                             )
-                        ) : (
-                            <div className="p-5 w-100 d-flex justify-content-center">
-                                <Loader color="#343434"/>
-                            </div>
-                        )}
+                        })
+                    ) : (
+                        <h6 className="w-100 p-5 text-center">Ничего нет</h6>
+                    )
+                ) : (
+                    <div className="p-5 w-100 d-flex justify-content-center">
+                        <Loader color="#343434" />
+                    </div>
+                )}
+
 
                         <div className="p-4">
                             {paginationItems?.length > 0 ? (

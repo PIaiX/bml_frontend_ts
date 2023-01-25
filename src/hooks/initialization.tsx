@@ -1,10 +1,10 @@
-import {useAppDispatch, useAppSelector} from './store'
-import {IUser} from '../types/user'
-import {useEffect} from 'react'
-import {getCity} from '../services/city'
-import {setCity} from '../store/reducers/citySlice'
-import {setSocketConnection} from '../services/sockets/socketInstance'
-import {checkAuth} from '../store/reducers/userSlice'
+import { useAppDispatch, useAppSelector } from './store'
+import { IUser } from '../types/user'
+import { useEffect } from 'react'
+import { getCity } from '../services/city'
+import { setCity } from '../store/reducers/citySlice'
+import { setSocketConnection } from '../services/sockets/socketInstance'
+import { checkAuth } from '../store/reducers/userSlice'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
 const fpPromise = FingerprintJS.load()
@@ -15,7 +15,7 @@ const useInitialization = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
 
     useEffect(() => {
-        ;(async () => {
+        (async () => {
             const fp = await fpPromise
             const result = await fp.get()
             localStorage.setItem('fingerprint', result.visitorId)

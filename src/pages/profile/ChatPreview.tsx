@@ -1,8 +1,8 @@
-import React, {DetailedHTMLProps, Dispatch, FC, HTMLAttributes, MouseEventHandler, SetStateAction} from 'react'
-import {Link, NavLink} from 'react-router-dom'
-import {MdDeleteForever} from 'react-icons/md'
-import {IUser} from '../../types/user'
-import {useAppSelector} from '../../hooks/store'
+import React, { DetailedHTMLProps, Dispatch, FC, HTMLAttributes, MouseEventHandler, SetStateAction } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import { MdDeleteForever } from 'react-icons/md'
+import { IUser } from '../../types/user'
+import { useAppSelector } from '../../hooks/store'
 
 type Props = {
     userId: number
@@ -16,6 +16,7 @@ type Props = {
     converId: number
     getIdConver: (converId: number) => void
     lastMessUserId?: number
+    newMessagesCount?: string
 }
 
 const ChatPreview: FC<Props> = (props) => {
@@ -34,11 +35,16 @@ const ChatPreview: FC<Props> = (props) => {
             <div className="text">
                 <Link
                     to={`window/${props?.converId}`}
-                    state={{userName: props.userName, userId: props.userId, avatar: props.imgURL}}
+                    state={{ userName: props.userName, userId: props.userId, avatar: props.imgURL }}
                 >
                     {props?.lastMessUserId === user?.id ? 'Вы: ' : 'Партнер: '}
                     {props.message}
                 </Link>
+            </div>
+            <div className="unread-count-container">
+                {props.newMessagesCount && parseInt(props.newMessagesCount) > 0 && <div className="unread-count">
+                    {props.newMessagesCount}
+                </div>}
             </div>
             <div className="btns">
                 <button className="ml-2" onClick={() => props?.getIdConver && props?.getIdConver(props?.converId)}>

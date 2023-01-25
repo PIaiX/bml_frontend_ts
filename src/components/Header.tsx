@@ -1,10 +1,10 @@
-import React, {FC, useEffect, useLayoutEffect, useState} from 'react'
-import {Link, NavLink} from 'react-router-dom'
-import {MdClose, MdLogin, MdMenu, MdOutlineShoppingCart, MdSearch, MdStarOutline} from 'react-icons/md'
-import {IconContext} from 'react-icons'
-import {useAppDispatch, useAppSelector} from '../hooks/store'
-import {IUser} from '../types/user'
-import {setInitialCount} from '../store/reducers/favoriteCountSlice'
+import React, { FC, useEffect, useLayoutEffect, useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import { MdClose, MdLogin, MdMenu, MdOutlineShoppingCart, MdSearch, MdStarOutline } from 'react-icons/md'
+import { IconContext } from 'react-icons'
+import { useAppDispatch, useAppSelector } from '../hooks/store'
+import { IUser } from '../types/user'
+import { setInitialCount } from '../store/reducers/favoriteCountSlice'
 const imgBottom = require('../assets/images/backgrounds/down.svg')
 
 const Header: FC = () => {
@@ -32,7 +32,7 @@ const Header: FC = () => {
                         </form>
                         <NavLink
                             to="/contacts"
-                            state={{fromHeader: true}}
+                            state={{ fromHeader: true }}
                             className="d-none d-md-block color-2 bb_1 lh_1"
                         >
                             Обратная связь
@@ -45,10 +45,11 @@ const Header: FC = () => {
                             <MdStarOutline />
                             {user && <span className="count">{count}</span>}
                         </NavLink>
-                        <a href="/" className="btn-icon d-none d-md-block">
+
+                        <NavLink to="/account/cart" className="btn-icon">
                             <MdOutlineShoppingCart />
                             <span className="count">3</span>
-                        </a>
+                        </NavLink>
                         {user?.id ? (
                             <NavLink to={`/account/profile/${user?.id}`} className={"d-none d-md-block"}>
                                 {window.innerWidth <= 400 ? (
@@ -127,7 +128,7 @@ const Header: FC = () => {
                             </ul>
                         </nav>
                         <button className="d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu">
-                            <IconContext.Provider value={{className: 'f_20 color-2'}}>
+                            <IconContext.Provider value={{ className: 'f_20 color-2' }}>
                                 <MdMenu />
                             </IconContext.Provider>
                         </button>
