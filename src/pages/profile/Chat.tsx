@@ -1,25 +1,25 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import ChatPreview from './ChatPreview'
-import {Link} from 'react-router-dom'
-import {MdOutlineArrowBack} from 'react-icons/md'
+import { Link } from 'react-router-dom'
+import { MdOutlineArrowBack } from 'react-icons/md'
 import {
     emitDeleteConversation,
     emitGetConversation,
     emitPaginateConversation,
 } from '../../services/sockets/conversations'
-import {IPagination, IUseStateItems} from '../../types'
-import {IConversationsItem, IConversationsMeta} from '../../models/sockets/conversations'
+import { IPagination, IUseStateItems } from '../../types'
+import { IConversationsItem, IConversationsMeta } from '../../models/sockets/conversations'
 import useSocketConnect from '../../hooks/socketConnect'
 import usePagination from '../../hooks/pagination'
 import Pagination from '../../components/utils/Pagination'
-import {checkPhotoPath} from '../../helpers/photoLoader'
+import { checkPhotoPath } from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'
-import {socketInstance} from '../../services/sockets/socketInstance'
-import {useAppDispatch} from '../../hooks/store'
-import {showAlert} from '../../store/reducers/alertSlice'
+import { socketInstance } from '../../services/sockets/socketInstance'
+import { useAppDispatch } from '../../hooks/store'
+import { showAlert } from '../../store/reducers/alertSlice'
 
 export default function Chat() {
-    const {isConnected} = useSocketConnect()
+    const { isConnected } = useSocketConnect()
     const generalLimit = 6
     const [conversations, setConversations] = useState<IUseStateItems<IConversationsItem, IConversationsMeta>>({
         isLoaded: false,
@@ -37,6 +37,7 @@ export default function Chat() {
     }: IPagination<IConversationsItem> = usePagination(conversations?.items, generalLimit, conversations?.meta?.total)
     const [conversationId, setConversationId] = useState<number | null>(null)
     const [isFetching, setIsFetching] = useState<boolean>(true)
+
     useEffect(() => {
         if (isConnected && socketInstance) {
             socketInstance?.on('conversation:update', onConversationUpdate)
@@ -50,12 +51,12 @@ export default function Chat() {
     useEffect(() => {
         isFetching &&
             setTimeout(() => {
-                emitPaginateConversation({page: selectedPage + 1, limit: generalLimit, orderBy: 'desc'})
+                emitPaginateConversation({ page: selectedPage + 1, limit: generalLimit, orderBy: 'desc' })
                     .then(
                         (res) =>
-                            res && setConversations({isLoaded: true, items: res?.body?.data, meta: res?.body?.meta})
+                            res && setConversations({ isLoaded: true, items: res?.body?.data, meta: res?.body?.meta })
                     )
-                    .catch(() => setConversations({isLoaded: true, items: null, meta: null}))
+                    .catch(() => setConversations({ isLoaded: true, items: null, meta: null }))
                     .finally(() => setIsFetching(false))
             }, 500)
     }, [isFetching])
@@ -89,16 +90,16 @@ export default function Chat() {
         if (conversationId) {
             emitDeleteConversation(conversationId)
                 .then(() => {
-                    emitPaginateConversation({page: selectedPage + 1, limit: generalLimit, orderBy: 'desc'})
+                    emitPaginateConversation({ page: selectedPage + 1, limit: generalLimit, orderBy: 'desc' })
                         .then(
                             (res) =>
-                                res && setConversations({isLoaded: true, items: res?.body?.data, meta: res?.body?.meta})
+                                res && setConversations({ isLoaded: true, items: res?.body?.data, meta: res?.body?.meta })
                         )
-                        .catch(() => setConversations({isLoaded: true, items: null, meta: null}))
-                    dispatch(showAlert({message: 'Беседа успешно удалена', typeAlert: 'good'}))
+                        .catch(() => setConversations({ isLoaded: true, items: null, meta: null }))
+                    dispatch(showAlert({ message: 'Беседа успешно удалена', typeAlert: 'good' }))
                 })
                 .catch(() => {
-                    dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'}))
+                    dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))
                 })
         }
     }, [conversationId])
@@ -111,22 +112,25 @@ export default function Chat() {
             <div className="acc-box p-0">
                 {conversations.isLoaded ? (
                     paginationItems?.length > 0 ? (
-                        paginationItems?.map((i) => (
-                            <ChatPreview
-                                getIdConver={getIdConversation}
-                                converId={i.id}
-                                userId={i?.user?.id}
-                                offerId={i?.offerId}
-                                lastMessUserId={i?.lastMessage?.userId}
-                                key={i?.id}
-                                imgURL={checkPhotoPath(i.user?.avatar)}
-                                userName={i?.user?.fullName}
-                                title={i?.offer?.title}
-                                adURL={`/adv-page/${i?.offerId}`}
-                                message={i.lastMessage?.text}
-                                isViewed={i?.lastMessage?.isViewed}
-                            />
-                        ))
+                        paginationItems?.map((i) => {
+                            return (
+                                <ChatPreview
+                                    getIdConver={getIdConversation}
+                                    converId={i.id}
+                                    userId={i?.user?.id}
+                                    offerId={i?.offerId}
+                                    lastMessUserId={i?.lastMessage?.userId}
+                                    key={i?.id}
+                                    imgURL={checkPhotoPath(i.user?.avatar)}
+                                    userName={i?.user?.fullName}
+                                    title={i?.offer?.title}
+                                    adURL={`/adv-page/${i?.offerId}`}
+                                    message={i.lastMessage?.text}
+                                    isViewed={i?.lastMessage?.isViewed}
+                                    newMessagesCount={i?.newMessagesCount}
+                                />
+                            )
+                        })
                     ) : (
                         <h6 className="w-100 p-5 text-center">Ничего нет</h6>
                     )

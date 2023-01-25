@@ -1947,6 +1947,22 @@ CHAT
     margin-left: 1em;
 }
 
+.chat-preview .unread-count-container {
+    width: 30px;
+    height: 30px;
+}
+
+.chat-preview .unread-count-container .unread-count {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    background: #324e90;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .new-message {
     background-color: rgb(231 232 236 / 80%);
 }
