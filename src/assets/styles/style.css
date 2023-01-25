@@ -48,7 +48,7 @@ header .logo img {
     font-size: 1.5em;
 }
 
-header .btn-icon {
+header .btn-icon, header .btn-icon2 {
     position: relative;
     display: block;
     font-size: 2em;
@@ -423,6 +423,7 @@ block 3
     height: 225px;
     object-fit: cover;
     display: block;
+    cursor: pointer;
 }
 
 .preview-small .text {
@@ -1588,7 +1589,7 @@ how to upload
 }
 
 .ad-preview:not(:first-child) {
-    margin-top: 2em;
+    margin-top: 3em;
 }
 
 .ad-preview .text {

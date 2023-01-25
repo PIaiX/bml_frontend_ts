@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import ChatPreview from './ChatPreview'
+
 import { Link } from 'react-router-dom'
 import { MdOutlineArrowBack } from 'react-icons/md'
 import {
@@ -9,17 +10,20 @@ import {
 } from '../../services/sockets/conversations'
 import { IPagination, IUseStateItems } from '../../types'
 import { IConversationsItem, IConversationsMeta } from '../../models/sockets/conversations'
+
 import useSocketConnect from '../../hooks/socketConnect'
 import usePagination from '../../hooks/pagination'
 import Pagination from '../../components/utils/Pagination'
 import { checkPhotoPath } from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'
+
 import { socketInstance } from '../../services/sockets/socketInstance'
 import { useAppDispatch } from '../../hooks/store'
 import { showAlert } from '../../store/reducers/alertSlice'
 
 export default function Chat() {
     const { isConnected } = useSocketConnect()
+
     const generalLimit = 6
     const [conversations, setConversations] = useState<IUseStateItems<IConversationsItem, IConversationsMeta>>({
         isLoaded: false,
@@ -50,15 +54,16 @@ export default function Chat() {
 
     useEffect(() => {
         isFetching &&
-            setTimeout(() => {
-                emitPaginateConversation({ page: selectedPage + 1, limit: generalLimit, orderBy: 'desc' })
-                    .then(
-                        (res) =>
-                            res && setConversations({ isLoaded: true, items: res?.body?.data, meta: res?.body?.meta })
-                    )
-                    .catch(() => setConversations({ isLoaded: true, items: null, meta: null }))
-                    .finally(() => setIsFetching(false))
-            }, 500)
+
+        setTimeout(() => {
+            emitPaginateConversation({page: selectedPage + 1, limit: generalLimit, orderBy: 'desc'})
+                .then(
+                    (res) =>
+                        res && setConversations({isLoaded: true, items: res?.body?.data, meta: res?.body?.meta})
+                )
+                .catch(() => setConversations({isLoaded: true, items: null, meta: null}))
+                .finally(() => setIsFetching(false))
+        }, 500)
     }, [isFetching])
 
     const getIdConversation = useCallback((converId: number) => {
@@ -106,6 +111,7 @@ export default function Chat() {
 
     return (
         <>
+
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
                 <MdOutlineArrowBack /> <span className="ms-2">Назад</span>
             </Link>
@@ -140,24 +146,28 @@ export default function Chat() {
                     </div>
                 )}
 
-                <div className="p-4">
-                    {paginationItems?.length > 0 ? (
-                        <div className="acc-box p-0 mt-3 d-flex justify-content-center">
-                            <Pagination
-                                nextLabel="❯"
-                                onPageChange={handlePageClick}
-                                pageRangeDisplayed={3}
-                                marginPagesDisplayed={1}
-                                pageCount={pageCount}
-                                previousLabel="❮"
-                                forcePage={selectedPage}
-                            />
+
+                        <div className="p-4">
+                            {paginationItems?.length > 0 ? (
+                                <div className="acc-box p-0 mt-3 d-flex justify-content-center">
+                                    <Pagination
+                                        nextLabel="❯"
+                                        onPageChange={handlePageClick}
+                                        pageRangeDisplayed={3}
+                                        marginPagesDisplayed={1}
+                                        pageCount={pageCount}
+                                        previousLabel="❮"
+                                        forcePage={selectedPage}
+                                    />
+                                </div>
+                            ) : (
+                                ''
+                            )}
                         </div>
-                    ) : (
-                        ''
-                    )}
-                </div>
-            </div>
+                    </div>
+                </> :<AccountMenu></AccountMenu>
+
+            }
         </>
     )
 }
