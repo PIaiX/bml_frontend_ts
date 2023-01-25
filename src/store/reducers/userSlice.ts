@@ -1,8 +1,8 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {$api} from '../../services/indexAuth'
-import {apiRoutes} from '../../config/api'
-import {IRegister} from '../../models/auth'
-import {IUser} from '../../types/user'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { $api } from '../../services/indexAuth'
+import { apiRoutes } from '../../config/api'
+import { IRegister } from '../../models/auth'
+import { IUser } from '../../types/user'
 
 type InitialState = {
     user: IUser | null
@@ -16,7 +16,7 @@ const initialState: InitialState = {
 
 export const checkAuth = createAsyncThunk('auth/refreshToken', async (_, thunkAPI) => {
     try {
-        const response = await $api.get<IRegister>(`${apiRoutes.REFRESH_TOKEN}`)
+        const response = await $api(apiRoutes.REFRESH_TOKEN)
         if (response.status === 200) {
             return response?.data?.body
         }
@@ -37,7 +37,7 @@ export const userSlice = createSlice({
         },
     },
     extraReducers: {
-        [checkAuth.fulfilled.type]: (state: InitialState, action: {payload: {token: string; user: any}}) => {
+        [checkAuth.fulfilled.type]: (state: InitialState, action: { payload: { token: string; user: any } }) => {
             localStorage.setItem('token', action?.payload?.token)
             state.user = action?.payload?.user
             state.isLoading = false
@@ -50,4 +50,4 @@ export const userSlice = createSlice({
     },
 })
 
-export const {setUser, resetUser} = userSlice.actions
+export const { setUser, resetUser } = userSlice.actions
