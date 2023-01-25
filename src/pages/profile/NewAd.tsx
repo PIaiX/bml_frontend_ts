@@ -948,15 +948,13 @@ const NewAd = () => {
                             <div>Окупаемость</div>
                         </div>
                         <div className="col-sm-6 col-lg-8">
-                            <select defaultValue={''} {...register('paybackTime')}>
-                                <option value={''} disabled>
-                                    Окупаемость
-                                </option>
-                                <option value={0}>до 3 месяцев</option>
-                                <option value={1}>от 3 до 6 месяцев</option>
-                                <option value={2}>от 6 месяцев до 1 года</option>
-                                <option value={3}>от 1 года до 3 лет</option>
-                                <option value={4}>от 3 лет</option>
+                            <select defaultValue={0} {...register('paybackTime')}>
+                                <option value={0} ></option>
+                                <option value={1}>до 3 месяцев</option>
+                                <option value={2}>от 3 до 6 месяцев</option>
+                                <option value={3}>от 6 месяцев до 1 года</option>
+                                <option value={4}>от 1 года до 3 лет</option>
+                                <option value={5}>от 3 лет</option>
                             </select>
                         </div>
                     </div>
@@ -1142,7 +1140,7 @@ const NewAd = () => {
                         </div>
                     </fieldset>
                 )}
-                <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={()=>funcForCityEr(city)}>
+                <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={() => funcForCityEr(city)}>
                     {returnText()}
                 </button>
             </form>
