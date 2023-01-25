@@ -1,12 +1,12 @@
-import {$api, $authApi} from './indexAuth'
-import {apiRoutes} from '../config/api'
+import { $api, $authApi } from './indexAuth'
+import { apiRoutes } from '../config/api'
 import {
     IOfferBodyRequest,
     IOffersAreaBodyRequest,
     IOffersBodyRequest,
     IOffersSubSectionsBodyRequest,
 } from '../models/offers'
-import {IPayloadsFilter} from '../types/offers'
+import { IPayloadsFilter } from '../types/offers'
 
 export const getAllAreas = async () => {
     try {
@@ -36,22 +36,14 @@ export const getOffers = async (
 ) => {
     try {
         const response = await $api.get<IOffersBodyRequest>(
-            `${apiRoutes.GET_OFFER_PAGINATE}${userId ? `/${userId}` : ''}?page=${page}&limit=${limit}${
-                payloads.city ? `&city=${payloads.city}` : ''
-            }${payloads.areaId ? `&areaId=${payloads.areaId}` : ''}&category=${categoryId}${
-                payloads.subsectionId ? `&subsectionId=${payloads.subsectionId}` : ''
-            }${payloads.orderBy ? `&orderBy=${payloads.orderBy}` : ''}${
-                payloads.query ? `&query=${payloads.query}` : ''
-            }${payloads.investmentsFrom ? `&investmentsFrom=${payloads.investmentsFrom}` : ''}${
-                payloads.investmentsTo ? `&investmentsTo=${payloads.investmentsTo}` : ''
-            }${payloads.projectStage ? `&projectStage=${payloads.projectStage}` : ''}${
-                payloads.paybackTime ? `&projectTime=${payloads.paybackTime}` : ''
-            }${payloads.priceFrom ? `&priceFrom=${payloads.priceFrom}` : ''}${
-                payloads.priceTo ? `&priceTo=${payloads.priceTo}` : ''
-            }${payloads.profitFrom ? `&profitFrom=${payloads.profitFrom}` : ''}${
-                payloads.profitTo ? `&profitTo=${payloads.profitTo}` : ''
-            }${payloads.profitPerMonthFrom ? `&profitPerMonthFrom=${payloads.profitPerMonthFrom}` : ''}${
-                payloads.profitPerMonthTo ? `&profitPerMonthTo=${payloads.profitPerMonthTo}` : ''
+            `${apiRoutes.GET_OFFER_PAGINATE}${userId ? `/${userId}` : ''}?page=${page}&limit=${limit}${payloads.city ? `&city=${payloads.city}` : ''
+            }${payloads.areaId ? `&areaId=${payloads.areaId}` : ''}&category=${categoryId}${payloads.subsectionId ? `&subsectionId=${payloads.subsectionId}` : ''
+            }${payloads.orderBy ? `&orderBy=${payloads.orderBy}` : ''}${payloads.query ? `&query=${payloads.query}` : ''
+            }${payloads.investmentsFrom ? `&investmentsFrom=${payloads.investmentsFrom}` : ''}${payloads.investmentsTo ? `&investmentsTo=${payloads.investmentsTo}` : ''
+            }${payloads.projectStage ? `&projectStage=${payloads.projectStage}` : ''}${payloads.paybackTime ? `&projectTime=${payloads.paybackTime}` : ''
+            }${payloads.priceFrom ? `&priceFrom=${payloads.priceFrom}` : ''}${payloads.priceTo ? `&priceTo=${payloads.priceTo}` : ''
+            }${payloads.profitFrom ? `&profitFrom=${payloads.profitFrom}` : ''}${payloads.profitTo ? `&profitTo=${payloads.profitTo}` : ''
+            }${payloads.profitPerMonthFrom ? `&profitPerMonthFrom=${payloads.profitPerMonthFrom}` : ''}${payloads.profitPerMonthTo ? `&profitPerMonthTo=${payloads.profitPerMonthTo}` : ''
             }${random ? `&random=${random}` : ''}`
         )
         return response?.data?.body
@@ -78,8 +70,7 @@ export const getUsersOffersNotArchive = async (
 ) => {
     try {
         const response = await $api.get<IOffersBodyRequest>(
-            `${apiRoutes.GET_NOT_ARCHIVED_USERS_OFFERS}/${userId}?page=${page}&limit=${limit}&orderBy=${orderBy}${
-                category || category === 0 ? `&category=${category}` : ''
+            `${apiRoutes.GET_NOT_ARCHIVED_USERS_OFFERS}/${userId}?page=${page}&limit=${limit}&orderBy=${orderBy}${category || category === 0 ? `&category=${category}` : ''
             }`
         )
         return response?.data?.body
@@ -97,8 +88,7 @@ export const getUsersOffersArchive = async (
 ) => {
     try {
         const response = await $api.get<IOffersBodyRequest>(
-            `${apiRoutes.GET_ARCHIVED_USERS_OFFERS}/${userId}?page=${page}&limit=${limit}&orderBy=${orderBy}${
-                category || category === 0 ? `&category=${category}` : ''
+            `${apiRoutes.GET_ARCHIVED_USERS_OFFERS}/${userId}?page=${page}&limit=${limit}&orderBy=${orderBy}${category || category === 0 ? `&category=${category}` : ''
             }`
         )
         return response?.data?.body
@@ -125,7 +115,7 @@ export const updateOffer = async (offerId: undefined | string, payloads: any) =>
 
 export const addInArchive = async (id: number | null) => {
     try {
-        const response = await $api.patch(`${apiRoutes.PATCH_ARCHIVE_OFFER}/${id}`)
+        const response = await $authApi.patch(`${apiRoutes.PATCH_ARCHIVE_OFFER}/${id}`)
     } catch (error) {
         console.log(error)
     }
@@ -133,7 +123,7 @@ export const addInArchive = async (id: number | null) => {
 
 export const deleteWithArchive = async (id: number | null) => {
     try {
-        return await $api.delete(`${apiRoutes.DELETE_ARCHIVE_OFFER}/${id}`)
+        return await $authApi.delete(`${apiRoutes.DELETE_ARCHIVE_OFFER}/${id}`)
     } catch (error) {
         throw error
     }

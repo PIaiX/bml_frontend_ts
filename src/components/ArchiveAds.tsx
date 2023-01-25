@@ -42,7 +42,7 @@ const ArchiveAds: FC<Props> = ({ tab, section }) => {
                 console.log(error)
             }
         },
-        staleTime: 60 * 1000,
+        staleTime: 1000,
         keepPreviousData: true,
     })
 
