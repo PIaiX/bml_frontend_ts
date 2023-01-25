@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Collapse from 'react-bootstrap/Collapse'
-import {MdCached} from 'react-icons/md'
-import {IOffersAreaItem, IOffersSubSectionsItem, IPayloadsFilter} from '../../types/offers'
-import {useForm} from 'react-hook-form'
+import { MdCached } from 'react-icons/md'
+import { IOffersAreaItem, IOffersSubSectionsItem, IPayloadsFilter } from '../../types/offers'
+import { useForm } from 'react-hook-form'
 import ValidateWrapper from '../utils/ValidateWrapper'
 // import CitiesForm from "./CitiesForm";
 import FunctionForPrice from '../../services/FunctionForPrice'
-import {FromStringToNumber} from '../../services/FromStringToNumber'
+import { FromStringToNumber } from '../../services/FromStringToNumber'
 import CitiesForm from './CitiesForm'
 
 type Props = {
@@ -34,7 +34,7 @@ const SearchForm: React.FC<Props> = ({
     const [isShowCollapse, setIsShowCollapse] = useState(true)
     const {
         register,
-        formState: {errors},
+        formState: { errors },
         handleSubmit,
         getValues,
         reset,
@@ -52,7 +52,7 @@ const SearchForm: React.FC<Props> = ({
             investmentsFrom: null,
             investmentsTo: null,
             projectStage: '',
-            paybackTime: '',
+            paybackTime: '0',
             priceFrom: null,
             priceTo: null,
             profitFrom: null,
@@ -179,15 +179,15 @@ const SearchForm: React.FC<Props> = ({
                         )}
                         {modules.includes('paybackTime') && (
                             <div className="col-sm-6 mb-3 mb-lg-4 collapse-content__module collapse-content__module_payback">
-                                <select {...register('paybackTime')}>
-                                    <option value={''} disabled>
+                                <select defaultValue={0} {...register('paybackTime')}>
+                                    <option value={0}>
                                         Срок окупаемости
                                     </option>
-                                    <option value={0}>до 3 месяцев</option>
-                                    <option value={1}>от 3 до 6 месяцев</option>
-                                    <option value={2}>от 6 до 1 года</option>
-                                    <option value={3}>от 1 года до 3 лет</option>
-                                    <option value={4}>от 3 лет</option>
+                                    <option value={1}>до 3 месяцев</option>
+                                    <option value={2}>от 3 до 6 месяцев</option>
+                                    <option value={3}>от 6 до 1 года</option>
+                                    <option value={4}>от 1 года до 3 лет</option>
+                                    <option value={5}>от 3 лет</option>
                                 </select>
                             </div>
                         )}

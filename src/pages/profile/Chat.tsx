@@ -18,11 +18,14 @@ import { checkPhotoPath } from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'
 
 import { socketInstance } from '../../services/sockets/socketInstance'
-import { useAppDispatch } from '../../hooks/store'
+import { useAppDispatch, useAppSelector } from '../../hooks/store'
 import { showAlert } from '../../store/reducers/alertSlice'
+import { IUser } from '../../types/user'
+import AccountMenu from './AccountMenu'
 
 export default function Chat() {
     const { isConnected } = useSocketConnect()
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
 
     const generalLimit = 6
     const [conversations, setConversations] = useState<IUseStateItems<IConversationsItem, IConversationsMeta>>({
@@ -108,6 +111,8 @@ export default function Chat() {
                 })
         }
     }, [conversationId])
+
+    if (!user) return <AccountMenu />
 
     return (
         <>
