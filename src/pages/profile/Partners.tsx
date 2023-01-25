@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {BaseSyntheticEvent, useCallback, useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import PartnerCard from './PartnerCard'
@@ -17,6 +17,8 @@ import {IFriendsItem, IFriendsMeta} from '../../types/friends'
 import Loader from '../../components/utils/Loader'
 import {checkPhotoPath} from '../../helpers/photoLoader'
 import {showAlert} from '../../store/reducers/alertSlice'
+import CustomModal from "../../components/utils/CustomModal";
+import {emitCreateWithoutTopicMessage} from "../../services/sockets/messages";
 
 const Partners = () => {
     const [tab, setTab] = useState(0)
@@ -40,6 +42,17 @@ const Partners = () => {
     const [searchText, setSearchText] = useState('')
     const [isFocus, setIsFocus] = useState(false)
     const dispatch = useAppDispatch()
+    const [isShowMessageModal, setIsShowMessageModal] = useState(false)
+    const [messagePayload, setMessagePayload] = useState({
+        text: '',
+        conversationId: 0,
+    })
+    const [id, setId] = useState<string>();
+
+    const setIsShowMessage=(messagePayload:boolean, id:string)=>{
+        setIsShowMessageModal(messagePayload);
+        setId(id);
+    }
 
     useEffect(() => {
         if (user) {
@@ -138,6 +151,21 @@ const Partners = () => {
         },
         [tab]
     )
+    const createWithTopicMessage = (e: BaseSyntheticEvent) => {
+        e.preventDefault()
+        if (id) {
+            emitCreateWithoutTopicMessage(id, messagePayload).then((res) => {
+                res?.status === 200 &&
+                dispatch(
+                    showAlert({
+                        message: 'Сообщение успешно отправлено',
+                        typeAlert: 'good',
+                    })
+                )
+                setIsShowMessageModal(false)
+            })
+        }
+    }
 
     return (
         <>
@@ -221,6 +249,7 @@ const Partners = () => {
                                             type={tab}
                                             imgURL={checkPhotoPath(i?.avatar)}
                                             name={i?.fullName}
+                                            setIsShowMessageModal={setIsShowMessage}
                                             agency={i?.companyName}
                                         />
                                     ))
@@ -321,6 +350,40 @@ const Partners = () => {
                     </div>
                 )}
             </div>
+            <CustomModal
+                isShow={isShowMessageModal}
+                setIsShow={setIsShowMessageModal}
+                centered={false}
+                closeButton={true}
+                className="modal__messages"
+            >
+                <form>
+                    <div className="m-3">
+                        <label>Текст сообщения:</label>
+                        <textarea
+                            placeholder="Введите сообщение..."
+                            value={messagePayload.text || ''}
+                            onChange={(e) => setMessagePayload((prevState) => ({...prevState, text: e.target.value}))}
+                        />
+                        {messagePayload?.text?.length === 0 ? (
+                            <span className="gray-text">
+                                <sup>*</sup>Минимум 1 знак
+                            </span>
+                        ) : null}
+                    </div>
+                    <div className="d-flex justify-content-center mt-5">
+                        <button
+                            className="btn_main btn_1"
+                            onClick={(event: BaseSyntheticEvent) =>
+                                messagePayload?.text?.length >= 1
+                                    ? createWithTopicMessage(event)
+                                    : event.preventDefault()
+                            }
+                        >
+                            Отправить
+                        </button>
+                    </div>                </form>
+            </CustomModal>
         </>
     )
 }
