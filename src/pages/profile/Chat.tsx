@@ -55,15 +55,15 @@ export default function Chat() {
     useEffect(() => {
         isFetching &&
 
-        setTimeout(() => {
-            emitPaginateConversation({page: selectedPage + 1, limit: generalLimit, orderBy: 'desc'})
-                .then(
-                    (res) =>
-                        res && setConversations({isLoaded: true, items: res?.body?.data, meta: res?.body?.meta})
-                )
-                .catch(() => setConversations({isLoaded: true, items: null, meta: null}))
-                .finally(() => setIsFetching(false))
-        }, 500)
+            setTimeout(() => {
+                emitPaginateConversation({ page: selectedPage + 1, limit: generalLimit, orderBy: 'desc' })
+                    .then(
+                        (res) =>
+                            res && setConversations({ isLoaded: true, items: res?.body?.data, meta: res?.body?.meta })
+                    )
+                    .catch(() => setConversations({ isLoaded: true, items: null, meta: null }))
+                    .finally(() => setIsFetching(false))
+            }, 500)
     }, [isFetching])
 
     const getIdConversation = useCallback((converId: number) => {
@@ -111,7 +111,6 @@ export default function Chat() {
 
     return (
         <>
-
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
                 <MdOutlineArrowBack /> <span className="ms-2">Назад</span>
             </Link>
@@ -147,27 +146,24 @@ export default function Chat() {
                 )}
 
 
-                        <div className="p-4">
-                            {paginationItems?.length > 0 ? (
-                                <div className="acc-box p-0 mt-3 d-flex justify-content-center">
-                                    <Pagination
-                                        nextLabel="❯"
-                                        onPageChange={handlePageClick}
-                                        pageRangeDisplayed={3}
-                                        marginPagesDisplayed={1}
-                                        pageCount={pageCount}
-                                        previousLabel="❮"
-                                        forcePage={selectedPage}
-                                    />
-                                </div>
-                            ) : (
-                                ''
-                            )}
+                <div className="p-4">
+                    {paginationItems?.length > 0 ? (
+                        <div className="acc-box p-0 mt-3 d-flex justify-content-center">
+                            <Pagination
+                                nextLabel="❯"
+                                onPageChange={handlePageClick}
+                                pageRangeDisplayed={3}
+                                marginPagesDisplayed={1}
+                                pageCount={pageCount}
+                                previousLabel="❮"
+                                forcePage={selectedPage}
+                            />
                         </div>
-                    </div>
-                </> :<AccountMenu></AccountMenu>
-
-            }
+                    ) : (
+                        ''
+                    )}
+                </div>
+            </div>
         </>
     )
 }

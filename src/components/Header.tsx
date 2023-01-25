@@ -38,8 +38,8 @@ const Header: FC = () => {
                             Обратная связь
                         </NavLink>
 
-                        <NavLink to={user ? '/account/favorites' : '/enter'} className={user?
-                            "btn-icon d-none d-md-block":
+                        <NavLink to={user ? '/account/favorites' : '/enter'} className={user ?
+                            "btn-icon d-none d-md-block" :
                             "btn-icon2 d-none d-md-block"}>
 
                             <MdStarOutline />
@@ -50,6 +50,7 @@ const Header: FC = () => {
                             <MdOutlineShoppingCart />
                             <span className="count">3</span>
                         </NavLink>
+
                         {user?.id ? (
                             <NavLink to={`/account/profile/${user?.id}`} className={"d-none d-md-block"}>
                                 {window.innerWidth <= 400 ? (
@@ -57,7 +58,7 @@ const Header: FC = () => {
                                 ) : (
                                     <div>
                                         <span>{user?.fullName}</span>
-                                        <img src="/images/icons/profile.svg" />
+                                        {/* <img src="/images/icons/profile.svg" /> */}
                                     </div>
                                 )}
                             </NavLink>
