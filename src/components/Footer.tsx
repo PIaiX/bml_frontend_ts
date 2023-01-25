@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react'
-import {Link} from 'react-router-dom'
-import {useAppSelector} from '../hooks/store'
-import {IUser} from '../types/user'
-import {socketInstance} from '../services/sockets/socketInstance'
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useAppSelector } from '../hooks/store'
+import { IUser } from '../types/user'
+import { socketInstance } from '../services/sockets/socketInstance'
 import useSocketConnect from '../hooks/socketConnect'
 
 export default function Footer() {
     const count = useAppSelector((state) => state?.favoritesCount?.count)
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [countNewMessage, setCountNewMessage] = useState<null | number | undefined>(null)
-    const {isConnected} = useSocketConnect()
+    const { isConnected } = useSocketConnect()
 
     useEffect(() => {
         setTimeout(() => {
@@ -28,13 +28,13 @@ export default function Footer() {
                             <img src="/images/logo.svg" alt="Бизнес My Life" className="f-logo mb-3" />
                             <div className="text-uppercase">Мы в социальных сетях</div>
                             <div className="footer-social">
-                                <a href="/" className="soc-icon">
+                                <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" className="soc-icon">
                                     <img src="/images/icons/facebook.svg" alt="Facebook" />
                                 </a>
-                                <a href="/" className="soc-icon">
+                                <a href="https://vk.com/" target="_blank" rel="noreferrer" className="soc-icon">
                                     <img src="/images/icons/vk.svg" alt="vk" />
                                 </a>
-                                <a href="/" className="soc-icon">
+                                <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" className="soc-icon">
                                     <img src="/images/icons/instagram.svg" alt="instagram" />
                                 </a>
                             </div>
@@ -63,7 +63,7 @@ export default function Footer() {
                                         <Link to="/news">Новости</Link>
                                     </li>
                                     <li>
-                                        <a href="/">Политика конфиденциальности</a>
+                                        <Link to="/privacy">Политика конфиденциальности</Link>
                                     </li>
                                 </ul>
                             </nav>
@@ -95,7 +95,7 @@ export default function Footer() {
                                                 <Link to="/news">Новости</Link>
                                             </li>
                                             <li>
-                                                <a href="/">Политика конфиденциальности</a>
+                                                <Link to="/privacy">Политика конфиденциальности</Link>
                                             </li>
                                         </ul>
                                     </nav>
