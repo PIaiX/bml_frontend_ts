@@ -165,6 +165,7 @@ const ViewProfile: FC = () => {
             })
         }
     }
+    console.log(userInfo?.item);
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -314,8 +315,8 @@ const ViewProfile: FC = () => {
                                                 <tr>
                                                     <td className="l-gray">Юридический адрес:</td>
                                                     <td className="color-1">
-                                                        {userInfo?.item?.taxpayerIdentificationNumber
-                                                            ? userInfo?.item?.taxpayerIdentificationNumber
+                                                        {userInfo?.item?.legalAddress
+                                                            ? userInfo?.item?.legalAddress
                                                             : 'Не установлено'}
                                                     </td>
                                                 </tr>
