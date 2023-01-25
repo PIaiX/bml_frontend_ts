@@ -560,7 +560,7 @@ block 3
 
 @media (max-width: 576px) {
     .preview-small {
-        font-size: 9px;
+        font-size: 11px;
     }
 
     .preview-small > img {
@@ -1612,8 +1612,8 @@ how to upload
 }
 
 .ad-preview .img img {
-    width: 100%;
-    height: 100%;
+    width: 140px;
+    height: 100px;
     object-fit: cover;
 }
 
@@ -1656,6 +1656,14 @@ how to upload
         height: 60vw;
         margin-right: 0;
         margin-bottom: 1em;
+    }
+    .ad-preview .img a{
+        width:100%;
+        height:100%;
+    }
+    .ad-preview .img a img{
+        width:100%;
+        height:100%;
     }
 }
 
@@ -2537,9 +2545,9 @@ footer {
     }
 }
 
-.modal__photosAdd {
+/* .modal__photosAdd {
 
-}
+} */
 
 .mainModalPhotos {
     padding: 2em;

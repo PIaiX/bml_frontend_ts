@@ -1,25 +1,25 @@
-import React, {FC, useCallback, useEffect, useState} from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import AdCard from '../pages/profile/AdCard'
 import Loader from './utils/Loader'
 import Pagination from './utils/Pagination'
-import {deleteWithArchive, getUsersOffersArchive, getUsersOffersNotArchive} from '../services/offers'
-import {IUser} from '../types/user'
-import {useAppDispatch, useAppSelector} from '../hooks/store'
-import {IPagination, IUseStateItems} from '../types'
-import {IOffersItem, IOffersMeta} from '../types/offers'
+import { deleteWithArchive, getUsersOffersArchive, getUsersOffersNotArchive } from '../services/offers'
+import { IUser } from '../types/user'
+import { useAppDispatch, useAppSelector } from '../hooks/store'
+import { IPagination, IUseStateItems } from '../types'
+import { IOffersItem, IOffersMeta } from '../types/offers'
 import usePagination from '../hooks/pagination'
-import {useMutation, useQuery, useQueryClient} from 'react-query'
-import {$api} from '../services/indexAuth'
-import {IOffersBodyRequest} from '../models/offers'
-import {apiRoutes} from '../config/api'
-import {showAlert} from '../store/reducers/alertSlice'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { $authApi } from '../services/indexAuth'
+import { IOffersBodyRequest } from '../models/offers'
+import { apiRoutes } from '../config/api'
+import { showAlert } from '../store/reducers/alertSlice'
 
 type Props = {
     tab: number
     section: number
 }
 
-const ArchiveAds: FC<Props> = ({tab, section}) => {
+const ArchiveAds: FC<Props> = ({ tab, section }) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const queryClient = useQueryClient()
@@ -32,9 +32,8 @@ const ArchiveAds: FC<Props> = ({tab, section}) => {
         queryFn: async () => {
             try {
                 if (user?.id) {
-                    const response = await $api.get<IOffersBodyRequest>(
-                        `${apiRoutes.GET_ARCHIVED_USERS_OFFERS}/${user?.id}?page=${
-                            currentPage + 1
+                    const response = await $authApi.get<IOffersBodyRequest>(
+                        `${apiRoutes.GET_ARCHIVED_USERS_OFFERS}/${user?.id}?page=${currentPage + 1
                         }&limit=${generalLimit}&orderBy=${'desc'}${tab || tab === 0 ? `&category=${tab}` : ''}`
                     )
                     return response?.data?.body
@@ -43,7 +42,7 @@ const ArchiveAds: FC<Props> = ({tab, section}) => {
                 console.log(error)
             }
         },
-        staleTime: 60 * 1000,
+        staleTime: 1000,
         keepPreviousData: true,
     })
 
@@ -54,7 +53,7 @@ const ArchiveAds: FC<Props> = ({tab, section}) => {
         [section, tab]
     )
 
-    const {paginationItems, pageCount, selectedPage, setSelectedPage, handlePageClick}: IPagination<IOffersItem> =
+    const { paginationItems, pageCount, selectedPage, setSelectedPage, handlePageClick }: IPagination<IOffersItem> =
         usePagination(archiveOffers?.data?.data, generalLimit, archiveOffers?.data?.meta.total, currPage)
 
     const offerIdSeterForUnArchive = useCallback((id: number) => {
@@ -65,9 +64,9 @@ const ArchiveAds: FC<Props> = ({tab, section}) => {
         mutationFn: () =>
             deleteWithArchive(offerId)
                 .then(() => {
-                    dispatch(showAlert({message: 'Объявление успешно убрано из архива', typeAlert: 'good'}))
+                    dispatch(showAlert({ message: 'Объявление успешно убрано из архива', typeAlert: 'good' }))
                 })
-                .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'}))),
+                .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))),
         onSuccess: () => queryClient.invalidateQueries(['archive']),
     })
 

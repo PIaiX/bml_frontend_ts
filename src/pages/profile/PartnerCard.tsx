@@ -8,7 +8,8 @@ interface Props {
     type: number
     id: number
     deleteFriend?: (id: number) => void
-    acceptFriend?: (id: number) => void
+    acceptFriend?: (id: number) => void,
+    setIsShowMessageModal?:(value:boolean, id:string)=>void
 }
 
 const PartnerCard: FC<Props> = (props) => {
@@ -25,7 +26,11 @@ const PartnerCard: FC<Props> = (props) => {
             </div>
             {props.type === 0 ? (
                 <div className="f_08 fw_4 mt-2 mt-sm-0 d-flex">
-                    <button className="btn_main btn_4 d-flex">
+                    <button className="btn_main btn_4 d-flex" onClick={()=>{
+                        props?.setIsShowMessageModal
+                        && props.setIsShowMessageModal(true, props.id.toString())
+
+                    }}>
                         <span>Написать</span>
                         <span className="d-none d-md-inline ms-2">сообщение</span>
                     </button>
