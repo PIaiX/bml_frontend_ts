@@ -12,7 +12,8 @@ type Props = {
     section: number
     type: number
     id: number
-    validity: string
+    validity: string,
+    isVerified?:boolean,
     offerIdSeterForUnArchive?: (id: number) => void
     offerIdSeterForArchive?: (id: number) => void
 }
@@ -31,6 +32,12 @@ const AdCard: FC<Props> = (props: any) => {
                         <NavLink to={`/adv-page/${props?.id}`}>
                             <div className="blue">{props.title}</div>
                         </NavLink>
+                        <div style={{color:"red"}}>
+                            {!props.isVerified &&
+                                <div style={{color:"red"}}>
+                                    На модерации
+                                </div>}
+                        </div>
                         <div className="l-gray f_08 mt-2">{props.scope}</div>
                     </div>
                     {props.investments && (

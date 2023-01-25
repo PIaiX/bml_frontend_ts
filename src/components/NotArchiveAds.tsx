@@ -105,6 +105,7 @@ const NotArchiveAds: FC<Props> = ({tab, section}) => {
                                 section={section}
                                 imgURL={i.image}
                                 title={i.title}
+                                isVerified={i.isVerified}
                                 scope={i.subsection?.area?.name}
                                 investments={i?.investments}
                                 validity={i?.archiveExpire}
