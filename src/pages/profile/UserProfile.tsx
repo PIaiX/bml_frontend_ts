@@ -133,7 +133,7 @@ const UserProfile: FC = () => {
                                                         {user?.email ? user?.email : 'Не установлено'}
                                                     </td>
                                                 </tr>
-                                                {user.typeForUser !== 'Физ лицо' && (
+                                                {user.type !== 0 && (
                                                     <tr>
                                                         <td className="l-gray">ИНН:</td>
                                                         <td className="color-1">

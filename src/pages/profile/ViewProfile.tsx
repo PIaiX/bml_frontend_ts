@@ -165,7 +165,6 @@ const ViewProfile: FC = () => {
             })
         }
     }
-    console.log(userInfo?.item);
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
