@@ -560,7 +560,7 @@ block 3
 
 @media (max-width: 576px) {
     .preview-small {
-        font-size: 9px;
+        font-size: 11px;
     }
 
     .preview-small > img {
