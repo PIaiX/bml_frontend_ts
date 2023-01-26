@@ -146,7 +146,7 @@ const AdvPage: FC = () => {
             })
         }
     }
-
+    console.log(offer)
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
@@ -189,12 +189,10 @@ const AdvPage: FC = () => {
                                         <div className="ms-2">
                                             <div className="f_11 font-weight-light">{offer?.item?.user?.fullName}</div>
                                             <div className="f_09">
-                                                {offer?.item?.user?.type
-                                                    ? offer?.item?.user?.typeForUser +
-                                                      ' «' +
-                                                      offer?.item?.user?.companyName +
-                                                      '»'
-                                                    : ''}
+                                                {offer?.item?.user?.type?
+                                                    offer?.item?.user?.companyName
+                                                    : ''
+                                                }
                                             </div>
                                         </div>
                                     </NavLink>
