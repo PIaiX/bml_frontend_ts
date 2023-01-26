@@ -7,8 +7,7 @@ type Props = {
 }
 
 const CitiesForm: FC<Props> = ({setVal, val = ''}) => {
-    // const cities: string[] = useAppSelector((state) => state?.cities.cities)
-    const cities=["Москва", "Казань", "Анапа"]
+    const cities: string[] = useAppSelector((state) => state?.cities.cities)
     const [focus, setFocus] = useState(false)
     const [value, setValue] = useState(val)
     const cityClick = (e: any) => {
