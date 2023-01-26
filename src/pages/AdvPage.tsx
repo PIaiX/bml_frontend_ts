@@ -248,7 +248,7 @@ const AdvPage: FC = () => {
                                     type="button"
                                     className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3"
                                     onClick={() => {
-                                        setMessageType('Сообщение успешно отправлено, в онлайн чат.')
+                                        setMessageType('Сообщение успешно отправлено в онлайн чат.')
                                         setIsShowMessageModal(true)
                                         setMessagePayload((prevState) => ({...prevState, text: ''}))
                                     }}
