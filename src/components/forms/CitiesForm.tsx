@@ -7,7 +7,8 @@ type Props = {
 }
 
 const CitiesForm: FC<Props> = ({setVal, val = ''}) => {
-    const cities: string[] = useAppSelector((state) => state?.cities.cities)
+    // const cities: string[] = useAppSelector((state) => state?.cities.cities)
+    const cities=["Москва", "Казань", "Анапа"]
     const [focus, setFocus] = useState(false)
     const [value, setValue] = useState(val)
     const cityClick = (e: any) => {
@@ -32,7 +33,7 @@ const CitiesForm: FC<Props> = ({setVal, val = ''}) => {
                     {cities
                         .slice()
                         .sort()
-                        .filter((val) => val.indexOf(value) !== -1)
+                        .filter((val) => val.toLowerCase().indexOf(value.toLowerCase()) !== -1)
                         .map((value, index) => (
                             <div
                                 key={index}
