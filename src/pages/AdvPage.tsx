@@ -72,7 +72,7 @@ const AdvPage: FC = () => {
     })
 
     useEffect(()=>{
-        if(user && messagePayload.text===user.fullName+' запросил бизнес план с объявления '+window.location.href)
+        if(user && messagePayload.text===user.fullName+' запросил бизнес план с объявления "'+window.location.href+'"')
         createWithOfferTopicMessage(null)
     },[messagePayload])
 
@@ -241,9 +241,9 @@ const AdvPage: FC = () => {
                                     className="btn_main btn-5 f_11 w-100"
                                     onClick={(event) => {
                                         setMessageType(
-                                            'Запрос Бизнес Плана отправлен в онлайн чат собственнику объявления.'
+                                            'Запрос на бизнес план отправлен'
                                         )
-                                        setMessagePayload((prevState) => ({...prevState, text: user.fullName+' запросил бизнес план с объявления '+window.location.href}))
+                                        setMessagePayload((prevState) => ({...prevState, text: user.fullName+' запросил бизнес план с объявления "'+window.location.href+'"'}))
                                         createWithOfferTopicMessage(event)
                                     }}
 
