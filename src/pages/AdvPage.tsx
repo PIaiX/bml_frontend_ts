@@ -71,6 +71,11 @@ const AdvPage: FC = () => {
         conversationId: 0,
     })
 
+    useEffect(()=>{
+        if(user && messagePayload.text===user.fullName+' запросил бизнес план с объявления '+window.location.href)
+        createWithOfferTopicMessage(null)
+    },[messagePayload])
+
     useEffect(() => {
         if (id) {
             getOneOffer(id, user?.id)
@@ -137,8 +142,8 @@ const AdvPage: FC = () => {
     }
     const [messageType, setMessageType] = useState<string>('0')
 
-    const createWithOfferTopicMessage = (e: BaseSyntheticEvent) => {
-        e.preventDefault()
+    const createWithOfferTopicMessage = (e: BaseSyntheticEvent | null) => {
+        e && e.preventDefault()
         if (offer.item) {
             emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
                 res?.status === 200 && dispatch(showAlert({message: messageType, typeAlert: 'good'}))
