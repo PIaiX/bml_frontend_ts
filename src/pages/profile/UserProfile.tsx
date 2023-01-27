@@ -40,6 +40,67 @@ const UserProfile: FC = () => {
                 .catch((error) => setUserOffers({ isLoaded: true, items: null, meta: null }))
         }
     }, [user?.id])
+    const getAddsContent = () => {
+        let content = []
+        if (userOffers?.items)
+            for (let i: number = 0; i < userOffers?.items?.length; i += 3) {
+                content.push(
+                    <div className={'row row-cols-3 g-1 g-sm-2 g-xl-4 text-center mt-1'}>
+                        {userOffers?.items[i] && (
+                            <div>
+                                <div className="acc-box ads d-flex flex-column justify-content-between h-100">
+                                    <div></div>
+                                    <div>
+                                        <img
+                                            src={checkPhotoPath(userOffers?.items[i]?.image)}
+                                            alt={userOffers?.items[i]?.categoryForUser}
+                                            className="ads-img"
+                                        />
+                                    </div>
+                                    <div className="fw_5 f_09 mt-2">{userOffers?.items[i]?.categoryForUser}</div>
+                                    <div className="gray f_09 mt-1">{userOffers?.items[i]?.subsection?.area?.name}</div>
+                                </div>
+                            </div>
+                        )}
+                        {userOffers?.items[i + 1] && (
+                            <div>
+                                <div className="acc-box ads d-flex flex-column justify-content-between h-100">
+                                    <div>
+                                        <img
+                                            src={checkPhotoPath(userOffers?.items[i + 1]?.image)}
+                                            alt={userOffers?.items[i + 1]?.categoryForUser}
+                                            className="ads-img"
+                                        />
+                                    </div>
+                                    <div className="fw_5 f_09 mt-2">{userOffers?.items[i + 1]?.categoryForUser}</div>
+                                    <div className="gray f_09 mt-1">
+                                        {userOffers?.items[i + 1]?.subsection?.area?.name}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {userOffers?.items[i + 2] && (
+                            <div>
+                                <div className="acc-box ads d-flex flex-column justify-content-between h-100">
+                                    <div>
+                                        <img
+                                            src={checkPhotoPath(userOffers?.items[i + 2]?.image)}
+                                            alt={userOffers?.items[i + 2]?.categoryForUser}
+                                            className="ads-img"
+                                        />
+                                    </div>
+                                    <div className="fw_5 f_09 mt-2">{userOffers?.items[i + 2]?.categoryForUser}</div>
+                                    <div className="gray f_09 mt-1">
+                                        {userOffers?.items[i + 2]?.subsection?.area?.name}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )
+            }
+        return content
+    }
 
     return (
         <>
@@ -133,7 +194,7 @@ const UserProfile: FC = () => {
                                                         {user?.email ? user?.email : 'Не установлено'}
                                                     </td>
                                                 </tr>
-                                                {user.typeForUser !== 'Физ лицо' && (
+                                                {user.type !== 0 && (
                                                     <tr>
                                                         <td className="l-gray">ИНН:</td>
                                                         <td className="color-1">
@@ -262,33 +323,13 @@ const UserProfile: FC = () => {
                             <div
                                 className={
                                     userOffers?.meta?.total && userOffers?.meta?.total > 0
-                                        ? 'row row-cols-3 g-1 g-sm-2 g-xl-4 text-center mt-1'
+                                        ? ''
                                         : 'd-flex flex-row justify-content-center'
                                 }
                             >
                                 {userOffers?.isLoaded ? (
                                     userOffers?.meta?.total && userOffers?.meta?.total > 0 ? (
-                                        userOffers?.items?.slice(0, sliceNumber).map((offer) => (
-                                            <div key={offer?.id}>
-                                                <div className="acc-box ads">
-                                                    <NavLink to={`/adv-page/${offer?.id}`}>
-                                                        <img
-                                                            src={checkPhotoPath(offer?.image)}
-                                                            alt={offer?.categoryForUser}
-                                                            className="ads-img"
-                                                        />
-                                                    </NavLink>
-                                                    <div className="fw_5 f_09 mt-2">
-                                                        <NavLink to={`/adv-page/${offer?.id}`}>
-                                                            {offer?.categoryForUser}
-                                                        </NavLink>
-                                                    </div>
-                                                    <div className="gray f_09 mt-1">
-                                                        {offer?.subsection?.area?.name}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))
+                                        getAddsContent()
                                     ) : (
                                         <div>
                                             <h5>Нет объявлений</h5>

@@ -21,12 +21,23 @@ const RegistrationForm: FC = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const companyTypes=["Физ лицо", "ИП", "ООО"]
+    const [companyType, setCompanyType]= useState<string>()
+    const [companyName, setCompanyName] = useState<string>('');
+    const forCompanyName=(name:string)=>{
+        let text:string=companyType+" "
+        if(name!==companyType)
+            text+=name.replaceAll(text, "");
+        else text='';
+        setCompanyName(text);
+    }
 
     const {
         register,
         formState: {errors},
         handleSubmit,
         reset,
+        setValue,
         getValues,
     } = useForm<IRegistrationForm>({
         mode: 'onSubmit',
@@ -107,7 +118,9 @@ const RegistrationForm: FC = () => {
                         name="profileType"
                         defaultValue={'start'}
                         onChange={(e) => {
+                            setCompanyType(companyTypes[Number(e.target.value)])
                             setProfileType(+e.target.value)
+                            setCompanyName("")
                         }}
                     >
                         <option value={'start'} disabled>
@@ -123,10 +136,17 @@ const RegistrationForm: FC = () => {
                 <ValidateWrapper error={errors.companyName}>
                     <input
                         type="text"
+                        value={companyName}
                         placeholder={profileType === 1 ? 'Введите название ИП' : 'Введите название компании'}
                         className="mt-3"
                         {...register('companyName', {
                             required: 'Поле обязательно к заполнению',
+                            validate:{
+                                NotEmpty: v=>v===companyType+" " && "Поле обязательно к заполнению" || true
+                            },
+                            onChange:(e) => {
+                                forCompanyName(e.target.value)
+                            }
                         })}
                     />
                 </ValidateWrapper>

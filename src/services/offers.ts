@@ -40,7 +40,7 @@ export const getOffers = async (
             }${payloads.areaId ? `&areaId=${payloads.areaId}` : ''}&category=${categoryId}${payloads.subsectionId ? `&subsectionId=${payloads.subsectionId}` : ''
             }${payloads.orderBy ? `&orderBy=${payloads.orderBy}` : ''}${payloads.query ? `&query=${payloads.query}` : ''
             }${payloads.investmentsFrom ? `&investmentsFrom=${payloads.investmentsFrom}` : ''}${payloads.investmentsTo ? `&investmentsTo=${payloads.investmentsTo}` : ''
-            }${payloads.projectStage ? `&projectStage=${payloads.projectStage}` : ''}${payloads.paybackTime ? `&projectTime=${payloads.paybackTime}` : ''
+            }${payloads.projectStage ? `&projectStage=${payloads.projectStage}` : ''}${payloads.paybackTime ? `&paybackTime=${payloads.paybackTime}` : ''
             }${payloads.priceFrom ? `&priceFrom=${payloads.priceFrom}` : ''}${payloads.priceTo ? `&priceTo=${payloads.priceTo}` : ''
             }${payloads.profitFrom ? `&profitFrom=${payloads.profitFrom}` : ''}${payloads.profitTo ? `&profitTo=${payloads.profitTo}` : ''
             }${payloads.profitPerMonthFrom ? `&profitPerMonthFrom=${payloads.profitPerMonthFrom}` : ''}${payloads.profitPerMonthTo ? `&profitPerMonthTo=${payloads.profitPerMonthTo}` : ''

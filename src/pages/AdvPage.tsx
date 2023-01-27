@@ -71,6 +71,11 @@ const AdvPage: FC = () => {
         conversationId: 0,
     })
 
+    useEffect(()=>{
+        if(user && messagePayload.text===user.fullName+' запросил бизнес план с объявления "'+window.location.href+'"')
+        createWithOfferTopicMessage(null)
+    },[messagePayload])
+
     useEffect(() => {
         if (id) {
             getOneOffer(id, user?.id)
@@ -137,8 +142,8 @@ const AdvPage: FC = () => {
     }
     const [messageType, setMessageType] = useState<string>('0')
 
-    const createWithOfferTopicMessage = (e: BaseSyntheticEvent) => {
-        e.preventDefault()
+    const createWithOfferTopicMessage = (e: BaseSyntheticEvent | null) => {
+        e && e.preventDefault()
         if (offer.item) {
             emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
                 res?.status === 200 && dispatch(showAlert({message: messageType, typeAlert: 'good'}))
@@ -146,7 +151,6 @@ const AdvPage: FC = () => {
             })
         }
     }
-
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
@@ -189,12 +193,10 @@ const AdvPage: FC = () => {
                                         <div className="ms-2">
                                             <div className="f_11 font-weight-light">{offer?.item?.user?.fullName}</div>
                                             <div className="f_09">
-                                                {offer?.item?.user?.type
-                                                    ? offer?.item?.user?.typeForUser +
-                                                      ' «' +
-                                                      offer?.item?.user?.companyName +
-                                                      '»'
-                                                    : ''}
+                                                {offer?.item?.user?.type?
+                                                    offer?.item?.user?.companyName
+                                                    : ''
+                                                }
                                             </div>
                                         </div>
                                     </NavLink>
@@ -232,41 +234,44 @@ const AdvPage: FC = () => {
                                 </div>
                             </div>
 
-                            <div>
-                                <button
+                            {(user
+                                && <div>
+                                    <button
                                     type="button"
                                     className="btn_main btn-5 f_11 w-100"
-                                    onClick={() => {
+                                    onClick={(event) => {
                                         setMessageType(
-                                            'Запрос Бизнес Плана отправлен в онлайн чат собственнику объявления.'
+                                            'Запрос на бизнес план отправлен'
                                         )
-                                        setIsShowMessageModal(true)
-                                        setMessagePayload((prevState) => ({...prevState, text: ''}))
+                                        setMessagePayload((prevState) => ({...prevState, text: user.fullName+' запросил бизнес план с объявления "'+window.location.href+'"'}))
+                                        createWithOfferTopicMessage(event)
                                     }}
-                                >
+
+                                    >
                                     ПОЛУЧИТЬ БИЗНЕС-ПЛАН
                                 </button>
                                 <button
                                     type="button"
                                     className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3"
                                     onClick={() => {
-                                        setMessageType('Сообщение успешно отправлено, в онлайн чат.')
+                                        setMessageType('Сообщение успешно отправлено в онлайн чат.')
                                         setIsShowMessageModal(true)
                                         setMessagePayload((prevState) => ({...prevState, text: ''}))
                                     }}
                                 >
                                     НАПИСАТЬ СООБЩЕНИЕ
                                 </button>
-                            </div>
+                            </div>)}
 
-                            <button
+                            {(user
+                                && <button
                                 type="button"
                                 className="d-flex align-items-center ms-auto me-0 mt-3 mt-sm-4 mt-lg-0"
                                 onClick={() => setIsShowModalReport(true)}
                             >
                                 <MdInfoOutline className="f_11 gray" />
                                 <span className="ms-2 fw_7 f_12">Пожаловаться</span>
-                            </button>
+                            </button>)}
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,8 @@
-import React, {FC, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {useAppSelector} from '../../hooks/store'
 
 type Props = {
-    setVal?: (val: string) => void
+    setVal: (val: string) => void
     val?: string
 }
 
@@ -16,6 +16,7 @@ const CitiesForm: FC<Props> = ({setVal, val = ''}) => {
             setVal(e.target.textContent)
         }
     }
+    useEffect(()=>setValue(val),[val])
     return (
         <div style={{position: 'relative'}} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}>
             <input
@@ -31,7 +32,7 @@ const CitiesForm: FC<Props> = ({setVal, val = ''}) => {
                     {cities
                         .slice()
                         .sort()
-                        .filter((val) => val.indexOf(value) !== -1)
+                        .filter((val) => val.toLowerCase().indexOf(value.toLowerCase()) !== -1)
                         .map((value, index) => (
                             <div
                                 key={index}

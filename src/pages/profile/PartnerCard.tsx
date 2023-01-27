@@ -15,15 +15,15 @@ interface Props {
 const PartnerCard: FC<Props> = (props) => {
     return (
         <div className="friend-row">
+            <NavLink to={`/account/profile/user/${props?.id}`}>
             <div className="d-flex align-items-center flex-1">
                 <img src={props.imgURL} alt={props.name} />
                 <div className="flex-1 ps-sm-2">
-                    <NavLink to={`/account/profile/user/${props?.id}`}>
                         <div className="f_11 color-1 mb-1">{props.name}</div>
                         <div className="f_08">{props.agency}</div>
-                    </NavLink>
                 </div>
             </div>
+            </NavLink>
             {props.type === 0 ? (
                 <div className="f_08 fw_4 mt-2 mt-sm-0 d-flex">
                     <button className="btn_main btn_4 d-flex" onClick={()=>{
