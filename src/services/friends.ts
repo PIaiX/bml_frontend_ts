@@ -60,3 +60,19 @@ export const getCurrentFriends = async (id: number, page: number = 1, limit: num
         console.log(error)
     }
 }
+
+export const getAllUsers = async (name:string, orderBy: string = 'desc') => {
+    try {
+        const response = await $authApi.get<IFriendsBodyRequest>(
+            `${apiRoutes.ACTIONS_USER}`, {
+                params:{
+                    page:1,
+                    query: name
+                }
+            }
+        )
+        return response?.data?.body
+    } catch (error) {
+        console.log(error)
+    }
+}

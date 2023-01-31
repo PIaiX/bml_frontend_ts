@@ -17,7 +17,7 @@ const Header: FC = () => {
             dispatch(setInitialCount(+user?.favoriteOffersCount))
         }
     }, [user])
-    console.log(user);
+
     return (
         <>
             <header>

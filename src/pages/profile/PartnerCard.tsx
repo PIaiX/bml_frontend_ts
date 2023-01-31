@@ -9,26 +9,28 @@ interface Props {
     id: number
     deleteFriend?: (id: number) => void
     acceptFriend?: (id: number) => void,
-    setIsShowMessageModal?:(value:boolean, id:string)=>void
+    setIsShowMessageModal?:(value:boolean, id:string)=>void,
+    AddPartner?:(id:string)=>void,
 }
 
-const PartnerCard: FC<Props> = (props) => {
+const PartnerCard: FC<Props> = ({imgURL, name, agency, type, id, deleteFriend, acceptFriend, setIsShowMessageModal, AddPartner}) => {
     return (
         <div className="friend-row">
-            <NavLink to={`/account/profile/user/${props?.id}`}>
+            <NavLink to={`/account/profile/user/${id}`}>
             <div className="d-flex align-items-center flex-1">
-                <img src={props.imgURL} alt={props.name} />
+                <img src={imgURL} alt={name} />
                 <div className="flex-1 ps-sm-2">
-                        <div className="f_11 color-1 mb-1">{props.name}</div>
-                        <div className="f_08">{props.agency}</div>
+                        <div className="f_11 color-1 mb-1">{name}</div>
+                        <div className="f_08">{agency}</div>
                 </div>
             </div>
             </NavLink>
-            {props.type === 0 ? (
+            { !AddPartner? (type === 0 ? (
+
                 <div className="f_08 fw_4 mt-2 mt-sm-0 d-flex">
                     <button className="btn_main btn_4 d-flex" onClick={()=>{
-                        props?.setIsShowMessageModal
-                        && props.setIsShowMessageModal(true, props.id.toString())
+                        setIsShowMessageModal
+                        && setIsShowMessageModal(true, id.toString())
 
                     }}>
                         <span>Написать</span>
@@ -37,16 +39,16 @@ const PartnerCard: FC<Props> = (props) => {
                     <button
                         type="button"
                         className="btn_main btn_3 d-flex ms-2"
-                        onClick={() => props?.deleteFriend && props?.deleteFriend(props?.id)}
+                        onClick={() => deleteFriend && deleteFriend(id)}
                     >
                         <span>Удалить</span>
                     </button>
                 </div>
-            ) : props.type === 1 ? (
+            ) : type === 1 ? (
                 <div className="f_08 fw_4 mt-2 mt-sm-0 d-flex">
                     <button
                         className="btn_main btn_4 d-flex"
-                        onClick={() => props?.acceptFriend && props?.acceptFriend(props?.id)}
+                        onClick={() => acceptFriend && acceptFriend(id)}
                     >
                         <span>Принять</span>
                         <span className="d-none d-md-inline ms-2">заявку</span>
@@ -54,7 +56,7 @@ const PartnerCard: FC<Props> = (props) => {
                     <button
                         type="button"
                         className="btn_main btn_3 d-flex ms-2"
-                        onClick={() => props?.deleteFriend && props?.deleteFriend(props?.id)}
+                        onClick={() => deleteFriend && deleteFriend(id)}
                     >
                         Отклонить
                     </button>
@@ -64,12 +66,28 @@ const PartnerCard: FC<Props> = (props) => {
                     <button
                         type="button"
                         className="btn_main btn_3 d-flex"
-                        onClick={() => props?.deleteFriend && props?.deleteFriend(props?.id)}
+                        onClick={() => deleteFriend && deleteFriend(id)}
                     >
                         Отменить
                     </button>
                 </div>
-            )}
+            )
+            ):(
+                <div className="f_08 fw_4 mt-2 mt-sm-0 d-flex">
+                    <button
+                        type="button"
+                        className="btn_main btn_4 d-flex ms-2"
+                        onClick={()=>{
+                            AddPartner && AddPartner(id.toString())
+                        }}
+                    >
+                        <span>Добавить</span>
+                    </button>
+                </div>
+
+            )
+
+            }
         </div>
     )
 }
