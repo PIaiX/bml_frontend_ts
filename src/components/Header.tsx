@@ -40,17 +40,15 @@ const Header: FC = () => {
                             Баланс: {FunctionForPrice('0')} руб
                         </NavLink>}
 
-                        <NavLink to={user ? '/account/favorites' : '/enter'} className={user ?
-                            "btn-icon d-none d-md-block" :
-                            "btn-icon2 d-none d-md-block"}>
+                        <NavLink to={user ? '/account/favorites' : '/enter'}
+                                 className={user ?
+                                     "btn-icon d-none d-md-block" :
+                                     "btn-icon2 d-none d-md-block"
+                                 }
+                        >
 
                             <MdStarOutline />
                             {user && <span className="count">{count}</span>}
-                        </NavLink>
-
-                        <NavLink to="/account/cart" className="btn-icon">
-                            <MdOutlineShoppingCart />
-                            <span className="count">3</span>
                         </NavLink>
 
                         {user?.id ? (
