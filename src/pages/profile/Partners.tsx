@@ -92,7 +92,6 @@ const Partners = () => {
     }
 
     useEffect(()=>{
-        alert("E")
         searchText!=="" &&
         setSearchOut(searchText)
         ||  setNotFriends({isLoaded: true, items: null, meta: null})
