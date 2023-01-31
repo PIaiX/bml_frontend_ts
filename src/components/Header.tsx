@@ -5,6 +5,7 @@ import { IconContext } from 'react-icons'
 import { useAppDispatch, useAppSelector } from '../hooks/store'
 import { IUser } from '../types/user'
 import { setInitialCount } from '../store/reducers/favoriteCountSlice'
+import FunctionForPrice from "../services/FunctionForPrice";
 const imgBottom = require('../assets/images/backgrounds/down.svg')
 
 const Header: FC = () => {
@@ -16,6 +17,7 @@ const Header: FC = () => {
             dispatch(setInitialCount(+user?.favoriteOffersCount))
         }
     }, [user])
+    console.log(user);
     return (
         <>
             <header>
@@ -30,13 +32,13 @@ const Header: FC = () => {
                                 <MdSearch />
                             </button>
                         </form>
-                        <NavLink
-                            to="/contacts"
+                        {user && <NavLink
+                            to="/account/wallet"
                             state={{ fromHeader: true }}
-                            className="d-none d-md-block color-2 bb_1 lh_1"
+                            className="d-none d-md-block"
                         >
-                            Обратная связь
-                        </NavLink>
+                            Баланс: {FunctionForPrice('0')} руб
+                        </NavLink>}
 
                         <NavLink to={user ? '/account/favorites' : '/enter'} className={user ?
                             "btn-icon d-none d-md-block" :
