@@ -166,10 +166,9 @@ const Partners = () => {
             })
         }
     }
-
     return (
         <>
-            <Link to="/account/profile" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
+            <Link to={"/account/profile/"+user?.id} className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
                 <MdOutlineArrowBack /> <span className="ms-2">Назад</span>
             </Link>
             <div className="acc-box">
