@@ -7,6 +7,7 @@ import useSocketConnect from '../hooks/socketConnect'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { showAlert } from '../store/reducers/alertSlice'
+import { subscribe } from '../services/subscription'
 
 export default function Footer() {
     const count = useAppSelector((state) => state?.favoritesCount?.count)
@@ -41,17 +42,18 @@ export default function Footer() {
         if (user) {
             setValue('email', user.email)
         }
-    }, [])
+    }, [user])
 
     const submitSubscrition = (data: { email: string }) => {
         console.log(data)
-        // .then(() => {
-        dispatch(showAlert({ message: 'Вы успешно подписались', typeAlert: 'good' }))
-        reset()
-        // })
-        // .catch(() => {
-        //     dispatch(showAlert({message: 'Произошла ошибка, попробуйте позже.', typeAlert: 'bad'}))
-        // })
+        subscribe(data)
+            .then(() => {
+                dispatch(showAlert({ message: 'Вы успешно подписались', typeAlert: 'good' }))
+                reset()
+            })
+            .catch(() => {
+                dispatch(showAlert({ message: 'Произошла ошибка, попробуйте позже.', typeAlert: 'bad' }))
+            })
     }
 
     return (
