@@ -1,22 +1,30 @@
-import React, { FC, useEffect, useLayoutEffect, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
-import { MdClose, MdLogin, MdMenu, MdOutlineShoppingCart, MdSearch, MdStarOutline } from 'react-icons/md'
-import { IconContext } from 'react-icons'
-import { useAppDispatch, useAppSelector } from '../hooks/store'
-import { IUser } from '../types/user'
-import { setInitialCount } from '../store/reducers/favoriteCountSlice'
+import React, {BaseSyntheticEvent, FC, useEffect} from 'react'
+import {Link, NavLink, useNavigate} from 'react-router-dom'
+import {MdClose, MdLogin, MdMenu, MdSearch, MdStarOutline} from 'react-icons/md'
+import {IconContext} from 'react-icons'
+import {useAppDispatch, useAppSelector} from '../hooks/store'
+import {IUser} from '../types/user'
+import {setInitialCount} from '../store/reducers/favoriteCountSlice'
 import FunctionForPrice from "../services/FunctionForPrice";
-const imgBottom = require('../assets/images/backgrounds/down.svg')
+import {setSearch} from '../store/reducers/searchHeader'
 
 const Header: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const count = useAppSelector((state) => state?.favoritesCount?.count || 0)
+    const inputSearch:string = useAppSelector((state) => state?.search.input)
     const dispatch = useAppDispatch()
+    const navigate=useNavigate();
     useEffect(() => {
         if (user) {
             dispatch(setInitialCount(+user?.favoriteOffersCount))
         }
     }, [user])
+
+
+    const searchOnSite=(e:BaseSyntheticEvent)=>{
+        e.preventDefault()
+        navigate("/search")
+    }
 
     return (
         <>
@@ -27,8 +35,9 @@ const Header: FC = () => {
                             <img src="/images/logo.svg" alt="Бизнес My Life" />
                         </Link>
                         <form action="" className="header_search d-none d-lg-flex">
-                            <input type="search" placeholder="Поиск по сайту" />
-                            <button type="submit" className="btn_main">
+                            <input value={inputSearch} type="search" placeholder="Поиск по сайту" onChange={(e)=> {dispatch(setSearch(e.target.value)) }
+                            } />
+                            <button type="submit" className="btn_main" onClick={(e)=>searchOnSite(e)}>
                                 <MdSearch />
                             </button>
                         </form>
