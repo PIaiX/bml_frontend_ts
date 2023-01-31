@@ -160,7 +160,10 @@ const AdvPage: FC = () => {
             <section id="offer-page" className="container">
                 <h1>{offer?.item?.title}</h1>
                 <div className="d-lg-flex justify-content-between align-items-center mb-2 mb-sm-4">
-                    <h2 className="mb-0">{offer?.item?.description}</h2>
+                    <h2 className="mb-0">
+                        {offer?.item?.description.slice(0, 50)}
+                        {offer?.item?.description &&  offer?.item?.description.length>50 && "..."}
+                    </h2>
                     <div className="short-info ms-auto mt-3 mt-sm-4 mt-lg-0">
                         <span>ID: {offer?.item?.id}</span>
                         <time className="d-flex align-items-center ms-3 ms-sm-4">
