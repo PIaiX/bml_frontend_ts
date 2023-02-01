@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {getOffersFromHeader} from "../services/offers";
 import {useAppDispatch, useAppSelector} from "../hooks/store";
-import {IOffersItem, IOffersMeta, IPayloadsFilter} from "../types/offers";
+import {IOffersItem, IOffersMeta} from "../types/offers";
 import AdvPreview from "../components/AdvPreview";
 import {useSearch} from "../hooks/useSearch";
 import Loader from "../components/utils/Loader";
@@ -23,7 +23,7 @@ const Search = () => {
         meta: null,
     })
 
-    const {paginationItems, pageCount, selectedPage, handlePageClick, setSelectedPage} = usePagination(
+    const {pageCount, selectedPage, handlePageClick, setSelectedPage} = usePagination(
         offers?.items,
         limit,
         offers?.meta?.total
@@ -34,6 +34,10 @@ const Search = () => {
             setLoading(false)
         })
     }, [inputSearch, filters, selectedPage])
+
+    useEffect(()=>{
+        setSelectedPage(0)
+    }, [inputSearch])
 
     useEffect(()=>setLoading(true), [filters, selectedPage])
 
