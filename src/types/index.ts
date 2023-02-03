@@ -26,6 +26,10 @@ export type IUseStateItems<items, meta> = {
     items: Array<items> | null
     meta: meta | null
 }
+export type IUseStateItems2<items, meta> = {
+    items: Array<items> | null
+    meta: meta | null
+}
 
 export type IUseStateItem<item> = {
     isLoaded: boolean

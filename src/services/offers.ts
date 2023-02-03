@@ -113,6 +113,25 @@ export const updateOffer = async (offerId: undefined | string, payloads: any) =>
     }
 }
 
+export const getOffersFromHeader = async (query='', orderBy:string | undefined, limit=16, page=1) => {
+    try {
+        const response = await $authApi.get(`${apiRoutes.GET_OFFER_PAGINATE}`,
+            {
+                params: {
+                    page,
+                    limit,
+                    orderBy,
+                    query
+                }
+            }
+        )
+        return response?.data?.body
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 export const addInArchive = async (id: number | null) => {
     try {
         const response = await $authApi.patch(`${apiRoutes.PATCH_ARCHIVE_OFFER}/${id}`)

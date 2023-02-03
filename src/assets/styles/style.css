@@ -585,7 +585,7 @@ block 3
 
 .collapse-filter {
     border: 1px solid #DDDDDD;
-    padding: 2em;
+    padding: 1em;
     background-color: #EFEFEF;
     margin-top: -1px;
 }
@@ -2826,4 +2826,15 @@ footer {
 
 .citiesSearch::-webkit-scrollbar-thumb {
     background-color: silver;
+}
+
+.privacy p{
+    padding: 10px 0 0 20px;
+}
+.privacy .paragraph{
+    font-size:1.1em;
+}
+
+.privacy .paragraph a{
+    color:deepskyblue;
 }

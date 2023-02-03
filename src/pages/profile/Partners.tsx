@@ -9,6 +9,7 @@ import {
     getCurrentFriends,
     getIncomingFriends,
     getOutgoingFriends,
+    getAllUsers
 } from '../../services/friends'
 import {IUser} from '../../types/user'
 import {useAppDispatch, useAppSelector} from '../../hooks/store'
@@ -39,7 +40,12 @@ const Partners = () => {
         items: null,
         meta: null,
     })
-    const [searchText, setSearchText] = useState('')
+    const [notFriends, setNotFriends]=useState<IUseStateItems<IFriendsItem, IFriendsMeta>>({
+        isLoaded: false,
+        items: null,
+        meta: null,
+    })
+    const [searchText, setSearchText] = useState<string>('')
     const [isFocus, setIsFocus] = useState(false)
     const dispatch = useAppDispatch()
     const [isShowMessageModal, setIsShowMessageModal] = useState(false)
@@ -54,6 +60,42 @@ const Partners = () => {
         setId(id);
     }
 
+    const setSearchOut=(text:string)=>{
+        getAllUsers(text).then((res) => {
+            if(res){
+                let withoutRepeat:any={isLoaded: true, items: [], meta: res?.meta}
+                res.data.forEach(i=>{
+                    let value:boolean= i.id!=user?.id;
+                    value &&
+                    currentFriends.items?.forEach(j=>{
+                        if(j.id===i.id){
+                            value=false
+                        }
+                    })
+                    incomingFriends.items?.forEach(j=>{
+                        if(j.id===i.id){
+                            value=false
+                        }
+                    })
+                    outgoingFriends.items?.forEach(j=>{
+                        if(j.id===i.id){
+                            value=false
+                        }
+                    })
+                    value && withoutRepeat.items.push(i)
+                })
+                setNotFriends(withoutRepeat)
+            }
+        }).catch(() => {
+            setNotFriends({isLoaded: true, items: null, meta: null})
+        })
+    }
+
+    useEffect(()=>{
+        searchText!=="" &&
+        setSearchOut(searchText)
+        ||  setNotFriends({isLoaded: true, items: null, meta: null})
+    },[searchText])
     useEffect(() => {
         if (user) {
             getCurrentFriends(user?.id, 1, generalLimit, 'desc')
@@ -72,6 +114,7 @@ const Partners = () => {
                 .then((res) => res && setIncomingFriends({isLoaded: true, items: res?.data, meta: res?.meta}))
                 .catch(() => setIncomingFriends({isLoaded: true, items: null, meta: null}))
         }
+
     }, [user])
 
     useEffect(() => {
@@ -80,6 +123,7 @@ const Partners = () => {
                 .then((res) => res && setOutgoingFriend({isLoaded: true, items: res?.data, meta: res?.meta}))
                 .catch(() => setOutgoingFriend({isLoaded: true, items: null, meta: null}))
         }
+
     }, [user])
 
     const deleteFromFriend = useCallback(
@@ -87,6 +131,7 @@ const Partners = () => {
             deleteFriend({fromId: user?.id, toId: id})
                 .then(() => {
                     dispatch(showAlert({message: 'Успешно удален из партнеров', typeAlert: 'good'}))
+                    setSearchOut(searchText)
                     if (tab === 0) {
                         if (user) {
                             getCurrentFriends(user?.id, 1, generalLimit, 'desc')
@@ -166,10 +211,35 @@ const Partners = () => {
             })
         }
     }
+    const AddPartner = (id:string) => {
+        if (user && id) {
+            createFriend({fromId: user?.id, toId: +id})
+                .then(() => {
+                    if (id && user?.id) {
+                        getOutgoingFriends(user?.id, 1, generalLimit, 'desc')
+                            .then(
+                                (res) =>{
+                                    res && setOutgoingFriend({isLoaded: true, items: res?.data, meta: res?.meta})
+                                    let copY:any={...notFriends, items:notFriends.items?.filter(i=>{return i.id.toString()!==id})}
+                                    setNotFriends(copY)
+                                }
+                            )
+                            .catch(() => setOutgoingFriend({isLoaded: true, items: null, meta: null}))
+                        dispatch(
+                            showAlert({
+                                message: 'Заявка успешно отправлена',
+                                typeAlert: 'good',
+                            })
+                        )
+                    }
+                })
+                .catch(() => console.log())
+        }
+    }
 
     return (
         <>
-            <Link to="/account/profile" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
+            <Link to={"/account/profile/"+user?.id} className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
                 <MdOutlineArrowBack /> <span className="ms-2">Назад</span>
             </Link>
             <div className="acc-box">
@@ -349,6 +419,22 @@ const Partners = () => {
                         )}
                     </div>
                 )}
+                { notFriends.items && notFriends.items?.length!==0 && <>
+                <hr />
+                    <div style={{textAlign:"center", marginBottom:"20px" }}>Возможные партнёры</div>
+                    {notFriends.items.map((i) => (
+                    <PartnerCard
+                        id={i.id}
+                        deleteFriend={deleteFromFriend}
+                        key={i.id}
+                        type={tab}
+                        imgURL={checkPhotoPath(i.avatar)}
+                        name={i.fullName}
+                        agency={i.companyName}
+                        AddPartner={AddPartner}
+                    />))}
+                </>
+                }
             </div>
             <CustomModal
                 isShow={isShowMessageModal}

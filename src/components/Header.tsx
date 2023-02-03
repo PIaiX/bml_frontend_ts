@@ -1,21 +1,40 @@
-import React, { FC, useEffect, useLayoutEffect, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
-import { MdClose, MdLogin, MdMenu, MdOutlineShoppingCart, MdSearch, MdStarOutline } from 'react-icons/md'
-import { IconContext } from 'react-icons'
-import { useAppDispatch, useAppSelector } from '../hooks/store'
-import { IUser } from '../types/user'
-import { setInitialCount } from '../store/reducers/favoriteCountSlice'
-const imgBottom = require('../assets/images/backgrounds/down.svg')
+import React, {BaseSyntheticEvent, FC, useEffect, useState} from 'react'
+import {Link, NavLink, useNavigate} from 'react-router-dom'
+import {MdClose, MdLogin, MdMenu, MdSearch, MdStarOutline} from 'react-icons/md'
+import {IconContext} from 'react-icons'
+import {useAppDispatch, useAppSelector} from '../hooks/store'
+import {IUser} from '../types/user'
+import {setInitialCount} from '../store/reducers/favoriteCountSlice'
+import FunctionForPrice from "../services/FunctionForPrice";
+import {setSearch} from '../store/reducers/searchHeader'
+import checkProfileForMenu from "../helpers/checkProfileForMenu";
 
 const Header: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const count = useAppSelector((state) => state?.favoritesCount?.count || 0)
+    const inputSearch:string = useAppSelector((state) => state?.search.input)
     const dispatch = useAppDispatch()
+    const navigate=useNavigate();
+    const [srcForProfile, setSrcForProfile] = useState<string>('')
+
+
     useEffect(() => {
         if (user) {
             dispatch(setInitialCount(+user?.favoriteOffersCount))
+
+            if(checkProfileForMenu(user))
+                setSrcForProfile(`/account/profile/${user?.id}`);
+            else
+                setSrcForProfile(`/account/settings`);
         }
     }, [user])
+
+
+    const searchOnSite=(e:BaseSyntheticEvent)=>{
+        e.preventDefault()
+        navigate("/search")
+    }
+
     return (
         <>
             <header>
@@ -25,34 +44,33 @@ const Header: FC = () => {
                             <img src="/images/logo.svg" alt="Бизнес My Life" />
                         </Link>
                         <form action="" className="header_search d-none d-lg-flex">
-                            <input type="search" placeholder="Поиск по сайту" />
-                            <button type="submit" className="btn_main">
+                            <input value={inputSearch} type="search" placeholder="Поиск по сайту" onChange={(e)=> {dispatch(setSearch(e.target.value)) }
+                            } />
+                            <button type="submit" className="btn_main" onClick={(e)=>searchOnSite(e)}>
                                 <MdSearch />
                             </button>
                         </form>
-                        <NavLink
-                            to="/contacts"
+                        {user && <NavLink
+                            to="/account/wallet"
                             state={{ fromHeader: true }}
-                            className="d-none d-md-block color-2 bb_1 lh_1"
+                            className="d-none d-md-block"
                         >
-                            Обратная связь
-                        </NavLink>
+                            Баланс: {FunctionForPrice('0')} руб
+                        </NavLink>}
 
-                        <NavLink to={user ? '/account/favorites' : '/enter'} className={user ?
-                            "btn-icon d-none d-md-block" :
-                            "btn-icon2 d-none d-md-block"}>
+                        <NavLink to={user ? '/account/favorites' : '/enter'}
+                                 className={user ?
+                                     "btn-icon d-none d-md-block" :
+                                     "btn-icon2 d-none d-md-block"
+                                 }
+                        >
 
                             <MdStarOutline />
                             {user && <span className="count">{count}</span>}
                         </NavLink>
 
-                        <NavLink to="/account/cart" className="btn-icon">
-                            <MdOutlineShoppingCart />
-                            <span className="count">3</span>
-                        </NavLink>
-
                         {user?.id ? (
-                            <NavLink to={`/account/profile/${user?.id}`} className={"d-none d-md-block"}>
+                            <NavLink to={srcForProfile} className={"d-none d-md-block"}>
                                 {window.innerWidth <= 400 ? (
                                     <img src="/images/icons/profile.svg" />
                                 ) : (

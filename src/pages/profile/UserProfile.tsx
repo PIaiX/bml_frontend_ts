@@ -136,8 +136,8 @@ const UserProfile: FC = () => {
                             >
                                 {currentFriends?.isLoaded ? (
                                     currentFriends?.meta && currentFriends?.meta?.total > 0 ? (
-                                        currentFriends?.items?.map((friend) => (
-                                            <NavLink key={friend.id} to={`/account/profile/user/${friend.id}`}>
+                                        currentFriends?.items?.map((friend, index) => (
+                                            <NavLink key={index} to={`/account/profile/user/${friend.id}`}>
                                                 <div>
                                                     <img src={checkPhotoPath(friend?.avatar)} alt={friend?.fullName} />
                                                     <br/>

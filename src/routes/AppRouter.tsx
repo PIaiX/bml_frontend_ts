@@ -14,6 +14,7 @@ import Layout from '../layouts/Layout'
 import NotFound from '../pages/NotFound'
 import { Link } from 'react-router-dom'
 import PrivacyPolicy from '../pages/profile/PrivacyPolicy'
+import Search from "../pages/Search";
 
 const router = createBrowserRouter([
     {
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
             {
                 path: 'account/*',
                 element: <PersonalAccount />,
+            },
+            {
+                path: 'search',
+                element: <Search />,
             },
             { path: '*', element: <NotFound /> },
         ],
