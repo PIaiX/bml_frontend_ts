@@ -2827,3 +2827,14 @@ footer {
 .citiesSearch::-webkit-scrollbar-thumb {
     background-color: silver;
 }
+
+.privacy p{
+    padding: 10px 0 0 20px;
+}
+.privacy .paragraph{
+    font-size:1.1em;
+}
+
+.privacy .paragraph a{
+    color:deepskyblue;
+}
