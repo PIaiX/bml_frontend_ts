@@ -9,36 +9,37 @@ import React, {
 } from 'react'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import AdvPreview from '../components/AdvPreview'
-import {NavLink, useParams} from 'react-router-dom'
-import {MdDateRange, MdInfoOutline, MdOutlinePlace, MdOutlineVisibility} from 'react-icons/md'
+import { NavLink, useParams } from 'react-router-dom'
+import { MdDateRange, MdInfoOutline, MdOutlinePlace, MdOutlineVisibility } from 'react-icons/md'
 import BtnFav from '../components/utils/BtnFav'
-import {PhotoProvider, PhotoView} from 'react-photo-view'
+import { PhotoProvider, PhotoView } from 'react-photo-view'
 import 'react-photo-view/dist/react-photo-view.css'
 import PartnersSite from '../components/PartnersSite'
-import {Swiper, SwiperSlide} from 'swiper/react'
-import {Pagination} from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import {getOffers, getOneOffer} from '../services/offers'
-import {IUseStateItem, IUseStateItems} from '../types'
-import {IOfferItem, IOffersItem, IOffersMeta} from '../types/offers'
-import {checkPhotoPath} from '../helpers/photoLoader'
+import { getOffers, getOneOffer } from '../services/offers'
+import { IUseStateItem, IUseStateItems } from '../types'
+import { IOfferItem, IOffersItem, IOffersMeta } from '../types/offers'
+import { checkPhotoPath } from '../helpers/photoLoader'
 import LeftMenuInOfferContainer from '../components/containers/LeftMenuInOffer'
 import ShortInfoInOfferContainer from '../components/containers/ShortInfoInOffer'
-import {createReport, getOfferReportType} from '../services/reports'
-import {IUser} from '../types/user'
-import {useAppDispatch, useAppSelector} from '../hooks/store'
+import { createReport, getOfferReportType } from '../services/reports'
+import { IUser } from '../types/user'
+import { useAppDispatch, useAppSelector } from '../hooks/store'
 import Loader from '../components/utils/Loader'
-import {IUseStateReportType, PayloadsReport} from '../types/report'
+import { IUseStateReportType, PayloadsReport } from '../types/report'
 import CustomModal from '../components/utils/CustomModal'
-import {useForm} from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import ValidateWrapper from '../components/utils/ValidateWrapper'
-import {resetAlert, showAlert} from '../store/reducers/alertSlice'
-import {emitCreateWithOfferTopicMessage, emitCreateWithoutTopicMessage} from '../services/sockets/messages'
+import { resetAlert, showAlert } from '../store/reducers/alertSlice'
+import { emitCreateWithOfferTopicMessage, emitCreateWithoutTopicMessage } from '../services/sockets/messages'
 import FunctionForPrice from '../services/FunctionForPrice'
+import { convertLocaleDate } from '../helpers/convertLocaleDate'
 
 const AdvPage: FC = () => {
-    const {id} = useParams()
+    const { id } = useParams()
     const [offer, setOffer] = useState<IUseStateItem<IOfferItem>>({
         isLoaded: false,
         item: null,
@@ -58,11 +59,11 @@ const AdvPage: FC = () => {
     const {
         register,
         getValues,
-        formState: {errors},
+        formState: { errors },
         handleSubmit,
         setValue,
         reset,
-    } = useForm<PayloadsReport>({mode: 'onSubmit', reValidateMode: 'onChange'})
+    } = useForm<PayloadsReport>({ mode: 'onSubmit', reValidateMode: 'onChange' })
     const dispatch = useAppDispatch()
     const [isShowMessageModal, setIsShowMessageModal] = useState<boolean>(false)
     const [messagePayload, setMessagePayload] = useState({
@@ -71,27 +72,27 @@ const AdvPage: FC = () => {
         conversationId: 0,
     })
 
-    useEffect(()=>{
-        if(user && messagePayload.text===user.fullName+' запросил бизнес план с объявления "'+window.location.href+'"')
-        createWithOfferTopicMessage(null)
-    },[messagePayload])
+    useEffect(() => {
+        if (user && messagePayload.text === user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"')
+            createWithOfferTopicMessage(null)
+    }, [messagePayload])
 
     useEffect(() => {
         if (id) {
             getOneOffer(id, user?.id)
                 .then((res) => {
-                    res && setOffer({isLoaded: true, item: res})
+                    res && setOffer({ isLoaded: true, item: res })
                 })
                 .catch((error) => {
-                    setOffer({isLoaded: true, item: null})
+                    setOffer({ isLoaded: true, item: null })
                 })
         }
     }, [id, user?.id])
 
     useEffect(() => {
         getOfferReportType()
-            .then((res) => res && setReportTypes({isLoaded: true, items: res, error: null}))
-            .catch(() => setReportTypes({isLoaded: true, items: null, error: 'Произошла ошибка'}))
+            .then((res) => res && setReportTypes({ isLoaded: true, items: res, error: null }))
+            .catch(() => setReportTypes({ isLoaded: true, items: null, error: 'Произошла ошибка' }))
     }, [])
 
     useEffect(() => {
@@ -99,8 +100,8 @@ const AdvPage: FC = () => {
             const payloads = {}
             if (user) {
                 getOffers(1, 10, offer?.item?.category, user?.id, payloads, true)
-                    .then((res) => setSimilarOffers({isLoaded: true, items: res?.data, meta: res?.meta}))
-                    .catch(() => setSimilarOffers({isLoaded: true, items: null, meta: null}))
+                    .then((res) => setSimilarOffers({ isLoaded: true, items: res?.data, meta: res?.meta }))
+                    .catch(() => setSimilarOffers({ isLoaded: true, items: null, meta: null }))
             }
         }
     }, [offer?.item, user?.id])
@@ -134,11 +135,11 @@ const AdvPage: FC = () => {
     const onSubmit = (data: PayloadsReport) => {
         createReport(data)
             .then(() => {
-                dispatch(showAlert({message: 'Жалоба успешно отправлена', typeAlert: 'good'}))
+                dispatch(showAlert({ message: 'Жалоба успешно отправлена', typeAlert: 'good' }))
                 setIsShowModalReport(false)
                 reset()
             })
-            .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
+            .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' })))
     }
     const [messageType, setMessageType] = useState<string>('0')
 
@@ -146,7 +147,7 @@ const AdvPage: FC = () => {
         e && e.preventDefault()
         if (offer.item) {
             emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
-                res?.status === 200 && dispatch(showAlert({message: messageType, typeAlert: 'good'}))
+                res?.status === 200 && dispatch(showAlert({ message: messageType, typeAlert: 'good' }))
                 setIsShowMessageModal(false)
             })
         }
@@ -162,7 +163,7 @@ const AdvPage: FC = () => {
                 <div className="d-lg-flex justify-content-between align-items-center mb-2 mb-sm-4">
                     <h2 className="mb-0">
                         {offer?.item?.description.slice(0, 50)}
-                        {offer?.item?.description &&  offer?.item?.description.length>50 && "..."}
+                        {offer?.item?.description && offer?.item?.description.length > 50 && "..."}
                     </h2>
                     <div className="short-info ms-auto mt-3 mt-sm-4 mt-lg-0">
                         <span>ID: {offer?.item?.id}</span>
@@ -196,7 +197,7 @@ const AdvPage: FC = () => {
                                         <div className="ms-2">
                                             <div className="f_11 font-weight-light">{offer?.item?.user?.fullName}</div>
                                             <div className="f_09">
-                                                {offer?.item?.user?.type?
+                                                {offer?.item?.user?.type ?
                                                     offer?.item?.user?.companyName
                                                     : ''
                                                 }
@@ -212,69 +213,207 @@ const AdvPage: FC = () => {
                                     </div>
                                 </div>
 
-                                <div className="d-flex align-items-center mb-3">
-                                    <span className="pt fw_7 gray f_11 me-2 me-sm-4">
-                                        {offer?.item?.category !== 3 ? 'Инвестиции' : 'Стоимость'}:
-                                    </span>
-                                    <span className="f_15 fw_5">
-                                        {offer?.item?.category !== 3
-                                            ? FunctionForPrice(offer?.item?.investments)
-                                            : FunctionForPrice(offer?.item?.price)}
-                                        ₽
-                                    </span>
-                                </div>
-                                {offer?.item?.category !== 1 && (
-                                    <div className="d-flex align-items-center mb-3">
-                                        <span className="pt fw_7 gray f_11 me-2 me-sm-4">Прибыль в месяц:</span>
-                                        <span className="f_15 fw_5">
-                                            {FunctionForPrice(offer?.item?.profitPerMonth)} ₽
-                                        </span>
-                                    </div>
+                                {/* Blue Box ------------------------------------------------------------------- */}
+                                {offer?.item?.category === 0 && (
+                                    <>
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
+                                            <span className="f_15 fw_5">
+                                                {FunctionForPrice(offer?.item?.profitPerMonth) || 0} ₽
+                                            </span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                            <span className="f_15 fw_5">{offer?.item?.paybackTimeForUser != '' ? offer?.item?.paybackTimeForUser : 'не установлено'}</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
+                                            <span className="f_15 fw_5">{offer?.item?.projectStage !== null ? offer?.item?.projectStageForUser?.toLowerCase() : 'не установлено'}</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Сфера:</span>
+                                            <span className="f_15 fw_5">{offer?.item?.subsection?.area?.name}</span>
+                                        </div>
+                                    </>
                                 )}
-                                <div className="d-flex align-items-center mb-3">
-                                    <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
-                                    <span className="f_15 fw_5">{offer?.item?.paybackTimeForUser}</span>
-                                </div>
+
+                                {offer?.item?.category === 1 && (
+                                    <>
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                            <span className="f_15 fw_5">{offer?.item?.paybackTimeForUser != '' ? offer?.item?.paybackTimeForUser : 'не установлено'}</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Сфера:</span>
+                                            <span className="f_15 fw_5">{offer?.item?.subsection?.area?.name}</span>
+                                        </div>
+                                    </>
+                                )}
+
+
+                                {offer?.item?.category === 2 && (
+                                    <>
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.profit)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                            <span className="f_15 fw_5">{offer?.item?.paybackTimeForUser != '' ? offer?.item?.paybackTimeForUser : 'не установлено'}</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
+                                            <span className="f_15 fw_5">{offer?.item?.projectStage !== null ? offer?.item?.projectStageForUser?.toLowerCase() : 'не установлено'}</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Город:</span>
+                                            <span className="f_15 fw_5">{offer?.item?.city}</span>
+                                        </div>
+                                    </>
+                                )}
+
+
+                                {offer?.item?.category === 3 && (
+                                    <>
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стоимость бизнеса:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.price)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                            <span className="f_15 fw_5">{offer?.item?.paybackTimeForUser != '' ? offer?.item?.paybackTimeForUser : 'не установлено'}</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Оборот в месяц:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Чистая прибыль:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.profit)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество точек:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Город:</span>
+                                            <span className="f_15 fw_5">{offer?.item?.city}</span>
+                                        </div>
+                                    </>
+                                )}
+
+
+                                {offer?.item?.category === 4 && (
+                                    <>
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стартовые инвестиции от:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Паушальный взнос:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.price)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Роялти:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.pricePerMonth)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Срок окупаемости:</span>
+                                            <span className="f_15 fw_5">{offer?.item?.paybackTimeForUser != '' ? offer?.item?.paybackTimeForUser : 'не установлено'}</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Год основания компании:</span>
+                                            <span className="f_15 fw_5">{convertLocaleDate(offer?.item?.dateOfCreation)?.slice(-4)}</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество собственных точек:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество проданных франшиз:</span>
+                                            <span className="f_15 fw_5">{FunctionForPrice(offer?.item?.soldBranchCount)} шт.</span>
+                                        </div>
+                                    </>
+                                )}
+
                             </div>
 
                             {(user
                                 && <div>
                                     <button
-                                    type="button"
-                                    className="btn_main btn-5 f_11 w-100"
-                                    onClick={(event) => {
-                                        setMessageType(
-                                            'Запрос на бизнес план отправлен'
-                                        )
-                                        setMessagePayload((prevState) => ({...prevState, text: user.fullName+' запросил бизнес план с объявления "'+window.location.href+'"'}))
-                                        createWithOfferTopicMessage(event)
-                                    }}
+                                        type="button"
+                                        className="btn_main btn-5 f_11 w-100"
+                                        onClick={(event) => {
+                                            setMessageType(
+                                                'Запрос на бизнес план отправлен'
+                                            )
+                                            setMessagePayload((prevState) => ({ ...prevState, text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"' }))
+                                            createWithOfferTopicMessage(event)
+                                        }}
 
                                     >
-                                    ПОЛУЧИТЬ БИЗНЕС-ПЛАН
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3"
-                                    onClick={() => {
-                                        setMessageType('Сообщение успешно отправлено в онлайн чат.')
-                                        setIsShowMessageModal(true)
-                                        setMessagePayload((prevState) => ({...prevState, text: ''}))
-                                    }}
-                                >
-                                    НАПИСАТЬ СООБЩЕНИЕ
-                                </button>
-                            </div>)}
+                                        ПОЛУЧИТЬ БИЗНЕС-ПЛАН
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3"
+                                        onClick={() => {
+                                            setMessageType('Сообщение успешно отправлено в онлайн чат.')
+                                            setIsShowMessageModal(true)
+                                            setMessagePayload((prevState) => ({ ...prevState, text: '' }))
+                                        }}
+                                    >
+                                        НАПИСАТЬ СООБЩЕНИЕ
+                                    </button>
+                                </div>)}
 
                             {(user
                                 && <button
-                                type="button"
-                                className="d-flex align-items-center ms-auto me-0 mt-3 mt-sm-4 mt-lg-0"
-                                onClick={() => setIsShowModalReport(true)}
-                            >
-                                <MdInfoOutline className="f_11 gray" />
-                                <span className="ms-2 fw_7 f_12">Пожаловаться</span>
-                            </button>)}
+                                    type="button"
+                                    className="d-flex align-items-center ms-auto me-0 mt-3 mt-sm-4 mt-lg-0"
+                                    onClick={() => setIsShowModalReport(true)}
+                                >
+                                    <MdInfoOutline className="f_11 gray" />
+                                    <span className="ms-2 fw_7 f_12">Пожаловаться</span>
+                                </button>)}
                         </div>
                     </div>
                 </div>
@@ -491,7 +630,7 @@ const AdvPage: FC = () => {
                         <textarea
                             placeholder="Введите сообщение..."
                             value={messagePayload.text || ''}
-                            onChange={(e) => setMessagePayload((prevState) => ({...prevState, text: e.target.value}))}
+                            onChange={(e) => setMessagePayload((prevState) => ({ ...prevState, text: e.target.value }))}
                         />
                         {messagePayload?.text?.length === 0 ? (
                             <span className="gray-text">
@@ -548,8 +687,8 @@ const AdvPage: FC = () => {
                                 <textarea
                                     {...register('description', {
                                         required: 'Обязательное поле',
-                                        minLength: {value: 5, message: 'Минимум 5 символов'},
-                                        maxLength: {value: 250, message: 'Максимум 250 символов'},
+                                        minLength: { value: 5, message: 'Минимум 5 символов' },
+                                        maxLength: { value: 250, message: 'Максимум 250 символов' },
                                     })}
                                 />
                             </ValidateWrapper>
