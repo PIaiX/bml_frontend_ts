@@ -1865,7 +1865,6 @@ form.promo {
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: auto;
     grid-gap: 1em;
-    height: fit-content;
 }
 
 .photogallery a {
