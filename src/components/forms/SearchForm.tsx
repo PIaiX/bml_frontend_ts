@@ -92,7 +92,6 @@ const SearchForm: React.FC<Props> = ({
             city: city,
         })
     }
-
     return (
         <div className="filter mb-4">
             <div className="filter_line_1">
@@ -110,7 +109,7 @@ const SearchForm: React.FC<Props> = ({
             <Collapse className="collapse-filter" in={isShowCollapse} dimension="height">
                 <div id="collapse-content">
                     <div className="row">
-                        <div className="col-sm-6 col-md-4 mb-3 mb-lg-4 collapse-content__module collapse-content__module_business">
+                        <div className="col-sm-6 col-md-4 mb-2 mb-lg-2 collapse-content__module collapse-content__module_business">
                             <ValidateWrapper error={errors?.areaId}>
                                 <select
                                     {...register('areaId', {
@@ -139,7 +138,7 @@ const SearchForm: React.FC<Props> = ({
                                 </select>
                             </ValidateWrapper>
                         </div>
-                        <div className="col-sm-6 col-md-4 mb-3 mb-lg-4 collapse-content__module collapse-content__module_category">
+                        <div className="col-sm-6 col-md-4 mb-2 mb-lg-2 collapse-content__module collapse-content__module_category">
                             <ValidateWrapper error={errors?.subsectionId}>
                                 <select
                                     {...register('subsectionId', {
@@ -161,12 +160,12 @@ const SearchForm: React.FC<Props> = ({
                                 </select>
                             </ValidateWrapper>
                         </div>
-                        <div className="col-sm-6 col-md-4 mb-3 mb-lg-4 collapse-content__module collapse-content__module_city">
+                        <div className="col-sm-6 col-md-4 mb-2 mb-lg-2 collapse-content__module collapse-content__module_city">
                             {/*<CitiesForm/>*/}
                             <CitiesForm setVal={setCity} />
                         </div>
                         {modules.includes('projectStage') && (
-                            <div className="col-sm-6 mb-3 mb-lg-4 collapse-content__module collapse-content__module_project">
+                            <div className="col-sm-6 mb-2 mb-lg-2 collapse-content__module collapse-content__module_project">
                                 <select {...register('projectStage')}>
                                     <option value={''} disabled>
                                         Стадия реализации проекта
@@ -178,7 +177,7 @@ const SearchForm: React.FC<Props> = ({
                             </div>
                         )}
                         {modules.includes('paybackTime') && (
-                            <div className="col-sm-6 mb-3 mb-lg-4 collapse-content__module collapse-content__module_payback">
+                            <div className="col-sm-6 mb-2 mb-lg-2 collapse-content__module collapse-content__module_payback">
                                 <select defaultValue={0} {...register('paybackTime')}>
                                     <option value={0}>
                                         Срок окупаемости
@@ -194,15 +193,15 @@ const SearchForm: React.FC<Props> = ({
                     </div>
                     <div className="row">
                         {modules.includes('query') && (
-                            <div className=" mb-3 mb-lg-4 collapse-content__module collapse-content__module_word">
-                                <div className={'col-sm-6 mb-3 mb-lg-4 mb-3 mb-lg-4'}>
+                            <div className=" mb-2 mb-lg-2 collapse-content__module collapse-content__module_word">
+                                <div className={'col-sm-6 mb-2 mb-lg-2'}>
                                     <div className="d-none d-md-block mb-1">Содержит слова:</div>
                                     <input type="text" {...register('query')} placeholder="Введите поисковую фразу" />
                                 </div>
                             </div>
                         )}
                         {modules.includes('investments') && (
-                            <div className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_investment">
+                            <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_investment">
                                 <div className="mb-1">Объем инвестиций, руб.:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
@@ -229,7 +228,7 @@ const SearchForm: React.FC<Props> = ({
                             </div>
                         )}
                         {modules.includes('price') && (
-                            <div className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_net">
+                            <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_net">
                                 <div className="mb-1">Стоимость бизнеса:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
@@ -256,7 +255,7 @@ const SearchForm: React.FC<Props> = ({
                             </div>
                         )}
                         {modules.includes('profit') && (
-                            <div className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_net">
+                            <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_net">
                                 <div className="mb-1">Чистая прибыль, руб.:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
@@ -283,7 +282,7 @@ const SearchForm: React.FC<Props> = ({
                             </div>
                         )}
                         {modules.includes('profitPerMonth') && (
-                            <div className="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-4 collapse-content__module collapse-content__module_turnover">
+                            <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_turnover">
                                 <div className="mb-1">Оборот в месяц, руб.:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
