@@ -1,4 +1,4 @@
-import React, {BaseSyntheticEvent, FC, useEffect} from 'react'
+import React, {BaseSyntheticEvent, FC, useEffect, useState} from 'react'
 import {Link, NavLink, useNavigate} from 'react-router-dom'
 import {MdClose, MdLogin, MdMenu, MdSearch, MdStarOutline} from 'react-icons/md'
 import {IconContext} from 'react-icons'
@@ -7,6 +7,7 @@ import {IUser} from '../types/user'
 import {setInitialCount} from '../store/reducers/favoriteCountSlice'
 import FunctionForPrice from "../services/FunctionForPrice";
 import {setSearch} from '../store/reducers/searchHeader'
+import checkProfileForMenu from "../helpers/checkProfileForMenu";
 
 const Header: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
@@ -14,9 +15,17 @@ const Header: FC = () => {
     const inputSearch:string = useAppSelector((state) => state?.search.input)
     const dispatch = useAppDispatch()
     const navigate=useNavigate();
+    const [srcForProfile, setSrcForProfile] = useState<string>('')
+
+
     useEffect(() => {
         if (user) {
             dispatch(setInitialCount(+user?.favoriteOffersCount))
+
+            if(checkProfileForMenu(user))
+                setSrcForProfile(`/account/profile/${user?.id}`);
+            else
+                setSrcForProfile(`/account/settings`);
         }
     }, [user])
 
@@ -61,7 +70,7 @@ const Header: FC = () => {
                         </NavLink>
 
                         {user?.id ? (
-                            <NavLink to={`/account/profile/${user?.id}`} className={"d-none d-md-block"}>
+                            <NavLink to={srcForProfile} className={"d-none d-md-block"}>
                                 {window.innerWidth <= 400 ? (
                                     <img src="/images/icons/profile.svg" />
                                 ) : (
