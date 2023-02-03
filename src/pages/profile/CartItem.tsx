@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import FunctionForPrice from '../../services/FunctionForPrice'
+import FunctionForPrice from '../../helpers/FunctionForPrice'
 
 const CartItem = (props: any) => {
     const [variant, setVariant] = useState(props.variant)

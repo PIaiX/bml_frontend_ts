@@ -1,7 +1,7 @@
 import React, {FC} from 'react'
 import {Link, NavLink} from 'react-router-dom'
 import {checkPhotoPath} from '../../helpers/photoLoader'
-import FunctionForPrice from '../../services/FunctionForPrice'
+import FunctionForPrice from '../../helpers/FunctionForPrice'
 
 type Props = {
     className?: string

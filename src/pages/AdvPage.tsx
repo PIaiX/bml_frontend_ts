@@ -35,7 +35,7 @@ import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../components/utils/ValidateWrapper'
 import {resetAlert, showAlert} from '../store/reducers/alertSlice'
 import {emitCreateWithOfferTopicMessage, emitCreateWithoutTopicMessage} from '../services/sockets/messages'
-import FunctionForPrice from '../services/FunctionForPrice'
+import FunctionForPrice from '../helpers/FunctionForPrice'
 
 const AdvPage: FC = () => {
     const {id} = useParams()

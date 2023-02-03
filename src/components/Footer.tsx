@@ -10,9 +10,10 @@ import { showAlert } from '../store/reducers/alertSlice'
 
 export default function Footer() {
     const count = useAppSelector((state) => state?.favoritesCount?.count)
-    const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const {user, complete}:{user: IUser | null, complete:boolean} = useAppSelector((state) => state?.user)
     const [countNewMessage, setCountNewMessage] = useState<null | number | undefined>(null)
     const { isConnected } = useSocketConnect()
+    const [srcForProfile, setSrcForProfile] = useState<string>('')
     const dispatch = useDispatch()
 
     const {
@@ -41,6 +42,11 @@ export default function Footer() {
         if (user) {
             setValue('email', user.email)
         }
+        if(complete)
+            setSrcForProfile(`/account`);
+        else
+            setSrcForProfile(`/account/settings`);
+
     }, [])
 
     const submitSubscrition = (data: { email: string }) => {
@@ -200,7 +206,7 @@ export default function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/account">
+                                <Link to={srcForProfile}>
                                     <img src="/images/icons/profile.png" alt="Профиль" />
                                     <div>Профиль</div>
                                 </Link>

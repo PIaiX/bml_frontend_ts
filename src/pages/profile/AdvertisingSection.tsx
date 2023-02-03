@@ -9,7 +9,7 @@ import {
     onRadioHandler,
     onSelectHandler,
 } from '../../helpers/formHandlers'
-import FunctionForPrice from '../../services/FunctionForPrice'
+import FunctionForPrice from '../../helpers/FunctionForPrice'
 
 const AdvertisingSection = () => {
     const [data, setData] = useState<any>({

@@ -4,7 +4,7 @@ import BtnFav from './utils/BtnFav'
 import {checkPhotoPath} from '../helpers/photoLoader'
 // @ts-ignore
 import {ReactComponent as OfferIcon} from '../assets/images/icons/off.svg'
-import FunctionForPrice from '../services/FunctionForPrice'
+import FunctionForPrice from '../helpers/FunctionForPrice'
 
 interface Props {
     image?: string

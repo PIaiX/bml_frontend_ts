@@ -1,17 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { $api } from '../../services/indexAuth'
 import { apiRoutes } from '../../config/api'
-import { IRegister } from '../../models/auth'
 import { IUser } from '../../types/user'
+import checkProfileForMenu from "../../helpers/checkProfileForMenu";
 
 type InitialState = {
     user: IUser | null
-    isLoading: boolean
+    isLoading: boolean,
+    complete:boolean
 }
 
 const initialState: InitialState = {
     user: null,
     isLoading: true,
+    complete:false
 }
 
 export const checkAuth = createAsyncThunk('auth/refreshToken', async (_, thunkAPI) => {
@@ -31,9 +33,11 @@ export const userSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             state.user = action.payload
+            state.complete = checkProfileForMenu(action.payload);
         },
         resetUser: (state) => {
             state.user = initialState.user
+            state.complete=false;
         },
     },
     extraReducers: {

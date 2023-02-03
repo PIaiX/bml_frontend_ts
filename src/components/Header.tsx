@@ -5,12 +5,12 @@ import {IconContext} from 'react-icons'
 import {useAppDispatch, useAppSelector} from '../hooks/store'
 import {IUser} from '../types/user'
 import {setInitialCount} from '../store/reducers/favoriteCountSlice'
-import FunctionForPrice from "../services/FunctionForPrice";
+import FunctionForPrice from "../helpers/FunctionForPrice";
 import {setSearch} from '../store/reducers/searchHeader'
 import checkProfileForMenu from "../helpers/checkProfileForMenu";
 
 const Header: FC = () => {
-    const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const {user, complete}:{user: IUser | null, complete:boolean} = useAppSelector((state) => state?.user)
     const count = useAppSelector((state) => state?.favoritesCount?.count || 0)
     const inputSearch:string = useAppSelector((state) => state?.search.input)
     const dispatch = useAppDispatch()
@@ -22,7 +22,7 @@ const Header: FC = () => {
         if (user) {
             dispatch(setInitialCount(+user?.favoriteOffersCount))
 
-            if(checkProfileForMenu(user))
+            if(complete)
                 setSrcForProfile(`/account/profile/${user?.id}`);
             else
                 setSrcForProfile(`/account/settings`);
