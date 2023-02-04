@@ -42,12 +42,12 @@ export default function Footer() {
         if (user) {
             setValue('email', user.email)
         }
-        if(complete)
+        if((user && complete) || (!user))
             setSrcForProfile(`/account`);
         else
             setSrcForProfile(`/account/settings`);
 
-    }, [])
+    }, [user])
 
     const submitSubscrition = (data: { email: string }) => {
         console.log(data)
