@@ -23,8 +23,8 @@ import { convertLocaleDate } from '../../helpers/convertLocaleDate'
 import { showAlert } from '../../store/reducers/alertSlice'
 import { IUseStateItem } from '../../types'
 import { checkPhotoPath } from '../../helpers/photoLoader'
-import { FromStringToNumber } from '../../services/FromStringToNumber'
-import FunctionForPrice from '../../services/FunctionForPrice'
+import { FromStringToNumber } from '../../helpers/FromStringToNumber'
+import FunctionForPrice from '../../helpers/FunctionForPrice'
 import CitiesForm from '../../components/forms/CitiesForm'
 
 const NewAd = () => {
