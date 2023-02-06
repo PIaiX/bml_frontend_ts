@@ -24,7 +24,7 @@ const Service: FC = () => {
     const params = useParams()
     const categoryId = params.categoryId ? parseInt(params.categoryId) : 0
     const [orderBy, setOrderBy] = useState<string>('')
-    const limit = 16
+    const limit = 24
     const ref = useRef<HTMLElement>(null)
     const [areas, setAreas] = useState<Array<IOffersAreaItem | undefined>>([])
     const [subSections, setSubSections] = useState<Array<IOffersSubSectionsItem | undefined>>([])
@@ -221,7 +221,7 @@ const Service: FC = () => {
                     <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
                         {offers?.isLoaded ? (
                             offers?.items && offers?.items?.length ? (
-                                paginationItems?.slice(0, 8).map((item: IOffersItem) => (
+                                paginationItems?.slice(0, 12).map((item: IOffersItem) => (
                                     <div className="col" key={item.id}>
                                         <AdvPreview
                                             id={item.id}
@@ -256,7 +256,7 @@ const Service: FC = () => {
                             </Swiper>
                         </div>
                         {offers?.items && offers?.items?.length
-                            ? paginationItems?.slice(8, paginationItems.length).map((item: IOffersItem) => (
+                            ? paginationItems?.slice(12, paginationItems.length).map((item: IOffersItem) => (
                                   <div className="col" key={item.id}>
                                       <AdvPreview
                                           id={item.id}
