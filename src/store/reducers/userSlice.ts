@@ -7,13 +7,11 @@ import checkProfileForMenu from "../../helpers/checkProfileForMenu";
 type InitialState = {
     user: IUser | null
     isLoading: boolean,
-    complete:boolean
 }
 
 const initialState: InitialState = {
     user: null,
     isLoading: true,
-    complete:false
 }
 
 export const checkAuth = createAsyncThunk('auth/refreshToken', async (_, thunkAPI) => {
@@ -33,11 +31,9 @@ export const userSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             state.user = action.payload
-            state.complete = checkProfileForMenu(action.payload);
         },
         resetUser: (state) => {
             state.user = initialState.user
-            state.complete=false;
         },
     },
     extraReducers: {

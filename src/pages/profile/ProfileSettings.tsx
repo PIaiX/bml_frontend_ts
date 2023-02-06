@@ -12,13 +12,13 @@ import EditProfileFormForIe from '../../components/forms/EditProfileFormForIE'
 import EditProfileFormForOoo from '../../components/forms/EditProfileFormForOOO'
 
 const ProfileSettings = () => {
-    const {user, complete}:{user: IUser | null, complete:boolean} = useAppSelector((state) => state?.user)
+    const {user}:{user: IUser | null} = useAppSelector((state) => state?.user)
     const [avatar, setAvatar] = useState<any>(null)
     let photo = useImageViewer(avatar)
 
     return (
         <div>
-            {complete && <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
+            {user?.isFormCompleted && <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
                 <MdOutlineArrowBack />
                 <span className="ms-2">Назад</span>
             </Link>}

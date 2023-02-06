@@ -16,7 +16,6 @@ export type OutletState = {
 const PersonalAccountLayout: React.FC<Props> = ({isMobile}) => {
     const {pathname} = useLocation()
     const ll = useMatch(pathname)
-    const current: boolean = useAppSelector((state) => state?.user?.complete)
     const [info, setInfo] = useState<OutletState>({
         id: null,
         pathname: null,
@@ -34,7 +33,7 @@ const PersonalAccountLayout: React.FC<Props> = ({isMobile}) => {
             {!isMobile ? (
                 <div className="row">
                     <div className="col-md-4 col-lg-3">
-                        {current && <AccountMenu />}
+                         <AccountMenu />
                     </div>
                     <div className="col-md-8 col-lg-9">
                         <Outlet context={[info, setInfo]} />

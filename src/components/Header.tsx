@@ -10,7 +10,7 @@ import {setSearch} from '../store/reducers/searchHeader'
 import checkProfileForMenu from "../helpers/checkProfileForMenu";
 
 const Header: FC = () => {
-    const {user, complete}:{user: IUser | null, complete:boolean} = useAppSelector((state) => state?.user)
+    const {user}:{user: IUser | null} = useAppSelector((state) => state?.user)
     const count = useAppSelector((state) => state?.favoritesCount?.count || 0)
     const inputSearch:string = useAppSelector((state) => state?.search.input)
     const dispatch = useAppDispatch()
@@ -22,7 +22,7 @@ const Header: FC = () => {
         if (user) {
             dispatch(setInitialCount(+user?.favoriteOffersCount))
 
-            if(complete)
+            if(user?.isFormCompleted)
                 setSrcForProfile(`/account/profile/${user?.id}`);
             else
                 setSrcForProfile(`/account/settings`);
