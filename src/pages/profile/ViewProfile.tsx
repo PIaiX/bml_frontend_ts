@@ -17,7 +17,6 @@ import CustomModal from '../../components/utils/CustomModal'
 const ViewProfile: FC = () => {
     const {id} = useParams()
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
-    const [sliceNumber, setSliceNumber] = useState(6)
     const [userInfo, setUserInfo] = useState<IUseStateItem<IUser>>({
         isLoaded: false,
         item: null,
@@ -271,7 +270,7 @@ const ViewProfile: FC = () => {
                                                     <td className="l-gray">ОГРНИП:</td>
                                                     <td className="color-1">
                                                         {userInfo?.item?.mainStateRegistrationNumber
-                                                            ? userInfo?.item?.birthdayForUser
+                                                            ? userInfo?.item?.mainStateRegistrationNumber
                                                             : 'Не установлено'}
                                                     </td>
                                                 </tr>
