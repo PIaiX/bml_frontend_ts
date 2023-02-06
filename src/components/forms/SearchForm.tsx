@@ -308,23 +308,23 @@ const SearchForm: React.FC<Props> = ({
                                 </div>
                             </div>
                         )}
-                    </div>
-                    <div className="d-flex justify-content-end">
-                        <button
-                            type="reset"
-                            className="d-flex align-items-center"
-                            onClick={() => {
-                                reset()
-                                setValue('orderBy', 'desc')
-                                onReset(getValues())
-                            }}
-                        >
-                            <MdCached className="f_15" />
-                            <span className="f_09 ms-2">Очистить фильтр</span>
-                        </button>
-                        <button className="btn_main btn_2 ms-3 ms-sm-4" onClick={handleSubmit(BeforeOnApplyFilters)}>
-                            Показать
-                        </button>
+                        <div className="col-sm-7 col-md-5 col-lg-4 d-flex justify-content-end align-items-center ms-auto">
+                            <button
+                                type="reset"
+                                className="d-flex align-items-center"
+                                onClick={() => {
+                                    reset()
+                                    setValue('orderBy', 'desc')
+                                    onReset(getValues())
+                                }}
+                            >
+                                <MdCached className="f_15" />
+                                <span className="f_09 ms-2 text-nowrap">Очистить фильтр</span>
+                            </button>
+                            <button className="btn_main btn_2 ms-3 ms-sm-4" onClick={handleSubmit(BeforeOnApplyFilters)}>
+                                Показать
+                            </button>
+                        </div>
                     </div>
                 </div>
             </Collapse>
