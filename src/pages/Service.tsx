@@ -222,7 +222,7 @@ const Service: FC = () => {
                         {offers?.isLoaded ? (
                             offers?.items && offers?.items?.length ? (
                                 paginationItems?.slice(0, 8).map((item: IOffersItem) => (
-                                    <div className="col" key={item.id}>
+                                    <div className="col position-relative" key={item.id}>
                                         <AdvPreview
                                             id={item.id}
                                             image={item.image}
@@ -257,7 +257,7 @@ const Service: FC = () => {
                         </div>
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(8, paginationItems.length).map((item: IOffersItem) => (
-                                  <div className="col" key={item.id}>
+                                  <div className="col position-relative" key={item.id}>
                                       <AdvPreview
                                           id={item.id}
                                           image={item.image}

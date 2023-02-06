@@ -271,7 +271,7 @@ const ViewProfile: FC = () => {
                                                     <td className="l-gray">ОГРНИП:</td>
                                                     <td className="color-1">
                                                         {userInfo?.item?.mainStateRegistrationNumber
-                                                            ? userInfo?.item?.birthdayForUser
+                                                            ? userInfo?.item?.mainStateRegistrationNumber
                                                             : 'Не установлено'}
                                                     </td>
                                                 </tr>

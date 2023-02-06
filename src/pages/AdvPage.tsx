@@ -1,41 +1,34 @@
-import React, {
-    BaseSyntheticEvent,
-    ButtonHTMLAttributes,
-    DetailedHTMLProps,
-    FC,
-    MouseEventHandler,
-    useEffect,
-    useState,
-} from 'react'
+import React, {BaseSyntheticEvent, FC, useEffect, useState,} from 'react'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import AdvPreview from '../components/AdvPreview'
-import { NavLink, useParams } from 'react-router-dom'
-import { MdDateRange, MdInfoOutline, MdOutlinePlace, MdOutlineVisibility } from 'react-icons/md'
+import {NavLink, useParams} from 'react-router-dom'
+import {MdDateRange, MdInfoOutline, MdOutlinePlace, MdOutlineVisibility} from 'react-icons/md'
 import BtnFav from '../components/utils/BtnFav'
-import { PhotoProvider, PhotoView } from 'react-photo-view'
+import {PhotoProvider, PhotoView} from 'react-photo-view'
 import 'react-photo-view/dist/react-photo-view.css'
 import PartnersSite from '../components/PartnersSite'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Pagination } from 'swiper'
+import {Swiper, SwiperSlide} from 'swiper/react'
+import {Pagination} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import { getOffers, getOneOffer } from '../services/offers'
-import { IUseStateItem, IUseStateItems } from '../types'
-import { IOfferItem, IOffersItem, IOffersMeta } from '../types/offers'
-import { checkPhotoPath } from '../helpers/photoLoader'
+import {getOffers, getOneOffer} from '../services/offers'
+import {IUseStateItem, IUseStateItems} from '../types'
+import {IOfferItem, IOffersItem, IOffersMeta} from '../types/offers'
+import {checkPhotoPath} from '../helpers/photoLoader'
 import LeftMenuInOfferContainer from '../components/containers/LeftMenuInOffer'
 import ShortInfoInOfferContainer from '../components/containers/ShortInfoInOffer'
-import { createReport, getOfferReportType } from '../services/reports'
-import { IUser } from '../types/user'
-import { useAppDispatch, useAppSelector } from '../hooks/store'
+import {createReport, getOfferReportType} from '../services/reports'
+import {IUser} from '../types/user'
+import {useAppDispatch, useAppSelector} from '../hooks/store'
 import Loader from '../components/utils/Loader'
-import { IUseStateReportType, PayloadsReport } from '../types/report'
+import {IUseStateReportType, PayloadsReport} from '../types/report'
 import CustomModal from '../components/utils/CustomModal'
-import { useForm } from 'react-hook-form'
+import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../components/utils/ValidateWrapper'
-import {resetAlert, showAlert} from '../store/reducers/alertSlice'
-import {emitCreateWithOfferTopicMessage, emitCreateWithoutTopicMessage} from '../services/sockets/messages'
+import {showAlert} from '../store/reducers/alertSlice'
+import {emitCreateWithOfferTopicMessage} from '../services/sockets/messages'
 import FunctionForPrice from '../helpers/FunctionForPrice'
+import {convertLocaleDate} from "../helpers/convertLocaleDate";
 
 const AdvPage: FC = () => {
     const { id } = useParams()

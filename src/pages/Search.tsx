@@ -99,7 +99,7 @@ const Search = () => {
                 <div className="row g-2 g-sm-3 g-xl-4">
                     {
                         !loading ? (offers?.items && offers.items.length > 0 ? offers.items.map(item =>
-                                <div className="col-6 col-md-4 col-lg-3" key={item.id}>
+                                <div className="col-6 col-md-4 col-lg-3 position-relative" key={item.id}>
                                     <AdvPreview
                                         id={item.id}
                                         image={item.image}
