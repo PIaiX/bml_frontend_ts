@@ -65,7 +65,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                     {isLoadingSuggestionsInvestors ? (
                         suggestionsInvestors?.length ? (
                             suggestionsInvestors?.map((item) => (
-                                <div className="col-6 col-md-4 col-lg-3" key={item.id}>
+                                <div className="col-6 col-md-4 col-lg-3 position-relative" key={item.id}>
                                     <AdvPreview
                                         id={item.id}
                                         image={item.image}
@@ -93,7 +93,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                     {isLoadingBusinessPartners ? (
                         businessPartners?.length ? (
                             businessPartners?.map((item) => (
-                                <div className="col-6 col-md-4 col-lg-3" key={item.id}>
+                                <div className="col-6 col-md-4 col-lg-3 position-relative" key={item.id}>
                                     <AdvPreview
                                         id={item.id}
                                         image={item.image}
@@ -121,7 +121,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                     {isLoadingSaleBusiness ? (
                         saleBusiness?.length ? (
                             saleBusiness?.map((item) => (
-                                <div className="col-6 col-md-4 col-lg-3" key={item.id}>
+                                <div className="col-6 col-md-4 col-lg-3 position-relative" key={item.id}>
                                     <AdvPreview
                                         id={item.id}
                                         image={item.image}
@@ -149,7 +149,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                     {isLoadingFranchise ? (
                         franchise?.length ? (
                             franchise?.map((item) => (
-                                <div className="col-6 col-md-4 col-lg-3" key={item.id}>
+                                <div className="col-6 col-md-4 col-lg-3 position-relative" key={item.id}>
                                     <AdvPreview
                                         id={item.id}
                                         image={item.image}
