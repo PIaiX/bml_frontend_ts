@@ -19,12 +19,13 @@ import {IOffersAreaItem, IOffersItem, IOffersMeta, IOffersSubSectionsItem, IPayl
 import {useAppSelector} from '../hooks/store'
 import {IUser} from '../types/user'
 import {IUseStateItems} from '../types'
+import {getAdvertising} from "../services/advertising";
 
 const Service: FC = () => {
     const params = useParams()
     const categoryId = params.categoryId ? parseInt(params.categoryId) : 0
     const [orderBy, setOrderBy] = useState<string>('')
-    const limit = 16
+    const limit = 36
     const ref = useRef<HTMLElement>(null)
     const [areas, setAreas] = useState<Array<IOffersAreaItem | undefined>>([])
     const [subSections, setSubSections] = useState<Array<IOffersSubSectionsItem | undefined>>([])
@@ -49,6 +50,7 @@ const Service: FC = () => {
         if (ref.current !== null) {
             window.scrollTo(0, ref?.current?.offsetTop - 130)
         }
+        getAdvertising().then(res=>res && setAdvertising(res))
     }, [categoryId])
 
     useEffect(() => {
@@ -111,6 +113,10 @@ const Service: FC = () => {
     useEffect(() => {
         setSelectedPage(0)
     }, [categoryId])
+
+    const [advertising, setAdvertising]=useState(
+        ['/images/slider_offers/slide2.jpg', '/images/slider_offers/slide1.jpg']
+    )
 
     return (
         <main>
@@ -221,7 +227,7 @@ const Service: FC = () => {
                     <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
                         {offers?.isLoaded ? (
                             offers?.items && offers?.items?.length ? (
-                                paginationItems?.slice(0, 8).map((item: IOffersItem) => (
+                                paginationItems?.slice(0, 12).map((item: IOffersItem) => (
                                     <div className="col position-relative" key={item.id}>
                                         <AdvPreview
                                             id={item.id}
@@ -241,22 +247,10 @@ const Service: FC = () => {
                             </div>
                         )}
                         <div className="col-12 w-100">
-                            <Swiper
-                                className="preview-slider"
-                                modules={[Pagination]}
-                                slidesPerView={1}
-                                pagination={{clickable: true}}
-                            >
-                                <SwiperSlide>
-                                    <img src="/images/slider_offers/slide1.jpg" alt="" className="img-fluid" />
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <img src="/images/slider_offers/slide2.jpg" alt="" className="img-fluid" />
-                                </SwiperSlide>
-                            </Swiper>
+                            <img src={advertising[0]} alt="" className="img-fluid" />
                         </div>
                         {offers?.items && offers?.items?.length
-                            ? paginationItems?.slice(8, paginationItems.length).map((item: IOffersItem) => (
+                            ? paginationItems?.slice(12, 24).map((item: IOffersItem) => (
                                   <div className="col position-relative" key={item.id}>
                                       <AdvPreview
                                           id={item.id}
@@ -268,10 +262,25 @@ const Service: FC = () => {
                                   </div>
                               ))
                             : null}
+                        <div className="col-12 w-100">
+                            <img src={advertising[1]} alt="" className="img-fluid" />
+                        </div>
+                        {offers?.items && offers?.items?.length
+                            ? paginationItems?.slice(24, offers?.items?.length).map((item: IOffersItem) => (
+                                <div className="col position-relative" key={item.id}>
+                                    <AdvPreview
+                                        id={item.id}
+                                        image={item.image}
+                                        title={item.title}
+                                        favorite={item.isFavorite}
+                                        investments={item.investments}
+                                    />
+                                </div>
+                            ))
+                            : null}
                     </div>
                 )}
-
-                {offers.isLoaded && (
+                    {offers.isLoaded && (
                     <div className="sort mt-4">
                         <ServicePagination
                             nextLabel="❯"
