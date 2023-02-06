@@ -1,7 +1,7 @@
 import React, {FC} from 'react'
 import {MdInfoOutline} from 'react-icons/md'
 import {convertLocaleDate} from '../../helpers/convertLocaleDate'
-import FunctionForPrice from '../../services/FunctionForPrice'
+import FunctionForPrice from '../../helpers/FunctionForPrice'
 
 type Props = {
     category?: number

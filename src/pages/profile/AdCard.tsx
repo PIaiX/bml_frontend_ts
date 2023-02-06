@@ -1,7 +1,7 @@
 import React, {FC} from 'react'
 import {Link, NavLink} from 'react-router-dom'
 import {checkPhotoPath} from '../../helpers/photoLoader'
-import FunctionForPrice from '../../services/FunctionForPrice'
+import FunctionForPrice from '../../helpers/FunctionForPrice'
 
 type Props = {
     className?: string
@@ -19,6 +19,7 @@ type Props = {
 }
 
 const AdCard: FC<Props> = (props: any) => {
+    console.log(props)
     return (
         <div className={'mx-sm-4 my-md-5 my-sm-3 py-1 ad-preview ' + props.className}>
             <div className="d-flex flex-column flex-sm-row align-items-stretch flex-1">
@@ -48,6 +49,9 @@ const AdCard: FC<Props> = (props: any) => {
                     )}
                     <div className="mt-2">
                         <span className="color-1 fw_5">{props?.archiveExpire}</span>
+                    </div>
+                    <div>
+                        {props.validity}
                     </div>
                 </div>
             </div>

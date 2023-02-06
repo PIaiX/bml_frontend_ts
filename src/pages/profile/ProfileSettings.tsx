@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import {useImageViewer} from '../../hooks/imageViewer'
@@ -12,16 +12,16 @@ import EditProfileFormForIe from '../../components/forms/EditProfileFormForIE'
 import EditProfileFormForOoo from '../../components/forms/EditProfileFormForOOO'
 
 const ProfileSettings = () => {
-    const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const {user}:{user: IUser | null} = useAppSelector((state) => state?.user)
     const [avatar, setAvatar] = useState<any>(null)
     let photo = useImageViewer(avatar)
 
     return (
         <div>
-            <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
+            {user?.isFormCompleted && <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
                 <MdOutlineArrowBack />
                 <span className="ms-2">Назад</span>
-            </Link>
+            </Link>}
 
             <div className="bg_light p-3 text-center mb-4">
                 Размещение объявлений и полный доступ будет предоставлен после заполнения всех обязательных полей

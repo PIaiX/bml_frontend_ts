@@ -34,4 +34,5 @@ export type IUser = {
     requestStatus: boolean
     outgoingStatus: boolean
     incomingStatus: boolean
+    isFormCompleted:boolean
 }

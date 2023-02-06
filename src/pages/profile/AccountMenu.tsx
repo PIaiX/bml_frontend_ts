@@ -9,8 +9,7 @@ export default function AccountMenu() {
     const [auth, setAuth] = useState(false)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const userState: IUser | null = useAppSelector((state) => state?.user?.user)
-
+    const {user:userState}:{user:IUser | null} = useAppSelector((state) => state?.user)
     const onSubmitLogout = () => {
         logout()
             .then((res) => {
@@ -43,7 +42,7 @@ export default function AccountMenu() {
                     <li>
                         <NavLink to="instructions">Как загрузить объявление</NavLink>
                     </li>
-                    <li>
+                    {userState?.isFormCompleted && <><li>
                         <NavLink to="my-ads">Мои объявления</NavLink>
                     </li>
                     <li>
@@ -62,7 +61,7 @@ export default function AccountMenu() {
                     )}
                     <li>
                         <NavLink to="cart">Мои покупки</NavLink>
-                    </li>
+                    </li></>}
                     <li>
                         <NavLink to="settings">Настройки профиля</NavLink>
                     </li>

@@ -1,12 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { $api } from '../../services/indexAuth'
 import { apiRoutes } from '../../config/api'
-import { IRegister } from '../../models/auth'
 import { IUser } from '../../types/user'
 
 type InitialState = {
     user: IUser | null
-    isLoading: boolean
+    isLoading: boolean,
 }
 
 const initialState: InitialState = {
