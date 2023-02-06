@@ -1,8 +1,8 @@
-import React, {FC} from 'react'
+import React, { FC } from 'react'
 import AdvPreview from '../AdvPreview'
 import Loader from '../utils/Loader'
-import {NavLink} from 'react-router-dom'
-import {IOffersItem, IOffersMeta} from '../../types/offers'
+import { NavLink } from 'react-router-dom'
+import { IOffersItem, IOffersMeta } from '../../types/offers'
 
 type Props = {
     isLoadingInvestors?: boolean
@@ -37,7 +37,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                     {isLoadingInvestors ? (
                         investors?.length ? (
                             investors?.map((item) => (
-                                <div className="col-6 col-md-4 col-lg-3" key={item.id}>
+                                <div className="col-6 col-md-4 col-lg-3 position-relative" key={item.id}>
                                     <AdvPreview
                                         id={item.id}
                                         image={item.image}
