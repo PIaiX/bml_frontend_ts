@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useMemo, useState} from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import PartnersSite from '../components/PartnersSite'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -14,11 +14,11 @@ import {
     useGetSuggestionsInvestorsCategoryQuery,
 } from '../services/RTK/offersApi'
 import MainTitle from '../components/containers/MainTitle'
-import {getMainTitle} from '../services/mainTitle'
-import {IUseStateItem} from '../types'
-import {IMainTitle} from '../types/mainTitle'
-import {IUser} from '../types/user'
-import {useAppSelector} from '../hooks/store'
+import { getMainTitle } from '../services/mainTitle'
+import { IUseStateItem } from '../types'
+import { IMainTitle } from '../types/mainTitle'
+import { IUser } from '../types/user'
+import { useAppSelector } from '../hooks/store'
 
 const Home: FC = () => {
     const [mainTitle, setMainTitle] = useState<IUseStateItem<IMainTitle>>({
@@ -27,7 +27,7 @@ const Home: FC = () => {
     })
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
 
-    const {investors, isLoadingInvestors} = useGetInvestorsCategoryQuery(
+    const { investors, isLoadingInvestors } = useGetInvestorsCategoryQuery(
         {
             page: 1,
             limit: 8,
@@ -36,11 +36,11 @@ const Home: FC = () => {
             userId: user ? user?.id : '',
         },
         {
-            selectFromResult: ({data}) => ({investors: data?.body, isLoadingInvestors: !!data?.status}),
+            selectFromResult: ({ data }) => ({ investors: data?.body, isLoadingInvestors: !!data?.status }),
         }
     )
 
-    const {suggestionsInvestors, isLoadingSuggestionsInvestors} = useGetSuggestionsInvestorsCategoryQuery(
+    const { suggestionsInvestors, isLoadingSuggestionsInvestors } = useGetSuggestionsInvestorsCategoryQuery(
         {
             page: 1,
             limit: 8,
@@ -49,13 +49,13 @@ const Home: FC = () => {
             userId: user ? user?.id : '',
         },
         {
-            selectFromResult: ({data}) => ({
+            selectFromResult: ({ data }) => ({
                 suggestionsInvestors: data?.body,
                 isLoadingSuggestionsInvestors: !!data?.status,
             }),
         }
     )
-    const {businessPartners, isLoadingBusinessPartners} = useGetBusinessPartnersCategoryQuery(
+    const { businessPartners, isLoadingBusinessPartners } = useGetBusinessPartnersCategoryQuery(
         {
             page: 1,
             limit: 8,
@@ -64,13 +64,13 @@ const Home: FC = () => {
             userId: user ? user?.id : '',
         },
         {
-            selectFromResult: ({data}) => ({
+            selectFromResult: ({ data }) => ({
                 businessPartners: data?.body,
                 isLoadingBusinessPartners: !!data?.status,
             }),
         }
     )
-    const {saleBusiness, isLoadingSaleBusiness} = useGetSaleBusinessCategoryQuery(
+    const { saleBusiness, isLoadingSaleBusiness } = useGetSaleBusinessCategoryQuery(
         {
             page: 1,
             limit: 8,
@@ -79,10 +79,10 @@ const Home: FC = () => {
             userId: user ? user?.id : '',
         },
         {
-            selectFromResult: ({data}) => ({saleBusiness: data?.body, isLoadingSaleBusiness: !!data?.status}),
+            selectFromResult: ({ data }) => ({ saleBusiness: data?.body, isLoadingSaleBusiness: !!data?.status }),
         }
     )
-    const {franchise, isLoadingFranchise} = useGetFranchiseCategoryQuery(
+    const { franchise, isLoadingFranchise } = useGetFranchiseCategoryQuery(
         {
             page: 1,
             limit: 8,
@@ -90,13 +90,13 @@ const Home: FC = () => {
             orderBy: 'desc',
             userId: user ? user?.id : '',
         },
-        {selectFromResult: ({data}) => ({franchise: data?.body, isLoadingFranchise: !!data?.status})}
+        { selectFromResult: ({ data }) => ({ franchise: data?.body, isLoadingFranchise: !!data?.status }) }
     )
 
     useEffect(() => {
         getMainTitle()
-            .then((res) => res && setMainTitle({isLoaded: true, item: res}))
-            .catch(() => setMainTitle({isLoaded: true, item: null}))
+            .then((res) => res && setMainTitle({ isLoaded: true, item: res }))
+            .catch(() => setMainTitle({ isLoaded: true, item: null }))
     }, [])
     return (
         <main>
@@ -111,10 +111,10 @@ const Home: FC = () => {
 
             <MainTitle
                 title={mainTitle?.item?.title}
-                description={
-                    'Посмотрите видео о работе портала: для инвесторов и партнеров, с помощью которого, не отрываясь от бизнес процессов, можно рассматривать перспективные проекты и узнавать о трендах рынка'
-                }
-                // description={mainTitle?.item?.description}
+                // description={
+                //     'Посмотрите видео о работе портала: для инвесторов и партнеров, с помощью которого, не отрываясь от бизнес процессов, можно рассматривать перспективные проекты и узнавать о трендах рынка'
+                // }
+                description={mainTitle?.item?.description}
 
                 videoPath={mainTitle?.item?.videoPath}
             />
