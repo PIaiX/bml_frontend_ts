@@ -7,7 +7,6 @@ import {IUser} from '../types/user'
 import {setInitialCount} from '../store/reducers/favoriteCountSlice'
 import FunctionForPrice from "../helpers/FunctionForPrice";
 import {setSearch} from '../store/reducers/searchHeader'
-import checkProfileForMenu from "../helpers/checkProfileForMenu";
 
 const Header: FC = () => {
     const {user}:{user: IUser | null} = useAppSelector((state) => state?.user)

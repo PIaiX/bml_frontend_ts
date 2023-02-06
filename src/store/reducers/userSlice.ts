@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { $api } from '../../services/indexAuth'
 import { apiRoutes } from '../../config/api'
 import { IUser } from '../../types/user'
-import checkProfileForMenu from "../../helpers/checkProfileForMenu";
 
 type InitialState = {
     user: IUser | null

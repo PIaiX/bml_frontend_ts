@@ -6,7 +6,6 @@ import {useAppDispatch} from '../../hooks/store'
 import {setUser} from '../../store/reducers/userSlice'
 import {showAlert} from '../../store/reducers/alertSlice'
 import ValidateWrapper from '../../components/utils/ValidateWrapper'
-import checkProfileForMenu from "../../helpers/checkProfileForMenu";
 
 const Entrance: FC = () => {
     const dispatch = useAppDispatch()
@@ -22,7 +21,7 @@ const Entrance: FC = () => {
             .then((res) => {
                 dispatch(setUser(res?.user))
                 localStorage.setItem('token', res?.token)
-                if (res?.user && checkProfileForMenu(res?.user))
+                if (res?.user && res?.user.isFormCompleted)
                     navigate(`/account/profile/${res?.user?.id}`)
                 else
                     navigate(`/account/settings`)
