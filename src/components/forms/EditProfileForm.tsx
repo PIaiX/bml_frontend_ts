@@ -99,11 +99,13 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
 
     useEffect(() => {
         if (city === '') setCityError('поле обязательно к заполнению')
+        else if(city && city.length<2)setCityError('поле должно содержать от 2 символов')
         else setCityError('')
     }, [city])
 
     const beforeSubmit = (data: any) => {
-        if (cityError === '') submitUpdateUserInfo(data)
+        if(city==null)setCity('')
+        else if (cityError === '') submitUpdateUserInfo(data)
     }
 
     return (
