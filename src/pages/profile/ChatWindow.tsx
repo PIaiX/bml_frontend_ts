@@ -135,7 +135,7 @@ const ChatWindow = () => {
                     <img src={state?.avatar} alt={state?.userName} />
                 </Link>
             </div>
-            <div className="middle p-2 p-sm-4" id="chatBody">
+            <div className="middle p-2 p-sm-4 flex-column-reverse" id="chatBody">
                 <InfiniteScroll
                     loadMore={getMessages}
                     isReverse={true}
@@ -151,8 +151,7 @@ const ChatWindow = () => {
             <div className="bottom p-2 px-sm-4 py-sm-3">
                 <form onSubmit={handleSubmit(createMessage)}>
                     <ValidateWrapper error={errors.text}>
-                        <textarea
-                            rows={6}
+                        <input
                             placeholder="Напишите сообщение..."
                             {...register('text', {
                                 required: 'Минимум 1 знак',

@@ -516,7 +516,7 @@ const AdvPage: FC = () => {
                                 <section className="anchor_block mb-4" id="anchor_video">
                                     <h4 className="fw_7">Видео</h4>
                                     <PhotoProvider maskOpacity={0.75}>
-                                        <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
+                                        <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4 col">
                                             <div className="acc-video">
                                                 <iframe
                                                     src={offer?.item?.video}
