@@ -8,6 +8,7 @@ import {resetAlert} from '../store/reducers/alertSlice'
 
 const Layout: FC = () => {
     const alertState = useAppSelector((state) => state.alert)
+    const user = useAppSelector((state) => state.user.user)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -17,6 +18,17 @@ const Layout: FC = () => {
             }, 2000)
         }
     }, [alertState?.isShow])
+    useEffect(()=>{
+        if(user){
+            // alert('begin')
+        }
+        return ()=>{
+            if(user){
+                // alert('end')
+            }
+        }
+
+    }, [user])
 
     return (
         <div className="root-wrapper">

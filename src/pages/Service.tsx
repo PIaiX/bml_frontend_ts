@@ -54,6 +54,8 @@ const Service: FC = () => {
         getAdvertisings().then(res=>res && setAdvertising(res))
     }, [categoryId])
 
+    useEffect(()=>console.log(advertising),)
+
     useEffect(() => {
         getAllAreas().then((res) => res && setAreas(res))
     }, [])
@@ -264,7 +266,7 @@ const Service: FC = () => {
                             : null}
                         {advertising && advertising[1] && advertising[1]?.image &&
                             <div className="col-12 w-100">
-                                <img src={advertising[0].image} alt="" className="img-fluid" />
+                                <img src={advertising[1].image} alt="" className="img-fluid" />
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(24, offers?.items?.length).map((item: IOffersItem) => (

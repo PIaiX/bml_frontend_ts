@@ -54,10 +54,8 @@ export default function Chat() {
             socketInstance?.off('conversation:update', onConversationUpdate)
         }
     }, [conversations])
-
     useEffect(() => {
         isFetching &&
-
             setTimeout(() => {
                 emitPaginateConversation({ page: selectedPage + 1, limit: generalLimit, orderBy: 'desc' })
                     .then(
