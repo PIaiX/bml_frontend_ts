@@ -10,7 +10,7 @@ const apiRoutes: ApiRoutesTypes = {
     GET_BANNER: 'banner',
 
     // advertising
-    GET_3_ADVERTISING: 'EW',
+    GET_ADVERTISING: 'ads',
 
     //feedback
     SEND_FEEDBACK: 'feedback',

@@ -1,11 +1,11 @@
 import {$api} from "./indexAuth";
 import {apiRoutes} from "../config/api";
 
-export const getAdvertising =
+export const getAdvertisings =
     async ()=> {
     try {
         const response = await $api.get<any>(
-            `${apiRoutes.GET_3_ADVERTISING}`
+            `${apiRoutes.GET_ADVERTISING}`
         )
         return response?.data?.body
     } catch (error) {
