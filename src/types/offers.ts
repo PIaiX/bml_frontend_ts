@@ -67,6 +67,7 @@ export type IOffersItem = {
         }
     }
     isArchivedForUser: string
+    isVerified?:boolean
     categoryForUser: string
     paybackTimeForUser: string
     projectStageForUser: string
