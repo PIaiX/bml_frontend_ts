@@ -372,7 +372,7 @@ const NewAd = () => {
                             <option value={1}>Предложения инвесторов</option>
                             <option value={2}>Поиск бизнес партнёров</option>
                             <option value={3}>Продажа готового бизнеса</option>
-                            {user?.typeForUser !== 'Физ лицо' && <option value={4}>Франшизы</option>}
+                            {user?.type !== 0 && <option value={4}>Франшизы</option>}
                         </select>
                     </div>
                 </fieldset>
