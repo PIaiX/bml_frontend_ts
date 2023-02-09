@@ -96,7 +96,7 @@ const ViewProfile: FC = () => {
                 content.push(
                     <div className={'row row-cols-3 g-1 g-sm-2 g-xl-4 text-center mt-1'}>
                         {userOffers?.items[i] && (
-                            <div>
+                            <div key={i}>
                                 <NavLink to={`/adv-page/${userOffers?.items[i].id}`} >
                                 <div className="acc-box ads d-flex flex-column justify-content-between h-100">
                                     <div>
@@ -113,7 +113,7 @@ const ViewProfile: FC = () => {
                             </div>
                         )}
                         {userOffers?.items[i + 1] && (
-                            <div>
+                            <div key={i+1}>
                                 <NavLink to={`/adv-page/${userOffers?.items[i+1].id}`} >
                                 <div className="acc-box ads d-flex flex-column justify-content-between h-100">
                                     <div>
@@ -132,7 +132,7 @@ const ViewProfile: FC = () => {
                             </div>
                         )}
                         {userOffers?.items[i + 2] && (
-                            <div>
+                            <div key={i+2}>
                                 <NavLink to={`/adv-page/${userOffers?.items[i+2].id}`} >
                                 <div className="acc-box ads d-flex flex-column justify-content-between h-100">
                                     <div>

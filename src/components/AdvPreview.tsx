@@ -34,7 +34,7 @@ const AdvPreview: FC<Props> = (props) => {
             }}></div>
             <Link to={`/adv-page/${props.id}`} className="preview-small">
                 <img src={checkPhotoPath(props?.image)} alt={props.title} />
-                <div className="text" style={{ cursor: "pointer" }}>
+                <div  className="text" style={{ cursor: "pointer" }}>
                     <div className="layer1">
                         <h6>{props.title}
                         </h6>

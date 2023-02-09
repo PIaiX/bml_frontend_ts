@@ -61,7 +61,7 @@ const Favorites: FC = () => {
                 {favoriteOffers?.isLoaded ? (
                     paginationItems?.length > 0 ? (
                         paginationItems?.map((i) => (
-                            <div key={i.id}>
+                            <div key={i.id} style={{position:"relative"}}>
                                 <AdvPreview
                                     id={i.id}
                                     image={i.image}
