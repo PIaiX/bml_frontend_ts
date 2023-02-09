@@ -2856,3 +2856,44 @@ footer {
 .privacy .paragraph a{
     color:deepskyblue;
 }
+.img-advertising{
+    object-fit: cover;
+    width:100%;
+    height:100%
+}
+
+.blockAdvertising{
+    width:100%
+}
+
+@media (min-width: 1200px) {
+    .blockAdvertising{
+        height:353px;
+    }
+}
+@media (max-width: 1199px) {
+    .blockAdvertising{
+        height:323px;
+    }
+
+}
+
+@media (max-width: 991px) {
+    .blockAdvertising{
+        height:270px;
+    }
+
+}
+
+@media (max-width: 767px) {
+    .blockAdvertising{
+        height:221px;
+    }
+}
+
+@media (max-width: 575px) {
+    .blockAdvertising{
+        height:202px;
+    }
+
+}

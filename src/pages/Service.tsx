@@ -248,8 +248,8 @@ const Service: FC = () => {
                             </div>
                         )}
                         {advertising && advertising[0] && advertising[0].image &&
-                            <div className="col-12 w-100">
-                                <img src={advertising[0].image} alt="" className="img-fluid" />
+                            <div className="blockAdvertising">
+                                <img className={"img-advertising"} src={advertising[0].image} alt="" />
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(12, 24).map((item: IOffersItem) => (
@@ -265,8 +265,8 @@ const Service: FC = () => {
                               ))
                             : null}
                         {advertising && advertising[1] && advertising[1]?.image &&
-                            <div className="col-12 w-100">
-                                <img src={advertising[1].image} alt="" className="img-fluid" />
+                            <div className={"blockAdvertising"}>
+                                <img className={"img-advertising"} src={advertising[1].image} alt="" />
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(24, offers?.items?.length).map((item: IOffersItem) => (
