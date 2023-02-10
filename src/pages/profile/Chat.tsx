@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {BaseSyntheticEvent, useCallback, useEffect, useState} from 'react'
 import ChatPreview from './ChatPreview'
 
 import { Link } from 'react-router-dom'
@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store'
 import { showAlert } from '../../store/reducers/alertSlice'
 import { IUser } from '../../types/user'
 import AccountMenu from './AccountMenu'
+import CustomModal from "../../components/utils/CustomModal";
 
 export default function Chat() {
     const { isConnected } = useSocketConnect()
@@ -44,6 +45,14 @@ export default function Chat() {
     }: IPagination<IConversationsItem> = usePagination(conversations?.items, generalLimit, conversations?.meta?.total)
     const [conversationId, setConversationId] = useState<number | null>(null)
     const [isFetching, setIsFetching] = useState<boolean>(true)
+
+    const [isShowMessageModal, setIsShowMessageModal] = useState(false)
+
+    function DelChat(e:BaseSyntheticEvent){
+        e.preventDefault()
+        setIsShowMessageModal(false)
+        setConversationId(beforeConversationId)
+    }
 
     useEffect(() => {
         if (isConnected && socketInstance) {
@@ -92,6 +101,12 @@ export default function Chat() {
         }
     }
 
+    const [beforeConversationId, setBeforeConversationId]=useState<number | null>(null)
+    useEffect(()=>{
+        if(beforeConversationId){
+            setIsShowMessageModal(true)
+        }
+    }, [beforeConversationId])
     useEffect(() => {
         if (conversationId) {
             emitDeleteConversation(conversationId)
@@ -123,7 +138,7 @@ export default function Chat() {
                         paginationItems?.map((i) => {
                             return (
                                 <ChatPreview
-                                    getIdConver={getIdConversation}
+                                    getIdConver={setBeforeConversationId}
                                     converId={i.id}
                                     userId={i?.user?.id}
                                     offerId={i?.offerId}
@@ -148,7 +163,6 @@ export default function Chat() {
                     </div>
                 )}
 
-
                 <div className="p-4">
                     {paginationItems?.length > 0 ? (
                         <div className="acc-box p-0 mt-3 d-flex justify-content-center">
@@ -167,6 +181,28 @@ export default function Chat() {
                     )}
                 </div>
             </div>
+            <CustomModal
+                isShow={isShowMessageModal}
+                setIsShow={setIsShowMessageModal}
+                centered={false}
+                closeButton={true}
+                className="modal__messages"
+            >
+                <form>
+                    <div>Вы уверены, что хотите удалить диалог?</div>
+                    <div className="d-flex justify-content-center mt-5">
+                        <button
+                            className="btn_main btn_1"
+                            onClick={(event: BaseSyntheticEvent) =>
+                                DelChat(event)
+                            }
+                        >
+                            Удалить
+                        </button>
+                    </div>
+                </form>
+            </CustomModal>
+
         </>
     )
 }
