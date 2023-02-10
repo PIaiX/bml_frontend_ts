@@ -105,6 +105,8 @@ const RegistrationForm: FC = () => {
             return 'btn_1'
         }
     }
+    const [typePassword, setTypePassword] = useState<boolean>(false);
+
 
     return (
         <form className="pt fw_4" autoComplete="disabled" onSubmit={handleSubmit(onSubmit)}>
@@ -225,15 +227,15 @@ const RegistrationForm: FC = () => {
                     </ValidateWrapper>
                     <ValidateWrapper error={errors.password}>
                         <input
-                            type="password"
+                            type={`${typePassword?'text':'password'}`}
                             className="mt-3"
                             placeholder="Пароль"
                             autoComplete="new-password"
                             {...register('password', {
                                 required: 'Поле обязательно к заполнению',
                                 minLength: {
-                                    value: 8,
-                                    message: 'Минимум 8 символов',
+                                    value: 6,
+                                    message: 'Минимум 6 символов',
                                 },
                                 maxLength: {
                                     value: 15,
@@ -246,9 +248,15 @@ const RegistrationForm: FC = () => {
                             })}
                         />
                     </ValidateWrapper>
+                    <div className={"mt-3 opacity-50"}>
+                        <div>* Минимум 6 символов</div>
+                        <div>* Максимум 15 символов</div>
+                        <div>* В пароле должна присутствовать буква и цифра</div>
+                    </div>
+
                     <ValidateWrapper error={errors.passwordConfirm}>
                         <input
-                            type="password"
+                            type={`${typePassword?'text':'password'}`}
                             className="mt-3"
                             placeholder="Повторите пароль"
                             {...register('passwordConfirm', {
@@ -257,8 +265,8 @@ const RegistrationForm: FC = () => {
                                 },
                                 required: 'Поле обязательно к заполнению',
                                 minLength: {
-                                    value: 8,
-                                    message: 'Минимум 8 символов',
+                                    value: 6,
+                                    message: 'Минимум 6 символов',
                                 },
                                 maxLength: {
                                     value: 15,
@@ -267,6 +275,16 @@ const RegistrationForm: FC = () => {
                             })}
                         />
                     </ValidateWrapper>
+                    <label className="color-1 mt-3 mt-sm-4">
+                        <input
+                            name="offer"
+                            type="checkbox"
+                            defaultChecked={false}
+                            onClick={(e) => setTypePassword(!typePassword)}
+                        />
+                        <span className="ms-3">Показать пароль</span>
+                    </label>
+
                 </>
             )}
             <label className="color-1 mt-3 mt-sm-4">
