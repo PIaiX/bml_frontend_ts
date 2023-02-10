@@ -56,7 +56,6 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
             type: 1,
         },
     })
-
     useEffect(() => {
         if (user) {
             setValue('companyName', user?.companyName)
@@ -64,7 +63,6 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
             setValue('lastName', user?.lastName)
             setValue('taxpayerIdentificationNumber', user?.taxpayerIdentificationNumber)
             setValue('mainStateRegistrationNumber', user?.mainStateRegistrationNumber)
-            setValue('phone', user?.phone)
             setValue('email', user?.email)
         }
     }, [user])
@@ -117,6 +115,8 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
         else if (cityError === '') submitUpdateUserInfo(data)
 
     }
+
+    const [phone, setPhone]=useState(user?.phone);
 
     return (
         <form className="acc-box" noValidate onSubmit={handleSubmit(beforeSubmit)}>
@@ -212,7 +212,7 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                                 maxLength: {
                                     value: 13,
                                     message: 'Максимальное количество символов 13',
-                                },
+                                }
                             })}
                         />
                     </ValidateWrapper>
@@ -269,7 +269,9 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                     <ValidateWrapper error={errors?.phone}>
                         <input
                             type="tel"
+                            value={phone}
                             placeholder="+79000000000"
+                            onFocus={()=>{setPhone('+7')}}
                             {...register('phone', {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
@@ -284,6 +286,7 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                                     value: /\+[7][0-9]{10}/,
                                     message: 'Не верный формат',
                                 },
+                                onChange:(e)=>setPhone(e.target.value)
                             })}
                         />
                     </ValidateWrapper>
