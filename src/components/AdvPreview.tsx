@@ -23,7 +23,6 @@ const AdvPreview: FC<Props> = (props) => {
         e.stopPropagation();
         e.nativeEvent.stopImmediatePropagation();
     }
-    const navigate = useNavigate();
     return (
         <>
             <div style={{

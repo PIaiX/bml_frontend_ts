@@ -31,7 +31,7 @@ import FunctionForPrice from '../helpers/FunctionForPrice'
 import {convertLocaleDate} from "../helpers/convertLocaleDate";
 
 const AdvPage: FC = () => {
-    const { id } = useParams()
+    const {id} = useParams()
     const [offer, setOffer] = useState<IUseStateItem<IOfferItem>>({
         isLoaded: false,
         item: null,
@@ -51,11 +51,11 @@ const AdvPage: FC = () => {
     const {
         register,
         getValues,
-        formState: { errors },
+        formState: {errors},
         handleSubmit,
         setValue,
         reset,
-    } = useForm<PayloadsReport>({ mode: 'onSubmit', reValidateMode: 'onChange' })
+    } = useForm<PayloadsReport>({mode: 'onSubmit', reValidateMode: 'onChange'})
     const dispatch = useAppDispatch()
     const [isShowMessageModal, setIsShowMessageModal] = useState<boolean>(false)
     const [messagePayload, setMessagePayload] = useState({
@@ -73,18 +73,18 @@ const AdvPage: FC = () => {
         if (id) {
             getOneOffer(id, user?.id)
                 .then((res) => {
-                    res && setOffer({ isLoaded: true, item: res })
+                    res && setOffer({isLoaded: true, item: res})
                 })
                 .catch((error) => {
-                    setOffer({ isLoaded: true, item: null })
+                    setOffer({isLoaded: true, item: null})
                 })
         }
     }, [id, user?.id])
 
     useEffect(() => {
         getOfferReportType()
-            .then((res) => res && setReportTypes({ isLoaded: true, items: res, error: null }))
-            .catch(() => setReportTypes({ isLoaded: true, items: null, error: 'Произошла ошибка' }))
+            .then((res) => res && setReportTypes({isLoaded: true, items: res, error: null}))
+            .catch(() => setReportTypes({isLoaded: true, items: null, error: 'Произошла ошибка'}))
     }, [])
 
     useEffect(() => {
@@ -92,8 +92,8 @@ const AdvPage: FC = () => {
             const payloads = {}
             if (user) {
                 getOffers(1, 10, offer?.item?.category, user?.id, payloads, true)
-                    .then((res) => setSimilarOffers({ isLoaded: true, items: res?.data, meta: res?.meta }))
-                    .catch(() => setSimilarOffers({ isLoaded: true, items: null, meta: null }))
+                    .then((res) => setSimilarOffers({isLoaded: true, items: res?.data, meta: res?.meta}))
+                    .catch(() => setSimilarOffers({isLoaded: true, items: null, meta: null}))
             }
         }
     }, [offer?.item, user?.id])
@@ -127,11 +127,11 @@ const AdvPage: FC = () => {
     const onSubmit = (data: PayloadsReport) => {
         createReport(data)
             .then(() => {
-                dispatch(showAlert({ message: 'Жалоба успешно отправлена', typeAlert: 'good' }))
+                dispatch(showAlert({message: 'Жалоба успешно отправлена', typeAlert: 'good'}))
                 setIsShowModalReport(false)
                 reset()
             })
-            .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' })))
+            .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
     }
     const [messageType, setMessageType] = useState<string>('0')
 
@@ -139,7 +139,7 @@ const AdvPage: FC = () => {
         e && e.preventDefault()
         if (offer.item) {
             emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
-                res?.status === 200 && dispatch(showAlert({ message: messageType, typeAlert: 'good' }))
+                res?.status === 200 && dispatch(showAlert({message: messageType, typeAlert: 'good'}))
                 setIsShowMessageModal(false)
             })
         }
@@ -147,24 +147,20 @@ const AdvPage: FC = () => {
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
-                <Breadcrumbs />
+                <Breadcrumbs/>
             </div>
 
             <section id="offer-page" className="container">
                 <h1>{offer?.item?.title}</h1>
                 <div className="d-lg-flex justify-content-between align-items-center mb-2 mb-sm-4">
-                    <h2 className="mb-0">
-                        {offer?.item?.description.slice(0, 50)}
-                        {offer?.item?.description && offer?.item?.description.length > 50 && "..."}
-                    </h2>
                     <div className="short-info ms-auto mt-3 mt-sm-4 mt-lg-0">
                         <span>ID: {offer?.item?.id}</span>
                         <time className="d-flex align-items-center ms-3 ms-sm-4">
-                            <MdDateRange />
+                            <MdDateRange/>
                             <span className="ms-1 ms-sm-2">{offer?.item?.createdAtForUser}</span>
                         </time>
                         <div className="d-flex align-items-center ms-3 ms-sm-4">
-                            <MdOutlineVisibility />
+                            <MdOutlineVisibility/>
                             <span className="ms-1 ms-sm-2">{offer?.item?.viewsCount} просмотров</span>
                         </div>
                     </div>
@@ -172,7 +168,7 @@ const AdvPage: FC = () => {
 
                 <div className="row mb-3 mb-sm-4 mb-md-5">
                     <div className="col-lg-7 col-xl-8 mb-4 mb-lg-0">
-                        <img src={checkPhotoPath(offer?.item?.image)} alt={offer?.item?.title} className="main-img" />
+                        <img src={checkPhotoPath(offer?.item?.image)} alt={offer?.item?.title} className="main-img"/>
                     </div>
                     <div className="col-lg-5 col-xl-4">
                         <div className="blue-box h-100 d-flex flex-column justify-content-between">
@@ -210,29 +206,36 @@ const AdvPage: FC = () => {
                                     <>
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
                                         </div>
 
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
-                                            <span className="f_15 fw_5 text-nowrap">
-                                                {FunctionForPrice(offer?.item?.profitPerMonth) || 0} ₽
-                                            </span>
-                                        </div>
+                                        {offer?.item?.profitPerMonth &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span
+                                                    className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
+                                            </div>}
 
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser != '' ? offer?.item?.paybackTimeForUser : 'не установлено'}</span>
-                                        </div>
+                                        {offer?.item?.paybackTimeForUser != '' &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                            </div>}
 
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.projectStage !== null ? offer?.item?.projectStageForUser?.toLowerCase() : 'не установлено'}</span>
-                                        </div>
+                                        {offer?.item?.projectStage!=0 &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
+                                                <span className="f_15 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
+                                            </div>
+                                        }
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Сфера:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.subsection?.area?.name}</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{offer?.item?.subsection?.area?.name}</span>
                                         </div>
                                     </>
                                 )}
@@ -241,17 +244,22 @@ const AdvPage: FC = () => {
                                     <>
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
                                         </div>
 
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser != '' ? offer?.item?.paybackTimeForUser : 'не установлено'}</span>
-                                        </div>
+                                        {offer?.item?.paybackTimeForUser != '' &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                            </div>
+                                        }
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Сфера:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.subsection?.area?.name}</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{offer?.item?.subsection?.area?.name}</span>
                                         </div>
                                     </>
                                 )}
@@ -261,23 +269,31 @@ const AdvPage: FC = () => {
                                     <>
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profit)} ₽</span>
+                                            <span
+                                                className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profit)} ₽</span>
                                         </div>
 
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser != '' ? offer?.item?.paybackTimeForUser : 'не установлено'}</span>
-                                        </div>
+                                        {offer?.item?.paybackTimeForUser != '' &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                            </div>
+                                        }
 
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.projectStage !== null ? offer?.item?.projectStageForUser?.toLowerCase() : 'не установлено'}</span>
-                                        </div>
+                                        {offer?.item?.projectStage!=0 &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
+                                                <span className="f_15 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
+                                            </div>
+                                        }
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Город:</span>
@@ -291,27 +307,33 @@ const AdvPage: FC = () => {
                                     <>
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стоимость бизнеса:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
                                         </div>
-
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser != '' ? offer?.item?.paybackTimeForUser : 'не установлено'}</span>
-                                        </div>
+                                        {offer?.item?.paybackTimeForUser &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                            </div>
+                                        }
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Оборот в месяц:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Чистая прибыль:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profit)} ₽</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profit)} ₽</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество точек:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
@@ -325,43 +347,56 @@ const AdvPage: FC = () => {
                                 {offer?.item?.category === 4 && (
                                     <>
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стартовые инвестиции от:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                            <span
+                                                className="pt fw_7 gray f_11 me-2 me-sm-4">Стартовые инвестиции от:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Паушальный взнос:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Роялти:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.pricePerMonth)} ₽</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.pricePerMonth)} ₽</span>
+                                        </div>
+
+                                        {offer?.item?.paybackTimeForUser != '' &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span
+                                                    className="pt fw_7 gray f_11 me-2 me-sm-4">Срок окупаемости:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                            </div>}
+
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span
+                                                className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Срок окупаемости:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser != '' ? offer?.item?.paybackTimeForUser : 'не установлено'}</span>
-                                        </div>
-
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
-                                        </div>
-
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Год основания компании:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{convertLocaleDate(offer?.item?.dateOfCreation)?.slice(-4)}</span>
+                                            <span
+                                                className="pt fw_7 gray f_11 me-2 me-sm-4">Год основания компании:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{convertLocaleDate(offer?.item?.dateOfCreation)?.slice(-4)}</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество собственных точек:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество проданных франшиз:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.soldBranchCount)} шт.</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.soldBranchCount)} шт.</span>
                                         </div>
                                     </>
                                 )}
@@ -377,7 +412,10 @@ const AdvPage: FC = () => {
                                             setMessageType(
                                                 'Запрос на бизнес план отправлен'
                                             )
-                                            setMessagePayload((prevState) => ({ ...prevState, text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"' }))
+                                            setMessagePayload((prevState) => ({
+                                                ...prevState,
+                                                text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"'
+                                            }))
                                             createWithOfferTopicMessage(event)
                                         }}
 
@@ -390,7 +428,7 @@ const AdvPage: FC = () => {
                                         onClick={() => {
                                             setMessageType('Сообщение успешно отправлено в онлайн чат.')
                                             setIsShowMessageModal(true)
-                                            setMessagePayload((prevState) => ({ ...prevState, text: '' }))
+                                            setMessagePayload((prevState) => ({...prevState, text: ''}))
                                         }}
                                     >
                                         НАПИСАТЬ СООБЩЕНИЕ
@@ -403,7 +441,7 @@ const AdvPage: FC = () => {
                                     className="d-flex align-items-center ms-auto me-0 mt-3 mt-sm-4 mt-lg-0"
                                     onClick={() => setIsShowModalReport(true)}
                                 >
-                                    <MdInfoOutline className="f_11 gray" />
+                                    <MdInfoOutline className="f_11 gray"/>
                                     <span className="ms-2 fw_7 f_12">Пожаловаться</span>
                                 </button>)}
                         </div>
@@ -413,11 +451,11 @@ const AdvPage: FC = () => {
                 <div className="row">
                     <div className="col-md-4 col-lg-3 position-relative">
                         <div className="left_menu">
-                            <LeftMenuInOfferContainer category={offer?.item?.category} video={offer?.item?.video} />
+                            <LeftMenuInOfferContainer category={offer?.item?.category} video={offer?.item?.video}/>
 
                             <div className="row justify-content-center g-4">
                                 <div className="col-8 col-sm-6 col-md-12 promo">
-                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2" />
+                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2"/>
                                     <h4 className="fw_7 mb-2">Акции от застройщиков</h4>
                                     <h5 className="mb-0">
                                         ТекстТекстТекст ТекстТекстТекст ТекстТекстТекстТекст Текст\Текст
@@ -425,7 +463,7 @@ const AdvPage: FC = () => {
                                     </h5>
                                 </div>
                                 <div className="col-8 col-sm-6 col-md-12 promo">
-                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2" />
+                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2"/>
                                     <h4 className="fw_7 mb-2">Акции от застройщиков</h4>
                                     <h5 className="mb-0">
                                         ТекстТекстТекст ТекстТекстТекст ТекстТекстТекстТекст Текст\Текст
@@ -437,9 +475,9 @@ const AdvPage: FC = () => {
                     </div>
                     <div className="col-md-8 col-lg-9">
                         <div className="offer-page-main">
-                            <hr className="mt-md-0" />
+                            <hr className="mt-md-0"/>
                             <div className="d-flex align-items-center f_09 mb-4 mb-lg-5">
-                                <MdOutlinePlace className="color-1" />
+                                <MdOutlinePlace className="color-1"/>
                                 <span className="gray ms-2">Регионы продаж:</span>
                                 <span className="ms-3">{offer?.item?.city}</span>
                             </div>
@@ -508,7 +546,7 @@ const AdvPage: FC = () => {
                                 className="d-flex align-items-center mb-2"
                                 onClick={() => setIsShowModalReport(true)}
                             >
-                                <MdInfoOutline className="f_11 gray" />
+                                <MdInfoOutline className="f_11 gray"/>
                                 <span className="ms-2 fw_7 f_12">Пожаловаться</span>
                             </button>
 
@@ -516,7 +554,8 @@ const AdvPage: FC = () => {
                                 <section className="anchor_block mb-4" id="anchor_video">
                                     <h4 className="fw_7">Видео</h4>
                                     <PhotoProvider maskOpacity={0.75}>
-                                        <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4 col">
+                                        <div
+                                            className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4 col">
                                             <div className="acc-video">
                                                 <iframe
                                                     src={offer?.item?.video}
@@ -603,7 +642,7 @@ const AdvPage: FC = () => {
                             )
                         ) : (
                             <div className="p-5 w-100 d-flex justify-content-center">
-                                <Loader color="#343434" />
+                                <Loader color="#343434"/>
                             </div>
                         )}
                     </Swiper>
@@ -622,7 +661,7 @@ const AdvPage: FC = () => {
                         <textarea
                             placeholder="Введите сообщение..."
                             value={messagePayload.text || ''}
-                            onChange={(e) => setMessagePayload((prevState) => ({ ...prevState, text: e.target.value }))}
+                            onChange={(e) => setMessagePayload((prevState) => ({...prevState, text: e.target.value}))}
                         />
                         {messagePayload?.text?.length === 0 ? (
                             <span className="gray-text">
@@ -679,8 +718,8 @@ const AdvPage: FC = () => {
                                 <textarea
                                     {...register('description', {
                                         required: 'Обязательное поле',
-                                        minLength: { value: 5, message: 'Минимум 5 символов' },
-                                        maxLength: { value: 250, message: 'Максимум 250 символов' },
+                                        minLength: {value: 5, message: 'Минимум 5 символов'},
+                                        maxLength: {value: 250, message: 'Максимум 250 символов'},
                                     })}
                                 />
                             </ValidateWrapper>
@@ -702,7 +741,7 @@ const AdvPage: FC = () => {
                     </form>
                 </div>
             </CustomModal>
-            <PartnersSite />
+            <PartnersSite/>
         </main>
     )
 }
