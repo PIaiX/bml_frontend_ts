@@ -19,6 +19,7 @@ type Props = {
 }
 
 const AdCard: FC<Props> = (props: any) => {
+    console.log(props)
     return (
         <div className={'mx-sm-4 my-md-5 my-sm-3 py-1 ad-preview ' + props.className}>
             <div className="d-flex flex-column flex-sm-row align-items-stretch flex-1">
@@ -49,9 +50,9 @@ const AdCard: FC<Props> = (props: any) => {
                     <div className="mt-2">
                         <span className="color-1 fw_5">{props?.archiveExpire}</span>
                     </div>
-                    <div>
-                        {props.validity}
-                    </div>
+                    {props.isVerified &&
+                        <div>{props.validity}</div>
+                    }
                 </div>
             </div>
             <div className="btns row gx-2 mt-3 mt-md-0 mt-sm-4">
