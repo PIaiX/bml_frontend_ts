@@ -1,9 +1,9 @@
 import React, {BaseSyntheticEvent, FC, useEffect, useState} from 'react'
-import {Link, NavLink, useParams} from 'react-router-dom'
+import {Link, NavLink, useNavigate, useParams} from 'react-router-dom'
 import {MdOutlineArrowBack, MdOutlineQuestionAnswer} from 'react-icons/md'
 import {IUseStateItem, IUseStateItems} from '../../types'
 import {IUser} from '../../types/user'
-import {getUserInfo} from '../../services/users'
+import {getIdChat, getUserInfo} from '../../services/users'
 import {IOffersItem, IOffersMeta} from '../../types/offers'
 import {getUsersOffersNotArchive} from '../../services/offers'
 import {checkPhotoPath} from '../../helpers/photoLoader'
@@ -17,11 +17,11 @@ import CustomModal from '../../components/utils/CustomModal'
 const ViewProfile: FC = () => {
     const {id} = useParams()
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
-    const [sliceNumber, setSliceNumber] = useState(6)
     const [userInfo, setUserInfo] = useState<IUseStateItem<IUser>>({
         isLoaded: false,
         item: null,
     })
+
     const [userOffers, setUserOffers] = useState<IUseStateItems<IOffersItem, IOffersMeta>>({
         isLoaded: false,
         meta: null,
@@ -31,6 +31,7 @@ const ViewProfile: FC = () => {
         text: '',
         conversationId: 0,
     })
+    const [idChat, setIdChat] = useState()
     const [isShowMessageModal, setIsShowMessageModal] = useState(false)
     const dispatch = useAppDispatch()
 
@@ -49,6 +50,13 @@ const ViewProfile: FC = () => {
                 .catch((error) => setUserOffers({isLoaded: true, items: null, meta: null}))
         }
     }, [id])
+
+    useEffect(()=>{
+        if(user && userInfo?.item?.id){
+            getIdChat(userInfo?.item?.id).then(res=>setIdChat(res.id))
+        }
+    },[userInfo?.item])
+
 
     const onSubmitCreateFriend = () => {
         if (user && id) {
@@ -189,19 +197,21 @@ const ViewProfile: FC = () => {
                         />
                         {user?.id != id && userInfo?.item && (
                             <div className="acc-box mt-3 mt-xl-4">
-                                {userInfo?.item?.friendStatus &&
-                                    <>
-                                        <button
-                                            type="button"
-                                            className="d-flex align-items-center blue fw_6"
-                                            onClick={() => setIsShowMessageModal(true)}
-                                        >
-                                            <MdOutlineQuestionAnswer className="f_17"/>
-                                            <span className="ms-1 ms-sm-3 text-start">Написать сообщение</span>
-                                        </button>
-                                        <hr className="my-3"/>
-                                    </>
-                                }
+                                <>
+                                    <Link
+                                        to={`/account/chat/window/${idChat ? idChat : 'new'}`}
+                                        state={{ userName: userInfo?.item.fullName, userId: userInfo?.item.id, avatar: userInfo?.item.avatar }}
+                                    >
+                                    <button
+                                        type="button"
+                                        className="d-flex align-items-center blue fw_6"
+                                    >
+                                        <MdOutlineQuestionAnswer className="f_17"/>
+                                        <span className="ms-1 ms-sm-3 text-start">Написать сообщение</span>
+                                    </button>
+                                    <hr className="my-3"/>
+                                    </Link>
+                                </>
                                 {!userInfo?.item?.outgoingStatus && !userInfo?.item?.incomingStatus && !userInfo?.item?.friendStatus && (
                                     <button
                                         type="button"

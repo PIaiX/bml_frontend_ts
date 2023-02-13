@@ -236,6 +236,7 @@ const Service: FC = () => {
                                             title={item.title}
                                             investments={item.investments}
                                             favorite={item.isFavorite}
+                                            price={categoryId===3?item.price : undefined}
                                         />
                                     </div>
                                 ))
@@ -247,9 +248,9 @@ const Service: FC = () => {
                                 <Loader color="#343434" />
                             </div>
                         )}
-                        {advertising && advertising[0] && advertising[0].image &&
+                        {advertising && advertising[0] && advertising[0].offerImage &&
                             <div className="blockAdvertising">
-                                <img className={"img-advertising"} src={advertising[0].image} alt="" />
+                                <img className={"img-advertising"} src={advertising[0].offerImage} alt="" />
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(12, 24).map((item: IOffersItem) => (
@@ -260,13 +261,14 @@ const Service: FC = () => {
                                           title={item.title}
                                           favorite={item.isFavorite}
                                           investments={item.investments}
+                                          price={categoryId===3?item.price : undefined}
                                       />
                                   </div>
                               ))
                             : null}
-                        {advertising && advertising[1] && advertising[1]?.image &&
+                        {advertising && advertising[1] && advertising[1]?.offerImage &&
                             <div className={"blockAdvertising"}>
-                                <img className={"img-advertising"} src={advertising[1].image} alt="" />
+                                <img className={"img-advertising"} src={advertising[1].offerImage} alt="" />
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(24, offers?.items?.length).map((item: IOffersItem) => (
@@ -277,6 +279,7 @@ const Service: FC = () => {
                                         title={item.title}
                                         favorite={item.isFavorite}
                                         investments={item.investments}
+                                        price={categoryId===3?item.price : undefined}
                                     />
                                 </div>
                             ))

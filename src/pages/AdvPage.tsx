@@ -1,7 +1,7 @@
 import React, {BaseSyntheticEvent, FC, useEffect, useState,} from 'react'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import AdvPreview from '../components/AdvPreview'
-import {NavLink, useParams} from 'react-router-dom'
+import {Link, NavLink, useNavigate, useParams} from 'react-router-dom'
 import {MdDateRange, MdInfoOutline, MdOutlinePlace, MdOutlineVisibility} from 'react-icons/md'
 import BtnFav from '../components/utils/BtnFav'
 import {PhotoProvider, PhotoView} from 'react-photo-view'
@@ -29,9 +29,12 @@ import {showAlert} from '../store/reducers/alertSlice'
 import {emitCreateWithOfferTopicMessage} from '../services/sockets/messages'
 import FunctionForPrice from '../helpers/FunctionForPrice'
 import {convertLocaleDate} from "../helpers/convertLocaleDate";
+import {getIdChat} from "../services/users";
 
 const AdvPage: FC = () => {
+    const navigate = useNavigate()
     const {id} = useParams()
+    const [idChat, setIdChat] = useState();
     const [offer, setOffer] = useState<IUseStateItem<IOfferItem>>({
         isLoaded: false,
         item: null,
@@ -50,7 +53,6 @@ const AdvPage: FC = () => {
     })
     const {
         register,
-        getValues,
         formState: {errors},
         handleSubmit,
         setValue,
@@ -65,11 +67,18 @@ const AdvPage: FC = () => {
     })
 
     useEffect(() => {
+        if (user && offer?.item?.user?.id) {
+            getIdChat(offer?.item?.user?.id).then(res => setIdChat(res.id))
+        }
+    }, [offer])
+
+    useEffect(() => {
         if (user && messagePayload.text === user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"')
             createWithOfferTopicMessage(null)
     }, [messagePayload])
 
     useEffect(() => {
+
         if (id) {
             getOneOffer(id, user?.id)
                 .then((res) => {
@@ -90,13 +99,11 @@ const AdvPage: FC = () => {
     useEffect(() => {
         if (offer?.item) {
             const payloads = {}
-            if (user) {
-                getOffers(1, 10, offer?.item?.category, user?.id, payloads, true)
-                    .then((res) => setSimilarOffers({isLoaded: true, items: res?.data, meta: res?.meta}))
-                    .catch(() => setSimilarOffers({isLoaded: true, items: null, meta: null}))
-            }
+            getOffers(1, 10, offer?.item?.category, user ? user.id : null, payloads, true)
+                .then((res) => setSimilarOffers({isLoaded: true, items: res?.data, meta: res?.meta}))
+                .catch(() => setSimilarOffers({isLoaded: true, items: null, meta: null}))
         }
-    }, [offer?.item, user?.id])
+    }, [offer?.item])
 
     const returnDescriptionName = () => {
         const category = offer?.item?.category
@@ -141,9 +148,15 @@ const AdvPage: FC = () => {
             emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
                 res?.status === 200 && dispatch(showAlert({message: messageType, typeAlert: 'good'}))
                 setIsShowMessageModal(false)
+                if (offer?.item?.user?.id) {
+                    getIdChat(offer?.item?.user?.id).then(res => setIdChat(res.id))
+                }
             })
         }
     }
+    let srcToChat='/enter'
+    if(user)
+        srcToChat=`/account/chat/window/${idChat ? idChat : 'new'}`
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
@@ -225,10 +238,11 @@ const AdvPage: FC = () => {
                                                     className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
                                             </div>}
 
-                                        {offer?.item?.projectStage!=0 &&
+                                        {offer?.item?.projectStage != 0 &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
-                                                <span className="f_15 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
                                             </div>
                                         }
 
@@ -288,10 +302,11 @@ const AdvPage: FC = () => {
                                             </div>
                                         }
 
-                                        {offer?.item?.projectStage!=0 &&
+                                        {offer?.item?.projectStage != 0 &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
-                                                <span className="f_15 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
                                             </div>
                                         }
 
@@ -402,13 +417,12 @@ const AdvPage: FC = () => {
                                 )}
 
                             </div>
-
-                            {(user
-                                && <div>
-                                    <button
-                                        type="button"
-                                        className="btn_main btn-5 f_11 w-100"
-                                        onClick={(event) => {
+                            <div>
+                                <button
+                                    type="button"
+                                    className="btn_main btn-5 f_11 w-100"
+                                    onClick={(event) => {
+                                        if (user) {
                                             setMessageType(
                                                 'Запрос на бизнес план отправлен'
                                             )
@@ -417,23 +431,21 @@ const AdvPage: FC = () => {
                                                 text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"'
                                             }))
                                             createWithOfferTopicMessage(event)
-                                        }}
-
-                                    >
-                                        ПОЛУЧИТЬ БИЗНЕС-ПЛАН
-                                    </button>
+                                        } else navigate('/enter')
+                                    }}
+                                >
+                                    ПОЛУЧИТЬ БИЗНЕС-ПЛАН
+                                </button>
+                                {<Link to={srcToChat}
+                                       state={{ userName: offer?.item?.user.fullName, userId: offer?.item?.user.id, avatar: offer?.item?.user.avatar }}
+                                >
                                     <button
-                                        type="button"
-                                        className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3"
-                                        onClick={() => {
-                                            setMessageType('Сообщение успешно отправлено в онлайн чат.')
-                                            setIsShowMessageModal(true)
-                                            setMessagePayload((prevState) => ({...prevState, text: ''}))
-                                        }}
-                                    >
-                                        НАПИСАТЬ СООБЩЕНИЕ
-                                    </button>
-                                </div>)}
+                                    type="button"
+                                    className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3">
+                                    НАПИСАТЬ СООБЩЕНИЕ
+                                </button>
+                                </Link>}
+                            </div>
 
                             {(user
                                 && <button

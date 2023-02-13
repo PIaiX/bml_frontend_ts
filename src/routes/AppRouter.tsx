@@ -15,6 +15,7 @@ import NotFound from '../pages/NotFound'
 import { Link } from 'react-router-dom'
 import PrivacyPolicy from '../pages/profile/PrivacyPolicy'
 import Search from "../pages/Search";
+import ChatWindowEmpty from "../pages/profile/ChatWindowEmpty";
 
 const router = createBrowserRouter([
     {
@@ -45,6 +46,11 @@ const router = createBrowserRouter([
             },
             {
                 path: 'privacy',
+                element: <PrivacyPolicy />,
+                handle: { crumb: () => <span>Политика</span> },
+            },
+            {
+                path: 'information/privacy',
                 element: <PrivacyPolicy />,
                 handle: { crumb: () => <span>Политика</span> },
             },

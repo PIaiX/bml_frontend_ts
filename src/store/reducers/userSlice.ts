@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import { $api } from '../../services/indexAuth'
 import { apiRoutes } from '../../config/api'
 import { IUser } from '../../types/user'
@@ -36,7 +36,7 @@ export const userSlice = createSlice({
         },
         resetUser: (state) => {
             state.user = initialState.user
-        },
+        }
     },
     extraReducers: {
         [checkAuth.fulfilled.type]: (state: InitialState, action: { payload: { token: string; user: any } }) => {

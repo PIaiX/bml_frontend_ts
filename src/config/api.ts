@@ -55,6 +55,7 @@ const apiRoutes: ApiRoutesTypes = {
     GET_CURRENT_FRIENDS: 'user/friend/friends',
     UPDATE_PASSWORD: 'user/updatePassword',
     ACTIONS_USER: 'user',
+    GET_ID_CHAT:'conversation',
 
     //instructions
     GET_PARTNERS: 'partner',

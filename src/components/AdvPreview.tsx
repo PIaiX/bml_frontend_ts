@@ -15,6 +15,7 @@ interface Props {
     id?: number
     investments?: number
     callbackClick?: () => void
+    price?:number | undefined
 }
 
 
@@ -40,11 +41,8 @@ const AdvPreview: FC<Props> = (props) => {
                     </div>
                     <div className="layer2">
                         <div className="white d-flex flex-wrap align-items-center d-lg-block">
-
-                            <div className="f_08 me-1 me-sm-3">Инвестиции от</div>
-                            <div>{FunctionForPrice(props.investments)} руб
-
-                            </div>
+                            <div className="f_08 me-1 me-sm-3">{props.price?'Стоимость бизнеса':'Инвестиции от'}</div>
+                            <div>{FunctionForPrice(props.price?props.price:props.investments)} руб</div>
                         </div>
                         <div className="d-flex align-items-center" onClick={(event) => { stopPropagation(event) }}>
 

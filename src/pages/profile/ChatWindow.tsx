@@ -16,6 +16,7 @@ import ValidateWrapper from '../../components/utils/ValidateWrapper'
 import {IUseStateItems} from '../../types'
 import {IMessageItem, IMessageMeta} from '../../models/sockets/messages'
 import InfiniteScroll from 'react-infinite-scroller'
+import {checkPhotoPath} from "../../helpers/photoLoader";
 
 const ChatWindow = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
@@ -132,7 +133,7 @@ const ChatWindow = () => {
                     <div className="fw_5">{state?.userName}</div>
                 </div>
                 <Link to={`/account/profile/user/${state?.userId}`} className="user">
-                    <img src={state?.avatar} alt={state?.userName} />
+                    <img src={checkPhotoPath(state?.avatar)} alt={state?.userName} />
                 </Link>
             </div>
             <div className="middle p-2 p-sm-4 flex-column-reverse" id="chatBody">

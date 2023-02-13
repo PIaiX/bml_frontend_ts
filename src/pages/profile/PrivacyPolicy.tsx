@@ -3,8 +3,8 @@ import React from "react"
 const PrivacyPolicy: React.FC = () => {
 
     return (
-        <main>
-            <div className={"px-5 py-4 privacy"}>
+        <main className={"d-flex justify-content-center"}>
+            <div className={"px-5 py-4 privacy"} style={{maxWidth:"1000px"}}>
                 <h3>
                     <p>
                         Политика конфиденциальности персональных данных портала БИЗНЕС MY LIFE (business-mylife.ru)
