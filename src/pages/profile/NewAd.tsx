@@ -307,7 +307,6 @@ const NewAd = () => {
             [ValuesFroPrice[6][0]]: ValuesFroPrice[6][1],
             city: city,
         }
-        console.log(data);
         if (id) {
             saveChanges(data)
         } else {

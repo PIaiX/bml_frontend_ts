@@ -19,7 +19,6 @@ type Props = {
 }
 
 const AdCard: FC<Props> = (props: any) => {
-    console.log(props)
     return (
         <div className={'mx-sm-4 my-md-5 my-sm-3 py-1 ad-preview ' + props.className}>
             <div className="d-flex flex-column flex-sm-row align-items-stretch flex-1">

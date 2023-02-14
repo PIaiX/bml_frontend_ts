@@ -17,6 +17,7 @@ import PrivacyPolicy from '../pages/profile/PrivacyPolicy'
 import Search from "../pages/Search";
 import ChatWindowEmpty from "../pages/profile/ChatWindowEmpty";
 import OfferInf from "../pages/profile/OfferInf";
+import MainInf from "../pages/profile/MainInf";
 
 const router = createBrowserRouter([
     {
@@ -46,12 +47,8 @@ const router = createBrowserRouter([
                 handle: { crumb: () => <span>Новости</span> },
             },
             {
-                path: 'information/privacy',
-                element: <PrivacyPolicy />,
-            },
-            {
-                path: 'information/offer',
-                element: <OfferInf />,
+                path: 'information',
+                element: <MainInf />,
             },
             {
                 path: 'news/:slug',
