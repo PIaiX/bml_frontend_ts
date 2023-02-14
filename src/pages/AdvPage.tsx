@@ -378,7 +378,10 @@ const AdvPage: FC = () => {
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Роялти:</span>
                                             <span
-                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.pricePerMonth)} ₽</span>
+                                                className="f_15 fw_5 text-nowrap">
+                                                {FunctionForPrice(offer?.item?.pricePerMonth)}
+                                                {offer?.item?.isPricePerMonthAbsolute?' %':' ₽'}
+                                            </span>
                                         </div>
 
                                         {offer?.item?.paybackTimeForUser != '' &&
@@ -552,6 +555,7 @@ const AdvPage: FC = () => {
                                 city={offer?.item?.city}
                                 dateOfCreation={offer?.item?.dateOfCreation}
                                 areaName={offer?.item?.subsection?.area?.name}
+                                isPricePerMonthAbsolute={offer?.item?.isPricePerMonthAbsolute}
                             />
 
                             <button
@@ -647,6 +651,7 @@ const AdvPage: FC = () => {
                                             title={offer.title}
                                             investments={offer.investments}
                                             favorite={false}
+                                            isPricePerMonthAbsolute={offer.isPricePerMonthAbsolute}
                                         />
                                     </SwiperSlide>
                                 ))

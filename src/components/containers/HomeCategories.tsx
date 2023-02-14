@@ -157,6 +157,8 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         title={item.title}
                                         investments={item.investments}
                                         favorite={item?.isFavorite}
+                                        isPricePerMonthAbsolute={item?.isPricePerMonthAbsolute}
+
                                     />
                                 </div>
                             ))

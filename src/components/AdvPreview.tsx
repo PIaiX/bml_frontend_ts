@@ -16,6 +16,7 @@ interface Props {
     investments?: number
     callbackClick?: () => void
     price?:number | undefined
+    isPricePerMonthAbsolute?:boolean | null
 }
 
 
@@ -42,7 +43,10 @@ const AdvPreview: FC<Props> = (props) => {
                     <div className="layer2">
                         <div className="white d-flex flex-wrap align-items-center d-lg-block">
                             <div className="f_08 me-1 me-sm-3">{props.price?'Стоимость бизнеса':'Инвестиции от'}</div>
-                            <div>{FunctionForPrice(props.price?props.price:props.investments)} руб</div>
+                            <div>
+                                {FunctionForPrice(props.price?props.price:props.investments)}
+                                {props.isPricePerMonthAbsolute?' %':' руб'}
+                            </div>
                         </div>
                         <div className="d-flex align-items-center" onClick={(event) => { stopPropagation(event) }}>
 

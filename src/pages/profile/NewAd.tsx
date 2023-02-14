@@ -59,7 +59,8 @@ const NewAd = () => {
         item: null,
     })
     const [imagesFromServer, setImagesFromServer] = useState<any>(null)
-
+    const [isPricePerMonthAbsolute, setRoaloty]=useState<boolean>(false)
+    const [placedForMonths, setPlacedForMonths]=useState(3)
     const {
         register,
         setValue,
@@ -213,7 +214,9 @@ const NewAd = () => {
             userId: user?.id,
             image: formInfo?.image || '',
             category: formInfo?.category,
-        }
+            isPricePerMonthAbsolute,
+            placedForMonths
+    }
         for (const key in req) {
             formData.append(key, req[key])
         }
@@ -917,6 +920,32 @@ const NewAd = () => {
                                             })}
                                         />
                                     </ValidateWrapper>
+
+                                </div>
+                            </div>
+                            <div className="row align-items-center mb-4">
+                                <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0 pb-1">
+                                    <div>
+                                        Единица измерения<span className="red">*</span>
+                                    </div>
+                                </div>
+                                <div className="col-sm-2 col-lg-1 col-2">
+                                    <div className={"d-inline-block"}><input
+                                        name="roal-type"
+                                        checked={!isPricePerMonthAbsolute}
+                                        onChange={()=>setRoaloty(!isPricePerMonthAbsolute)}
+                                        type="radio"
+                                    /></div>
+                                    <div className={"d-inline-block"}>&nbsp;₽</div>
+                                </div>
+                                <div className="col-sm-2 col-lg-1 col-2">
+                                    <div className={"d-inline-block"}><input
+                                        name="raol-type"
+                                        checked={isPricePerMonthAbsolute}
+                                        onChange={()=>setRoaloty(!isPricePerMonthAbsolute)}
+                                        type="radio"
+                                    /></div>
+                                    <div className={"d-inline-block"}>&nbsp;%</div>
                                 </div>
                             </div>
                         </>
@@ -1095,13 +1124,8 @@ const NewAd = () => {
                                         <input
                                             name="ad-type"
                                             type="radio"
-                                            value="6000"
-                                            onChange={(e) =>
-                                                setFormInfo((prevState: any) => ({
-                                                    ...prevState,
-                                                    [e.target.name]: e.target.value,
-                                                }))
-                                            }
+                                            checked={placedForMonths===3}
+                                            onChange={() => setPlacedForMonths(3)}
                                         />
                                         <span className="ms-1 ms-sm-2 ms-xl-3">Разместить</span>
                                     </label>
@@ -1114,13 +1138,8 @@ const NewAd = () => {
                                         <input
                                             name="ad-type"
                                             type="radio"
-                                            value="11 000"
-                                            onChange={(e) =>
-                                                setFormInfo((prevState: any) => ({
-                                                    ...prevState,
-                                                    [e.target.name]: e.target.value,
-                                                }))
-                                            }
+                                            checked={placedForMonths===6}
+                                            onChange={() => setPlacedForMonths(6)}
                                         />
                                         <span className="ms-1 ms-sm-2 ms-xl-3">Разместить</span>
                                     </label>

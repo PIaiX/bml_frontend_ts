@@ -13,6 +13,7 @@ type Props = {
     type: number
     id: number
     validity: string,
+    isPricePerMonthAbsolute:boolean | null
     isVerified?:boolean,
     offerIdSeterForUnArchive?: (id: number) => void
     offerIdSeterForArchive?: (id: number) => void
@@ -44,7 +45,7 @@ const AdCard: FC<Props> = (props: any) => {
                         <div className="l-gray f_08 mt-2">{props.scope}</div>
                     </div>
                     {props.investments && (
-                        <div className="fw_5 f_09 mt-2">{FunctionForPrice(props.investments)}&nbsp;₽</div>
+                        <div className="fw_5 f_09 mt-2">{FunctionForPrice(props.investments)}&nbsp;{props.isPricePerMonthAbsolute?' %':' руб'}</div>
                     )}
                     <div className="mt-2">
                         <span className="color-1 fw_5">{props?.archiveExpire}</span>
