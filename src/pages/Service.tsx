@@ -1,26 +1,27 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import AdvPreview from '../components/AdvPreview'
-import {Swiper, SwiperSlide} from 'swiper/react'
-import {Pagination} from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import Loader from '../components/utils/Loader'
 import ServicePagination from '../components/utils/Pagination'
 import usePagination from '../hooks/pagination'
-import {useParams} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import SearchForm from '../components/forms/SearchForm'
 import PartnersSite from '../components/PartnersSite'
 import NewsContainer from '../components/containers/News'
 import BannerContainer from '../components/containers/Banner'
 import BlocksContainer from '../components/containers/Blocks'
-import {getAllAreas, getAllSubsections, getOffers} from '../services/offers'
-import {getCity} from '../services/city'
-import {IOffersAreaItem, IOffersItem, IOffersMeta, IOffersSubSectionsItem, IPayloadsFilter} from '../types/offers'
-import {useAppSelector} from '../hooks/store'
-import {IUser} from '../types/user'
-import {IUseStateItems} from '../types'
-import {getAdvertisings} from "../services/advertising";
-import {Advertisings} from "../types/advertising";
+import { getAllAreas, getAllSubsections, getOffers } from '../services/offers'
+import { getCity } from '../services/city'
+import { IOffersAreaItem, IOffersItem, IOffersMeta, IOffersSubSectionsItem, IPayloadsFilter } from '../types/offers'
+import { useAppSelector } from '../hooks/store'
+import { IUser } from '../types/user'
+import { IUseStateItems } from '../types'
+import { getAdvertisings } from "../services/advertising";
+import { Advertisings } from "../types/advertising";
+import { ScrollRestoration } from "react-router-dom";
 
 const Service: FC = () => {
     const params = useParams()
@@ -38,7 +39,7 @@ const Service: FC = () => {
         meta: null,
     })
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
-    const {paginationItems, pageCount, selectedPage, handlePageClick, setSelectedPage} = usePagination(
+    const { paginationItems, pageCount, selectedPage, handlePageClick, setSelectedPage } = usePagination(
         offers?.items,
         limit,
         offers?.meta?.total
@@ -48,13 +49,9 @@ const Service: FC = () => {
     })
 
     useEffect(() => {
-        if (ref.current !== null) {
-            window.scrollTo(0, ref?.current?.offsetTop - 130)
-        }
-        getAdvertisings().then(res=>res && setAdvertising(res))
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        getAdvertisings().then(res => res && setAdvertising(res))
     }, [categoryId])
-
-    useEffect(()=>console.log(advertising),)
 
     useEffect(() => {
         getAllAreas().then((res) => res && setAreas(res))
@@ -75,19 +72,19 @@ const Service: FC = () => {
             if (user?.id) {
                 getOffers(selectedPage + 1, limit, categoryId, user?.id, filters, false)
                     .then((res) => {
-                        res && setOffers({isLoaded: true, items: res?.data, meta: res?.meta})
+                        res && setOffers({ isLoaded: true, items: res?.data, meta: res?.meta })
                     })
                     .catch((error) => {
-                        setOffers({isLoaded: true, items: null, meta: null})
+                        setOffers({ isLoaded: true, items: null, meta: null })
                     })
             }
         } else {
             getOffers(selectedPage + 1, limit, categoryId, null, filters, false)
                 .then((res) => {
-                    res && setOffers({isLoaded: true, items: res?.data, meta: res?.meta})
+                    res && setOffers({ isLoaded: true, items: res?.data, meta: res?.meta })
                 })
                 .catch((error) => {
-                    setOffers({isLoaded: true, items: null, meta: null})
+                    setOffers({ isLoaded: true, items: null, meta: null })
                 })
         }
     }, [selectedPage, orderBy, categoryId, user?.id, filters])
@@ -101,10 +98,10 @@ const Service: FC = () => {
         if (user) {
             getOffers(1, limit, categoryId, user?.id, data, false)
                 .then((res) => {
-                    res && setOffers({isLoaded: true, items: res?.data, meta: res?.meta})
+                    res && setOffers({ isLoaded: true, items: res?.data, meta: res?.meta })
                 })
                 .catch((error) => {
-                    setOffers({isLoaded: true, items: null, meta: null})
+                    setOffers({ isLoaded: true, items: null, meta: null })
                 })
         }
     }
@@ -117,7 +114,7 @@ const Service: FC = () => {
         setSelectedPage(0)
     }, [categoryId])
 
-    const [advertising, setAdvertising]=useState<Advertisings>()
+    const [advertising, setAdvertising] = useState<Advertisings>()
 
     return (
         <main>
@@ -212,7 +209,7 @@ const Service: FC = () => {
                                 name="orderBy"
                                 value={filters?.orderBy}
                                 className="f_08 ms-2 pe-4"
-                                onChange={(e) => setFilters((prevState) => ({...prevState, orderBy: e.target.value}))}
+                                onChange={(e) => setFilters((prevState) => ({ ...prevState, orderBy: e.target.value }))}
                             >
                                 <option value={''} disabled>
                                     по дате публикации
@@ -236,7 +233,7 @@ const Service: FC = () => {
                                             title={item.title}
                                             investments={item.investments}
                                             favorite={item.isFavorite}
-                                            price={categoryId===3?item.price : undefined}
+                                            price={categoryId === 3 ? item.price : undefined}
                                         />
                                     </div>
                                 ))
@@ -254,17 +251,17 @@ const Service: FC = () => {
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(12, 24).map((item: IOffersItem) => (
-                                  <div className="col position-relative" key={item.id}>
-                                      <AdvPreview
-                                          id={item.id}
-                                          image={item.image}
-                                          title={item.title}
-                                          favorite={item.isFavorite}
-                                          investments={item.investments}
-                                          price={categoryId===3?item.price : undefined}
-                                      />
-                                  </div>
-                              ))
+                                <div className="col position-relative" key={item.id}>
+                                    <AdvPreview
+                                        id={item.id}
+                                        image={item.image}
+                                        title={item.title}
+                                        favorite={item.isFavorite}
+                                        investments={item.investments}
+                                        price={categoryId === 3 ? item.price : undefined}
+                                    />
+                                </div>
+                            ))
                             : null}
                         {advertising && advertising[1] && advertising[1]?.offerImage &&
                             <div className={"blockAdvertising"}>
@@ -279,14 +276,14 @@ const Service: FC = () => {
                                         title={item.title}
                                         favorite={item.isFavorite}
                                         investments={item.investments}
-                                        price={categoryId===3?item.price : undefined}
+                                        price={categoryId === 3 ? item.price : undefined}
                                     />
                                 </div>
                             ))
                             : null}
                     </div>
                 )}
-                    {offers.isLoaded && (
+                {offers.isLoaded && (
                     <div className="sort mt-4">
                         <ServicePagination
                             nextLabel="❯"
@@ -308,7 +305,7 @@ const Service: FC = () => {
                                 name="orderBy"
                                 value={filters?.orderBy}
                                 className="f_08 ms-2 pe-4"
-                                onChange={(e) => setFilters((prevState) => ({...prevState, orderBy: e.target.value}))}
+                                onChange={(e) => setFilters((prevState) => ({ ...prevState, orderBy: e.target.value }))}
                             >
                                 <option value={''} disabled>
                                     по дате публикации

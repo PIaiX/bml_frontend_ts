@@ -1,10 +1,10 @@
-import React, {FC, useEffect, useMemo} from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import {Outlet, ScrollRestoration} from 'react-router-dom'
+import { Outlet, ScrollRestoration } from 'react-router-dom'
 import Alert from '../components/utils/Alert'
-import {useAppDispatch, useAppSelector} from '../hooks/store'
-import {resetAlert} from '../store/reducers/alertSlice'
+import { useAppDispatch, useAppSelector } from '../hooks/store'
+import { resetAlert } from '../store/reducers/alertSlice'
 
 const Layout: FC = () => {
     const alertState = useAppSelector((state) => state.alert)
@@ -18,12 +18,12 @@ const Layout: FC = () => {
             }, 2000)
         }
     }, [alertState?.isShow])
-    useEffect(()=>{
-        if(user){
+    useEffect(() => {
+        if (user) {
             // alert('begin')
         }
-        return ()=>{
-            if(user){
+        return () => {
+            if (user) {
                 // alert('end')
             }
         }
@@ -32,7 +32,7 @@ const Layout: FC = () => {
 
     return (
         <div className="root-wrapper">
-            <ScrollRestoration />
+            {/* <ScrollRestoration /> */}
             <Header />
             <div className="content-wrapper">
                 <Outlet />
