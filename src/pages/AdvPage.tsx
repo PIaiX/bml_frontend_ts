@@ -141,7 +141,8 @@ const AdvPage: FC = () => {
             .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
     }
     const [messageType, setMessageType] = useState<string>('0')
-
+    let swiperPB=250;
+    if(window. innerWidth>1400)swiperPB=350
     const createWithOfferTopicMessage = (e: BaseSyntheticEvent | null) => {
         e && e.preventDefault()
         if (offer.item) {
@@ -609,7 +610,7 @@ const AdvPage: FC = () => {
                 <div className="container">
                     <h2 className="mt-sm-4">Похожие объявления</h2>
                     <Swiper
-                        className="pt-sm-4 pb-4 pb-sm-5"
+                        style={{paddingBottom:`${swiperPB}px`}}
                         modules={[Pagination]}
                         slidesPerView={2}
                         spaceBetween={6}

@@ -121,7 +121,7 @@ export default function Footer() {
                                                 <Link to="/news">Новости</Link>
                                             </li>
                                             <li>
-                                                <Link to="/privacy">Информацию по сайту</Link>
+                                                <Link to="information/privacy">Информацию по сайту</Link>
                                             </li>
                                         </ul>
                                     </nav>
