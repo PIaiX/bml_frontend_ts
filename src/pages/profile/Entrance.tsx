@@ -10,6 +10,8 @@ import ValidateWrapper from '../../components/utils/ValidateWrapper'
 const Entrance: FC = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+    const [typePassword, setTypePassword] = useState<boolean>(false);
+
     const {
         register,
         formState: {errors},
@@ -56,13 +58,23 @@ const Entrance: FC = () => {
                             </ValidateWrapper>
                             <ValidateWrapper error={errors.password}>
                                 <input
-                                    type="password"
+                                    type={`${typePassword?'text':'password'}`}
                                     placeholder="Пароль"
                                     className="mt-3"
                                     {...register('password', {
                                         required: 'Введите пароль',
                                     })}
                                 />
+                                <label className="color-1 mt-3 mt-sm-4">
+                                    <input
+                                        name="offer"
+                                        type="checkbox"
+                                        defaultChecked={false}
+                                        onClick={(e) => setTypePassword(!typePassword)}
+                                    />
+                                    <span className="ms-3">Показать пароль</span>
+                                </label>
+
                             </ValidateWrapper>
                             <button className="btn_main btn_2 px-5 mx-auto mt-3 mt-sm-4">Войти</button>
                             <div className="mt-3">
