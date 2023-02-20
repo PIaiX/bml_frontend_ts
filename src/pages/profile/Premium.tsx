@@ -29,8 +29,6 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium}) => {
             .catch(e=>console.log(e))
     }, [])
 
-    console.log(banners)
-
     const validLittlePhoto: any = (little: any) => {
         if (little?.width === undefined && little?.height === undefined) {
             return <span>Фото не загружено</span>
@@ -63,7 +61,6 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium}) => {
         return !statusPost && idPost === id
     }
 
-
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -86,7 +83,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium}) => {
                             key={i.id}
                             onClick={() => {
                                 currentId(i.id)
-                                if(!i.isBlocked && idPost!==i.id){
+                                if(!i.isBlocked && idPost!==i.id && i.employedUntillForUser==='' && i.type!=='big'){
                                     const newSum=data.dateLifeAd==='1'?banners[i.id-1].priceThreeMonths:banners[i.id-1].priceSixMonths
                                     setData((prevState: any) => ({
                                         ...prevState,
@@ -105,7 +102,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium}) => {
                                 ...i,
                                 bigPicture: validBigPhoto(lookBigPicture)[1],
                                 littlePicture:validLittlePhoto(lookLittleBanner)[1],
-                                selected:filterType((i.type==='big' || i.isBlocked), i.id)
+                                selected:filterType((i.type==='big' || i.isBlocked || i.employedUntillForUser!==''), i.id)
                             }} />
 
                         </div>

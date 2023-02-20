@@ -21,8 +21,8 @@ const AdvPrice = (props:IOPremium) => {
             <div className='text'>
                 <h6 className='mt-1 mb-2'>{props.title}</h6>
                 {
-                    (props.isBlocked)
-                        ? <div className='red mb-2 mb-sm-3'>Занято до {props.employedUntill}</div>
+                    (props.employedUntill)
+                        ? <div className='red mb-2 mb-sm-3'>Занято до {props.employedUntillForUser}</div>
                         : <div className='mb-2 mb-sm-3'>Свободно</div>
                 }
                 <div className='fw_7'>Стоимость размещения:</div>
@@ -30,7 +30,7 @@ const AdvPrice = (props:IOPremium) => {
                 <div className='fw_7'>6 месяцев — {props.priceSixMonths} рублей</div>
             </div>
             {
-                (props.type === "big") &&
+                (props.type === "big" || props.isBlocked) &&
                 <div className='blocked'>ЗАБЛОКИРОВАНО</div>
             }
         </div>

@@ -24,12 +24,13 @@ export type IOPremium={
     id:number
     title:string
     type:"small" | "big"
-    image?:"string" | null
-    franchiseId?:number | null
+    image:"string" | null
+    franchiseId:number | null
     employedUntill:string
     isBlocked:boolean
     priceThreeMonths:number
     priceSixMonths:number
+    employedUntillForUser:string
     selected?:boolean
     littlePicture?:string
     bigPicture?:string
