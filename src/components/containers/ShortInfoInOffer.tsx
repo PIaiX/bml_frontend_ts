@@ -95,7 +95,7 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
                 <ul>
                     <li>Стартовые инвестиции от: {FunctionForPrice(props?.investments)} ₽</li>
                     <li>Паушальный взнос: {FunctionForPrice(props?.price)} ₽</li>
-                    <li>Роялти: {FunctionForPrice(props?.pricePerMonth)} {props.isPricePerMonthAbsolute?' %':' ₽'}
+                    <li>Роялти: {FunctionForPrice(props?.pricePerMonth)} {!props.isPricePerMonthAbsolute?' %':' ₽'}
                     </li>
                     <li>
                         Срок окупаемости:{' '}
