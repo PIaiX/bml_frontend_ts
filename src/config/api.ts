@@ -39,6 +39,7 @@ const apiRoutes: ApiRoutesTypes = {
     ACTIONS_OFFER: 'offer',
     DELETE_OFFER_IMAGE: 'offer/deleteImage',
     GET_ALL_SUBSECTIONS: 'offer/subsection',
+    GET_PREMIUM_SLOTS:'offer/premium/slots?page=1',
 
     //reports
     GET_USER_REPORT_TYPE: 'report/type/user',
@@ -63,6 +64,7 @@ const apiRoutes: ApiRoutesTypes = {
 
     //subscription
     ACTIONS_SUBSCRIBE: 'subscribe',
+
 }
 
 const BASE_URL: string | undefined = process.env.REACT_APP_BASE_URL

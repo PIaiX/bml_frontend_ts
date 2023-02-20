@@ -64,6 +64,7 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
             setValue('taxpayerIdentificationNumber', user?.taxpayerIdentificationNumber)
             setValue('mainStateRegistrationNumber', user?.mainStateRegistrationNumber)
             setValue('email', user?.email)
+            setValue('phone', user?.phone)
         }
     }, [user])
 
@@ -115,8 +116,6 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
         else if (cityError === '') submitUpdateUserInfo(data)
 
     }
-
-    const [phone, setPhone]=useState(user?.phone);
 
     return (
         <form className="acc-box" noValidate onSubmit={handleSubmit(beforeSubmit)}>
@@ -269,9 +268,11 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                     <ValidateWrapper error={errors?.phone}>
                         <input
                             type="tel"
-                            value={phone}
                             placeholder="+79000000000"
-                            onFocus={()=>{setPhone('+7')}}
+                            onFocus={()=>{
+                                if(!getValues('phone') || getValues('phone').length===0)
+                                    setValue('phone', '+7')
+                            }}
                             {...register('phone', {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
@@ -286,7 +287,6 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                                     value: /\+[7][0-9]{10}/,
                                     message: 'Не верный формат',
                                 },
-                                onChange:(e)=>setPhone(e.target.value)
                             })}
                         />
                     </ValidateWrapper>

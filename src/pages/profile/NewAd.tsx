@@ -26,6 +26,7 @@ import { checkPhotoPath } from '../../helpers/photoLoader'
 import { FromStringToNumber } from '../../helpers/FromStringToNumber'
 import FunctionForPrice from '../../helpers/FunctionForPrice'
 import CitiesForm from '../../components/forms/CitiesForm'
+import Premium from "./Premium";
 
 const NewAd = () => {
     const [category, setCategory] = useState<number | undefined>(0)
@@ -61,6 +62,8 @@ const NewAd = () => {
     const [imagesFromServer, setImagesFromServer] = useState<any>(null)
     const [isPricePerMonthAbsolute, setRoaloty]=useState<boolean>(false)
     const [placedForMonths, setPlacedForMonths]=useState(3)
+    const [premiumInf, setPremiumInf]=useState<any>(null)
+    useEffect(()=>{console.log(premiumInf)},[premiumInf])
     const {
         register,
         setValue,
@@ -347,6 +350,7 @@ const NewAd = () => {
         formInfo.image && setAdCover([formInfo.image])
     }, [formInfo])
 
+    const [premium, setPremium]=useState(false)
 
     return (
         <>
@@ -1146,22 +1150,22 @@ const NewAd = () => {
                                     <div className="fw_6 sky">6 мес. — 11 000 рублей</div>
                                 </div>
                             </div>
-                            <div className="col-12 col-md-4 mt-2 mt-sm-3 mt-md-0">
-                                <NavLink
-                                    to="/account/my-ads/premium"
-                                    state={{ data: formInfo }}
-                                    className="btn_main btn_5 f_13 w-100 h-100"
-                                >
+                            <div className="col-12 col-md-4 mt-2 mt-sm-3 mt-md-0" style={{cursor:"pointer"}} onClick={()=>{setPremium(!premium)}}>
+                                <div className="btn_main btn_5 f_13 w-100 h-100">
                                     Premium-размещение
-                                </NavLink>
+                                </div>
                             </div>
                         </div>
                     </fieldset>
                 )}
+                {premium && <div className={"pt-4"}>
+                    <Premium setChange={setPremiumInf} priceWithoutPremium={placedForMonths===3?6000:11000} />
+                </div>}
                 <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={() => funcForCityEr(city)}>
                     {returnText()}
                 </button>
             </form>
+
         </>
     )
 }

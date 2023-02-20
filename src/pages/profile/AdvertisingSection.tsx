@@ -13,10 +13,12 @@ import FunctionForPrice from '../../helpers/FunctionForPrice'
 
 const AdvertisingSection = () => {
     const [data, setData] = useState<any>({
-        lifeAd: 1,
-        sum: 6000,
+        lifeAd: '1',
     })
-
+    const prices=[
+        {3:30000,6:54000},
+        {3:15000,6:27000}
+    ]
     const viewPhoto = useImageViewer(data?.photo)
 
     const validLittlePhoto = (photo: any) => {
@@ -39,7 +41,6 @@ const AdvertisingSection = () => {
             return <span>Размеры не подходят</span>
         }
     }
-
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -81,6 +82,10 @@ const AdvertisingSection = () => {
                                 className="f_11"
                                 value={0}
                                 onChange={(e) => {
+                                    setData((prevState: any) => ({
+                                        ...prevState,
+                                        sum: prices[0][`${data.lifeAd=='1'?3:6}`]
+                                    }))
                                     onRadioHandler(e, setData, true)
                                 }}
                             />
@@ -90,8 +95,8 @@ const AdvertisingSection = () => {
                             Статус: <span className="l-gray">свободен</span>
                         </div>
                         <div className="fw_5">Стоимость размещения:</div>
-                        <div>3 месяца – {FunctionForPrice(6000)} ₽</div>
-                        <div>6 месяцев – {FunctionForPrice(8000)} ₽</div>
+                        <div>3 месяца – {FunctionForPrice(prices[0][3])} ₽</div>
+                        <div>6 месяцев – {FunctionForPrice(prices[0][6])} ₽ (скидка 10%)</div>
                         <div className="fw_5 mt-3 mt-sm-4 mt-md-5">Изображение</div>
                         <div className="f_09 l-gray mt-1">Размер баннера 1200*800</div>
                         <div className="file-upload mt-2">
@@ -118,6 +123,10 @@ const AdvertisingSection = () => {
                                 value={1}
                                 className="f_11"
                                 onChange={(e) => {
+                                    setData((prevState: any) => ({
+                                        ...prevState,
+                                        sum: prices[1][`${data.lifeAd=='1'?3:6}`]
+                                    }))
                                     onRadioHandler(e, setData, true)
                                 }}
                             />
@@ -127,8 +136,8 @@ const AdvertisingSection = () => {
                             Статус: <span className="l-gray">свободен</span>
                         </div>
                         <div className="fw_5">Стоимость размещения:</div>
-                        <div>3 месяца – {FunctionForPrice(6000)} ₽</div>
-                        <div>6 месяцев – {FunctionForPrice(8000)} ₽</div>
+                        <div>3 месяца – {FunctionForPrice(prices[1][3])} ₽</div>
+                        <div>6 месяцев – {FunctionForPrice(prices[1][6])} ₽ (скидка 10%)</div>
                         <div className="fw_5 mt-3 mt-sm-4 mt-md-5">Изображение</div>
                         <div className="f_09 l-gray mt-1">Размер баннера 250х160</div>
                         <div className="file-upload mt-2">
@@ -157,7 +166,7 @@ const AdvertisingSection = () => {
                                 setData((prevState: any) => ({
                                     ...prevState,
                                     lifeAd: e.target.value,
-                                    sum: (e.target.value === '1' && 6000) || (e.target.value === '2' && 8000),
+                                    sum: data.adv!==undefined?(e.target.value === '1' && prices[data.adv][3]) || (e.target.value === '2' && prices[data.adv][6]):'0',
                                 }))
                             }}
                         >
@@ -172,7 +181,7 @@ const AdvertisingSection = () => {
                         <div className="f_12 fw_6">Сумма к оплате</div>
                     </div>
                     <div className="col-sm-8 col-md-4 col-xxl-3 mb-3 mb-sm-0">
-                        <span className="f_12 fw_6">{FunctionForPrice(data?.sum)} ₽</span>
+                        <span className="f_12 fw_6">{data.sum?FunctionForPrice(data.sum):0} ₽</span>
                     </div>
                 </div>
                 <button type="button" className="btn_main btn_4 fw_4 mt-sm-5">

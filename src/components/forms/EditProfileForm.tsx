@@ -108,8 +108,6 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
         else if (cityError === '') submitUpdateUserInfo(data)
     }
 
-    const [phone, setPhone]=useState('');
-
     return (
         <form className="acc-box" noValidate onSubmit={handleSubmit(beforeSubmit)}>
             <div className="row  align-items-center g-3">
@@ -200,8 +198,10 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                     <ValidateWrapper error={errors?.phone}>
                         <input
                             type="tel"
-                            onFocus={()=>{setPhone('+7')}}
-                            value={phone}
+                            onFocus={()=>{
+                                if(!getValues('phone') || getValues('phone').length===0)
+                                    setValue('phone', '+7')
+                            }}
                             placeholder="+79000000000"
                             {...register('phone', {
                                 required: 'поле обязательно к заполнению',
