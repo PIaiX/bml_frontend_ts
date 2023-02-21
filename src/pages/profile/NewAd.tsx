@@ -142,6 +142,7 @@ const NewAd = () => {
                         setValue('profit', FunctionForPrice(res?.profit) || '')
                         setValue('city', res?.city || '')
                         setCurrentArea(res?.subsection?.area?.id)
+                        setRoaloty(res?.isPricePerMonthAbsolute)
                     }
                 })
                 .catch()
@@ -254,6 +255,7 @@ const NewAd = () => {
             dateOfCreation: dateNew ? dateNew : '',
             userId: user?.id,
             image: formInfo?.image || '',
+            isPricePerMonthAbsolute
         }
         for (const key in req) {
             formData.append(key, req[key])

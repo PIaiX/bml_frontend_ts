@@ -125,7 +125,7 @@ export type IOfferItem = {
     projectStage: number
     investments: number
     dateOfCreation: string
-    isPricePerMonthAbsolute:boolean | null
+    isPricePerMonthAbsolute:boolean
     price: number
     pricePerMonth: number
     profitPerMonth: number

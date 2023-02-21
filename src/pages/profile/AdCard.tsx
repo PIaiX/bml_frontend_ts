@@ -45,7 +45,7 @@ const AdCard: FC<Props> = (props: any) => {
                         <div className="l-gray f_08 mt-2">{props.scope}</div>
                     </div>
                     {props.investments && (
-                        <div className="fw_5 f_09 mt-2">{FunctionForPrice(props.investments)}&nbsp;{!props.isPricePerMonthAbsolute?' %':' руб'}</div>
+                        <div className="fw_5 f_09 mt-2">{FunctionForPrice(props.investments)}&nbsp;{props.isPricePerMonthAbsolute?' %':' руб'}</div>
                     )}
                     <div className="mt-2">
                         <span className="color-1 fw_5">{props?.archiveExpire}</span>
