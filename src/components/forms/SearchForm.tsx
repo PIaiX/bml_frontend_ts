@@ -5,8 +5,8 @@ import { IOffersAreaItem, IOffersSubSectionsItem, IPayloadsFilter } from '../../
 import { useForm } from 'react-hook-form'
 import ValidateWrapper from '../utils/ValidateWrapper'
 // import CitiesForm from "./CitiesForm";
-import FunctionForPrice from '../../services/FunctionForPrice'
-import { FromStringToNumber } from '../../services/FromStringToNumber'
+import FunctionForPrice from '../../helpers/FunctionForPrice'
+import { FromStringToNumber } from '../../helpers/FromStringToNumber'
 import CitiesForm from './CitiesForm'
 
 type Props = {

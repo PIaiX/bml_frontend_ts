@@ -8,7 +8,6 @@ import {convertLocaleDate} from '../../helpers/convertLocaleDate'
 import {showAlert} from '../../store/reducers/alertSlice'
 import {setUser} from '../../store/reducers/userSlice'
 import CitiesForm from './CitiesForm'
-import {setCity} from '../../store/reducers/citySlice'
 
 type Props = {
     avatar: File
@@ -29,8 +28,6 @@ type UserForm = {
 const EditProfileForm: FC<Props> = ({avatar}) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const dispatch = useAppDispatch()
-    let cities: Array<string> = useAppSelector((state) => state?.cities?.cities)
-
     const {
         register,
         formState: {errors},
@@ -61,7 +58,6 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
             setValue('lastName', user?.lastName)
             setValue('phone', user?.phone)
             setValue('email', user?.email)
-            // setValue('city', user?.city)
             setValue('birthday', user?.birthday)
         }
     }, [user])
@@ -70,9 +66,9 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
         let req
         const newDate = getValues('birthday') ? convertLocaleDate(getValues('birthday')) : ''
 
-        if (user?.city !== city) {
+        if (user?.city !== city)
             req = {...data, birthday: newDate, avatar: avatar ? avatar : '', city: city}
-        } else req = {...data, birthday: newDate, avatar: avatar ? avatar : ''}
+        else req = {...data, birthday: newDate, avatar: avatar ? avatar : ''}
 
         const formData = new FormData()
         for (const key in req) {
@@ -103,11 +99,13 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
 
     useEffect(() => {
         if (city === '') setCityError('поле обязательно к заполнению')
+        else if(city && city.length<2)setCityError('поле должно содержать от 2 символов')
         else setCityError('')
     }, [city])
 
     const beforeSubmit = (data: any) => {
-        if (cityError === '') submitUpdateUserInfo(data)
+        if(city==null)setCity('')
+        else if (cityError === '') submitUpdateUserInfo(data)
     }
 
     return (

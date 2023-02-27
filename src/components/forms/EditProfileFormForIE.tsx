@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {IUser} from '../../types/user'
 import {useAppDispatch, useAppSelector} from '../../hooks/store'
 import {useForm} from 'react-hook-form'
@@ -7,6 +7,7 @@ import {updateUserInfo} from '../../services/profileSettings'
 import {showAlert} from '../../store/reducers/alertSlice'
 import ValidateWrapper from '../utils/ValidateWrapper'
 import {setUser} from '../../store/reducers/userSlice'
+import CitiesForm from "./CitiesForm";
 
 type Props = {
     avatar: File
@@ -28,7 +29,8 @@ type FormInfo = {
 
 const EditProfileFormForIe: FC<Props> = ({avatar}) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
-    const cities: Array<string> = useAppSelector((state) => state?.cities?.cities)
+    const [city, setCity] = useState(user?.city)
+    const [cityError, setCityError] = useState('')
     const dispatch = useAppDispatch()
     const {
         register,
@@ -64,12 +66,16 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
             setValue('mainStateRegistrationNumber', user?.mainStateRegistrationNumber)
             setValue('phone', user?.phone)
             setValue('email', user?.email)
-            setValue('city', user?.city)
         }
     }, [user])
 
-    const submitUpadateUserInfo = (data: any) => {
-        const req = {...data, avatar: avatar ? avatar : ''}
+    const submitUpdateUserInfo = (data: any) => {
+        let req
+        if (user?.city !== city) {
+            req = {...data, avatar: avatar ? avatar : '', city: city}
+        }
+        else req = {...data, avatar: avatar ? avatar : ''}
+
         const formData = new FormData()
         for (const key in req) {
             formData.append(key, req[key])
@@ -100,9 +106,20 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                 })
         }
     }
+    useEffect(() => {
+        if (city === '') setCityError('поле обязательно к заполнению')
+        else if(city && city.length<2)setCityError('поле должно содержать от 2 символов')
+        else setCityError('')
+    }, [city])
+
+    const beforeSubmit = (data: any) => {
+        if(city==null)setCity('')
+        else if (cityError === '') submitUpdateUserInfo(data)
+
+    }
 
     return (
-        <form className="acc-box" noValidate onSubmit={handleSubmit(submitUpadateUserInfo)}>
+        <form className="acc-box" noValidate onSubmit={handleSubmit(beforeSubmit)}>
             <div className="row  align-items-center g-3">
                 <div className="col-sm-4">
                     <h6>
@@ -277,17 +294,8 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                     </h6>
                 </div>
                 <div className="col-sm-8">
-                    <ValidateWrapper error={errors?.city}>
-                        <select defaultValue={''} {...register('city', {required: 'Обязательное поле'})}>
-                            <option value={''} disabled>
-                                Город
-                            </option>
-                            {cities?.map((city, index) => (
-                                <option key={index} value={city} selected={user?.city === city}>
-                                    {city}
-                                </option>
-                            ))}
-                        </select>
+                    <ValidateWrapper error={{message: cityError}}>
+                        <CitiesForm val={city} setVal={setCity} />
                     </ValidateWrapper>
                 </div>
             </div>

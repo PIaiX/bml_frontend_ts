@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react'
-import FunctionForPrice from '../../services/FunctionForPrice'
+import FunctionForPrice from '../../helpers/FunctionForPrice'
 import {useForm} from 'react-hook-form'
 import {IOfferForm} from '../../types/offers'
 

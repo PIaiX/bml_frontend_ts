@@ -11,7 +11,7 @@ import { subscribe } from '../services/subscription'
 
 export default function Footer() {
     const count = useAppSelector((state) => state?.favoritesCount?.count)
-    const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const {user}:{user: IUser | null} = useAppSelector((state) => state?.user)
     const [countNewMessage, setCountNewMessage] = useState<null | number | undefined>(null)
     const { isConnected } = useSocketConnect()
     const dispatch = useDispatch()
@@ -39,9 +39,8 @@ export default function Footer() {
     }, [isConnected])
 
     useEffect(() => {
-        if (user) {
+        if (user)
             setValue('email', user.email)
-        }
     }, [user])
 
     const submitSubscrition = (data: { email: string }) => {
@@ -202,7 +201,7 @@ export default function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/account">
+                                <Link to={'/account'}>
                                     <img src="/images/icons/profile.png" alt="Профиль" />
                                     <div>Профиль</div>
                                 </Link>
