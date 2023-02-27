@@ -9,19 +9,19 @@ const ActionNotification: React.FC<{ delay: number }> = ({ delay }) => {
     const showClassName = `${notification?.isShow ? 'show' : ''}`
     const dispatch = useAppDispatch()
 
-    // useEffect(() => {
-    //     if (notification?.isShow) {
-    //         const timeoutId = setTimeout(() => {
-    //             dispatch(resetNotification())
-    //         }, delay)
+    useEffect(() => {
+        if (notification?.isShow) {
+            const timeoutId = setTimeout(() => {
+                dispatch(resetNotification())
+            }, delay)
 
-    //         return () => clearTimeout(timeoutId)
-    //     }
-    // }, [notification])
+            return () => clearTimeout(timeoutId)
+        }
+    }, [notification])
 
     return (
         <Link
-            to={`/account/messages/chat/${notification?.conversation}`}
+            to={`/account/chat/window/${notification?.conversation}`}
             className={`action-notification ${showClassName}`}
             onClick={() => dispatch(resetNotification())}
         >

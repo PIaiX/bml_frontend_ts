@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from 'react'
-import {NavLink, useNavigate} from 'react-router-dom'
-import {logout} from '../../services/auth'
-import {useAppDispatch, useAppSelector} from '../../hooks/store'
-import {resetUser} from '../../store/reducers/userSlice'
-import {IUser} from '../../types/user'
-import {notifications} from "../../types/sockets/    notifications";
+import React, { useEffect, useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { logout } from '../../services/auth'
+import { useAppDispatch, useAppSelector } from '../../hooks/store'
+import { resetUser } from '../../store/reducers/userSlice'
+import { IUser } from '../../types/user'
+import { notifications } from "../../types/sockets/notifications";
 
 export default function AccountMenu() {
     const [auth, setAuth] = useState(false)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const {user:userState, notifications}:{user:IUser | null, notifications:notifications | null} = useAppSelector((state) => state?.user)
+    const { user: userState }: { user: IUser | null, notifications: notifications | null } = useAppSelector((state) => state?.user)
+    const notification = useAppSelector((state) => state?.notification)
     const onSubmitLogout = () => {
         logout()
             .then((res) => {
@@ -46,28 +47,28 @@ export default function AccountMenu() {
                     {userState?.isFormCompleted && <><li>
                         <NavLink to="my-ads">Мои объявления</NavLink>
                     </li>
-                    <li>
-                        <NavLink to="chat">
-                            <div>
-                                <div className={"d-inline"}>
-                                    Онлайн чат
+                        <li>
+                            <NavLink to="chat">
+                                <div>
+                                    <div className={"d-inline"}>
+                                        Онлайн чат
+                                    </div>
+                                    {notification.unreadCount && <div className="notificationAll d-inline mx-2">{notification.unreadCount}</div>}
                                 </div>
-                                {notifications  && <div className="notificationAll d-inline mx-2">{notifications} </div>}
-                            </div>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="favorites">Избранные объявления</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="wallet">Мой кошелек</NavLink>
-                    </li>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="favorites">Избранные объявления</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="wallet">Мой кошелек</NavLink>
+                        </li>
                         <li>
                             <NavLink to="advertising-section">Рекламный раздел</NavLink>
                         </li>
-                    <li>
-                        <NavLink to="cart">Мои покупки</NavLink>
-                    </li></>}
+                        <li>
+                            <NavLink to="cart">Мои покупки</NavLink>
+                        </li></>}
                     <li>
                         <NavLink to="settings">Настройки профиля</NavLink>
                     </li>

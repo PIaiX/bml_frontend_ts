@@ -9,7 +9,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
 import { io } from 'socket.io-client'
 import { BASE_URL_SOCKET } from '../config/api'
-import { setNotification } from '../store/reducers/notificationSlice'
+import { setNotification, setUnreadCount } from '../store/reducers/notificationSlice'
 import cities from '../helpers/cities'
 
 const fpPromise = FingerprintJS.load()
@@ -39,10 +39,8 @@ const useInitialization = () => {
 
         if (!user) return
 
-        let userId = user.id
         let socketNotification = io(`${BASE_URL_SOCKET}`, {
-            // auth: { token: `Bearer ${localStorage.getItem('token')}` },
-            query: { userId }
+            auth: { token: `Bearer ${localStorage.getItem('token')}` }
         })
 
         if (user && socketNotification) {
@@ -53,9 +51,9 @@ const useInitialization = () => {
                     dispatch(setNotification(newMessage))
                 }
             })
-            // socketNotification.on('conversation:unreadCount', (count) => {
-            //     dispatch(setUnreadCount(count))
-            // })
+            socketNotification.on('conversation:unreadCount', (count) => {
+                dispatch(setUnreadCount(count))
+            })
         }
 
         return () => {
@@ -70,12 +68,8 @@ const useInitialization = () => {
     useEffect(() => {
         if (localStorage.getItem('token')) {
             dispatch(checkAuth())
-            console.log(user)
-            console.log(localStorage.getItem('token'))
         } else {
             dispatch(checkAuth())
-            console.log(user)
-            console.log(localStorage.getItem('token'))
         }
     }, [])
 

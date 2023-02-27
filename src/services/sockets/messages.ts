@@ -77,3 +77,15 @@ export const emitPaginateMessages = async (conversationId: { conversationId: num
         })
     })
 }
+
+export const emitGetConversationWithUserId = async (userId: number) => {
+    return await new Promise((resolve, reject) => {
+        socketInstance?.emit('conversation:getByUserId', userId, (response: any) => {
+            try {
+                resolve(response)
+            } catch (e) {
+                reject(e)
+            }
+        })
+    })
+}

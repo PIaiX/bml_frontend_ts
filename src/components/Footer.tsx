@@ -7,11 +7,11 @@ import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { showAlert } from '../store/reducers/alertSlice'
 import { subscribe } from '../services/subscription'
-import {notifications} from "../types/sockets/    notifications";
+import { notifications } from "../types/sockets/notifications";
 
 export default function Footer() {
     const count = useAppSelector((state) => state?.favoritesCount?.count)
-    const {user, notifications}:{user: IUser | null, notifications:notifications | null} = useAppSelector((state) => state?.user)
+    const { user, notifications }: { user: IUser | null, notifications: notifications | null } = useAppSelector((state) => state?.user)
     const dispatch = useDispatch()
 
     const {

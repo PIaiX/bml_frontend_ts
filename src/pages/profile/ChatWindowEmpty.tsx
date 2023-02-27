@@ -1,37 +1,41 @@
-import React, {BaseSyntheticEvent, SyntheticEvent, useEffect, useRef, useState} from 'react'
-import {Link, useLocation, useNavigate, useOutletContext, useParams} from 'react-router-dom'
+import React, { BaseSyntheticEvent, SyntheticEvent, useEffect, useRef, useState } from 'react'
+import { Link, useLocation, useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import {
     emitCreateMessage,
     emitCreateWithoutTopicMessage,
+    emitGetConversationWithUserId,
     emitPaginateMessages,
     emitViewedMessage
 } from '../../services/sockets/messages'
 import ChatMessage from '../../components/chatMessage'
-import {MdOutlineKeyboardArrowLeft} from 'react-icons/md'
+import { MdOutlineKeyboardArrowLeft } from 'react-icons/md'
 import Loader from '../../components/utils/Loader'
-import {IPayloadsMessage} from '../../types/sockets/messages'
-import {useAppSelector} from '../../hooks/store'
-import {IUser} from '../../types/user'
-import {convertLocaleDate} from '../../helpers/convertLocaleDate'
+import { IPayloadsMessage } from '../../types/sockets/messages'
+import { useAppSelector } from '../../hooks/store'
+import { IUser } from '../../types/user'
+import { convertLocaleDate } from '../../helpers/convertLocaleDate'
 import useSocketConnect from '../../hooks/socketConnect'
-import {socketInstance} from '../../services/sockets/socketInstance'
-import {emitGetConversation} from '../../services/sockets/conversations'
-import {useForm} from 'react-hook-form'
+import { socketInstance } from '../../services/sockets/socketInstance'
+import { emitGetConversation } from '../../services/sockets/conversations'
+import { useForm } from 'react-hook-form'
 import ValidateWrapper from '../../components/utils/ValidateWrapper'
-import {IUseStateItems} from '../../types'
-import {IMessageItem, IMessageMeta} from '../../models/sockets/messages'
+import { IUseStateItems } from '../../types'
+import { IMessageItem, IMessageMeta } from '../../models/sockets/messages'
 import InfiniteScroll from 'react-infinite-scroller'
-import {checkPhotoPath} from "../../helpers/photoLoader";
-import {getIdChat} from "../../services/users";
+import { checkPhotoPath } from "../../helpers/photoLoader";
+import { getIdChat } from "../../services/users";
 
 const ChatWindow = () => {
-    const user:IUser | null= useAppSelector((state) => state?.user.user)
-    const {state} = useLocation()
-    const navigate=useNavigate()
+    const user: IUser | null = useAppSelector((state) => state?.user.user)
+    const { state } = useLocation()
+    const navigate = useNavigate()
+    const [conversationId, setConversationId] = useState()
+
     const {
         register,
-        formState: {errors},
+        formState: { errors },
         handleSubmit,
+        setValue,
     } = useForm<IPayloadsMessage>({
         mode: 'onSubmit',
         reValidateMode: 'onChange',
@@ -41,14 +45,12 @@ const ChatWindow = () => {
         },
     })
 
-    const createMessage = ({text}:any) => {
+    const createMessage = ({ text }: any) => {
         if (state && state.userId) {
-            emitCreateWithoutTopicMessage(state.userId, {
-                text: text,
-                conversationId: 0,
-            }).then((res) => {
-                navigate(`/account/chat/window/${res.body.conversationId}`)
-            })
+            emitCreateMessage({ userId: state.userId, text: text })
+                .then((res: any) => {
+                    navigate(`/account/chat/window/${res.body.conversationId}`, { replace: true })
+                })
         }
     }
 

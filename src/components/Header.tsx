@@ -1,28 +1,29 @@
-import React, {BaseSyntheticEvent, FC, useEffect, useState} from 'react'
-import {Link, NavLink, useNavigate} from 'react-router-dom'
-import {MdClose, MdLogin, MdMenu, MdSearch, MdStarOutline} from 'react-icons/md'
-import {IconContext} from 'react-icons'
-import {useAppDispatch, useAppSelector} from '../hooks/store'
-import {IUser} from '../types/user'
-import {setInitialCount} from '../store/reducers/favoriteCountSlice'
+import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { MdClose, MdLogin, MdMenu, MdSearch, MdStarOutline } from 'react-icons/md'
+import { IconContext } from 'react-icons'
+import { useAppDispatch, useAppSelector } from '../hooks/store'
+import { IUser } from '../types/user'
+import { setInitialCount } from '../store/reducers/favoriteCountSlice'
 import FunctionForPrice from "../helpers/FunctionForPrice";
-import {setSearch} from '../store/reducers/searchHeader'
-import {notifications} from "../types/sockets/    notifications";
+import { setSearch } from '../store/reducers/searchHeader'
+import { notifications } from "../types/sockets/notifications";
 
 const Header: FC = () => {
-    const {user, notifications}:{user: IUser | null, notifications:notifications | null} = useAppSelector((state) => state?.user)
+    const { user }: { user: IUser | null, notifications: notifications | null } = useAppSelector((state) => state?.user)
     const count = useAppSelector((state) => state?.favoritesCount?.count || 0)
-    const inputSearch:string = useAppSelector((state) => state?.search.input)
+    const inputSearch: string = useAppSelector((state) => state?.search.input)
     const dispatch = useAppDispatch()
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const [srcForProfile, setSrcForProfile] = useState<string>('')
+    const notification = useAppSelector((state) => state?.notification)
 
 
     useEffect(() => {
         if (user) {
             dispatch(setInitialCount(+user?.favoriteOffersCount))
 
-            if(user?.isFormCompleted)
+            if (user?.isFormCompleted)
                 setSrcForProfile(`/account/profile/${user?.id}`);
             else
                 setSrcForProfile(`/account/settings`);
@@ -30,7 +31,7 @@ const Header: FC = () => {
     }, [user])
 
 
-    const searchOnSite=(e:BaseSyntheticEvent)=>{
+    const searchOnSite = (e: BaseSyntheticEvent) => {
         e.preventDefault()
         navigate("/search")
     }
@@ -43,9 +44,9 @@ const Header: FC = () => {
                             <img src="/images/logo.svg" alt="Бизнес My Life" />
                         </Link>
                         <form action="" className="header_search d-none d-lg-flex">
-                            <input value={inputSearch} type="search" placeholder="Поиск по сайту" onChange={(e)=> {dispatch(setSearch(e.target.value)) }
+                            <input value={inputSearch} type="search" placeholder="Поиск по сайту" onChange={(e) => { dispatch(setSearch(e.target.value)) }
                             } />
-                            <button type="submit" className="btn_main" onClick={(e)=>searchOnSite(e)}>
+                            <button type="submit" className="btn_main" onClick={(e) => searchOnSite(e)}>
                                 <MdSearch />
                             </button>
                         </form>
@@ -58,10 +59,10 @@ const Header: FC = () => {
                         </NavLink>}
 
                         <NavLink to={user ? '/account/favorites' : '/enter'}
-                                 className={user ?
-                                     "btn-icon d-none d-md-block" :
-                                     "btn-icon2 d-none d-md-block"
-                                 }
+                            className={user ?
+                                "btn-icon d-none d-md-block" :
+                                "btn-icon2 d-none d-md-block"
+                            }
                         >
 
                             <MdStarOutline />
@@ -75,7 +76,7 @@ const Header: FC = () => {
                                 ) : (
                                     <div>
                                         <span>{user?.fullName}</span>
-                                        {notifications && <span className="notification  notificationAll"></span>}
+                                        {notification.unreadCount && <span className="notification  notificationAll">{notification.unreadCount}</span>}
                                     </div>
                                 )}
                             </NavLink>

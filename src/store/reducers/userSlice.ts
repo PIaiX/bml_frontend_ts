@@ -1,13 +1,13 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { $api } from '../../services/indexAuth'
 import { apiRoutes } from '../../config/api'
 import { IUser } from '../../types/user'
-import {notifications} from "../../types/sockets/    notifications";
+import { notifications } from "../../types/sockets/notifications";
 
 type InitialState = {
     user: IUser | null
     isLoading: boolean,
-    notifications:notifications | null
+    notifications: notifications | null
 }
 
 const initialState: InitialState = {
