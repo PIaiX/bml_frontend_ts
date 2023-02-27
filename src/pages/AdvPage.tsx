@@ -68,7 +68,7 @@ const AdvPage: FC = () => {
 
     useEffect(() => {
         if (user && offer?.item?.user?.id) {
-            getIdChat(offer?.item?.user?.id).then(res => setIdChat(res.id))
+            getIdChat(offer?.item?.user?.id).then(res => res.id && setIdChat(res.id))
         }
     }, [offer])
 

@@ -4,14 +4,14 @@ import { logout } from '../../services/auth'
 import { useAppDispatch, useAppSelector } from '../../hooks/store'
 import { resetUser } from '../../store/reducers/userSlice'
 import { IUser } from '../../types/user'
-import { notifications } from "../../types/sockets/notifications";
 
 export default function AccountMenu() {
     const [auth, setAuth] = useState(false)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const { user: userState }: { user: IUser | null, notifications: notifications | null } = useAppSelector((state) => state?.user)
+    const { user }: { user: IUser | null } = useAppSelector((state) => state?.user)
     const notification = useAppSelector((state) => state?.notification)
+
     const onSubmitLogout = () => {
         logout()
             .then((res) => {
@@ -39,12 +39,12 @@ export default function AccountMenu() {
             {auth ? (
                 <ul className="list-unstyled mb-0">
                     <li>
-                        <NavLink to={`profile/${userState?.id}`}>Профиль</NavLink>
+                        <NavLink to={`profile/${user?.id}`}>Профиль</NavLink>
                     </li>
                     <li>
                         <NavLink to="instructions">Как загрузить объявление</NavLink>
                     </li>
-                    {userState?.isFormCompleted && <><li>
+                    {user?.isFormCompleted && <><li>
                         <NavLink to="my-ads">Мои объявления</NavLink>
                     </li>
                         <li>
