@@ -1,7 +1,5 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react'
 import AdvPreview from '../components/AdvPreview'
-import {Swiper, SwiperSlide} from 'swiper/react'
-import {Pagination} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import Loader from '../components/utils/Loader'
@@ -12,7 +10,6 @@ import SearchForm from '../components/forms/SearchForm'
 import PartnersSite from '../components/PartnersSite'
 import NewsContainer from '../components/containers/News'
 import BannerContainer from '../components/containers/Banner'
-import BlocksContainer from '../components/containers/Blocks'
 import {getAllAreas, getAllSubsections, getOffers} from '../services/offers'
 import {getCity} from '../services/city'
 import {IOffersAreaItem, IOffersItem, IOffersMeta, IOffersSubSectionsItem, IPayloadsFilter} from '../types/offers'
@@ -21,7 +18,10 @@ import {IUser} from '../types/user'
 import {IUseStateItems} from '../types'
 import {getAdvertisings} from "../services/advertising";
 import {Advertisings} from "../types/advertising";
+import {checkPhotoPath} from "../helpers/photoLoader";
 
+let advertisingCount=0
+let lastPage=1;
 const Service: FC = () => {
     const params = useParams()
     const categoryId = params.categoryId ? parseInt(params.categoryId) : 0
@@ -37,6 +37,7 @@ const Service: FC = () => {
         items: null,
         meta: null,
     })
+    const [advertising, setAdvertising]=useState<Advertisings>()
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const {paginationItems, pageCount, selectedPage, handlePageClick, setSelectedPage} = usePagination(
         offers?.items,
@@ -48,13 +49,9 @@ const Service: FC = () => {
     })
 
     useEffect(() => {
-        if (ref.current !== null) {
+        if (ref.current !== null)
             window.scrollTo(0, ref?.current?.offsetTop - 130)
-        }
-        getAdvertisings().then(res=>res && setAdvertising(res))
     }, [categoryId])
-
-    useEffect(()=>console.log(advertising),)
 
     useEffect(() => {
         getAllAreas().then((res) => res && setAreas(res))
@@ -71,6 +68,14 @@ const Service: FC = () => {
     }, [])
 
     useEffect(() => {
+        getAdvertisings((advertisingCount%lastPage)+1,'category').then(res=>{
+            if(res){
+                advertisingCount++
+                setAdvertising(res.data)
+                lastPage=res.meta.lastPage
+            }
+        })
+
         if (localStorage.getItem('token')) {
             if (user?.id) {
                 getOffers(selectedPage + 1, limit, categoryId, user?.id, filters, false)
@@ -116,8 +121,6 @@ const Service: FC = () => {
     useEffect(() => {
         setSelectedPage(0)
     }, [categoryId])
-
-    const [advertising, setAdvertising]=useState<Advertisings>()
 
     return (
         <main>
@@ -249,9 +252,9 @@ const Service: FC = () => {
                                 <Loader color="#343434" />
                             </div>
                         )}
-                        {advertising && advertising[0] && advertising[0].offerImage &&
+                        {advertising && advertising[0] && advertising[0].image &&
                             <div className="blockAdvertising">
-                                <img className={"img-advertising"} src={advertising[0].offerImage} alt="" />
+                                <img className={"img-advertising"} src={checkPhotoPath(advertising[0].image)} alt="" />
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(12, 24).map((item: IOffersItem) => (
@@ -268,9 +271,9 @@ const Service: FC = () => {
                                   </div>
                               ))
                             : null}
-                        {advertising && advertising[1] && advertising[1]?.offerImage &&
+                        {advertising && advertising[1] && advertising[1]?.image &&
                             <div className={"blockAdvertising"}>
-                                <img className={"img-advertising"} src={advertising[1].offerImage} alt="" />
+                                <img className={"img-advertising"} src={checkPhotoPath(advertising[1].image)} alt="" />
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(24, offers?.items?.length).map((item: IOffersItem) => (

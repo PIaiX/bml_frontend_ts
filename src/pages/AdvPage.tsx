@@ -30,6 +30,7 @@ import {emitCreateWithOfferTopicMessage} from '../services/sockets/messages'
 import FunctionForPrice from '../helpers/FunctionForPrice'
 import {convertLocaleDate} from "../helpers/convertLocaleDate";
 import {getIdChat} from "../services/users";
+import {getAdvertisings} from "../services/advertising";
 
 const AdvPage: FC = () => {
     const navigate = useNavigate()
@@ -65,6 +66,10 @@ const AdvPage: FC = () => {
         offerId: id,
         conversationId: 0,
     })
+
+    useEffect(()=>{}, [
+        getAdvertisings(2,'offer').then(res=>console.log(res.data))
+    ])
 
     useEffect(() => {
         if (user && offer?.item?.user?.id) {

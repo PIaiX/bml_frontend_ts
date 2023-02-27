@@ -10,15 +10,16 @@ import {
     onSelectHandler,
 } from '../../helpers/formHandlers'
 import FunctionForPrice from '../../helpers/FunctionForPrice'
+import {getAdvertisingsPrices} from "../../services/advertising";
 
 const AdvertisingSection = () => {
     const [data, setData] = useState<any>({
         lifeAd: '1',
     })
-    const prices=[
-        {3:30000,6:54000},
-        {3:15000,6:27000}
-    ]
+    const [prices, setPrices]=useState()
+    useEffect(()=>{
+        getAdvertisingsPrices().then(setPrices)
+    },[])
     const viewPhoto = useImageViewer(data?.photo)
 
     const validLittlePhoto = (photo: any) => {
@@ -47,7 +48,7 @@ const AdvertisingSection = () => {
                 <MdOutlineArrowBack />
                 <span className="ms-2">Назад</span>
             </Link>
-            <div>
+            {prices && <div>
                 <h4 className="mb-3 mb-sm-4 mb-md-5">Разместить баннер</h4>
                 <h6 className="f_11 fw_5 mb-3">Описание размещения баннеров и объявлений</h6>
                 <p>
@@ -84,7 +85,7 @@ const AdvertisingSection = () => {
                                 onChange={(e) => {
                                     setData((prevState: any) => ({
                                         ...prevState,
-                                        sum: prices[0][`${data.lifeAd=='1'?3:6}`]
+                                        sum: prices[0][data.lifeAd=='1'?'priceThreeMonths':'priceSixMonths']
                                     }))
                                     onRadioHandler(e, setData, true)
                                 }}
@@ -95,8 +96,8 @@ const AdvertisingSection = () => {
                             Статус: <span className="l-gray">свободен</span>
                         </div>
                         <div className="fw_5">Стоимость размещения:</div>
-                        <div>3 месяца – {FunctionForPrice(prices[0][3])} ₽</div>
-                        <div>6 месяцев – {FunctionForPrice(prices[0][6])} ₽ (скидка 10%)</div>
+                        <div>3 месяца – {FunctionForPrice(prices[0]['priceThreeMonths'])} ₽</div>
+                        <div>6 месяцев – {FunctionForPrice(prices[0]['priceSixMonths'])} ₽ (скидка 10%)</div>
                         <div className="fw_5 mt-3 mt-sm-4 mt-md-5">Изображение</div>
                         <div className="f_09 l-gray mt-1">Размер баннера 1200*800</div>
                         <div className="file-upload mt-2">
@@ -125,7 +126,7 @@ const AdvertisingSection = () => {
                                 onChange={(e) => {
                                     setData((prevState: any) => ({
                                         ...prevState,
-                                        sum: prices[1][`${data.lifeAd=='1'?3:6}`]
+                                        sum: prices[1][data.lifeAd=='1'?'priceThreeMonths':'priceSixMonths']
                                     }))
                                     onRadioHandler(e, setData, true)
                                 }}
@@ -136,8 +137,8 @@ const AdvertisingSection = () => {
                             Статус: <span className="l-gray">свободен</span>
                         </div>
                         <div className="fw_5">Стоимость размещения:</div>
-                        <div>3 месяца – {FunctionForPrice(prices[1][3])} ₽</div>
-                        <div>6 месяцев – {FunctionForPrice(prices[1][6])} ₽ (скидка 10%)</div>
+                        <div>3 месяца – {FunctionForPrice(prices[1]['priceThreeMonths'])} ₽</div>
+                        <div>6 месяцев – {FunctionForPrice(prices[1]['priceSixMonths'])} ₽ (скидка 10%)</div>
                         <div className="fw_5 mt-3 mt-sm-4 mt-md-5">Изображение</div>
                         <div className="f_09 l-gray mt-1">Размер баннера 250х160</div>
                         <div className="file-upload mt-2">
@@ -166,7 +167,7 @@ const AdvertisingSection = () => {
                                 setData((prevState: any) => ({
                                     ...prevState,
                                     lifeAd: e.target.value,
-                                    sum: data.adv!==undefined?(e.target.value === '1' && prices[data.adv][3]) || (e.target.value === '2' && prices[data.adv][6]):'0',
+                                    sum: data.adv!==undefined?(e.target.value === '1' && prices[data.adv]['priceThreeMonths']) || (e.target.value === '2' && prices[data.adv]['priceSixMonths']):'0',
                                 }))
                             }}
                         >
@@ -187,7 +188,7 @@ const AdvertisingSection = () => {
                 <button type="button" className="btn_main btn_4 fw_4 mt-sm-5">
                     Создать и перейти к оплате
                 </button>
-            </div>
+            </div>}
         </>
     )
 }

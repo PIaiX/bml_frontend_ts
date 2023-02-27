@@ -11,6 +11,7 @@ const apiRoutes: ApiRoutesTypes = {
 
     // advertising
     GET_ADVERTISING: 'ads',
+    GET_PRICES: 'ads/types',
 
     //feedback
     SEND_FEEDBACK: 'feedback',
