@@ -7,6 +7,11 @@ import { setSocketConnection } from '../services/sockets/socketInstance'
 import { checkAuth } from '../store/reducers/userSlice'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
+import { io } from 'socket.io-client'
+import { BASE_URL_SOCKET } from '../config/api'
+import { setNotification, setUnreadCount } from '../store/reducers/notificationSlice'
+import cities from '../helpers/cities'
+
 const fpPromise = FingerprintJS.load()
 
 const useInitialization = () => {
@@ -23,11 +28,41 @@ const useInitialization = () => {
     }, [])
 
     useEffect(() => {
-        getCity().then((res) => res && dispatch(setCity(res)))
+        dispatch(setCity(cities))
     }, [])
 
     useEffect(() => {
         user && setSocketConnection(user?.id)
+    }, [user])
+
+    useEffect(() => {
+
+        if (!user) return
+
+        let socketNotification = io(`${BASE_URL_SOCKET}`, {
+            auth: { token: `Bearer ${localStorage.getItem('token')}` }
+        })
+
+        if (user && socketNotification) {
+            console.log('Start listen to notification')
+            socketNotification.on('message:create', (newMessage) => {
+                console.log(newMessage)
+                if (newMessage.userId != user.id) {
+                    dispatch(setNotification(newMessage))
+                }
+            })
+            socketNotification.on('conversation:unreadCount', (count) => {
+                dispatch(setUnreadCount(count))
+            })
+        }
+
+        return () => {
+            console.log('Stop listen to notification')
+            socketNotification?.off('message:create')
+            socketNotification?.off('conversation:unreadCount')
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user])
 
     useEffect(() => {
