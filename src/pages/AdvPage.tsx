@@ -31,6 +31,10 @@ import FunctionForPrice from '../helpers/FunctionForPrice'
 import {convertLocaleDate} from "../helpers/convertLocaleDate";
 import {getIdChat} from "../services/users";
 import {getAdvertisings} from "../services/advertising";
+import {Advertisings} from "../types/advertising";
+
+let advertisingCount=0;
+let lastPage=1;
 
 const AdvPage: FC = () => {
     const navigate = useNavigate()
@@ -47,6 +51,7 @@ const AdvPage: FC = () => {
         items: null,
         meta: null,
     })
+    const [advertising, setAdvertising]=useState<Advertisings>()
     const [reportTypes, setReportTypes] = useState<IUseStateReportType>({
         isLoaded: true,
         error: null,
@@ -67,9 +72,13 @@ const AdvPage: FC = () => {
         conversationId: 0,
     })
 
-    useEffect(()=>{}, [
-        getAdvertisings(2,'offer').then(res=>console.log(res.data))
-    ])
+    useEffect(()=>{
+        getAdvertisings((advertisingCount%lastPage)+1,'offer').then(res=>{
+            advertisingCount++
+            setAdvertising(res.data)
+            lastPage=res.meta.lastPage
+        })
+    }, [offer?.item?.id])
 
     useEffect(() => {
         if (user && offer?.item?.user?.id) {
@@ -475,22 +484,14 @@ const AdvPage: FC = () => {
                             <LeftMenuInOfferContainer category={offer?.item?.category} video={offer?.item?.video}/>
 
                             <div className="row justify-content-center g-4">
-                                <div className="col-8 col-sm-6 col-md-12 promo">
-                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2"/>
-                                    <h4 className="fw_7 mb-2">Акции от застройщиков</h4>
-                                    <h5 className="mb-0">
-                                        ТекстТекстТекст ТекстТекстТекст ТекстТекстТекстТекст Текст\Текст
-                                        ТекстТекстТекстТекстТекст
-                                    </h5>
-                                </div>
-                                <div className="col-8 col-sm-6 col-md-12 promo">
-                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2"/>
-                                    <h4 className="fw_7 mb-2">Акции от застройщиков</h4>
-                                    <h5 className="mb-0">
-                                        ТекстТекстТекст ТекстТекстТекст ТекстТекстТекстТекст Текст\Текст
-                                        ТекстТекстТекстТекстТекст
-                                    </h5>
-                                </div>
+                                {advertising && advertising[0] && <div className="col-8 col-sm-6 col-md-12 promo">
+                                    <img src={checkPhotoPath(advertising[0].image)} alt="img" className="img-fluid mb-2"/>
+                                    <h4 className="fw_7 mb-2">{advertising[0].description}</h4>
+                                </div>}
+                                {advertising && advertising[1] && <div className="col-8 col-sm-6 col-md-12 promo">
+                                    <img src={checkPhotoPath(advertising[1].image)} alt="img" className="img-fluid mb-2"/>
+                                    <h4 className="fw_7 mb-2">{advertising[1].description}</h4>
+                                </div>}
                             </div>
                         </div>
                     </div>
