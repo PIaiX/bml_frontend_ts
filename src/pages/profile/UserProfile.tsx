@@ -45,7 +45,7 @@ const UserProfile: FC = () => {
         if (userOffers?.items)
             for (let i: number = 0; i < userOffers?.items?.length; i += 3) {
                 content.push(
-                    <div className={'row row-cols-3 g-1 g-sm-2 g-xl-4 text-center mt-1'}>
+                    <div className={'row row-cols-3 g-1 g-sm-2 g-xl-4 text-center mt-1'} key={`user-offer-1112255${i}`}>
                         {userOffers?.items[i] && (
                             <div>
                                 <div className="acc-box ads d-flex flex-column justify-content-between h-100">
@@ -140,13 +140,13 @@ const UserProfile: FC = () => {
                                             <NavLink key={index} to={`/account/profile/user/${friend.id}`}>
                                                 <div>
                                                     <img src={checkPhotoPath(friend?.avatar)} alt={friend?.fullName} />
-                                                    <br/>
+                                                    <br />
 
                                                     {friend.fullName}
                                                 </div>
                                             </NavLink>
 
-                                    ))
+                                        ))
                                     ) : (
                                         <div>
                                             <h5>Нет партнеров</h5>
