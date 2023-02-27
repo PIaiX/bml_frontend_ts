@@ -61,20 +61,26 @@ header .btn-icon:focus,
 header .btn-icon:active {
     color: rgb(var(--color-2));
 }
-
-header .btn-icon span {
+.notificationAll{
     position: absolute;
-    bottom: 50%;
-    left: 65%;
-    background-color: rgb(var(--color-2));
-    color: #fff;
-    font-size: 12px;
     width: 21px;
     height: 21px;
-    line-height: 22px;
     text-align: center;
     border-radius: 50%;
     transition: var(--transition);
+    background-color: rgb(var(--color-2));
+    color: #fff;
+    font-size: 12px;
+    line-height: 22px;
+
+}
+.notification{
+    bottom: 70%;
+}
+
+header .btn-icon span  {
+    bottom: 50%;
+    left: 65%;
 }
 
 header .btn-icon:hover span,
@@ -1040,6 +1046,7 @@ section.anchor_block {
     border-radius: 20px;
     width: 100%;
     object-fit: cover;
+    aspect-ratio: 4/3
 }
 
 .blue-box {
@@ -1289,8 +1296,6 @@ personal account
 }
 
 .acc-video {
-    width: 100%;
-    height: 200px;
     margin-bottom: 5px;
     overflow: hidden;
 }
@@ -1301,31 +1306,44 @@ personal account
     object-fit: contain;
     background: black;
 }
-
+@media (min-width: 1399px) {
+    .acc-video {
+        min-width:80%;
+        height: 30vw;
+    }
+}
 @media (max-width: 1399px) {
     .user-photo {
         height: 240px;
     }
-
     .acc-video {
-        height: 175px;
+        min-width:80%;
+        height: 30vw;
     }
+
 }
 
 @media (max-width: 1199px) {
     .user-photo {
         height: 200px;
     }
-
     .acc-video {
-        height: 150px;
+        min-width:80%;
+        height: 30vw;
     }
+
+
 }
 
 @media (max-width: 767px) {
     .user-photo {
         height: 450px;
     }
+    .acc-video {
+        max-width:80%;
+        height: 45vw;
+         }
+
 }
 
 @media (max-width: 575px) {
@@ -1352,6 +1370,7 @@ personal account
     }
 
     .acc-video {
+        max-width:80%;
         height: 55vw;
     }
 }
@@ -2422,9 +2441,9 @@ footer {
 
 @media (max-width: 767px) {
     footer {
-        background-color: #E2E8F4;
+        background-color: #2E5193;
         height: 40px;
-        color: #000;
+        color: white;
         position: sticky;
         bottom: 0px;
         left: 0px;
@@ -2837,3 +2856,44 @@ footer {
 .privacy .paragraph a{
     color:deepskyblue;
 }
+.img-advertising{
+    object-fit: cover;
+    width:100%;
+    height:100%
+}
+
+.blockAdvertising{
+    width:100%
+}
+
+@media (min-width: 1200px) {
+    .blockAdvertising{
+        height:353px;
+    }
+}
+@media (max-width: 1199px) {
+    .blockAdvertising{
+        height:323px;
+    }
+
+}
+
+@media (max-width: 991px) {
+    .blockAdvertising{
+        height:270px;
+    }
+
+}
+
+@media (max-width: 767px) {
+    .blockAdvertising{
+        height:221px;
+    }
+}
+
+@media (max-width: 575px) {
+    .blockAdvertising{
+        height:202px;
+    }
+}
+

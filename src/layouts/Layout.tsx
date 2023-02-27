@@ -18,7 +18,6 @@ const Layout: FC = () => {
             }, 2000)
         }
     }, [alertState?.isShow])
-
     return (
         <div className="root-wrapper">
             <ScrollRestoration />

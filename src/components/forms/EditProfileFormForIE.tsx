@@ -56,7 +56,6 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
             type: 1,
         },
     })
-
     useEffect(() => {
         if (user) {
             setValue('companyName', user?.companyName)
@@ -64,8 +63,8 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
             setValue('lastName', user?.lastName)
             setValue('taxpayerIdentificationNumber', user?.taxpayerIdentificationNumber)
             setValue('mainStateRegistrationNumber', user?.mainStateRegistrationNumber)
-            setValue('phone', user?.phone)
             setValue('email', user?.email)
+            setValue('phone', user?.phone)
         }
     }, [user])
 
@@ -212,7 +211,7 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                                 maxLength: {
                                     value: 13,
                                     message: 'Максимальное количество символов 13',
-                                },
+                                }
                             })}
                         />
                     </ValidateWrapper>
@@ -270,6 +269,10 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                         <input
                             type="tel"
                             placeholder="+79000000000"
+                            onFocus={()=>{
+                                if(!getValues('phone') || getValues('phone').length===0)
+                                    setValue('phone', '+7')
+                            }}
                             {...register('phone', {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import AdvPreview from '../AdvPreview'
 import Loader from '../utils/Loader'
-import { NavLink } from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 import { IOffersItem, IOffersMeta } from '../../types/offers'
 
 type Props = {
@@ -128,6 +128,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         title={item.title}
                                         investments={item.investments}
                                         favorite={item?.isFavorite}
+                                        price={item.price}
                                     />
                                 </div>
                             ))
@@ -138,9 +139,9 @@ const HomeCategoriesContainer: FC<Props> = ({
                         </div>
                     )}
                 </div>
-                <NavLink to="category/3">
+                <Link to="category/3">
                     <button className="btn_main btn_1 mx-auto mt-4">Показать еще</button>
-                </NavLink>
+                </Link>
             </section>
 
             <section className="block_3 container">
@@ -156,6 +157,8 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         title={item.title}
                                         investments={item.investments}
                                         favorite={item?.isFavorite}
+                                        isPricePerMonthAbsolute={item?.isPricePerMonthAbsolute}
+
                                     />
                                 </div>
                             ))

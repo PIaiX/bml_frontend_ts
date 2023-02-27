@@ -9,6 +9,9 @@ const apiRoutes: ApiRoutesTypes = {
     //banner
     GET_BANNER: 'banner',
 
+    // advertising
+    GET_ADVERTISING: 'ads',
+
     //feedback
     SEND_FEEDBACK: 'feedback',
 
@@ -36,6 +39,7 @@ const apiRoutes: ApiRoutesTypes = {
     ACTIONS_OFFER: 'offer',
     DELETE_OFFER_IMAGE: 'offer/deleteImage',
     GET_ALL_SUBSECTIONS: 'offer/subsection',
+    GET_PREMIUM_SLOTS:'offer/premium/slots?page=1',
 
     //reports
     GET_USER_REPORT_TYPE: 'report/type/user',
@@ -52,6 +56,7 @@ const apiRoutes: ApiRoutesTypes = {
     GET_CURRENT_FRIENDS: 'user/friend/friends',
     UPDATE_PASSWORD: 'user/updatePassword',
     ACTIONS_USER: 'user',
+    GET_ID_CHAT:'conversation',
 
     //instructions
     GET_PARTNERS: 'partner',
@@ -59,6 +64,7 @@ const apiRoutes: ApiRoutesTypes = {
 
     //subscription
     ACTIONS_SUBSCRIBE: 'subscribe',
+
 }
 
 const BASE_URL: string | undefined = process.env.REACT_APP_BASE_URL

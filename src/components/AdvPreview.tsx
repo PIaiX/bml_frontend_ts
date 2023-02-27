@@ -15,6 +15,8 @@ interface Props {
     id?: number
     investments?: number
     callbackClick?: () => void
+    price?:number | undefined
+    isPricePerMonthAbsolute?:boolean | null
 }
 
 
@@ -23,7 +25,6 @@ const AdvPreview: FC<Props> = (props) => {
         e.stopPropagation();
         e.nativeEvent.stopImmediatePropagation();
     }
-    const navigate = useNavigate();
     return (
         <>
             <div style={{
@@ -34,17 +35,17 @@ const AdvPreview: FC<Props> = (props) => {
             }}></div>
             <Link to={`/adv-page/${props.id}`} className="preview-small">
                 <img src={checkPhotoPath(props?.image)} alt={props.title} />
-                <div className="text" style={{ cursor: "pointer" }}>
+                <div  className="text" style={{ cursor: "pointer" }}>
                     <div className="layer1">
                         <h6>{props.title}
                         </h6>
                     </div>
                     <div className="layer2">
                         <div className="white d-flex flex-wrap align-items-center d-lg-block">
-
-                            <div className="f_08 me-1 me-sm-3">Инвестиции от</div>
-                            <div>{FunctionForPrice(props.investments)} руб
-
+                            <div className="f_08 me-1 me-sm-3">{props.price?'Стоимость бизнеса':'Инвестиции от'}</div>
+                            <div>
+                                {FunctionForPrice(props.price?props.price:props.investments)}
+                                {props.isPricePerMonthAbsolute?' %':' руб'}
                             </div>
                         </div>
                         <div className="d-flex align-items-center" onClick={(event) => { stopPropagation(event) }}>

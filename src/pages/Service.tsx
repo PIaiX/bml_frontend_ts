@@ -19,12 +19,14 @@ import {IOffersAreaItem, IOffersItem, IOffersMeta, IOffersSubSectionsItem, IPayl
 import {useAppSelector} from '../hooks/store'
 import {IUser} from '../types/user'
 import {IUseStateItems} from '../types'
+import {getAdvertisings} from "../services/advertising";
+import {Advertisings} from "../types/advertising";
 
 const Service: FC = () => {
     const params = useParams()
     const categoryId = params.categoryId ? parseInt(params.categoryId) : 0
     const [orderBy, setOrderBy] = useState<string>('')
-    const limit = 16
+    const limit = 36
     const ref = useRef<HTMLElement>(null)
     const [areas, setAreas] = useState<Array<IOffersAreaItem | undefined>>([])
     const [subSections, setSubSections] = useState<Array<IOffersSubSectionsItem | undefined>>([])
@@ -49,7 +51,10 @@ const Service: FC = () => {
         if (ref.current !== null) {
             window.scrollTo(0, ref?.current?.offsetTop - 130)
         }
+        getAdvertisings().then(res=>res && setAdvertising(res))
     }, [categoryId])
+
+    useEffect(()=>console.log(advertising),)
 
     useEffect(() => {
         getAllAreas().then((res) => res && setAreas(res))
@@ -111,6 +116,8 @@ const Service: FC = () => {
     useEffect(() => {
         setSelectedPage(0)
     }, [categoryId])
+
+    const [advertising, setAdvertising]=useState<Advertisings>()
 
     return (
         <main>
@@ -221,14 +228,16 @@ const Service: FC = () => {
                     <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
                         {offers?.isLoaded ? (
                             offers?.items && offers?.items?.length ? (
-                                paginationItems?.slice(0, 8).map((item: IOffersItem) => (
-                                    <div className="col" key={item.id}>
+                                paginationItems?.slice(0, 12).map((item: IOffersItem) => (
+                                    <div className="col position-relative" key={item.id}>
                                         <AdvPreview
                                             id={item.id}
                                             image={item.image}
                                             title={item.title}
                                             investments={item.investments}
                                             favorite={item.isFavorite}
+                                            price={categoryId===3?item.price : undefined}
+                                            isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
                                         />
                                     </div>
                                 ))
@@ -240,38 +249,47 @@ const Service: FC = () => {
                                 <Loader color="#343434" />
                             </div>
                         )}
-                        <div className="col-12 w-100">
-                            <Swiper
-                                className="preview-slider"
-                                modules={[Pagination]}
-                                slidesPerView={1}
-                                pagination={{clickable: true}}
-                            >
-                                <SwiperSlide>
-                                    <img src="/images/slider_offers/slide1.jpg" alt="" className="img-fluid" />
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <img src="/images/slider_offers/slide2.jpg" alt="" className="img-fluid" />
-                                </SwiperSlide>
-                            </Swiper>
-                        </div>
+                        {advertising && advertising[0] && advertising[0].offerImage &&
+                            <div className="blockAdvertising">
+                                <img className={"img-advertising"} src={advertising[0].offerImage} alt="" />
+                            </div>}
                         {offers?.items && offers?.items?.length
-                            ? paginationItems?.slice(8, paginationItems.length).map((item: IOffersItem) => (
-                                  <div className="col" key={item.id}>
+                            ? paginationItems?.slice(12, 24).map((item: IOffersItem) => (
+                                  <div className="col position-relative" key={item.id}>
                                       <AdvPreview
                                           id={item.id}
                                           image={item.image}
                                           title={item.title}
                                           favorite={item.isFavorite}
                                           investments={item.investments}
+                                          price={categoryId===3?item.price : undefined}
+                                          isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
                                       />
                                   </div>
                               ))
                             : null}
+                        {advertising && advertising[1] && advertising[1]?.offerImage &&
+                            <div className={"blockAdvertising"}>
+                                <img className={"img-advertising"} src={advertising[1].offerImage} alt="" />
+                            </div>}
+                        {offers?.items && offers?.items?.length
+                            ? paginationItems?.slice(24, offers?.items?.length).map((item: IOffersItem) => (
+                                <div className="col position-relative" key={item.id}>
+                                    <AdvPreview
+                                        id={item.id}
+                                        image={item.image}
+                                        title={item.title}
+                                        favorite={item.isFavorite}
+                                        investments={item.investments}
+                                        price={categoryId===3?item.price : undefined}
+                                        isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
+                                    />
+                                </div>
+                            ))
+                            : null}
                     </div>
                 )}
-
-                {offers.isLoaded && (
+                    {offers.isLoaded && (
                     <div className="sort mt-4">
                         <ServicePagination
                             nextLabel="❯"

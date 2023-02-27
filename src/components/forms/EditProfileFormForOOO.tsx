@@ -122,6 +122,7 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
         else if (cityError === '') submitUpdateUserInfo(data)
 
     }
+
     return (
         <form className="acc-box" noValidate onSubmit={handleSubmit(beforeSubmit)}>
             <div className="row  align-items-center g-3">
@@ -295,7 +296,10 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
                         <input
                             type="tel"
                             placeholder="+79000000000"
-                            {...register('phone', {
+                            onFocus={()=>{
+                                if(!getValues('phone') || getValues('phone').length===0)
+                                    setValue('phone', '+7')
+                            }}                            {...register('phone', {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
                                     value: 12,

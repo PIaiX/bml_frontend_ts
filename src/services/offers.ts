@@ -4,7 +4,7 @@ import {
     IOfferBodyRequest,
     IOffersAreaBodyRequest,
     IOffersBodyRequest,
-    IOffersSubSectionsBodyRequest,
+    IOffersSubSectionsBodyRequest, IOPremium,
 } from '../models/offers'
 import { IPayloadsFilter } from '../types/offers'
 
@@ -56,6 +56,15 @@ export const getOneOffer = async (id: string, userId: number | string = '') => {
     try {
         const response = await $api.get<IOfferBodyRequest>(`${apiRoutes.ACTIONS_OFFER}/${id}/${userId}`)
         return response?.data?.body
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getPremiumSlots = async () => {
+    try {
+        const response = await $api.get(`${apiRoutes.GET_PREMIUM_SLOTS}`)
+        return response?.data?.body.data
     } catch (error) {
         console.log(error)
     }

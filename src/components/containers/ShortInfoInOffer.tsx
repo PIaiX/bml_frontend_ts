@@ -19,6 +19,7 @@ type Props = {
     city?: string
     dateOfCreation?: string
     areaName?: string
+    isPricePerMonthAbsolute?:boolean | null
 }
 
 const ShortInfoInOfferContainer: FC<Props> = (props) => {
@@ -94,7 +95,8 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
                 <ul>
                     <li>Стартовые инвестиции от: {FunctionForPrice(props?.investments)} ₽</li>
                     <li>Паушальный взнос: {FunctionForPrice(props?.price)} ₽</li>
-                    <li>Роялти: {FunctionForPrice(props?.pricePerMonth)} ₽</li>
+                    <li>Роялти: {FunctionForPrice(props?.pricePerMonth)} {props.isPricePerMonthAbsolute && props.category===4?' %':' ₽'}
+                    </li>
                     <li>
                         Срок окупаемости:{' '}
                         {props?.payback !== null ? props?.paybackForUser?.toLowerCase() : 'не установлено'}

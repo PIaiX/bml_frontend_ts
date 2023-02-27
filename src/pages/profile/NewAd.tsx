@@ -26,6 +26,7 @@ import { checkPhotoPath } from '../../helpers/photoLoader'
 import { FromStringToNumber } from '../../helpers/FromStringToNumber'
 import FunctionForPrice from '../../helpers/FunctionForPrice'
 import CitiesForm from '../../components/forms/CitiesForm'
+import Premium from "./Premium";
 
 const NewAd = () => {
     const [category, setCategory] = useState<number | undefined>(0)
@@ -59,7 +60,10 @@ const NewAd = () => {
         item: null,
     })
     const [imagesFromServer, setImagesFromServer] = useState<any>(null)
-
+    const [isPricePerMonthAbsolute, setRoaloty]=useState<boolean>(false)
+    const [placedForMonths, setPlacedForMonths]=useState(3)
+    const [premiumInf, setPremiumInf]=useState<any>(null)
+    useEffect(()=>{console.log(premiumInf)},[premiumInf])
     const {
         register,
         setValue,
@@ -138,6 +142,7 @@ const NewAd = () => {
                         setValue('profit', FunctionForPrice(res?.profit) || '')
                         setValue('city', res?.city || '')
                         setCurrentArea(res?.subsection?.area?.id)
+                        setRoaloty(res?.isPricePerMonthAbsolute)
                     }
                 })
                 .catch()
@@ -213,7 +218,9 @@ const NewAd = () => {
             userId: user?.id,
             image: formInfo?.image || '',
             category: formInfo?.category,
-        }
+            isPricePerMonthAbsolute,
+            placedForMonths
+    }
         for (const key in req) {
             formData.append(key, req[key])
         }
@@ -248,6 +255,7 @@ const NewAd = () => {
             dateOfCreation: dateNew ? dateNew : '',
             userId: user?.id,
             image: formInfo?.image || '',
+            isPricePerMonthAbsolute
         }
         for (const key in req) {
             formData.append(key, req[key])
@@ -307,7 +315,6 @@ const NewAd = () => {
             [ValuesFroPrice[6][0]]: ValuesFroPrice[6][1],
             city: city,
         }
-        console.log(data);
         if (id) {
             saveChanges(data)
         } else {
@@ -345,6 +352,7 @@ const NewAd = () => {
         formInfo.image && setAdCover([formInfo.image])
     }, [formInfo])
 
+    const [premium, setPremium]=useState(false)
 
     return (
         <>
@@ -372,7 +380,7 @@ const NewAd = () => {
                             <option value={1}>Предложения инвесторов</option>
                             <option value={2}>Поиск бизнес партнёров</option>
                             <option value={3}>Продажа готового бизнеса</option>
-                            {user?.typeForUser !== 'Физ лицо' && <option value={4}>Франшизы</option>}
+                            {user?.type !== 0 && <option value={4}>Франшизы</option>}
                         </select>
                     </div>
                 </fieldset>
@@ -918,6 +926,32 @@ const NewAd = () => {
                                             })}
                                         />
                                     </ValidateWrapper>
+
+                                </div>
+                            </div>
+                            <div className="row align-items-center mb-4">
+                                <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0 pb-1">
+                                    <div>
+                                        Единица измерения<span className="red">*</span>
+                                    </div>
+                                </div>
+                                <div className="col-sm-2 col-lg-1 col-2">
+                                    <div className={"d-inline-block"}><input
+                                        name="roal-type"
+                                        checked={!isPricePerMonthAbsolute}
+                                        onChange={()=>setRoaloty(!isPricePerMonthAbsolute)}
+                                        type="radio"
+                                    /></div>
+                                    <div className={"d-inline-block"}>&nbsp;₽</div>
+                                </div>
+                                <div className="col-sm-2 col-lg-1 col-2">
+                                    <div className={"d-inline-block"}><input
+                                        name="raol-type"
+                                        checked={isPricePerMonthAbsolute}
+                                        onChange={()=>setRoaloty(!isPricePerMonthAbsolute)}
+                                        type="radio"
+                                    /></div>
+                                    <div className={"d-inline-block"}>&nbsp;%</div>
                                 </div>
                             </div>
                         </>
@@ -1096,13 +1130,8 @@ const NewAd = () => {
                                         <input
                                             name="ad-type"
                                             type="radio"
-                                            value="6000"
-                                            onChange={(e) =>
-                                                setFormInfo((prevState: any) => ({
-                                                    ...prevState,
-                                                    [e.target.name]: e.target.value,
-                                                }))
-                                            }
+                                            checked={placedForMonths===3}
+                                            onChange={() => setPlacedForMonths(3)}
                                         />
                                         <span className="ms-1 ms-sm-2 ms-xl-3">Разместить</span>
                                     </label>
@@ -1115,35 +1144,30 @@ const NewAd = () => {
                                         <input
                                             name="ad-type"
                                             type="radio"
-                                            value="11 000"
-                                            onChange={(e) =>
-                                                setFormInfo((prevState: any) => ({
-                                                    ...prevState,
-                                                    [e.target.name]: e.target.value,
-                                                }))
-                                            }
+                                            checked={placedForMonths===6}
+                                            onChange={() => setPlacedForMonths(6)}
                                         />
                                         <span className="ms-1 ms-sm-2 ms-xl-3">Разместить</span>
                                     </label>
                                     <div className="fw_6 sky">6 мес. — 11 000 рублей</div>
                                 </div>
                             </div>
-                            <div className="col-12 col-md-4 mt-2 mt-sm-3 mt-md-0">
-                                <NavLink
-                                    to="/account/my-ads/premium"
-                                    state={{ data: formInfo }}
-                                    className="btn_main btn_5 f_13 w-100 h-100"
-                                >
+                            <div className="col-12 col-md-4 mt-2 mt-sm-3 mt-md-0" style={{cursor:"pointer"}} onClick={()=>{setPremium(!premium)}}>
+                                <div className="btn_main btn_5 f_13 w-100 h-100">
                                     Premium-размещение
-                                </NavLink>
+                                </div>
                             </div>
                         </div>
                     </fieldset>
                 )}
+                {premium && <div className={"pt-4"}>
+                    <Premium setChange={setPremiumInf} priceWithoutPremium={placedForMonths===3?6000:11000} />
+                </div>}
                 <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={() => funcForCityEr(city)}>
                     {returnText()}
                 </button>
             </form>
+
         </>
     )
 }

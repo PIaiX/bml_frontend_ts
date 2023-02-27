@@ -7,9 +7,10 @@ import {IUser} from '../types/user'
 import {setInitialCount} from '../store/reducers/favoriteCountSlice'
 import FunctionForPrice from "../helpers/FunctionForPrice";
 import {setSearch} from '../store/reducers/searchHeader'
+import {notifications} from "../types/sockets/    notifications";
 
 const Header: FC = () => {
-    const {user}:{user: IUser | null} = useAppSelector((state) => state?.user)
+    const {user, notifications}:{user: IUser | null, notifications:notifications | null} = useAppSelector((state) => state?.user)
     const count = useAppSelector((state) => state?.favoritesCount?.count || 0)
     const inputSearch:string = useAppSelector((state) => state?.search.input)
     const dispatch = useAppDispatch()
@@ -33,7 +34,6 @@ const Header: FC = () => {
         e.preventDefault()
         navigate("/search")
     }
-
     return (
         <>
             <header>
@@ -65,7 +65,7 @@ const Header: FC = () => {
                         >
 
                             <MdStarOutline />
-                            {user && <span className="count">{count}</span>}
+                            {user && <span className="count notificationAll">{count}</span>}
                         </NavLink>
 
                         {user?.id ? (
@@ -75,7 +75,7 @@ const Header: FC = () => {
                                 ) : (
                                     <div>
                                         <span>{user?.fullName}</span>
-                                        {/* <img src="/images/icons/profile.svg" /> */}
+                                        {notifications && <span className="notification  notificationAll"></span>}
                                     </div>
                                 )}
                             </NavLink>

@@ -34,7 +34,7 @@ const ChatMessage: FC<Props> = ({avatarUser, keyArr, arr}) => {
                         <div className="d-flex align-items-center mb-1 mb-sm-3">
                             <Link to={`/account/profile/user/${i?.userId}`} className="user">
                                 <img
-                                    src={+i?.userId === user?.id ? checkPhotoPath(user?.avatar) : avatarUser}
+                                    src={+i?.userId === user?.id ? checkPhotoPath(user?.avatar) : checkPhotoPath(avatarUser)}
                                     alt={String(i?.userId)}
                                 />
                             </Link>
