@@ -33,9 +33,10 @@ import { IUseStateReportType, PayloadsReport } from '../types/report'
 import CustomModal from '../components/utils/CustomModal'
 import { useForm } from 'react-hook-form'
 import ValidateWrapper from '../components/utils/ValidateWrapper'
-import {resetAlert, showAlert} from '../store/reducers/alertSlice'
-import {emitCreateWithOfferTopicMessage, emitCreateWithoutTopicMessage} from '../services/sockets/messages'
+import { resetAlert, showAlert } from '../store/reducers/alertSlice'
+import { emitCreateWithOfferTopicMessage, emitCreateWithoutTopicMessage } from '../services/sockets/messages'
 import FunctionForPrice from '../helpers/FunctionForPrice'
+import { convertLocaleDate } from '../helpers/convertLocaleDate'
 
 const AdvPage: FC = () => {
     const { id } = useParams()
