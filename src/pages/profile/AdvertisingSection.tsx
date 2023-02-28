@@ -1,49 +1,81 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import {useImageViewer} from '../../hooks/imageViewer'
-import {
-    onCheckboxHandler,
-    onImageHandler,
-    onInputHandler,
-    onRadioHandler,
-    onSelectHandler,
-} from '../../helpers/formHandlers'
+import {onImageHandler, onRadioHandler,} from '../../helpers/formHandlers'
 import FunctionForPrice from '../../helpers/FunctionForPrice'
 import {getAdvertisingsPrices} from "../../services/advertising";
+import {useForm} from "react-hook-form";
+import ValidateWrapper from "../../components/utils/ValidateWrapper";
+import {useAppSelector} from "../../hooks/store";
+
 
 const AdvertisingSection = () => {
     const [data, setData] = useState<any>({
         lifeAd: '1',
     })
+    const {
+        register,
+        formState: {errors},
+        handleSubmit,
+        reset,
+        setValue,
+        setError,
+        clearErrors,
+        getValues,
+    } = useForm<{image:string, placedForMonths:string, urlLink:string, description:string}>()
+
     const [prices, setPrices]=useState()
     useEffect(()=>{
         getAdvertisingsPrices().then(setPrices)
     },[])
-    const viewPhoto = useImageViewer(data?.photo)
-
-    const validLittlePhoto = (photo: any) => {
+    const viewPhoto = useImageViewer(data?.image)
+    const user = useAppSelector(state => state.user.user)
+    const validLittlePhoto = (photo: any):string => {
         if (photo?.width === undefined && photo?.height === undefined) {
-            return <span>Фото не загружено</span>
+            return 'Фото не загружено'
         } else if (photo?.width === 250 && photo?.height === 160 && data?.adv === 1) {
-            return <span>Фото загружено</span>
-        } else if (photo?.width !== 250 && photo?.height !== 160) {
-            delete data?.photo
-            return <span>Размеры не подходят</span>
+            return 'Фото загружено'
+        } else {
+            return 'Размеры не подходят'
         }
     }
 
-    const validBigPhoto = (photo: any) => {
+    const validBigPhoto = (photo: any):string => {
         if (photo?.width === undefined && photo?.height === undefined) {
-            return <span>Фото не загружено</span>
+            return 'Фото не загружено'
         } else if (photo?.width === 1200 && photo?.height === 800 && data?.adv === 0) {
-            return <span>Фото загружено</span>
-        } else if (photo?.width !== 1200 && photo?.height !== 800) {
-            return <span>Размеры не подходят</span>
+            return 'Фото загружено'
+        } else{
+            return 'Размеры не подходят'
         }
     }
+
+    const NewAdvertisings=(data:any)=>{
+        alert(JSON.stringify({...data, userId:user?.id}))
+        // setNewAdvertisings({})
+        //     .then(res=>console.log(res))
+        //     .catch(e=>console.log(e))
+    }
+
+    const ref1=useRef<HTMLInputElement>(null)
+    const ref2=useRef<HTMLInputElement>(null)
+    const refClick=(ref:number)=>{
+        if(ref===1 && ref1.current){
+            ref1.current.click()
+        }
+        if(ref===2 && ref2.current){
+            ref2.current.click()
+        }
+    }
+    let status:string=''
+        if(data.adv== 1)
+            status=validLittlePhoto(viewPhoto)
+        if(data.adv== 0)
+            status = validBigPhoto(viewPhoto)
+
     return (
-        <>
+        <form onSubmit={handleSubmit(NewAdvertisings)}>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
                 <MdOutlineArrowBack />
                 <span className="ms-2">Назад</span>
@@ -78,11 +110,13 @@ const AdvertisingSection = () => {
                     <div className="col-sm-6 col-md-4 mb-3 mb-sm-0">
                         <label className=" mb-3">
                             <input
+                                ref={ref1}
                                 type="radio"
                                 name="adv"
                                 className="f_11"
                                 value={0}
                                 onChange={(e) => {
+                                    delete data?.image
                                     setData((prevState: any) => ({
                                         ...prevState,
                                         sum: prices[0][data.lifeAd=='1'?'priceThreeMonths':'priceSixMonths']
@@ -102,8 +136,8 @@ const AdvertisingSection = () => {
                         <div className="f_09 l-gray mt-1">Размер баннера 1200*800</div>
                         <div className="file-upload mt-2">
                             <button className="btn_main btn_2 fw_4">Загрузить</button>
-                            <input type="file" onChange={(e) => onImageHandler(e, 'photo', setData)} />
-                            {validBigPhoto(viewPhoto)}
+                            <input type="file" onClick={()=>refClick(1)} onChange={(e) => onImageHandler(e, setData,'image')} />
+                            {data?.adv === 0 && <span style={{color:`${status!=='Фото загружено'?'red':''}`}}>{status}</span>}
                         </div>
                     </div>
                     <div className="col-sm-6 col-md-8">
@@ -119,11 +153,14 @@ const AdvertisingSection = () => {
                     <div className="col-sm-6 col-md-4 mb-3 mb-sm-0">
                         <label className=" mb-3">
                             <input
+                                ref={ref2}
                                 type="radio"
                                 name="adv"
                                 value={1}
                                 className="f_11"
                                 onChange={(e) => {
+                                    delete data?.image
+                                    refClick(2)
                                     setData((prevState: any) => ({
                                         ...prevState,
                                         sum: prices[1][data.lifeAd=='1'?'priceThreeMonths':'priceSixMonths']
@@ -143,8 +180,14 @@ const AdvertisingSection = () => {
                         <div className="f_09 l-gray mt-1">Размер баннера 250х160</div>
                         <div className="file-upload mt-2">
                             <button className="btn_main btn_2 fw_4">Загрузить</button>
-                            <input type="file" onChange={(e) => onImageHandler(e, 'photo', setData)} />
-                            {validLittlePhoto(viewPhoto)}
+                            <input
+                                onClick={()=>refClick(2)}
+                                type="file"
+                                onChange={(e) => {
+                                    onImageHandler(e, setData, 'image')
+                                }}
+                            />
+                            {data?.adv === 1 && <span style={{color:`${status!=='Фото загружено'?'red':''}`}}>{status}</span>}
                         </div>
                     </div>
                     <div className="col-sm-6 col-md-8">
@@ -161,23 +204,67 @@ const AdvertisingSection = () => {
                     </div>
                     <div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">
                         <select
-                            name="lifeAd"
                             defaultValue={1}
+                            {...register('placedForMonths')}
                             onChange={(e) => {
                                 setData((prevState: any) => ({
                                     ...prevState,
                                     lifeAd: e.target.value,
-                                    sum: data.adv!==undefined?(e.target.value === '1' && prices[data.adv]['priceThreeMonths']) || (e.target.value === '2' && prices[data.adv]['priceSixMonths']):'0',
+                                    sum: data.adv!==undefined?(e.target.value === '3' && prices[data.adv]['priceThreeMonths']) || (e.target.value === '6' && prices[data.adv]['priceSixMonths']):'0',
                                 }))
                             }}
                         >
                             <option value={0} disabled hidden>
                                 Срок размещения
                             </option>
-                            <option value={1}>3 месяца</option>
-                            <option value={2}>6 месяцев</option>
+                            <option value={3}>3 месяца</option>
+                            <option value={6}>6 месяцев</option>
                         </select>
                     </div>
+
+                    <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
+                        <div>Ссылка при нажатии</div>
+                    </div>
+                    <div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">
+                        <ValidateWrapper error={errors.urlLink}>
+                            <input type={'url'}
+                                   placeholder={'Введите ссылку'}
+                                   {...register('urlLink', {
+                                       required: 'Поле обязательно к заполнению',
+                                       minLength: {
+                                           value: 6,
+                                           message: 'Минимум 6 символов',
+                                       },
+                                   })}
+                            />
+                        </ValidateWrapper>
+                    </div>
+
+                    {data?.adv ==1 &&
+                        <>
+                            <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
+                                <div>Название объявления</div>
+                            </div>
+                            <div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">
+                                <ValidateWrapper error={errors.description}>
+                                    <input
+                                        type={'text'}
+                                        placeholder={'Введите название'}
+                                        {...register('description', {
+                                               required: 'Поле обязательно к заполнению',
+                                               minLength: {
+                                                   value: 2,
+                                                   message: 'Минимум 2 символов',
+                                               },
+                                               maxLength: {
+                                                   value: 30,
+                                                   message: 'Максимум 30 символов',
+                                               },
+                                           })}
+                                    />
+                                </ValidateWrapper>
+                            </div>
+                        </>}
                     <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
                         <div className="f_12 fw_6">Сумма к оплате</div>
                     </div>
@@ -185,11 +272,15 @@ const AdvertisingSection = () => {
                         <span className="f_12 fw_6">{data.sum?FunctionForPrice(data.sum):0} ₽</span>
                     </div>
                 </div>
-                <button type="button" className="btn_main btn_4 fw_4 mt-sm-5">
+                <button type="submit" className="btn_main btn_4 fw_4 mt-sm-5"
+                        onClick={()=>{
+                            if(status!=='Фото загружено')setError('image', {message:'Загрузите фото'})
+                            else clearErrors(["image"])
+                        }}>
                     Создать и перейти к оплате
                 </button>
             </div>}
-        </>
+        </form>
     )
 }
 
