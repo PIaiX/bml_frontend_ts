@@ -49,7 +49,7 @@ const ChatWindow = () => {
         if (state && state.userId) {
             emitCreateMessage({ userId: state.userId, text: text })
                 .then((res: any) => {
-                    navigate(`/account/chat/window/${res.body.conversationId}`, { replace: true })
+                    navigate(`/account/chat/window/${res.body.conversationId}`, { replace: true, state})
                 })
         }
     }

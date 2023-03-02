@@ -20,8 +20,6 @@ import {getAdvertisings} from "../services/advertising";
 import {Advertisings} from "../types/advertising";
 import {checkPhotoPath} from "../helpers/photoLoader";
 
-let advertisingCount=0
-let lastPage=1;
 const Service: FC = () => {
     const params = useParams()
     const categoryId = params.categoryId ? parseInt(params.categoryId) : 0
@@ -68,12 +66,8 @@ const Service: FC = () => {
     }, [])
 
     useEffect(() => {
-        getAdvertisings((advertisingCount%lastPage)+1,'category').then(res=>{
-            if(res){
-                advertisingCount++
-                setAdvertising(res.data)
-                lastPage=res.meta.lastPage
-            }
+        getAdvertisings(1).then(res=>{
+            res && setAdvertising(res)
         })
 
         if (localStorage.getItem('token')) {

@@ -141,11 +141,12 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium}) => {
                             <option value={2}>6 месяцев – {functionForPrice(banners[data.placeInSite-1].priceSixMonths)} ₽</option>
                         </select>
                     </div></>}
-                    <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
+                    <div className="col-sm-6 col-lg-4 mb-2 mb-sm-0">
                         <div className="f_12 fw_6">Сумма к оплате</div>
                     </div>
-                    <div className="col-sm-8 col-md-4 col-xxl-3 mb-3 mb-sm-0">
-                        <span className="f_12 fw_6">{data?.sum!=0?functionForPrice(data?.sum+(priceWithoutPremium?priceWithoutPremium:0)):0} ₽</span>
+                    <div className="col-sm-6 col-lg-4 mb-3 mb-sm-2">
+                        <span className="f_12 fw_6">{functionForPrice(priceWithoutPremium+data?.sum)} ₽</span>
+                        {/*<span className="f_12 fw_6">{data?.sum!=0?functionForPrice(data?.sum+(priceWithoutPremium?priceWithoutPremium:0)):0} ₽</span>*/}
                     </div>
                 </div>
                 {!setChange && <button type="button" className="btn_main btn_4 fw_4 mt-sm-5">

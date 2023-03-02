@@ -63,6 +63,7 @@ const NewAd = () => {
     const [isPricePerMonthAbsolute, setRoaloty]=useState<boolean>(false)
     const [placedForMonths, setPlacedForMonths]=useState(3)
     const [premiumInf, setPremiumInf]=useState<any>(null)
+    const [paymentType, setPaymentType] = useState('site');
     useEffect(()=>{console.log(premiumInf)},[premiumInf])
     const {
         register,
@@ -205,7 +206,6 @@ const NewAd = () => {
     }, [formInfo?.image, photoInfo])
 
     useEffect(() => { }, [textPhoto?.isInValidSize, textPhoto?.isInValidSizeMB])
-
     const createNewOffer = (data: IOfferForm) => {
         const formData = new FormData()
         let dateNew
@@ -1118,12 +1118,12 @@ const NewAd = () => {
                     )}
                 </fieldset>
 
-                {category === 4 && (
+                {!id && category === 4 && (
                     <fieldset className="mt-3 mt-sm-4 mt-md-5">
                         <legend className="fw_7 f_10 text-uppercase mb-2 mb-sm-4">
                             Размещение объявления на 30 дней
                         </legend>
-                        <div className="f_xs_08 row gx-2 gx-sm-3 gx-xl-4">
+                        <div className="f_xs_08 row gx-2 gx-sm-3 gx-xl-4 mb-3 mb-sm-4">
                             <div className="col-5 col-md-4">
                                 <div className="acc-box w-100 h-100">
                                     <label className="mb-2 mb-xl-3">
@@ -1160,9 +1160,39 @@ const NewAd = () => {
                         </div>
                     </fieldset>
                 )}
-                {premium && <div className={"pt-4"}>
+                {!id && premium && <div className={"pt-4"}>
                     <Premium setChange={setPremiumInf} priceWithoutPremium={placedForMonths===3?6000:11000} />
                 </div>}
+
+
+                {!id && category === 4 && <div className="row align-items-center mb-3 mb-sm-4">
+                    <div className="col-sm-6 col-lg-4">
+                        <div>Способ оплаты: </div>
+                    </div>
+                    <div className="col-sm-6 col-lg-4">
+                        <div>
+                            <div className={"d-inline-block"}><input
+                                name="payment-type"
+                                defaultChecked={true}
+                                onClick={()=>setPaymentType('site')}
+                                type="radio"
+                            /></div>
+                            <div className={"d-inline-block px-2 mb-2"}>Кошелёк сайта</div>
+                        </div>
+                        <div>
+                            <div className={"d-inline-block"}><input
+                                name="payment-type"
+                                defaultChecked={false}
+                                onClick={()=>setPaymentType('card')}
+                                type="radio"
+                            /></div>
+                            <div className={"d-inline-block px-2"}>Банковской картой</div>
+                        </div>
+
+                    </div>
+                </div>}
+
+
                 <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={() => funcForCityEr(city)}>
                     {returnText()}
                 </button>

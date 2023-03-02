@@ -1,18 +1,10 @@
-import {$api} from "./indexAuth";
+import {$api, $authApi} from "./indexAuth";
 import {apiRoutes} from "../config/api";
 
 export const getAdvertisings =
-    async (page:number, place:string)=> {
+    async (adsTypeId:number)=> {
     try {
-        const response = await $api.get(
-            `${apiRoutes.GET_ADVERTISING}`, {
-                params:{
-                    page,
-                    limit:2,
-                    place
-                }
-            }
-        )
+        const response = await $api.post(`${apiRoutes.GET_ADVERTISING}?limit=2&adsTypeId=${adsTypeId}`)
         return response.data.body
     } catch (error) {
         console.log(error)
@@ -34,11 +26,7 @@ export const getAdvertisingsPrices =
 export const setNewAdvertisings =
     async (body:any)=> {
     try {
-        const response = await $api.post(
-            `${apiRoutes.GET_PRICES}`,
-            {body:JSON.stringify(body)
-            }
-        )
+        const response = await $authApi.post(`${apiRoutes.GET_ADVERTISING}`, body)
         return response.data.body
     } catch (error) {
         console.log(error)

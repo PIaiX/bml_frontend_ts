@@ -33,8 +33,6 @@ import {getIdChat} from "../services/users";
 import {getAdvertisings} from "../services/advertising";
 import {Advertisings} from "../types/advertising";
 
-let advertisingCount=0;
-let lastPage=1;
 
 const AdvPage: FC = () => {
     const navigate = useNavigate()
@@ -69,20 +67,18 @@ const AdvPage: FC = () => {
     const [messagePayload, setMessagePayload] = useState({
         text: '',
         offerId: id,
-        conversationId: 0,
+        conversationId: 0
     })
 
     useEffect(()=>{
-        getAdvertisings((advertisingCount%lastPage)+1,'offer').then(res=>{
-            advertisingCount++
-            setAdvertising(res.data)
-            lastPage=res.meta.lastPage
+        getAdvertisings(2).then(res=>{
+            setAdvertising(res)
         })
     }, [offer?.item?.id])
 
     useEffect(() => {
         if (user && offer?.item?.user?.id) {
-            getIdChat(offer?.item?.user?.id).then(res => setIdChat(res.id))
+            getIdChat(offer?.item?.user?.id).then(res => res && setIdChat(res.id))
         }
     }, [offer])
 
@@ -131,7 +127,6 @@ const AdvPage: FC = () => {
             return 'Описание чего-то'
         }
     }
-
     const aboutMeBlock = () => {
         if (offer?.item?.category || offer?.item?.category === 0) {
             if (3 > offer?.item?.category) {
@@ -172,12 +167,12 @@ const AdvPage: FC = () => {
     let srcToChat='/enter'
     if(user)
         srcToChat=`/account/chat/window/${idChat ? idChat : 'new'}`
+
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
                 <Breadcrumbs/>
             </div>
-
             <section id="offer-page" className="container">
                 <h1>{offer?.item?.title}</h1>
                 <div className="d-lg-flex justify-content-between align-items-center mb-2 mb-sm-4">

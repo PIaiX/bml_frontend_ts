@@ -4,10 +4,13 @@ import {MdOutlineArrowBack} from 'react-icons/md'
 import {useImageViewer} from '../../hooks/imageViewer'
 import {onImageHandler, onRadioHandler,} from '../../helpers/formHandlers'
 import FunctionForPrice from '../../helpers/FunctionForPrice'
-import {getAdvertisingsPrices} from "../../services/advertising";
+import {getAdvertisingsPrices, setNewAdvertisings} from "../../services/advertising";
 import {useForm} from "react-hook-form";
 import ValidateWrapper from "../../components/utils/ValidateWrapper";
 import {useAppSelector} from "../../hooks/store";
+import {getAllAreas, getAllSubsections} from "../../services/offers";
+import {IOffersAreaItem, IOffersSubSectionsItem} from "../../types/offers";
+import {convertLocaleDate} from "../../helpers/convertLocaleDate";
 
 
 const AdvertisingSection = () => {
@@ -23,7 +26,7 @@ const AdvertisingSection = () => {
         setError,
         clearErrors,
         getValues,
-    } = useForm<{image:string, placedForMonths:string, urlLink:string, description:string}>()
+    } = useForm<{image:string, placedForMonths:string, link:string, description:string, adsTypeId:string, subsectionId:string}>()
 
     const [prices, setPrices]=useState()
     useEffect(()=>{
@@ -40,6 +43,24 @@ const AdvertisingSection = () => {
             return 'Размеры не подходят'
         }
     }
+    const [areas, setAreas] = useState<Array<IOffersAreaItem | undefined>>([])
+    const [subSections, setSubSections] = useState<Array<IOffersSubSectionsItem | undefined>>([])
+    const [currentArea, setCurrentArea] = useState<number | undefined>(undefined)
+    const [paymentType, setPaymentType] = useState('site');
+
+    useEffect(()=>{setValue('adsTypeId', '')},[areas])
+    useEffect(()=>{setValue('subsectionId', '')},[subSections])
+
+    useEffect(() => {
+        getAllAreas().then(res=>res && setAreas(res))
+    }, [])
+
+    useEffect(() => {
+        if (currentArea) {
+            getAllSubsections(currentArea).then((res) => res && setSubSections(res))
+        }
+    }, [currentArea])
+
 
     const validBigPhoto = (photo: any):string => {
         if (photo?.width === undefined && photo?.height === undefined) {
@@ -51,11 +72,20 @@ const AdvertisingSection = () => {
         }
     }
 
-    const NewAdvertisings=(data:any)=>{
-        alert(JSON.stringify({...data, userId:user?.id}))
-        // setNewAdvertisings({})
-        //     .then(res=>console.log(res))
-        //     .catch(e=>console.log(e))
+    const NewAdvertisings=(dat:any)=>{
+        const formData = new FormData()
+        const req: any = {
+            ...dat,
+            userId: user?.id,
+            image: data.image
+        }
+        for (const key in req) {
+            formData.append(key, req[key])
+        }
+
+        setNewAdvertisings(formData)
+            .then(res=>console.log(res))
+            .catch(e=>console.log(e))
     }
 
     const ref1=useRef<HTMLInputElement>(null)
@@ -226,10 +256,10 @@ const AdvertisingSection = () => {
                         <div>Ссылка при нажатии</div>
                     </div>
                     <div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">
-                        <ValidateWrapper error={errors.urlLink}>
+                        <ValidateWrapper error={errors.link}>
                             <input type={'url'}
                                    placeholder={'Введите ссылку'}
-                                   {...register('urlLink', {
+                                   {...register('link', {
                                        required: 'Поле обязательно к заполнению',
                                        minLength: {
                                            value: 6,
@@ -266,12 +296,91 @@ const AdvertisingSection = () => {
                             </div>
                         </>}
                     <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
+                        <div>Сфера</div>
+                    </div>
+                    <div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">
+                        <ValidateWrapper error={errors?.adsTypeId}>
+                            <select
+                                {...register('adsTypeId', {
+                                    required: 'Выберите значение!',
+                                    onChange:(e)=>setCurrentArea(e.target.value)
+                                })}
+                            >
+                                <option value={''} disabled>
+                                    Сфера
+                                </option>
+                                {areas ? (
+                                    areas.map((i) => (
+                                        <option key={i?.id} value={i?.id}>
+                                            {i?.name}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option disabled>Пусто</option>
+                                )}
+                            </select>
+                        </ValidateWrapper>
+                    </div>
+                    <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
+                        <div>Категория</div>
+                    </div>
+                    <div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">
+                        <ValidateWrapper error={errors?.subsectionId}>
+                            <select
+                                {...register('subsectionId', {
+                                    required: 'Выберите значение!',
+                                })}
+                            >
+                                <option value={''} disabled>
+                                    Категория
+                                </option>
+                                {subSections ? (
+                                    subSections.map((i) => (
+                                        <option key={i?.id} value={i?.id}>
+                                            {i?.name}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option disabled>Пусто</option>
+                                )}
+                            </select>
+                        </ValidateWrapper>
+                    </div>
+
+                    <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
                         <div className="f_12 fw_6">Сумма к оплате</div>
                     </div>
                     <div className="col-sm-8 col-md-4 col-xxl-3 mb-3 mb-sm-0">
                         <span className="f_12 fw_6">{data.sum?FunctionForPrice(data.sum):0} ₽</span>
                     </div>
                 </div>
+                <div className="row align-items-center mb-3 mb-sm-4 mt-3">
+                    <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
+                        <div>Способ оплаты: </div>
+                    </div>
+                    <div className="col-sm-8 col-md-4 col-xxl-3 mb-3 mb-sm-0">
+                        <div>
+                            <div className={"d-inline-block"}><input
+                                name="payment-type"
+                                defaultChecked={true}
+                                onClick={()=>setPaymentType('site')}
+                                type="radio"
+                            /></div>
+                            <div className={"d-inline-block px-2 mb-2"}>Кошелёк сайта</div>
+                        </div>
+                        <div>
+                            <div className={"d-inline-block"}><input
+                                name="payment-type"
+                                defaultChecked={false}
+                                onClick={()=>setPaymentType('card')}
+                                type="radio"
+                            /></div>
+                            <div className={"d-inline-block px-2"}>Банковской картой</div>
+                        </div>
+
+                    </div>
+                </div>
+
                 <button type="submit" className="btn_main btn_4 fw_4 mt-sm-5"
                         onClick={()=>{
                             if(status!=='Фото загружено')setError('image', {message:'Загрузите фото'})

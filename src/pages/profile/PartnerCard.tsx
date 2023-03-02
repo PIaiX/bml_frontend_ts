@@ -1,5 +1,6 @@
-import React, {FC} from 'react'
-import {NavLink} from 'react-router-dom'
+import React, {FC, useEffect, useState} from 'react'
+import {NavLink, useNavigate} from 'react-router-dom'
+import {getIdChat} from "../../services/users";
 
 interface Props {
     imgURL: string
@@ -14,6 +15,12 @@ interface Props {
 }
 
 const PartnerCard: FC<Props> = ({imgURL, name, agency, type, id, deleteFriend, acceptFriend, setIsShowMessageModal, AddPartner}) => {
+    const navigate=useNavigate()
+
+    const clickChat = () => {
+        getIdChat(id).then(res=>navigate( `/account/chat/window/${res?res.id:'new'}`, {state:{ userName: name, userId: id, avatar: imgURL}}))
+    }
+
     return (
         <div className="friend-row">
             <NavLink to={`/account/profile/user/${id}`}>
@@ -28,11 +35,8 @@ const PartnerCard: FC<Props> = ({imgURL, name, agency, type, id, deleteFriend, a
             { !AddPartner? (type === 0 ? (
 
                 <div className="f_08 fw_4 mt-2 mt-sm-0 d-flex">
-                    <button className="btn_main btn_4 d-flex" onClick={()=>{
-                        setIsShowMessageModal
-                        && setIsShowMessageModal(true, id.toString())
 
-                    }}>
+                    <button className="btn_main btn_4 d-flex" onClick={()=>clickChat()}>
                         <span>Написать</span>
                         <span className="d-none d-md-inline ms-2">сообщение</span>
                     </button>
