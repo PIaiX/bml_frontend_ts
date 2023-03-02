@@ -2,8 +2,10 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import FunctionForPrice from '../../helpers/FunctionForPrice'
+import {useAppSelector} from "../../hooks/store";
 
 function MyWallet() {
+    const user = useAppSelector(state => state.user.user)
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -14,7 +16,7 @@ function MyWallet() {
                 <button type="button" className="btn_main btn_1">
                     Пополнить
                 </button>
-                <div className="f_11 fw_7 pt mt-3">Баланс: {FunctionForPrice('0')} ₽</div>
+                <div className="f_11 fw_7 pt mt-3">Баланс: {FunctionForPrice(user?.balance)} ₽</div>
                 <form className="promo mt-3">
                     <input type="text" />
                     <button type="button" className="btn_main btn_3 w-100 mt-2">
