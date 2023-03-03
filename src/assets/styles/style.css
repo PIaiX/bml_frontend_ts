@@ -492,7 +492,7 @@ block 3
 
 @media (max-width: 1399px) {
     .preview-small > img {
-        height: 165px;
+        height: 205px;
     }
 }
 
@@ -502,7 +502,7 @@ block 3
     }
 
     .preview-small > img {
-        height: 150px;
+        height: 180px;
     }
 
     .preview-slider img {
@@ -516,7 +516,7 @@ block 3
     }
 
     .preview-small > img {
-        height: 145px;
+        height: 175px;
     }
 
     .preview-slider img {
@@ -556,7 +556,7 @@ block 3
 
 @media (max-width: 767px) {
     .preview-small > img {
-        height: 160px;
+        height: 180px;
     }
 
     .preview-slider img {
@@ -570,7 +570,7 @@ block 3
     }
 
     .preview-small > img {
-        height: 30vw;
+        height: 40vw;
     }
 
     .preview-slider img {
