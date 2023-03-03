@@ -11,8 +11,9 @@ import {getPremiumSlots} from "../../services/offers";
 interface propsType{
     setChange?:(s:any)=>void
     priceWithoutPremium?:number
+    setPayment?:(s:string)=>void
 }
-const Premium: FC<propsType> = ({setChange, priceWithoutPremium}) => {
+const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) => {
     const loc: any = useLocation()
     const [data, setData] = useState<any>({littleBanner: null, sum: 0, dateLifeAd: '1'})
     const lookBigPicture = useImageViewer(data?.bigBanner)
@@ -60,6 +61,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium}) => {
     const filterType = (statusPost: any, id: any) => {
         return !statusPost && idPost === id
     }
+    const [paymentType, setPaymentType] = useState('site');
 
     return (
         <>
@@ -149,6 +151,32 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium}) => {
                         {/*<span className="f_12 fw_6">{data?.sum!=0?functionForPrice(data?.sum+(priceWithoutPremium?priceWithoutPremium:0)):0} ₽</span>*/}
                     </div>
                 </div>
+                <div className="row align-items-center mb-3 mb-sm-4">
+                    <div className="col-sm-6 col-lg-4">
+                        <div>Способ оплаты: </div>
+                    </div>
+                    <div className="col-sm-6 col-lg-4">
+                        <div>
+                            <div className={"d-inline-block"}><input
+                                name="payment-type"
+                                defaultChecked={true}
+                                onClick={()=>setPayment && setPayment('site') || setPaymentType('site')}
+                                type="radio"
+                            /></div>
+                            <div className={"d-inline-block px-2 mb-2"}>Кошелёк сайта</div>
+                        </div>
+                        <div>
+                            <div className={"d-inline-block"}><input
+                                name="payment-type"
+                                defaultChecked={false}
+                                onClick={()=>setPayment && setPayment('card') || setPaymentType('card')}
+                                type="radio"
+                            /></div>
+                            <div className={"d-inline-block px-2"}>Банковской картой</div>
+                        </div>
+                    </div>
+                </div>
+
                 {!setChange && <button type="button" className="btn_main btn_4 fw_4 mt-sm-5">
                     Создать и перейти к оплате
                 </button>}

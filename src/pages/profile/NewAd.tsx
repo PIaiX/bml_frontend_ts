@@ -1161,11 +1161,11 @@ const NewAd = () => {
                     </fieldset>
                 )}
                 {!id && premium && <div className={"pt-4"}>
-                    <Premium setChange={setPremiumInf} priceWithoutPremium={placedForMonths===3?6000:11000} />
+                    <Premium setPayment={setPaymentType} setChange={setPremiumInf} priceWithoutPremium={placedForMonths===3?6000:11000} />
                 </div>}
 
 
-                {!id && category === 4 && <div className="row align-items-center mb-3 mb-sm-4">
+                {!id && !premium && category === 4 && <div className="row align-items-center mb-3 mb-sm-4">
                     <div className="col-sm-6 col-lg-4">
                         <div>Способ оплаты: </div>
                     </div>
@@ -1188,7 +1188,6 @@ const NewAd = () => {
                             /></div>
                             <div className={"d-inline-block px-2"}>Банковской картой</div>
                         </div>
-
                     </div>
                 </div>}
 
