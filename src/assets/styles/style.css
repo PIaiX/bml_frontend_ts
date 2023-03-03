@@ -1295,19 +1295,20 @@ personal account
     border-radius: 50%;
 }
 
-.acc-video {
+.acc-video2 {
     margin-bottom: 5px;
     overflow: hidden;
+    max-height:400px;
 }
 
-.acc-video video, .acc-video iframe {
+.acc-video2 video, .acc-video2 iframe {
     width: 100% !important;
     height: 100% !important;
     object-fit: contain;
     background: black;
 }
 @media (min-width: 1399px) {
-    .acc-video {
+    .acc-video2 {
         min-width:80%;
         height: 30vw;
     }
@@ -1316,7 +1317,7 @@ personal account
     .user-photo {
         height: 240px;
     }
-    .acc-video {
+    .acc-video2 {
         min-width:80%;
         height: 30vw;
     }
@@ -1327,7 +1328,7 @@ personal account
     .user-photo {
         height: 200px;
     }
-    .acc-video {
+    .acc-video2 {
         min-width:80%;
         height: 30vw;
     }
@@ -1339,7 +1340,7 @@ personal account
     .user-photo {
         height: 450px;
     }
-    .acc-video {
+    .acc-video2 {
         max-width:80%;
         height: 45vw;
          }
@@ -1369,11 +1370,112 @@ personal account
         height: 50px;
     }
 
-    .acc-video {
+    .acc-video2 {
         max-width:80%;
         height: 55vw;
     }
 }
+
+
+
+
+
+
+.acc-video {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 5px;
+    overflow: hidden;
+}
+
+.acc-video video, .acc-video iframe {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    background: black;
+}
+.ads-img {
+    width: 85px;
+    height: 85px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+@media (min-width: 1399px) {
+    .acc-video {
+        height: 175px;
+    }
+
+}
+@media (max-width: 1399px) {
+    .user-photo {
+        height: 240px;
+    }
+}
+
+@media (max-width: 1199px) {
+    .user-photo {
+        height: 200px;
+    }
+    .acc-video {
+        height: 150px;
+    }
+
+}
+
+@media (max-width: 767px) {
+    .user-photo {
+        height: 450px;
+    }
+}
+
+@media (max-width: 575px) {
+    .user-photo {
+        height: calc(100vw - 71px);
+    }
+
+    .acc-table {
+        font-size: .75em;
+    }
+
+    .acc-table td {
+        padding: 0.5rem 0rem;
+    }
+
+    .ads {
+        font-size: 10px;
+        padding: 0.5em 0.25em;
+    }
+
+    .ads-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .acc-video {
+        height: 55vw;
+    }
+}
+.acc-video-block > a {
+    color: #0c63e4;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* незаполненные блоки */

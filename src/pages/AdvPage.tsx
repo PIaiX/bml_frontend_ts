@@ -584,7 +584,7 @@ const AdvPage: FC = () => {
                                     <PhotoProvider maskOpacity={0.75}>
                                         <div
                                             className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4 col">
-                                            <div className="acc-video">
+                                            <div className="acc-video2">
                                                 <iframe
                                                     src={offer?.item?.video}
                                                     title="YouTube video player"
