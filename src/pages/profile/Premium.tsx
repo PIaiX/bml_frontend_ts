@@ -145,7 +145,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium}) => {
                         <div className="f_12 fw_6">Сумма к оплате</div>
                     </div>
                     <div className="col-sm-6 col-lg-4 mb-3 mb-sm-2">
-                        <span className="f_12 fw_6">{functionForPrice(priceWithoutPremium+data?.sum)} ₽</span>
+                        <span className="f_12 fw_6">{priceWithoutPremium?functionForPrice(priceWithoutPremium+data?.sum):data?.sum?data?.sum:0} ₽</span>
                         {/*<span className="f_12 fw_6">{data?.sum!=0?functionForPrice(data?.sum+(priceWithoutPremium?priceWithoutPremium:0)):0} ₽</span>*/}
                     </div>
                 </div>
