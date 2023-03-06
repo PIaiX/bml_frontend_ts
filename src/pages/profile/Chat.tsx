@@ -144,7 +144,7 @@ export default function Chat() {
                                     offerId={i?.offerId}
                                     lastMessUserId={i?.lastMessage?.userId}
                                     key={i?.id}
-                                    imgURL={checkPhotoPath(i.user?.avatar)}
+                                    imgURL={i.user?.avatar}
                                     userName={i?.user?.fullName}
                                     title={i?.offer?.title}
                                     adURL={`/adv-page/${i?.offerId}`}
