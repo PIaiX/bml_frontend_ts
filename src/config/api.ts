@@ -41,6 +41,7 @@ const apiRoutes: ApiRoutesTypes = {
     DELETE_OFFER_IMAGE: 'offer/deleteImage',
     GET_ALL_SUBSECTIONS: 'offer/subsection',
     GET_PREMIUM_SLOTS:'offer/premium/slots?page=1',
+    SET_PREMIUM_FRANCHISES: 'offer/premium/franchises',
 
     //reports
     GET_USER_REPORT_TYPE: 'report/type/user',

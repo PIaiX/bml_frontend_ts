@@ -33,7 +33,10 @@ export const userSlice = createSlice({
         },
         resetUser: (state) => {
             state.user = initialState.user
-        }
+        },
+        setBalance(user, action:PayloadAction<number>){
+            if(user?.user?.balance)user.user.balance -= action.payload;
+}
     },
     extraReducers: {
         [checkAuth.fulfilled.type]: (state: InitialState, action: { payload: { token: string; user: any } }) => {
@@ -49,4 +52,4 @@ export const userSlice = createSlice({
     },
 })
 
-export const { setUser, resetUser } = userSlice.actions
+export const { setUser, resetUser, setBalance } = userSlice.actions

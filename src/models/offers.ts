@@ -34,4 +34,9 @@ export type IOPremium={
     selected?:boolean
     littlePicture?:string
     bigPicture?:string
+    premiumFranchise?:premiumFranchise
+}
+interface premiumFranchise{
+    timeBeforeArchive:string
+    offer:IOfferItem
 }

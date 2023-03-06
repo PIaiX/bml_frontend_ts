@@ -65,7 +65,7 @@ const AdvertisingSection = () => {
     const validBigPhoto = (photo: any):string => {
         if (photo?.width === undefined && photo?.height === undefined) {
             return 'Фото не загружено'
-        } else if (photo?.width === 1200 && photo?.height === 800 && data?.adv === 0) {
+        } else if (photo?.width === 1200 && photo?.height === 400 && data?.adv === 0) {
             return 'Фото загружено'
         } else{
             return 'Размеры не подходят'
@@ -154,7 +154,7 @@ const AdvertisingSection = () => {
                                     onRadioHandler(e, setData, true)
                                 }}
                             />
-                            <h6 className="f_11 fw_5 ms-2 ms-xl-3 flex-1">Рекламный баннер (1200х800)</h6>
+                            <h6 className="f_11 fw_5 ms-2 ms-xl-3 flex-1">Рекламный баннер (1200х400)</h6>
                         </label>
                         <div className="mb-3 mb-md-4">
                             Статус: <span className="l-gray">свободен</span>

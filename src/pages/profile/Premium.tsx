@@ -5,7 +5,9 @@ import AdvPrice from './AdvPrice'
 import {useImageViewer} from '../../hooks/imageViewer'
 import functionForPrice from "../../helpers/FunctionForPrice";
 import {IOPremium} from "../../models/offers";
-import {getPremiumSlots} from "../../services/offers";
+import {getPremiumSlots, setPremiumSlot} from "../../services/offers";
+import {useAppDispatch} from "../../hooks/store";
+import {setBalance} from "../../store/reducers/userSlice";
 
 
 interface propsType{
@@ -15,11 +17,12 @@ interface propsType{
 }
 const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) => {
     const loc: any = useLocation()
-    const [data, setData] = useState<any>({littleBanner: null, sum: 0, dateLifeAd: '1'})
+    const [data, setData] = useState<any>({littleBanner: null, sum: 0, placedForMonths: '1'})
     const lookBigPicture = useImageViewer(data?.bigBanner)
     const lookLittleBanner = useImageViewer(data?.littleBanner)
     const [idPost, setIdPost] = useState()
     const [banners, setBanners]=useState<Array<IOPremium>>()
+    const dispatch = useAppDispatch()
     useEffect(() => {
         setData((prevState: any) => ({...prevState, ...loc?.state?.data}))
     }, [loc])
@@ -61,7 +64,17 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
     const filterType = (statusPost: any, id: any) => {
         return statusPost && idPost === id
     }
-    const [paymentType, setPaymentType] = useState('site');
+    const [paymentType, setPaymentType] = useState('INTERNAL');
+    const clickPay=()=>{
+       setPremiumSlot({paymentMethod:paymentType, offerId:data?.id, slot:data?.slot, placedForMonths:data?.placedForMonths*3})
+           .then(res=>{
+               if(res===200){
+                   dispatch(setBalance(data.sum))
+                   // eslint-disable-next-line no-restricted-globals
+                   history.back()
+               }
+           })
+    }
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -84,16 +97,16 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
                             key={i.id}
                             onClick={() => {
                                 currentId(i.id)
-                                if(!i.isBlocked && idPost!==i.id && i.employedUntillForUser===undefined && i.type!=='big'){
-                                    const newSum=data.dateLifeAd==='1'?banners[i.id-1].priceThreeMonths:banners[i.id-1].priceSixMonths
+                                if(!i.isBlocked && idPost!==i.id && i.employedUntillForUser===undefined && i.type!=='big'  && !i.premiumFranchise){
+                                    const newSum=data.placedForMonths==='1'?banners[i.id-1].priceThreeMonths:banners[i.id-1].priceSixMonths
                                     setData((prevState: any) => ({
                                         ...prevState,
-                                        placeInSite: prevState === i.id ? '' : i.id,
+                                        slot: prevState === i.id ? '' : i.id,
                                         sum:newSum
                                     }))
                                 }
                                 else {
-                                    const { placeInSite,...dat}=data;
+                                    const { slot,...dat}=data;
                                     const da={...dat, sum:0}
                                     setData(da)
                                     }
@@ -103,7 +116,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
                                 ...i,
                                 bigPicture: validBigPhoto(lookBigPicture)[1],
                                 littlePicture:validLittlePhoto(lookLittleBanner)[1],
-                                selected:filterType((i.type!=='big' && !i.isBlocked && i.employedUntillForUser!==''), i.id)
+                                selected:filterType((i.type!=='big' && !i.isBlocked && i.employedUntillForUser!=='' && !i.premiumFranchise), i.id)
                             }} />
 
                         </div>
@@ -120,17 +133,17 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
                     </div>
                         <div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">
                             <select
-                            defaultValue={data.dateLifeAd}
-                            name="dateLifeAd"
+                            defaultValue={data.placedForMonths}
+                            name="placedForMonths"
                             onChange={(e) =>
                                 setData((prevState: any) => ({
                                     ...prevState,
-                                    dateLifeAd: e.target.value,
+                                    placedForMonths: e.target.value,
                                     sum:
-                                        data.placeInSite?
+                                        data.slot?
                                             e.target.value==='1'?
-                                                banners[data.placeInSite-1].priceThreeMonths
-                                                :banners[data.placeInSite-1].priceSixMonths
+                                                banners[data.slot-1].priceThreeMonths
+                                                :banners[data.slot-1].priceSixMonths
                                         :0
                                 }))
                             }
@@ -138,8 +151,8 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
                             <option value={0} hidden disabled>
                                 Срок размещения
                             </option>
-                            <option value={1}>3 месяца – {functionForPrice(banners[data.placeInSite-1].priceThreeMonths)} ₽</option>
-                            <option value={2}>6 месяцев – {functionForPrice(banners[data.placeInSite-1].priceSixMonths)} ₽</option>
+                            <option value={1}>3 месяца – {functionForPrice(banners[data.slot-1].priceThreeMonths)} ₽</option>
+                            <option value={2}>6 месяцев – {functionForPrice(banners[data.slot-1].priceSixMonths)} ₽</option>
                         </select>
                     </div></>}
                     <div className="col-sm-6 col-lg-4 mb-2 mb-sm-0">
@@ -147,7 +160,6 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
                     </div>
                     <div className="col-sm-6 col-lg-4 mb-3 mb-sm-2">
                         <span className="f_12 fw_6">{priceWithoutPremium?functionForPrice(priceWithoutPremium+data?.sum):data?.sum?data?.sum:0} ₽</span>
-                        {/*<span className="f_12 fw_6">{data?.sum!=0?functionForPrice(data?.sum+(priceWithoutPremium?priceWithoutPremium:0)):0} ₽</span>*/}
                     </div>
                 </div>
                 <div className="row align-items-center mb-3 mb-sm-4">
@@ -159,7 +171,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
                             <div className={"d-inline-block"}><input
                                 name="payment-type"
                                 defaultChecked={true}
-                                onClick={()=>setPayment && setPayment('site') || setPaymentType('site')}
+                                onClick={()=>setPayment && setPayment('site') || setPaymentType('INTERNAL')}
                                 type="radio"
                             /></div>
                             <div className={"d-inline-block px-2 mb-2"}>Кошелёк сайта</div>
@@ -176,9 +188,10 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
                     </div>
                 </div>
 
-                {!setChange && <button type="button" className="btn_main btn_4 fw_4 mt-sm-5">
-                    Создать и перейти к оплате
-                </button>}
+                {!setChange &&
+                    <button type="button" className="btn_main btn_4 fw_4 mt-sm-5" onClick={()=>data.sum!==0 && clickPay()}>
+                        Создать и перейти к оплате
+                    </button>}
             </div>}
         </>
     )
