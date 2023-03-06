@@ -1,39 +1,39 @@
-import React, {BaseSyntheticEvent, FC, useEffect, useState,} from 'react'
+import React, { BaseSyntheticEvent, FC, useEffect, useState, } from 'react'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import AdvPreview from '../components/AdvPreview'
-import {Link, NavLink, useNavigate, useParams} from 'react-router-dom'
-import {MdDateRange, MdInfoOutline, MdOutlinePlace, MdOutlineVisibility} from 'react-icons/md'
+import { Link, NavLink, useNavigate, useParams } from 'react-router-dom'
+import { MdDateRange, MdInfoOutline, MdOutlinePlace, MdOutlineVisibility } from 'react-icons/md'
 import BtnFav from '../components/utils/BtnFav'
-import {PhotoProvider, PhotoView} from 'react-photo-view'
+import { PhotoProvider, PhotoView } from 'react-photo-view'
 import 'react-photo-view/dist/react-photo-view.css'
 import PartnersSite from '../components/PartnersSite'
-import {Swiper, SwiperSlide} from 'swiper/react'
-import {Pagination} from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import {getOffers, getOneOffer} from '../services/offers'
-import {IUseStateItem, IUseStateItems} from '../types'
-import {IOfferItem, IOffersItem, IOffersMeta} from '../types/offers'
-import {checkPhotoPath} from '../helpers/photoLoader'
+import { getOffers, getOneOffer } from '../services/offers'
+import { IUseStateItem, IUseStateItems } from '../types'
+import { IOfferItem, IOffersItem, IOffersMeta } from '../types/offers'
+import { checkPhotoPath } from '../helpers/photoLoader'
 import LeftMenuInOfferContainer from '../components/containers/LeftMenuInOffer'
 import ShortInfoInOfferContainer from '../components/containers/ShortInfoInOffer'
-import {createReport, getOfferReportType} from '../services/reports'
-import {IUser} from '../types/user'
-import {useAppDispatch, useAppSelector} from '../hooks/store'
+import { createReport, getOfferReportType } from '../services/reports'
+import { IUser } from '../types/user'
+import { useAppDispatch, useAppSelector } from '../hooks/store'
 import Loader from '../components/utils/Loader'
-import {IUseStateReportType, PayloadsReport} from '../types/report'
+import { IUseStateReportType, PayloadsReport } from '../types/report'
 import CustomModal from '../components/utils/CustomModal'
-import {useForm} from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import ValidateWrapper from '../components/utils/ValidateWrapper'
-import {showAlert} from '../store/reducers/alertSlice'
-import {emitCreateWithOfferTopicMessage} from '../services/sockets/messages'
+import { showAlert } from '../store/reducers/alertSlice'
+import { emitCreateWithOfferTopicMessage } from '../services/sockets/messages'
 import FunctionForPrice from '../helpers/FunctionForPrice'
-import {convertLocaleDate} from "../helpers/convertLocaleDate";
-import {getIdChat} from "../services/users";
+import { convertLocaleDate } from "../helpers/convertLocaleDate";
+import { getIdChat } from "../services/users";
 
 const AdvPage: FC = () => {
     const navigate = useNavigate()
-    const {id} = useParams()
+    const { id } = useParams()
     const [idChat, setIdChat] = useState();
     const [offer, setOffer] = useState<IUseStateItem<IOfferItem>>({
         isLoaded: false,
@@ -53,11 +53,11 @@ const AdvPage: FC = () => {
     })
     const {
         register,
-        formState: {errors},
+        formState: { errors },
         handleSubmit,
         setValue,
         reset,
-    } = useForm<PayloadsReport>({mode: 'onSubmit', reValidateMode: 'onChange'})
+    } = useForm<PayloadsReport>({ mode: 'onSubmit', reValidateMode: 'onChange' })
     const dispatch = useAppDispatch()
     const [isShowMessageModal, setIsShowMessageModal] = useState<boolean>(false)
     const [messagePayload, setMessagePayload] = useState({
@@ -68,7 +68,7 @@ const AdvPage: FC = () => {
 
     useEffect(() => {
         if (user && offer?.item?.user?.id) {
-            getIdChat(offer?.item?.user?.id).then(res => setIdChat(res.id))
+            getIdChat(offer?.item?.user?.id).then(res => res.id && setIdChat(res.id))
         }
     }, [offer])
 
@@ -82,26 +82,26 @@ const AdvPage: FC = () => {
         if (id) {
             getOneOffer(id, user?.id)
                 .then((res) => {
-                    res && setOffer({isLoaded: true, item: res})
+                    res && setOffer({ isLoaded: true, item: res })
                 })
                 .catch((error) => {
-                    setOffer({isLoaded: true, item: null})
+                    setOffer({ isLoaded: true, item: null })
                 })
         }
     }, [id, user?.id])
 
     useEffect(() => {
         getOfferReportType()
-            .then((res) => res && setReportTypes({isLoaded: true, items: res, error: null}))
-            .catch(() => setReportTypes({isLoaded: true, items: null, error: 'Произошла ошибка'}))
+            .then((res) => res && setReportTypes({ isLoaded: true, items: res, error: null }))
+            .catch(() => setReportTypes({ isLoaded: true, items: null, error: 'Произошла ошибка' }))
     }, [])
 
     useEffect(() => {
         if (offer?.item) {
             const payloads = {}
             getOffers(1, 10, offer?.item?.category, user ? user.id : null, payloads, true)
-                .then((res) => setSimilarOffers({isLoaded: true, items: res?.data, meta: res?.meta}))
-                .catch(() => setSimilarOffers({isLoaded: true, items: null, meta: null}))
+                .then((res) => setSimilarOffers({ isLoaded: true, items: res?.data, meta: res?.meta }))
+                .catch(() => setSimilarOffers({ isLoaded: true, items: null, meta: null }))
         }
     }, [offer?.item])
 
@@ -134,20 +134,20 @@ const AdvPage: FC = () => {
     const onSubmit = (data: PayloadsReport) => {
         createReport(data)
             .then(() => {
-                dispatch(showAlert({message: 'Жалоба успешно отправлена', typeAlert: 'good'}))
+                dispatch(showAlert({ message: 'Жалоба успешно отправлена', typeAlert: 'good' }))
                 setIsShowModalReport(false)
                 reset()
             })
-            .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
+            .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' })))
     }
     const [messageType, setMessageType] = useState<string>('0')
-    let swiperPB=250;
-    if(window. innerWidth>1400)swiperPB=350
+    let swiperPB = 250;
+    if (window.innerWidth > 1400) swiperPB = 350
     const createWithOfferTopicMessage = (e: BaseSyntheticEvent | null) => {
         e && e.preventDefault()
         if (offer.item) {
             emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
-                res?.status === 200 && dispatch(showAlert({message: messageType, typeAlert: 'good'}))
+                res?.status === 200 && dispatch(showAlert({ message: messageType, typeAlert: 'good' }))
                 setIsShowMessageModal(false)
                 if (offer?.item?.user?.id) {
                     getIdChat(offer?.item?.user?.id).then(res => setIdChat(res.id))
@@ -155,13 +155,13 @@ const AdvPage: FC = () => {
             })
         }
     }
-    let srcToChat='/enter'
-    if(user)
-        srcToChat=`/account/chat/window/${idChat ? idChat : 'new'}`
+    let srcToChat = '/enter'
+    if (user)
+        srcToChat = `/account/chat/window/${idChat ? idChat : 'new'}`
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
-                <Breadcrumbs/>
+                <Breadcrumbs />
             </div>
 
             <section id="offer-page" className="container">
@@ -170,11 +170,11 @@ const AdvPage: FC = () => {
                     <div className="short-info ms-auto mt-3 mt-sm-4 mt-lg-0">
                         <span>ID: {offer?.item?.id}</span>
                         <time className="d-flex align-items-center ms-3 ms-sm-4">
-                            <MdDateRange/>
+                            <MdDateRange />
                             <span className="ms-1 ms-sm-2">{offer?.item?.createdAtForUser}</span>
                         </time>
                         <div className="d-flex align-items-center ms-3 ms-sm-4">
-                            <MdOutlineVisibility/>
+                            <MdOutlineVisibility />
                             <span className="ms-1 ms-sm-2">{offer?.item?.viewsCount} просмотров</span>
                         </div>
                     </div>
@@ -182,7 +182,7 @@ const AdvPage: FC = () => {
 
                 <div className="row mb-3 mb-sm-4 mb-md-5">
                     <div className="col-lg-7 col-xl-8 mb-4 mb-lg-0">
-                        <img src={checkPhotoPath(offer?.item?.image)} alt={offer?.item?.title} className="main-img"/>
+                        <img src={checkPhotoPath(offer?.item?.image)} alt={offer?.item?.title} className="main-img" />
                     </div>
                     <div className="col-lg-5 col-xl-4">
                         <div className="blue-box h-100 d-flex flex-column justify-content-between">
@@ -380,7 +380,7 @@ const AdvPage: FC = () => {
                                             <span
                                                 className="f_15 fw_5 text-nowrap">
                                                 {FunctionForPrice(offer?.item?.pricePerMonth)}
-                                                {offer?.item?.isPricePerMonthAbsolute && offer?.item?.category===4?' %':' ₽'}
+                                                {offer?.item?.isPricePerMonthAbsolute && offer?.item?.category === 4 ? ' %' : ' ₽'}
                                             </span>
                                         </div>
 
@@ -441,13 +441,18 @@ const AdvPage: FC = () => {
                                     ПОЛУЧИТЬ БИЗНЕС-ПЛАН
                                 </button>
                                 {<Link to={srcToChat}
-                                       state={{ userName: offer?.item?.user.fullName, userId: offer?.item?.user.id, avatar: offer?.item?.user.avatar }}
+                                    state={{
+                                        userName: offer?.item?.user.fullName,
+                                        userId: offer?.item?.user.id,
+                                        avatar: offer?.item?.user.avatar,
+                                        offerId: offer?.item?.id
+                                    }}
                                 >
                                     <button
-                                    type="button"
-                                    className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3">
-                                    НАПИСАТЬ СООБЩЕНИЕ
-                                </button>
+                                        type="button"
+                                        className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3">
+                                        НАПИСАТЬ СООБЩЕНИЕ
+                                    </button>
                                 </Link>}
                             </div>
 
@@ -457,7 +462,7 @@ const AdvPage: FC = () => {
                                     className="d-flex align-items-center ms-auto me-0 mt-3 mt-sm-4 mt-lg-0"
                                     onClick={() => setIsShowModalReport(true)}
                                 >
-                                    <MdInfoOutline className="f_11 gray"/>
+                                    <MdInfoOutline className="f_11 gray" />
                                     <span className="ms-2 fw_7 f_12">Пожаловаться</span>
                                 </button>)}
                         </div>
@@ -467,11 +472,11 @@ const AdvPage: FC = () => {
                 <div className="row">
                     <div className="col-md-4 col-lg-3 position-relative">
                         <div className="left_menu">
-                            <LeftMenuInOfferContainer category={offer?.item?.category} video={offer?.item?.video}/>
+                            <LeftMenuInOfferContainer category={offer?.item?.category} video={offer?.item?.video} />
 
                             <div className="row justify-content-center g-4">
                                 <div className="col-8 col-sm-6 col-md-12 promo">
-                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2"/>
+                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2" />
                                     <h4 className="fw_7 mb-2">Акции от застройщиков</h4>
                                     <h5 className="mb-0">
                                         ТекстТекстТекст ТекстТекстТекст ТекстТекстТекстТекст Текст\Текст
@@ -479,7 +484,7 @@ const AdvPage: FC = () => {
                                     </h5>
                                 </div>
                                 <div className="col-8 col-sm-6 col-md-12 promo">
-                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2"/>
+                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2" />
                                     <h4 className="fw_7 mb-2">Акции от застройщиков</h4>
                                     <h5 className="mb-0">
                                         ТекстТекстТекст ТекстТекстТекст ТекстТекстТекстТекст Текст\Текст
@@ -491,9 +496,9 @@ const AdvPage: FC = () => {
                     </div>
                     <div className="col-md-8 col-lg-9">
                         <div className="offer-page-main">
-                            <hr className="mt-md-0"/>
+                            <hr className="mt-md-0" />
                             <div className="d-flex align-items-center f_09 mb-4 mb-lg-5">
-                                <MdOutlinePlace className="color-1"/>
+                                <MdOutlinePlace className="color-1" />
                                 <span className="gray ms-2">Регионы продаж:</span>
                                 <span className="ms-3">{offer?.item?.city}</span>
                             </div>
@@ -563,7 +568,7 @@ const AdvPage: FC = () => {
                                 className="d-flex align-items-center mb-2"
                                 onClick={() => setIsShowModalReport(true)}
                             >
-                                <MdInfoOutline className="f_11 gray"/>
+                                <MdInfoOutline className="f_11 gray" />
                                 <span className="ms-2 fw_7 f_12">Пожаловаться</span>
                             </button>
 
@@ -614,7 +619,7 @@ const AdvPage: FC = () => {
                 <div className="container">
                     <h2 className="mt-sm-4">Похожие объявления</h2>
                     <Swiper
-                        style={{paddingBottom:`${swiperPB}px`}}
+                        style={{ paddingBottom: `${swiperPB}px` }}
                         modules={[Pagination]}
                         slidesPerView={2}
                         spaceBetween={6}
@@ -660,7 +665,7 @@ const AdvPage: FC = () => {
                             )
                         ) : (
                             <div className="p-5 w-100 d-flex justify-content-center">
-                                <Loader color="#343434"/>
+                                <Loader color="#343434" />
                             </div>
                         )}
                     </Swiper>
@@ -679,7 +684,7 @@ const AdvPage: FC = () => {
                         <textarea
                             placeholder="Введите сообщение..."
                             value={messagePayload.text || ''}
-                            onChange={(e) => setMessagePayload((prevState) => ({...prevState, text: e.target.value}))}
+                            onChange={(e) => setMessagePayload((prevState) => ({ ...prevState, text: e.target.value }))}
                         />
                         {messagePayload?.text?.length === 0 ? (
                             <span className="gray-text">
@@ -736,8 +741,8 @@ const AdvPage: FC = () => {
                                 <textarea
                                     {...register('description', {
                                         required: 'Обязательное поле',
-                                        minLength: {value: 5, message: 'Минимум 5 символов'},
-                                        maxLength: {value: 250, message: 'Максимум 250 символов'},
+                                        minLength: { value: 5, message: 'Минимум 5 символов' },
+                                        maxLength: { value: 250, message: 'Максимум 250 символов' },
                                     })}
                                 />
                             </ValidateWrapper>
@@ -759,7 +764,7 @@ const AdvPage: FC = () => {
                     </form>
                 </div>
             </CustomModal>
-            <PartnersSite/>
+            <PartnersSite />
         </main>
     )
 }

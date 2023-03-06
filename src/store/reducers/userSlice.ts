@@ -1,19 +1,16 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { $api } from '../../services/indexAuth'
 import { apiRoutes } from '../../config/api'
 import { IUser } from '../../types/user'
-import {notifications} from "../../types/sockets/    notifications";
 
 type InitialState = {
     user: IUser | null
-    isLoading: boolean,
-    notifications:notifications | null
+    isLoading: boolean
 }
 
 const initialState: InitialState = {
     user: null,
-    isLoading: true,
-    notifications: 2
+    isLoading: true
 }
 
 export const checkAuth = createAsyncThunk('auth/refreshToken', async (_, thunkAPI) => {

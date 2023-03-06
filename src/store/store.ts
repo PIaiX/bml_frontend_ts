@@ -1,12 +1,13 @@
-import {configureStore} from '@reduxjs/toolkit'
-import {newsApi} from '../services/RTK/newsApi'
-import {bannerApi} from '../services/RTK/bannerApi'
-import {userSlice} from './reducers/userSlice'
-import {alertSlice} from './reducers/alertSlice'
-import {offersApi} from '../services/RTK/offersApi'
-import {citySlice} from './reducers/citySlice'
-import {favoriteCountSlice} from './reducers/favoriteCountSlice'
-import {searchHeaderSlice} from './reducers/searchHeader';
+import { configureStore } from '@reduxjs/toolkit'
+import { newsApi } from '../services/RTK/newsApi'
+import { bannerApi } from '../services/RTK/bannerApi'
+import { userSlice } from './reducers/userSlice'
+import { alertSlice } from './reducers/alertSlice'
+import { offersApi } from '../services/RTK/offersApi'
+import { citySlice } from './reducers/citySlice'
+import { favoriteCountSlice } from './reducers/favoriteCountSlice'
+import { searchHeaderSlice } from './reducers/searchHeader'
+import notificationReducer from './reducers/notificationSlice'
 
 const store = configureStore({
     reducer: {
@@ -17,7 +18,8 @@ const store = configureStore({
         alert: alertSlice.reducer,
         cities: citySlice.reducer,
         favoritesCount: favoriteCountSlice.reducer,
-        search: searchHeaderSlice.reducer
+        search: searchHeaderSlice.reducer,
+        notification: notificationReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(newsApi.middleware).concat(bannerApi.middleware).concat(offersApi.middleware),

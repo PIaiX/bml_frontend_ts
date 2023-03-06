@@ -1,28 +1,28 @@
-import React, {BaseSyntheticEvent, SyntheticEvent, useEffect, useRef, useState} from 'react'
-import {Link, useLocation, useOutletContext, useParams} from 'react-router-dom'
-import {emitCreateMessage, emitPaginateMessages, emitViewedMessage} from '../../services/sockets/messages'
+import React, { BaseSyntheticEvent, SyntheticEvent, useEffect, useRef, useState } from 'react'
+import { Link, useLocation, useOutletContext, useParams } from 'react-router-dom'
+import { emitCreateMessage, emitPaginateMessages, emitViewedMessage } from '../../services/sockets/messages'
 import ChatMessage from '../../components/chatMessage'
-import {MdOutlineKeyboardArrowLeft} from 'react-icons/md'
+import { MdOutlineKeyboardArrowLeft } from 'react-icons/md'
 import Loader from '../../components/utils/Loader'
-import {IPayloadsMessage} from '../../types/sockets/messages'
-import {useAppSelector} from '../../hooks/store'
-import {IUser} from '../../types/user'
-import {convertLocaleDate} from '../../helpers/convertLocaleDate'
+import { IPayloadsMessage } from '../../types/sockets/messages'
+import { useAppSelector } from '../../hooks/store'
+import { IUser } from '../../types/user'
+import { convertLocaleDate } from '../../helpers/convertLocaleDate'
 import useSocketConnect from '../../hooks/socketConnect'
-import {socketInstance} from '../../services/sockets/socketInstance'
-import {emitGetConversation} from '../../services/sockets/conversations'
-import {useForm} from 'react-hook-form'
+import { socketInstance } from '../../services/sockets/socketInstance'
+import { emitGetConversation } from '../../services/sockets/conversations'
+import { useForm } from 'react-hook-form'
 import ValidateWrapper from '../../components/utils/ValidateWrapper'
-import {IUseStateItems} from '../../types'
-import {IMessageItem, IMessageMeta} from '../../models/sockets/messages'
+import { IUseStateItems } from '../../types'
+import { IMessageItem, IMessageMeta } from '../../models/sockets/messages'
 import InfiniteScroll from 'react-infinite-scroller'
-import {checkPhotoPath} from "../../helpers/photoLoader";
+import { checkPhotoPath } from "../../helpers/photoLoader";
 
 const ChatWindow = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
-    const {isConnected} = useSocketConnect()
-    const {id} = useParams()
-    const {state, pathname} = useLocation()
+    const { isConnected } = useSocketConnect()
+    const { id } = useParams()
+    const { state, pathname } = useLocation()
     const [messages, setMessages] = useState<IUseStateItems<IMessageItem, IMessageMeta>>({
         isLoaded: false,
         items: [],
@@ -30,7 +30,7 @@ const ChatWindow = () => {
     })
     const {
         register,
-        formState: {errors},
+        formState: { errors },
         handleSubmit,
         reset,
     } = useForm<IPayloadsMessage>({
@@ -40,6 +40,7 @@ const ChatWindow = () => {
             conversationId: id,
             text: '',
             fromId: user?.id,
+            offerId: state?.offerId
         },
     })
     const [currentPage, setCurrentPage] = useState<number>(1)
@@ -69,16 +70,17 @@ const ChatWindow = () => {
                         items: prevState.items ? [...prevState.items, newMessage] : [newMessage],
                     }))
             })
-            id && user?.id && emitViewedMessage(id, user?.id)
+            id && user?.id && emitViewedMessage({ conversationId: +id }, user?.id)
             socketInstance?.on('message:viewed', () => {
                 setMessages((prevState) => ({
                     ...prevState,
-                    items: prevState.items && prevState.items.map((i: any) => ({...i, isViewed: true})),
+                    items: prevState.items && prevState.items.map((i: any) => ({ ...i, isViewed: true })),
                 }))
             })
         }
         return () => {
-            socketInstance?.removeAllListeners()
+            socketInstance?.off('message:create')
+            socketInstance?.off('message:viewed')
         }
     }, [])
 
@@ -94,7 +96,8 @@ const ChatWindow = () => {
     const createMessage = (payload: IPayloadsMessage) => {
         emitCreateMessage(payload)
             .then((res) => {
-                res &&
+                console.log(res)
+                res.status === 200 &&
                     setMessages((prevState) => ({
                         ...prevState,
                         items: prevState.items ? [...prevState.items, res.body] : [res.body],
@@ -106,7 +109,7 @@ const ChatWindow = () => {
 
     const getMessages = () => {
         if (id) {
-            emitPaginateMessages(+id, {page: currentPage, limit: 10, orderBy: 'desc'})
+            emitPaginateMessages({ conversationId: +id }, { page: currentPage, limit: 10, orderBy: 'desc' })
                 .then((res) => {
                     res &&
                         messages.items &&
@@ -117,7 +120,7 @@ const ChatWindow = () => {
                         })
                     setCurrentPage(currentPage + 1)
                 })
-                .catch(() => setMessages({isLoaded: true, items: null, meta: null}))
+                .catch(() => setMessages({ isLoaded: true, items: null, meta: null }))
                 .finally(() => setIsFetching(false))
         }
     }
