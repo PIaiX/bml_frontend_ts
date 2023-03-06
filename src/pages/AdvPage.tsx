@@ -441,7 +441,12 @@ const AdvPage: FC = () => {
                                     ПОЛУЧИТЬ БИЗНЕС-ПЛАН
                                 </button>
                                 {<Link to={srcToChat}
-                                    state={{ userName: offer?.item?.user.fullName, userId: offer?.item?.user.id, avatar: offer?.item?.user.avatar }}
+                                    state={{
+                                        userName: offer?.item?.user.fullName,
+                                        userId: offer?.item?.user.id,
+                                        avatar: offer?.item?.user.avatar,
+                                        offerId: offer?.item?.id
+                                    }}
                                 >
                                     <button
                                         type="button"
