@@ -44,9 +44,7 @@ const useInitialization = () => {
         })
 
         if (user && socketNotification) {
-            console.log('Start listen to notification')
             socketNotification.on('message:create', (newMessage) => {
-                console.log(newMessage)
                 if (newMessage.userId != user.id) {
                     dispatch(setNotification(newMessage))
                 }
@@ -57,7 +55,6 @@ const useInitialization = () => {
         }
 
         return () => {
-            console.log('Stop listen to notification')
             socketNotification?.off('message:create')
             socketNotification?.off('conversation:unreadCount')
         }

@@ -29,4 +29,7 @@ export type IMessagesBodyRequest = {
 
 export type ICreateMessagesBodyResponse = {
     body: IMessageItem
+    code: string
+    message: string
+    status: number
 }

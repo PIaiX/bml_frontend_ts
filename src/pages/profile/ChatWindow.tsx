@@ -16,7 +16,7 @@ import ValidateWrapper from '../../components/utils/ValidateWrapper'
 import { IUseStateItems } from '../../types'
 import { IMessageItem, IMessageMeta } from '../../models/sockets/messages'
 import InfiniteScroll from 'react-infinite-scroller'
-import {checkPhotoPath} from "../../helpers/photoLoader";
+import { checkPhotoPath } from "../../helpers/photoLoader";
 
 const ChatWindow = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
@@ -40,6 +40,7 @@ const ChatWindow = () => {
             conversationId: id,
             text: '',
             fromId: user?.id,
+            offerId: state?.offerId
         },
     })
     const [currentPage, setCurrentPage] = useState<number>(1)
@@ -62,7 +63,6 @@ const ChatWindow = () => {
 
     useEffect(() => {
         if (isConnected && socketInstance) {
-            console.log(`Chat ${id} listener activated`)
             socketInstance?.on('message:create', (newMessage) => {
                 newMessage &&
                     setMessages((prevState) => ({
@@ -79,7 +79,6 @@ const ChatWindow = () => {
             })
         }
         return () => {
-            console.log(`Chat ${id} listener deactivated`)
             socketInstance?.off('message:create')
             socketInstance?.off('message:viewed')
         }
@@ -97,7 +96,8 @@ const ChatWindow = () => {
     const createMessage = (payload: IPayloadsMessage) => {
         emitCreateMessage(payload)
             .then((res) => {
-                res &&
+                console.log(res)
+                res.status === 200 &&
                     setMessages((prevState) => ({
                         ...prevState,
                         items: prevState.items ? [...prevState.items, res.body] : [res.body],

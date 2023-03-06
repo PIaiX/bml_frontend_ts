@@ -59,10 +59,9 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
     }
 
     const filterType = (statusPost: any, id: any) => {
-        return !statusPost && idPost === id
+        return statusPost && idPost === id
     }
     const [paymentType, setPaymentType] = useState('site');
-
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -85,7 +84,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
                             key={i.id}
                             onClick={() => {
                                 currentId(i.id)
-                                if(!i.isBlocked && idPost!==i.id && i.employedUntillForUser==='' && i.type!=='big'){
+                                if(!i.isBlocked && idPost!==i.id && i.employedUntillForUser===undefined && i.type!=='big'){
                                     const newSum=data.dateLifeAd==='1'?banners[i.id-1].priceThreeMonths:banners[i.id-1].priceSixMonths
                                     setData((prevState: any) => ({
                                         ...prevState,
@@ -104,7 +103,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
                                 ...i,
                                 bigPicture: validBigPhoto(lookBigPicture)[1],
                                 littlePicture:validLittlePhoto(lookLittleBanner)[1],
-                                selected:filterType((i.type==='big' || i.isBlocked || i.employedUntillForUser!==''), i.id)
+                                selected:filterType((i.type!=='big' && !i.isBlocked && i.employedUntillForUser!==''), i.id)
                             }} />
 
                         </div>

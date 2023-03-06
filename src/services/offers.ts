@@ -63,7 +63,7 @@ export const getOneOffer = async (id: string, userId: number | string = '') => {
 
 export const getPremiumSlots = async () => {
     try {
-        const response = await $api.get(`${apiRoutes.GET_PREMIUM_SLOTS}`)
+        const response = await $authApi.get(`${apiRoutes.GET_PREMIUM_SLOTS}`)
         return response?.data?.body.data
     } catch (error) {
         console.log(error)
