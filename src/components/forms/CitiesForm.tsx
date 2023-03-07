@@ -28,7 +28,7 @@ const CitiesForm: FC<Props> = ({setVal, val = ''}) => {
                 placeholder={'Введите город'}
             />
             {focus && (
-                <div className={'citiesSearch'} style={{backgroundColor: 'white', marginTop: '2px', zIndex: '99'}}>
+                <div className={'citiesSearch'} style={{backgroundColor: 'white', marginTop: '2px', zIndex: '9'}}>
                     {cities
                         .slice()
                         .sort()

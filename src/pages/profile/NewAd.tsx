@@ -897,7 +897,7 @@ const NewAd = () => {
                                         <input
                                             type="text"
                                             placeholder="0"
-                                            className="f_09"
+                                            className="f_09 input-price"
                                             {...register('price', {
                                                 required: 'Обязательное поле',
                                                 min: { value: 0, message: 'Минимум 0' },
