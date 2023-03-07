@@ -749,7 +749,7 @@ const NewAd = () => {
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-8">
-                            <ValidateWrapper error={{ message: cityEr }}>
+                            <ValidateWrapper forCity={true} error={{ message: cityEr }}>
                                 <CitiesForm val={city} setVal={funcForCityEr} />
                             </ValidateWrapper>
                         </div>
@@ -897,7 +897,7 @@ const NewAd = () => {
                                         <input
                                             type="text"
                                             placeholder="0"
-                                            className="f_09"
+                                            className="f_09 input-price"
                                             {...register('price', {
                                                 required: 'Обязательное поле',
                                                 min: { value: 0, message: 'Минимум 0' },
