@@ -749,7 +749,7 @@ const NewAd = () => {
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-8">
-                            <ValidateWrapper error={{ message: cityEr }}>
+                            <ValidateWrapper forCity={true} error={{ message: cityEr }}>
                                 <CitiesForm val={city} setVal={funcForCityEr} />
                             </ValidateWrapper>
                         </div>
