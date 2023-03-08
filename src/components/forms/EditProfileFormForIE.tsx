@@ -297,7 +297,7 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                     </h6>
                 </div>
                 <div className="col-sm-8">
-                    <ValidateWrapper error={{message: cityError}}>
+                    <ValidateWrapper  forCity={true} error={{message: cityError}}>
                         <CitiesForm val={city} setVal={setCity} />
                     </ValidateWrapper>
                 </div>

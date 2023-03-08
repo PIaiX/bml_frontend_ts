@@ -324,7 +324,7 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
                 </div>
                 <div className="col-sm-8">
                     <ValidateWrapper error={errors?.city}>
-                        <ValidateWrapper error={{message: cityError}}>
+                        <ValidateWrapper forCity={true} error={{message: cityError}}>
                             <CitiesForm val={city} setVal={setCity} />
                         </ValidateWrapper>
                     </ValidateWrapper>

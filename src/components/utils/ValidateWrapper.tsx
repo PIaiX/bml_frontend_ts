@@ -7,11 +7,11 @@ interface Props {
     forCity?:boolean
 }
 
-const ValidateWrapper: React.FC<Props> = ({children, error, forCity=false}) => (
+const ValidateWrapper: React.FC<Props> = ({children, error, forCity}) => (
     <div className={`validate-wrapper ${error ? 'validate-wrapper_error' : ''}`}>
         {children}
         {error && (
-            <div className="validate-error" style={{zIndex: `${forCity?'12':'10'}`}}>
+            <div className="validate-error" style={{zIndex: `${forCity?'120':'10'}`}}>
                 {error?.message}
             </div>
         )}
