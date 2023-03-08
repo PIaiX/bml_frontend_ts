@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
-import {Link, useLocation} from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import AdvPrice from './AdvPrice'
 import {useImageViewer} from '../../hooks/imageViewer'
@@ -8,6 +8,7 @@ import {IOPremium} from "../../models/offers";
 import {getPremiumSlots, setPremiumSlot} from "../../services/offers";
 import {useAppDispatch} from "../../hooks/store";
 import {setBalance} from "../../store/reducers/userSlice";
+import {showAlert} from "../../store/reducers/alertSlice";
 
 
 interface propsType{
@@ -22,6 +23,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
     const lookLittleBanner = useImageViewer(data?.littleBanner)
     const [idPost, setIdPost] = useState()
     const [banners, setBanners]=useState<Array<IOPremium>>()
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     useEffect(() => {
         setData((prevState: any) => ({...prevState, ...loc?.state?.data}))
@@ -68,11 +70,13 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
     const clickPay=()=>{
        setPremiumSlot({paymentMethod:paymentType, offerId:data?.id, slot:data?.slot, placedForMonths:data?.placedForMonths*3})
            .then(res=>{
-               if(res===200){
+               if(res){
                    dispatch(setBalance(data.sum))
-                   // eslint-disable-next-line no-restricted-globals
-                   history.back()
+                   dispatch(showAlert({message: 'Оплата прошла успешно', typeAlert: 'good'}))
+                   navigate(0)
                }
+               else
+                   dispatch(showAlert({message: 'Оплата не прошла', typeAlert: 'bad'}))
            })
     }
     return (

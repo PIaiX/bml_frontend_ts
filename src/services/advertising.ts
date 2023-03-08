@@ -26,8 +26,8 @@ export const getAdvertisingsPrices =
 export const setNewAdvertisings =
     async (body:any)=> {
     try {
-        const response = await $authApi.post(`${apiRoutes.GET_ADVERTISING}`, body)
-        return response.data.body
+        const response = await $authApi.post(`${apiRoutes.SET_ADVERTISING}`, body)
+        return response?.data?.body
     } catch (error) {
         console.log(error)
     }

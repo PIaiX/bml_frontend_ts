@@ -1,5 +1,5 @@
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react'
-import {Link} from 'react-router-dom'
+import React, {useEffect, useRef, useState} from 'react'
+import {Link, useNavigate} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import {useImageViewer} from '../../hooks/imageViewer'
 import {onImageHandler, onRadioHandler,} from '../../helpers/formHandlers'
@@ -7,15 +7,19 @@ import FunctionForPrice from '../../helpers/FunctionForPrice'
 import {getAdvertisingsPrices, setNewAdvertisings} from "../../services/advertising";
 import {useForm} from "react-hook-form";
 import ValidateWrapper from "../../components/utils/ValidateWrapper";
-import {useAppSelector} from "../../hooks/store";
+import {useAppDispatch, useAppSelector} from "../../hooks/store";
 import {getAllAreas, getAllSubsections} from "../../services/offers";
 import {IOffersAreaItem, IOffersSubSectionsItem} from "../../types/offers";
-import {convertLocaleDate} from "../../helpers/convertLocaleDate";
+import {useImagesViewer} from "../../hooks/imagesViewer";
+import {Row} from "react-bootstrap";
+import {setBalance} from "../../store/reducers/userSlice";
+import {showAlert} from "../../store/reducers/alertSlice";
 
 
 const AdvertisingSection = () => {
     const [data, setData] = useState<any>({
         lifeAd: '1',
+        paymentType:'INTERNAL'
     })
     const {
         register,
@@ -27,11 +31,19 @@ const AdvertisingSection = () => {
         clearErrors,
         getValues,
     } = useForm<{image:string, placedForMonths:string, link:string, description:string, adsTypeId:string, subsectionId:string}>()
-
     const [prices, setPrices]=useState()
     useEffect(()=>{
         getAdvertisingsPrices().then(setPrices)
     },[])
+
+    const [adCover, setAdCover] = useState<any>([])
+    const adCoverViewer = useImagesViewer(adCover)
+    useEffect(() => {
+        data.image && setAdCover([data.image])
+    }, [data])
+
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const viewPhoto = useImageViewer(data?.image)
     const user = useAppSelector(state => state.user.user)
     const validLittlePhoto = (photo: any):string => {
@@ -46,8 +58,6 @@ const AdvertisingSection = () => {
     const [areas, setAreas] = useState<Array<IOffersAreaItem | undefined>>([])
     const [subSections, setSubSections] = useState<Array<IOffersSubSectionsItem | undefined>>([])
     const [currentArea, setCurrentArea] = useState<number | undefined>(undefined)
-    const [paymentType, setPaymentType] = useState('site');
-
     useEffect(()=>{setValue('adsTypeId', '')},[areas])
     useEffect(()=>{setValue('subsectionId', '')},[subSections])
 
@@ -60,7 +70,6 @@ const AdvertisingSection = () => {
             getAllSubsections(currentArea).then((res) => res && setSubSections(res))
         }
     }, [currentArea])
-
 
     const validBigPhoto = (photo: any):string => {
         if (photo?.width === undefined && photo?.height === undefined) {
@@ -77,14 +86,23 @@ const AdvertisingSection = () => {
         const req: any = {
             ...dat,
             userId: user?.id,
-            image: data.image
+            image: data.image,
+            adsTypeId:data.adv+1,
+            paymentMethod:data.paymentType
         }
         for (const key in req) {
             formData.append(key, req[key])
         }
-
         setNewAdvertisings(formData)
-            .then(res=>console.log(res))
+            .then(res=>{
+                if(res) {
+                    dispatch(setBalance(data.sum))
+                    dispatch(showAlert({message: 'Оплата прошла успешно', typeAlert: 'good'}))
+                    navigate(-1)
+                }
+                else
+                    dispatch(showAlert({message: 'Оплата не прошла', typeAlert: 'bad'}))
+            })
             .catch(e=>console.log(e))
     }
 
@@ -103,7 +121,6 @@ const AdvertisingSection = () => {
             status=validLittlePhoto(viewPhoto)
         if(data.adv== 0)
             status = validBigPhoto(viewPhoto)
-
     return (
         <form onSubmit={handleSubmit(NewAdvertisings)}>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -163,17 +180,22 @@ const AdvertisingSection = () => {
                         <div>3 месяца – {FunctionForPrice(prices[0]['priceThreeMonths'])} ₽</div>
                         <div>6 месяцев – {FunctionForPrice(prices[0]['priceSixMonths'])} ₽ (скидка 10%)</div>
                         <div className="fw_5 mt-3 mt-sm-4 mt-md-5">Изображение</div>
-                        <div className="f_09 l-gray mt-1">Размер баннера 1200*800</div>
+                        <div className="f_09 l-gray mt-1">Размер баннера 1200*400</div>
                         <div className="file-upload mt-2">
                             <button className="btn_main btn_2 fw_4">Загрузить</button>
                             <input type="file" onClick={()=>refClick(1)} onChange={(e) => onImageHandler(e, setData,'image')} />
+                            {data?.adv === 0 && status==='Фото загружено' &&
+                                <Row className={'py-1'}>
+                                    <img src={adCoverViewer[0]?.info?.data_url} alt={'Баннер 250*160'}/>
+                                </Row>
+                            }
                             {data?.adv === 0 && <span style={{color:`${status!=='Фото загружено'?'red':''}`}}>{status}</span>}
                         </div>
                     </div>
                     <div className="col-sm-6 col-md-8">
                         <img
                             src="/images/banner-2.jpg"
-                            alt="Рекламный баннер  (1200х800)"
+                            alt="Рекламный баннер  (1200х400)"
                             className="img-fluid d-block mx-auto"
                         />
                     </div>
@@ -217,6 +239,11 @@ const AdvertisingSection = () => {
                                     onImageHandler(e, setData, 'image')
                                 }}
                             />
+                            {data?.adv === 1 && status==='Фото загружено' &&
+                                <Row className={'py-1'}>
+                                    <img src={adCoverViewer[0]?.info?.data_url} alt={'Баннер 250*160'}/>
+                                </Row>
+                            }
                             {data?.adv === 1 && <span style={{color:`${status!=='Фото загружено'?'red':''}`}}>{status}</span>}
                         </div>
                     </div>
@@ -283,8 +310,8 @@ const AdvertisingSection = () => {
                                         {...register('description', {
                                                required: 'Поле обязательно к заполнению',
                                                minLength: {
-                                                   value: 2,
-                                                   message: 'Минимум 2 символов',
+                                                   value: 10,
+                                                   message: 'Минимум 10 символов',
                                                },
                                                maxLength: {
                                                    value: 30,
@@ -363,7 +390,10 @@ const AdvertisingSection = () => {
                             <div className={"d-inline-block"}><input
                                 name="payment-type"
                                 defaultChecked={true}
-                                onClick={()=>setPaymentType('site')}
+                                onClick={()=> setData((prevState: any) => ({
+                                    ...prevState,
+                                    paymentType:'INTERNAL'
+                                }))}
                                 type="radio"
                             /></div>
                             <div className={"d-inline-block px-2 mb-2"}>Кошелёк сайта</div>
@@ -372,7 +402,10 @@ const AdvertisingSection = () => {
                             <div className={"d-inline-block"}><input
                                 name="payment-type"
                                 defaultChecked={false}
-                                onClick={()=>setPaymentType('card')}
+                                onClick={()=> setData((prevState: any) => ({
+                                    ...prevState,
+                                    paymentType:'card'
+                                }))}
                                 type="radio"
                             /></div>
                             <div className={"d-inline-block px-2"}>Банковской картой</div>

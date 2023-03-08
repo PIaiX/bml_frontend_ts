@@ -73,7 +73,7 @@ export const getPremiumSlots = async () => {
 export const setPremiumSlot = async (payload:any) => {
     try {
         const response = await $authApi.post(`${apiRoutes.SET_PREMIUM_FRANCHISES}`, payload)
-        return response.status
+        return response?.data?.body
     } catch (error) {
         console.log(error)
     }
