@@ -72,8 +72,10 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
            .then(res=>{
                if(res){
                    dispatch(setBalance(data.sum))
-                   dispatch(showAlert({message: 'Оплата прошла успешно', typeAlert: 'good'}))
-                   navigate(0)
+                   dispatch(showAlert({message: 'Оплата прошла успешно! Ждите одобрения модерации...', typeAlert: 'good'}))
+                   setTimeout(() => {
+                       navigate(-1)
+                   }, 1000)
                }
                else
                    dispatch(showAlert({message: 'Оплата не прошла', typeAlert: 'bad'}))
@@ -175,7 +177,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
                             <div className={"d-inline-block"}><input
                                 name="payment-type"
                                 defaultChecked={true}
-                                onClick={()=>setPayment && setPayment('site') || setPaymentType('INTERNAL')}
+                                onClick={()=>setPayment && setPayment('INTERNAL') || setPaymentType('INTERNAL')}
                                 type="radio"
                             /></div>
                             <div className={"d-inline-block px-2 mb-2"}>Кошелёк сайта</div>

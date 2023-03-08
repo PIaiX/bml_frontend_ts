@@ -11,7 +11,7 @@ import {
     deleteImageOffer,
     getAllAreas,
     getAllSubsections,
-    getOneOffer,
+    getOneOffer, setPremiumSlot,
     updateOffer,
 } from '../../services/offers'
 import { IOfferForm, IOfferItem, IOffersAreaItem, IOffersSubSectionsItem } from '../../types/offers'
@@ -27,6 +27,7 @@ import { FromStringToNumber } from '../../helpers/FromStringToNumber'
 import FunctionForPrice from '../../helpers/FunctionForPrice'
 import CitiesForm from '../../components/forms/CitiesForm'
 import Premium from "./Premium";
+import {setBalance} from "../../store/reducers/userSlice";
 
 const NewAd = () => {
     const [category, setCategory] = useState<number | undefined>(0)
@@ -63,7 +64,8 @@ const NewAd = () => {
     const [isPricePerMonthAbsolute, setRoaloty]=useState<boolean>(false)
     const [placedForMonths, setPlacedForMonths]=useState(3)
     const [premiumInf, setPremiumInf]=useState<any>(null)
-    const [paymentType, setPaymentType] = useState('site');
+    const [paymentType, setPaymentType] = useState('INTERNAL');
+
     useEffect(()=>{console.log(premiumInf)},[premiumInf])
     const {
         register,
@@ -206,6 +208,8 @@ const NewAd = () => {
     }, [formInfo?.image, photoInfo])
 
     useEffect(() => { }, [textPhoto?.isInValidSize, textPhoto?.isInValidSizeMB])
+
+
     const createNewOffer = (data: IOfferForm) => {
         const formData = new FormData()
         let dateNew
@@ -219,7 +223,8 @@ const NewAd = () => {
             image: formInfo?.image || '',
             category: formInfo?.category,
             isPricePerMonthAbsolute,
-            placedForMonths
+            placedForMonths,
+            paymentType
     }
         for (const key in req) {
             formData.append(key, req[key])
@@ -227,17 +232,38 @@ const NewAd = () => {
         imageViewer.forEach((image: any) => {
             formData.append('images[]', image?.initialFile)
         })
+
         createOffer(formData)
-            .then(() => {
-                dispatch(
-                    showAlert({
-                        message: 'Объявление успешно создано! Ждите одобрения модерации...',
-                        typeAlert: 'good',
+            .then((res) => {
+                if(premium) setPremiumSlot({paymentMethod:paymentType, offerId:res.id, slot:premiumInf?.slot, placedForMonths:premiumInf?.placedForMonths*3})
+                    .then(res=>{
+                        if(res){
+                            alert(premiumInf?.sum)
+                            alert((placedForMonths===3?6000:11000)+premiumInf.sum)
+                            dispatch(setBalance((placedForMonths===3?6000:11000)+premiumInf.sum))
+                            dispatch(showAlert({
+                                message: 'Объявление успешно создано! Ждите одобрения модерации...',
+                                typeAlert: 'good'}))
+                            setTimeout(() => {
+                                navigate(-1)
+                            }, 1000)
+                        }
+                    }).catch(()=>{
+                        dispatch(setBalance(placedForMonths===3?6000:11000))
+                        dispatch(showAlert({ message: 'Ошибка с премиум размещением!', typeAlert: 'bad' }))
+                        setTimeout(() => {
+                            navigate(-1)
+                        }, 1000)
                     })
-                )
-                setTimeout(() => {
-                    navigate(-1)
-                }, 1000)
+                else{
+                    dispatch(setBalance(placedForMonths===3?6000:11000))
+                    dispatch(showAlert({
+                        message: 'Объявление успешно создано! Ждите одобрения модерации...',
+                        typeAlert: 'good'}))
+                    setTimeout(() => {
+                        navigate(-1)
+                    }, 1000)
+                }
             })
             .catch((error) => {
                 dispatch(showAlert({ message: 'Произошла ошибка!', typeAlert: 'bad' }))
@@ -318,10 +344,12 @@ const NewAd = () => {
         if (id) {
             saveChanges(data)
         } else {
-            createNewOffer(data)
+            if(user?.balance && user?.balance>=((placedForMonths===3?6000:11000)+premiumInf.sum || !premium))
+                createNewOffer(data)
+            else
+                dispatch(showAlert({message: 'Оплата не прошла', typeAlert: 'bad'}))
         }
     }
-
     const returnText = () => {
         if (id) {
             return 'Сохранить изменения'
@@ -1174,7 +1202,7 @@ const NewAd = () => {
                             <div className={"d-inline-block"}><input
                                 name="payment-type"
                                 defaultChecked={true}
-                                onClick={()=>setPaymentType('site')}
+                                onClick={()=>setPaymentType('INTERNAL')}
                                 type="radio"
                             /></div>
                             <div className={"d-inline-block px-2 mb-2"}>Кошелёк сайта</div>

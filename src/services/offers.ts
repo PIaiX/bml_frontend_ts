@@ -118,7 +118,8 @@ export const getUsersOffersArchive = async (
 
 export const createOffer = async (payloads: any) => {
     try {
-        await $authApi.post(`${apiRoutes.ACTIONS_OFFER}`, payloads)
+        const response = await $authApi.post(`${apiRoutes.ACTIONS_OFFER}`, payloads)
+        return response?.data?.body
     } catch (error) {
         throw error
     }

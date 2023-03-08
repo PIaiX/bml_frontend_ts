@@ -97,8 +97,11 @@ const AdvertisingSection = () => {
             .then(res=>{
                 if(res) {
                     dispatch(setBalance(data.sum))
-                    dispatch(showAlert({message: 'Оплата прошла успешно', typeAlert: 'good'}))
-                    navigate(-1)
+                    dispatch(showAlert({message: 'Оплата прошла успешно! Ждите одобрения модерации...', typeAlert: 'good'}))
+                    setTimeout(() => {
+                        navigate(-1)
+                    }, 1000)
+
                 }
                 else
                     dispatch(showAlert({message: 'Оплата не прошла', typeAlert: 'bad'}))

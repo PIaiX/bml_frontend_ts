@@ -54,7 +54,7 @@ const Header: FC = () => {
                             state={{ fromHeader: true }}
                             className="d-none d-md-block"
                         >
-                            Баланс: {FunctionForPrice(user?.balance)} руб
+                            Баланс: {FunctionForPrice(user?.balance) || 0} руб
                         </NavLink>}
 
                         <NavLink to={user ? '/account/favorites' : '/enter'}
