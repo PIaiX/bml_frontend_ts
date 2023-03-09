@@ -49,7 +49,7 @@ const AdvertisingSection = () => {
     const validLittlePhoto = (photo: any):string => {
         if (photo?.width === undefined && photo?.height === undefined) {
             return 'Фото не загружено'
-        } else if (photo?.width === 250 && photo?.height === 160 && data?.adv === 1) {
+        } else if (data?.adv === 1 && photo?.width >=200 && photo?.height >= 120) {
             return 'Фото загружено'
         } else {
             return 'Размеры не подходят'
@@ -74,7 +74,7 @@ const AdvertisingSection = () => {
     const validBigPhoto = (photo: any):string => {
         if (photo?.width === undefined && photo?.height === undefined) {
             return 'Фото не загружено'
-        } else if (photo?.width === 1200 && photo?.height === 400 && data?.adv === 0) {
+        } else if ( data?.adv === 0 && photo?.width>=800 && photo.height>=300) {
             return 'Фото загружено'
         } else{
             return 'Размеры не подходят'
@@ -189,7 +189,7 @@ const AdvertisingSection = () => {
                             <input type="file" onClick={()=>refClick(1)} onChange={(e) => onImageHandler(e, setData,'image')} />
                             {data?.adv === 0 && status==='Фото загружено' &&
                                 <Row className={'py-1'}>
-                                    <img src={adCoverViewer[0]?.info?.data_url} alt={'Баннер 250*160'}/>
+                                    <img style={{objectFit:'cover', aspectRatio:'3/1'}} src={adCoverViewer[0]?.info?.data_url} alt={'Баннер 250*160'}/>
                                 </Row>
                             }
                             {data?.adv === 0 && <span style={{color:`${status!=='Фото загружено'?'red':''}`}}>{status}</span>}
@@ -244,7 +244,7 @@ const AdvertisingSection = () => {
                             />
                             {data?.adv === 1 && status==='Фото загружено' &&
                                 <Row className={'py-1'}>
-                                    <img src={adCoverViewer[0]?.info?.data_url} alt={'Баннер 250*160'}/>
+                                    <img style={{objectFit:'cover', aspectRatio:'25/16'}} src={adCoverViewer[0]?.info?.data_url} alt={'Баннер 250*160'}/>
                                 </Row>
                             }
                             {data?.adv === 1 && <span style={{color:`${status!=='Фото загружено'?'red':''}`}}>{status}</span>}
