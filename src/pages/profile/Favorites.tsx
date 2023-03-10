@@ -78,7 +78,7 @@ const Favorites: FC = () => {
                             </div>
                         ))
                     ) : (
-                        <h6 className="w-100 p-5 text-center">Ничего нет</h6>
+                        <h6 className="w-100 p-5 text-center">В избранных пока ничего нет</h6>
                     )
                 ) : (<div className="p-5 w-100 d-flex justify-content-center">
                         <Loader color="#343434" />
