@@ -116,6 +116,13 @@ const Service: FC = () => {
         setSelectedPage(0)
     }, [categoryId])
 
+    useEffect(()=>{
+        const timer = setTimeout(() => {
+            window.scrollTo(0,0)
+        }, 50);
+        return () => clearTimeout(timer);
+        },[])
+
     return (
         <main>
             <BannerContainer />
