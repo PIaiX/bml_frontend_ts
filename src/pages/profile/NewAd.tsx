@@ -66,7 +66,6 @@ const NewAd = () => {
     const [premiumInf, setPremiumInf]=useState<any>(null)
     const [paymentType, setPaymentType] = useState('INTERNAL');
 
-    useEffect(()=>{console.log(premiumInf)},[premiumInf])
     const {
         register,
         setValue,
@@ -344,7 +343,7 @@ const NewAd = () => {
         if (id) {
             saveChanges(data)
         } else {
-            if(user?.balance && user?.balance>=((placedForMonths===3?6000:11000)+premiumInf.sum || !premium))
+            if(!premium || user?.balance && user?.balance>=((placedForMonths===3?6000:11000)+premiumInf.sum))
                 createNewOffer(data)
             else
                 dispatch(showAlert({message: 'Оплата не прошла', typeAlert: 'bad'}))
@@ -508,17 +507,13 @@ const NewAd = () => {
                     <div className="row mb-3 mb-sm-4">
                         <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0 pt-sm-2">
                             <div>
-                                {category === 0 || category === 2 || category === 4 ? (
-                                    <>
-                                        Условия сотрудничества<span className="red">*</span>
-                                    </>
-                                ) : category === 1 ? (
-                                    'Предполагаемые условия сотрудничества'
-                                ) : (
-                                    <>
-                                        Условия продажи<span className="red">*</span>
-                                    </>
-                                )}
+                                {category === 0 || category === 2 || category === 4 ?
+                                    'Условия сотрудничества'
+                                    : category === 1 ?
+                                        'Предполагаемые условия сотрудничества'
+                                        : 'Условия продажи'
+                                }
+                                <span className="red">*</span>
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-8">
@@ -543,7 +538,7 @@ const NewAd = () => {
                     {(category === 0 || category === 2 || category === 3 || category === 4) && (
                         <div className="row mb-3 mb-sm-4">
                             <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0 pt-sm-2">
-                                <div>Бизнес-план{category === 4 && <span className="red">*</span>}</div>
+                                <div>Бизнес-план<span className="red">*</span></div>
                             </div>
                             <div className="col-sm-6 col-lg-8">
                                 <ValidateWrapper error={errors?.businessPlan}>
@@ -938,7 +933,8 @@ const NewAd = () => {
                             <div className="row align-items-center mb-4">
                                 <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0">
                                     <div>
-                                        Роялти<span className="red">*</span>
+                                        Роялти
+                                        <span className="red">*</span>
                                     </div>
                                 </div>
                                 <div className="col-sm-6 col-lg-4">
@@ -946,7 +942,7 @@ const NewAd = () => {
                                         <input
                                             type="text"
                                             placeholder="0"
-                                            className="f_09"
+                                            className={`f_09 ${isPricePerMonthAbsolute?'input-procent':'input-price'}`}
                                             {...register('pricePerMonth', {
                                                 required: 'Обязательное поле',
                                                 min: { value: 0, message: 'Минимум 0' },

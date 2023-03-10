@@ -262,6 +262,12 @@ input.input-price {
     background-size: auto;
     background-position: calc(100% - .75em) 50%;
 }
+input.input-procent {
+    background: url(/src/assets/images/backgrounds/procent.svg) no-repeat;
+    background-size: auto;
+    background-position: calc(100% - .75em) 50%;
+}
+
 
 input.input-price::-webkit-outer-spin-button,
 input.input-price::-webkit-inner-spin-button {
