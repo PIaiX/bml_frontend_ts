@@ -477,15 +477,6 @@ const AdvPage: FC = () => {
                                         НАПИСАТЬ СООБЩЕНИЕ
                                     </button>
                                 </div>
-                                {/*<Link to={srcToChat}*/}
-                                {/*       state={{ userName: offer?.item?.user.fullName, userId: offer?.item?.user.id, avatar: offer?.item?.user.avatar }}*/}
-                                {/*>*/}
-                                {/*    <button*/}
-                                {/*    type="button"*/}
-                                {/*    className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3">*/}
-                                {/*        НАПИСАТЬ СООБЩЕНИЕ*/}
-                                {/*    </button>*/}
-                                {/*</Link>*/}
                             </div>
 
                             {(user
