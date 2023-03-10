@@ -168,6 +168,15 @@ const AdvPage: FC = () => {
     if(user)
         srcToChat=`/account/chat/window/${idChat ? idChat : 'new'}`
 
+
+    const clickMessage = ()=>{
+        if(user)
+            navigate(srcToChat, {state:{ userName: offer?.item?.user.fullName, userId: offer?.item?.user.id, avatar: offer?.item?.user.avatar }})
+        else
+            dispatch(showAlert({message: 'Пожалуйста, зарегистрируйтесь или войдите в аккаунт для отправки сообщения. ', typeAlert: 'bad', withLink:true}))
+
+    }
+
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
@@ -454,20 +463,29 @@ const AdvPage: FC = () => {
                                                 text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"'
                                             }))
                                             createWithOfferTopicMessage(event)
-                                        } else navigate('/enter')
+                                        } else{
+                                            dispatch(showAlert({message: 'Пожалуйста, зарегистрируйтесь или войдите в аккаунт для запроса бизнес плана. ', typeAlert: 'bad', withLink:true}))
+                                        }
                                     }}
                                 >
                                     ПОЛУЧИТЬ БИЗНЕС-ПЛАН
                                 </button>
-                                {<Link to={srcToChat}
-                                       state={{ userName: offer?.item?.user.fullName, userId: offer?.item?.user.id, avatar: offer?.item?.user.avatar }}
-                                >
+                                <div onClick={()=>clickMessage()}>
                                     <button
                                     type="button"
                                     className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3">
-                                    НАПИСАТЬ СООБЩЕНИЕ
-                                </button>
-                                </Link>}
+                                        НАПИСАТЬ СООБЩЕНИЕ
+                                    </button>
+                                </div>
+                                {/*<Link to={srcToChat}*/}
+                                {/*       state={{ userName: offer?.item?.user.fullName, userId: offer?.item?.user.id, avatar: offer?.item?.user.avatar }}*/}
+                                {/*>*/}
+                                {/*    <button*/}
+                                {/*    type="button"*/}
+                                {/*    className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3">*/}
+                                {/*        НАПИСАТЬ СООБЩЕНИЕ*/}
+                                {/*    </button>*/}
+                                {/*</Link>*/}
                             </div>
 
                             {(user
