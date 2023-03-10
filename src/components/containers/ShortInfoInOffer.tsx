@@ -22,6 +22,7 @@ type Props = {
 }
 
 const ShortInfoInOfferContainer: FC<Props> = (props) => {
+    console.log(props)
     if (props?.category === 0) {
         return (
             <section className="anchor_block" id="anchor_little_info">
@@ -33,12 +34,12 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
                     {props?.profitPerMonth &&
                         <li>Предполагаемая прибыль: {FunctionForPrice(props?.profitPerMonth) || 0} ₽</li>
                     }
-                    {props?.payback &&
+                    {props?.paybackForUser &&
                         <li>
                             Окупаемость: {props?.paybackForUser?.toLowerCase()}
                         </li>
                     }
-                    {props?.projectStage &&
+                    {props?.projectStageForUser &&
                         <li>
                             Стадия проекта: {props?.projectStageForUser?.toLowerCase()}
                         </li>
@@ -55,7 +56,7 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
                     {props?.investments &&
                         <li>Инвестиции: {FunctionForPrice(props?.investments)} ₽</li>
                     }
-                    {props?.payback &&
+                    {props?.paybackForUser &&
                         <li>
                             Окупаемость: {props?.paybackForUser?.toLowerCase()}
                         </li>
@@ -75,12 +76,12 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
                     {props?.profit &&
                         <li>Предполагаемая прибыль: {FunctionForPrice(props?.profit)} ₽</li>
                     }
-                    {props?.payback &&
+                    {props?.paybackForUser &&
                         <li>
                             Окупаемость: {props?.paybackForUser?.toLowerCase()}
                         </li>
                     }
-                    {props?.projectStage &&
+                    {props?.projectStageForUser &&
                         <li>
                             Стадия проекта: {props?.projectStageForUser?.toLowerCase()}
                         </li>
@@ -95,7 +96,7 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
                 <h4 className="fw_7">Краткая информация</h4>
                 <ul>
                     <li>Стоимость бизнеса: {FunctionForPrice(props?.price)} ₽</li>
-                    {props?.payback &&
+                    {props?.paybackForUser &&
                         <li>
                             Окупаемость: {props?.paybackForUser?.toLowerCase()}
                         </li>
@@ -116,7 +117,7 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
                     <li>Паушальный взнос: {FunctionForPrice(props?.price)} ₽</li>
                     <li>Роялти: {FunctionForPrice(props?.pricePerMonth)} {props.isPricePerMonthAbsolute && props.category === 4 ? ' %' : ' ₽'}
                     </li>
-                    {props?.payback &&
+                    {props?.paybackForUser &&
                         <li>
                             Срок окупаемости:{' '}
                             {props?.paybackForUser?.toLowerCase()}
