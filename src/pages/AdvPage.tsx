@@ -173,8 +173,7 @@ const AdvPage: FC = () => {
         if(user)
             navigate(srcToChat, {state:{ userName: offer?.item?.user.fullName, userId: offer?.item?.user.id, avatar: offer?.item?.user.avatar }})
         else
-            dispatch(showAlert({message: 'Пожалуйста, зарегистрируйтесь или войдите в аккаунт для отправки сообщения. ', typeAlert: 'bad', withLink:true}))
-
+            dispatch(showAlert({message: 'Зарегистрируйтесь для отправки сообщений. ', typeAlert: 'neutral', withLink:true}))
     }
 
     return (
@@ -464,7 +463,7 @@ const AdvPage: FC = () => {
                                             }))
                                             createWithOfferTopicMessage(event)
                                         } else{
-                                            dispatch(showAlert({message: 'Пожалуйста, зарегистрируйтесь или войдите в аккаунт для запроса бизнес плана. ', typeAlert: 'bad', withLink:true}))
+                                            dispatch(showAlert({message: 'Зарегистрируйтесь для запроса бизнес плана. ', typeAlert: 'neutral', withLink:true}))
                                         }
                                     }}
                                 >
@@ -577,7 +576,6 @@ const AdvPage: FC = () => {
                                 areaName={offer?.item?.subsection?.area?.name}
                                 isPricePerMonthAbsolute={offer?.item?.isPricePerMonthAbsolute}
                             />
-
                             <button
                                 type="button"
                                 className="d-flex align-items-center mb-2"

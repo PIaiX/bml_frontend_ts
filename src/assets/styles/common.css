@@ -254,6 +254,7 @@ input.simple,
 textarea.simple {
     border: 2px solid var(--orange);
     width: fit-content;
+    width: fit-content;
     padding: .5em 1em;
 }
 
@@ -1111,8 +1112,9 @@ ul.simple_list>li::before {
 
 
 .alert {
+    color:white;
     position: fixed;
-    bottom: 20px;
+    top: 20vh;
     z-index: 100000;
     /*transition: opacity 1s ease;*/
     height: auto;
@@ -1125,27 +1127,30 @@ ul.simple_list>li::before {
 @media (min-width: 1200px) {
 
     .alert.good,
+    .alert.neutral,
     .alert.bad {
         width: 20%;
-        margin-left: 40%;
+        margin-left: 80%;
     }
 }
 
 @media (max-width: 1199px) {
 
     .alert.good,
+    .alert.neutral,
     .alert.bad {
         width: 30%;
-        margin-left: 35%;
+        margin-left: 70%;
     }
 }
 
 @media (max-width: 575px) {
 
     .alert.good,
+    .alert.neutral,
     .alert.bad {
         width: 60%;
-        margin-left: 20%;
+        margin-left: 40%;
     }
 }
 
@@ -1165,7 +1170,10 @@ ul.simple_list>li::before {
 }
 
 .alert.bad {
-    background: #FF002D;
+    background: red;
+}
+.alert.neutral {
+    background: #2e5193;
 }
 
 .action-notification {

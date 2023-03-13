@@ -11,7 +11,7 @@ const Alert: FC = () => {
         }>
             <div>
                 {alertState?.message}
-                {alertState?.withLink && <Link style={{color:"blue"}} to={'/enter'} >Войти</Link>}
+                {alertState?.withLink && <Link style={{color:"#FF8E37"}} to={'/enter'} >Перейти</Link>}
             </div>
         </div>
     )
