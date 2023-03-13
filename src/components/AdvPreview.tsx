@@ -25,6 +25,7 @@ const AdvPreview: FC<Props> = (props) => {
         e.stopPropagation();
         e.nativeEvent.stopImmediatePropagation();
     }
+    console.log(props.title,  !props.isPricePerMonthAbsolute)
     return (
         <>
             <div style={{
@@ -45,7 +46,7 @@ const AdvPreview: FC<Props> = (props) => {
                             <div className="f_08 me-1 me-sm-3">{props.price?'Стоимость бизнеса':'Инвестиции от'}</div>
                             <div>
                                 {FunctionForPrice(props.price?props.price:props.investments)}
-                                {props.isPricePerMonthAbsolute?' %':' руб'}
+                                {props.isPricePerMonthAbsolute===undefined || props.isPricePerMonthAbsolute?' руб':' %'}
                             </div>
                         </div>
                         <div className="d-flex align-items-center" onClick={(event) => { stopPropagation(event) }}>

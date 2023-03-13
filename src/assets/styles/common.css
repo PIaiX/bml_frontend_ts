@@ -23,6 +23,7 @@ body {
 }
 
 header {
+    z-index:121;
     flex: 0 0 auto;
 }
 

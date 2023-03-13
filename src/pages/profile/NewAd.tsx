@@ -61,14 +61,14 @@ const NewAd = () => {
         item: null,
     })
     const [imagesFromServer, setImagesFromServer] = useState<any>(null)
-    const [isPricePerMonthAbsolute, setRoaloty]=useState<boolean>(false)
+    const [isPricePerMonthAbsolute, setRoaloty]=useState<boolean>(true)
     const [placedForMonths, setPlacedForMonths]=useState(3)
     const [premiumInf, setPremiumInf]=useState<any>(null)
     const [paymentType, setPaymentType] = useState('INTERNAL');
 
     useEffect(()=>{
         const val=getValues('pricePerMonth')
-        if (isPricePerMonthAbsolute){
+        if (!isPricePerMonthAbsolute){
             if(val>100) setError('pricePerMonth', {message:'Не больше 100%'})
             clearErrors('profitPerMonth')
         }
@@ -954,12 +954,12 @@ const NewAd = () => {
                                         <input
                                             type="text"
                                             placeholder="0"
-                                            className={`f_09 ${isPricePerMonthAbsolute?'input-procent':'input-price'}`}
+                                            className={`f_09 ${!isPricePerMonthAbsolute?'input-procent':'input-price'}`}
                                             {...register('pricePerMonth', {
                                                 required: 'Обязательное поле',
                                                 min: { value: 0, message: 'Минимум 0' },
                                                 validate: e=>{
-                                                   if(isPricePerMonthAbsolute && Number(String(e).replaceAll(' ', ''))>100) return 'Не больше 100%'
+                                                   if(!isPricePerMonthAbsolute && Number(String(e).replaceAll(' ', ''))>100) return 'Не больше 100%'
                                                     return true;
                                                 },
                                                 onChange: (event) => GoodLook(event),
@@ -978,7 +978,7 @@ const NewAd = () => {
                                 <div className="col-sm-2 col-lg-1 col-2">
                                     <div className={"d-inline-block"}><input
                                         name="roal-type"
-                                        checked={!isPricePerMonthAbsolute}
+                                        checked={isPricePerMonthAbsolute}
                                         onChange={()=>setRoaloty(!isPricePerMonthAbsolute)}
                                         type="radio"
                                     /></div>
@@ -987,7 +987,7 @@ const NewAd = () => {
                                 <div className="col-sm-2 col-lg-1 col-2">
                                     <div className={"d-inline-block"}><input
                                         name="raol-type"
-                                        checked={isPricePerMonthAbsolute}
+                                        checked={!isPricePerMonthAbsolute}
                                         onChange={()=>setRoaloty(!isPricePerMonthAbsolute)}
                                         type="radio"
                                     /></div>
@@ -1013,7 +1013,7 @@ const NewAd = () => {
                                             validate: e=>{
                                                 console.log(Number(String(e).replaceAll(' ', '')))
                                                 console.log(Number(String(getValues('pricePerMonth')).replaceAll(' ', '')))
-                                                    if(e && category===4 && !isPricePerMonthAbsolute && Number(String(e).replaceAll(' ', ''))<Number(String(getValues('pricePerMonth')).replaceAll(' ', '')))
+                                                    if(e && category===4 && isPricePerMonthAbsolute && Number(String(e).replaceAll(' ', ''))<Number(String(getValues('pricePerMonth')).replaceAll(' ', '')))
                                                     return `Не меньше роялти`
                                                 return true;
                                             },

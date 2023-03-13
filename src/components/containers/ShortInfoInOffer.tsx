@@ -115,7 +115,7 @@ const ShortInfoInOfferContainer: FC<Props> = (props) => {
                 <ul>
                     <li>Стартовые инвестиции от: {FunctionForPrice(props?.investments)} ₽</li>
                     <li>Паушальный взнос: {FunctionForPrice(props?.price)} ₽</li>
-                    <li>Роялти: {FunctionForPrice(props?.pricePerMonth)} {props.isPricePerMonthAbsolute && props.category === 4 ? ' %' : ' ₽'}
+                    <li>Роялти: {FunctionForPrice(props?.pricePerMonth)} {props.isPricePerMonthAbsolute && props.category === 4 ? ' ₽':' %'}
                     </li>
                     {props?.paybackForUser &&
                         <li>

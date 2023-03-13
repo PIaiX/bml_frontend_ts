@@ -401,7 +401,7 @@ const AdvPage: FC = () => {
                                             <span
                                                 className="f_15 fw_5 text-nowrap">
                                                 {FunctionForPrice(offer?.item?.pricePerMonth)}
-                                                {offer?.item?.isPricePerMonthAbsolute && offer?.item?.category===4?' %':' ₽'}
+                                                {offer?.item?.isPricePerMonthAbsolute && offer?.item?.category===4?' ₽': '%'}
                                             </span>
                                         </div>
 

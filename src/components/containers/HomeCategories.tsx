@@ -72,6 +72,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         title={item.title}
                                         investments={item.investments}
                                         favorite={item?.isFavorite}
+                                        isPricePerMonthAbsolute={item?.isPricePerMonthAbsolute}
                                     />
                                 </div>
                             ))
@@ -100,6 +101,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         title={item.title}
                                         investments={item.investments}
                                         favorite={item?.isFavorite}
+                                        isPricePerMonthAbsolute={item?.isPricePerMonthAbsolute}
                                     />
                                 </div>
                             ))
@@ -129,6 +131,7 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         investments={item.investments}
                                         favorite={item?.isFavorite}
                                         price={item.price}
+                                        isPricePerMonthAbsolute={item?.isPricePerMonthAbsolute}
                                     />
                                 </div>
                             ))
@@ -158,7 +161,6 @@ const HomeCategoriesContainer: FC<Props> = ({
                                         investments={item.investments}
                                         favorite={item?.isFavorite}
                                         isPricePerMonthAbsolute={item?.isPricePerMonthAbsolute}
-
                                     />
                                 </div>
                             ))

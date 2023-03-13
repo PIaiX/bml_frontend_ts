@@ -98,6 +98,7 @@ const NotArchiveAds: FC<Props> = ({ tab, section }) => {
                     paginationItems?.length > 0 ? (
                         paginationItems?.map((i: any) => (
                             <AdCard
+                                timeBeforeArchive={i.timeBeforeArchive}
                                 id={i.id}
                                 key={i.id}
                                 type={tab}

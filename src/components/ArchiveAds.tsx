@@ -100,6 +100,7 @@ const ArchiveAds: FC<Props> = ({ tab, section }) => {
                                 type={tab}
                                 section={section}
                                 imgURL={i.image}
+                                timeBeforeArchive={i.timeBeforeArchive}
                                 title={i.title}
                                 scope={i.subsection?.area?.name}
                                 investments={i?.investments}
