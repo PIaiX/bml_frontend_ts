@@ -66,12 +66,21 @@ const NewAd = () => {
     const [premiumInf, setPremiumInf]=useState<any>(null)
     const [paymentType, setPaymentType] = useState('INTERNAL');
 
+    useEffect(()=>{
+        const val=getValues('pricePerMonth')
+        if (isPricePerMonthAbsolute && val>100) setError('pricePerMonth', {message:'Не больше 100%'})
+        else clearErrors('pricePerMonth')
+    }, [isPricePerMonthAbsolute])
+
     const {
         register,
         setValue,
         watch,
         formState: { errors },
         handleSubmit,
+        setError,
+        getValues,
+        clearErrors
     } = useForm<IOfferForm>({
         mode: 'onSubmit',
         reValidateMode: 'onChange',
@@ -946,6 +955,10 @@ const NewAd = () => {
                                             {...register('pricePerMonth', {
                                                 required: 'Обязательное поле',
                                                 min: { value: 0, message: 'Минимум 0' },
+                                                validate: e=>{
+                                                    if(isPricePerMonthAbsolute && e>=100) return 'Не больше 100%'
+                                                    return true;
+                                                },
                                                 onChange: (event) => GoodLook(event),
                                             })}
                                         />
@@ -994,6 +1007,11 @@ const NewAd = () => {
                                         {...register('profitPerMonth', {
                                             min: { value: 0, message: 'Минимум 0' },
                                             minLength: { value: 0, message: 'Минимальная длина 0 символа' },
+                                            validate: e=>{
+                                                if(category===4 && !isPricePerMonthAbsolute && e>Number(getValues('pricePerMonth')))
+                                                    return `Не больше роялти`
+                                                return true;
+                                            },
                                             onChange: (event) => GoodLook(event),
                                         })}
                                     />
