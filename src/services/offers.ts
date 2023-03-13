@@ -4,7 +4,7 @@ import {
     IOfferBodyRequest,
     IOffersAreaBodyRequest,
     IOffersBodyRequest,
-    IOffersSubSectionsBodyRequest,
+    IOffersSubSectionsBodyRequest, IOPremium,
 } from '../models/offers'
 import { IPayloadsFilter } from '../types/offers'
 
@@ -61,6 +61,25 @@ export const getOneOffer = async (id: string, userId: number | string = '') => {
     }
 }
 
+export const getPremiumSlots = async () => {
+    try {
+        const response = await $authApi.get(`${apiRoutes.GET_PREMIUM_SLOTS}`)
+        return response?.data?.body.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const setPremiumSlot = async (payload:any) => {
+    try {
+        const response = await $authApi.post(`${apiRoutes.SET_PREMIUM_FRANCHISES}`, payload)
+        return response?.data?.body
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 export const getUsersOffersNotArchive = async (
     userId: number,
     page: number = 1,
@@ -99,7 +118,8 @@ export const getUsersOffersArchive = async (
 
 export const createOffer = async (payloads: any) => {
     try {
-        await $authApi.post(`${apiRoutes.ACTIONS_OFFER}`, payloads)
+        const response = await $authApi.post(`${apiRoutes.ACTIONS_OFFER}`, payloads)
+        return response?.data?.body
     } catch (error) {
         throw error
     }

@@ -18,3 +18,16 @@ export const getUserInfo = async (userId: number, myId: number | string = '') =>
         console.log(error)
     }
 }
+
+export const getIdChat = async (userId: number) => {
+    try {
+        const response = await $authApi.get(`${apiRoutes.GET_ID_CHAT}`, {
+            params:{
+                userId
+            }
+        })
+        return response?.data?.body
+    } catch (error) {
+        console.log(error)
+    }
+}

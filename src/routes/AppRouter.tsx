@@ -1,5 +1,5 @@
 import React from 'react'
-import { createBrowserRouter, NavLink, RouterProvider, useLoaderData } from 'react-router-dom'
+import {createBrowserRouter, Link, RouterProvider} from 'react-router-dom'
 import Home from '../pages/Home'
 import Contacts from '../pages/Contacts'
 import Service from '../pages/Service'
@@ -12,9 +12,8 @@ import ResetPassword from '../pages/profile/ResetPassword'
 import PersonalAccount from '../pages/profile/PersonalAccount'
 import Layout from '../layouts/Layout'
 import NotFound from '../pages/NotFound'
-import { Link } from 'react-router-dom'
-import PrivacyPolicy from '../pages/profile/PrivacyPolicy'
 import Search from "../pages/Search";
+import MainInf from "../pages/profile/MainInf";
 
 const router = createBrowserRouter([
     {
@@ -44,9 +43,8 @@ const router = createBrowserRouter([
                 handle: { crumb: () => <span>Новости</span> },
             },
             {
-                path: 'privacy',
-                element: <PrivacyPolicy />,
-                handle: { crumb: () => <span>Политика</span> },
+                path: 'information',
+                element: <MainInf />,
             },
             {
                 path: 'news/:slug',

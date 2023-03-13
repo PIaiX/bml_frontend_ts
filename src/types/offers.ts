@@ -67,6 +67,8 @@ export type IOffersItem = {
         }
     }
     isArchivedForUser: string
+    isVerified?:boolean,
+    isPricePerMonthAbsolute:boolean | null
     categoryForUser: string
     paybackTimeForUser: string
     projectStageForUser: string
@@ -123,6 +125,7 @@ export type IOfferItem = {
     projectStage: number
     investments: number
     dateOfCreation: string
+    isPricePerMonthAbsolute:boolean
     price: number
     pricePerMonth: number
     profitPerMonth: number

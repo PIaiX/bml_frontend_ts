@@ -8,6 +8,7 @@ import {showAlert} from '../../store/reducers/alertSlice'
 import ValidateWrapper from '../utils/ValidateWrapper'
 import {setUser} from '../../store/reducers/userSlice'
 import CitiesForm from "./CitiesForm";
+import {selectToEnd} from "../../helpers/selectToEndForPhoneInput";
 
 type Props = {
     avatar: File
@@ -26,7 +27,6 @@ type FormInfo = {
     isShowPhone: false
     type: 1
 }
-
 const EditProfileFormForIe: FC<Props> = ({avatar}) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [city, setCity] = useState(user?.city)
@@ -56,7 +56,6 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
             type: 1,
         },
     })
-
     useEffect(() => {
         if (user) {
             setValue('companyName', user?.companyName)
@@ -64,11 +63,10 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
             setValue('lastName', user?.lastName)
             setValue('taxpayerIdentificationNumber', user?.taxpayerIdentificationNumber)
             setValue('mainStateRegistrationNumber', user?.mainStateRegistrationNumber)
-            setValue('phone', user?.phone)
             setValue('email', user?.email)
+            setValue('phone', user?.phone?user.phone:'')
         }
     }, [user])
-
     const submitUpdateUserInfo = (data: any) => {
         let req
         if (user?.city !== city) {
@@ -212,7 +210,7 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                                 maxLength: {
                                     value: 13,
                                     message: 'Максимальное количество символов 13',
-                                },
+                                }
                             })}
                         />
                     </ValidateWrapper>
@@ -270,12 +268,19 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                         <input
                             type="tel"
                             placeholder="+79000000000"
+                            onClick={(e)=>{
+                                if(!getValues('phone') || getValues('phone').length===0)
+                                    setValue('phone', '+7')
+                                selectToEnd(e)
+                            }}
                             {...register('phone', {
                                 required: 'поле обязательно к заполнению',
+
                                 minLength: {
                                     value: 12,
                                     message: 'Минимальная длина 12 символов',
                                 },
+                                onChange:(e)=>e.target.value.length<3 && setValue('phone', '+7'),
                                 maxLength: {
                                     value: 12,
                                     message: 'Максимальная длина 12 символов',
@@ -294,7 +299,7 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                     </h6>
                 </div>
                 <div className="col-sm-8">
-                    <ValidateWrapper error={{message: cityError}}>
+                    <ValidateWrapper  forCity={true} error={{message: cityError}}>
                         <CitiesForm val={city} setVal={setCity} />
                     </ValidateWrapper>
                 </div>

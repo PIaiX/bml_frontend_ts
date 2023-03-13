@@ -7,6 +7,7 @@ import { showAlert } from '../../store/reducers/alertSlice'
 import ValidateWrapper from '../utils/ValidateWrapper'
 import { setUser } from '../../store/reducers/userSlice'
 import CitiesForm from "./CitiesForm";
+import {selectToEnd} from "../../helpers/selectToEndForPhoneInput";
 
 type Props = {
     avatar: File
@@ -67,7 +68,7 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
             setValue('taxpayerIdentificationNumber', user?.taxpayerIdentificationNumber)
             setValue('mainStateRegistrationNumber', user?.mainStateRegistrationNumber)
             setValue('legalAddress', user?.legalAddress)
-            setValue('phone', user?.phone)
+            setValue('phone', user?.phone?user.phone:'')
             setValue('email', user?.email)
         }
     }, [user])
@@ -122,6 +123,7 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
         else if (cityError === '') submitUpdateUserInfo(data)
 
     }
+
     return (
         <form className="acc-box" noValidate onSubmit={handleSubmit(beforeSubmit)}>
             <div className="row  align-items-center g-3">
@@ -295,13 +297,18 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
                         <input
                             type="tel"
                             placeholder="+79000000000"
-                            {...register('phone', {
+                            onClick={(e)=>{
+                                if(!getValues('phone') || getValues('phone').length===0)
+                                    setValue('phone', '+7')
+                                selectToEnd(e)
+                            }}{...register('phone', {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
                                     value: 12,
                                     message: 'Минимальная длина 12 символов',
                                 },
-                                maxLength: {
+                            onChange:(e)=>e.target.value.length<3 && setValue('phone', '+7'),
+                            maxLength: {
                                     value: 12,
                                     message: 'Максимальная длина 12 символов',
                                 },
@@ -320,7 +327,7 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
                 </div>
                 <div className="col-sm-8">
                     <ValidateWrapper error={errors?.city}>
-                        <ValidateWrapper error={{message: cityError}}>
+                        <ValidateWrapper forCity={true} error={{message: cityError}}>
                             <CitiesForm val={city} setVal={setCity} />
                         </ValidateWrapper>
                     </ValidateWrapper>

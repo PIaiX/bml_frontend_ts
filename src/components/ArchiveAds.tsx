@@ -105,6 +105,7 @@ const ArchiveAds: FC<Props> = ({ tab, section }) => {
                                 investments={i?.investments}
                                 validity={i?.archiveExpire}
                                 offerIdSeterForUnArchive={offerIdSeterForUnArchive}
+                                isPricePerMonthAbsolute={i.isPricePerMonthAbsolute}
                             />
                         ))
                     ) : (

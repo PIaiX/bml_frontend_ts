@@ -1,6 +1,6 @@
-import {socketInstance} from './socketInstance'
-import {ICreateMessagesBodyResponse, IMessagesBodyRequest} from '../../models/sockets/messages'
-import {IPayloadsMessage} from '../../types/sockets/messages'
+import { socketInstance } from './socketInstance'
+import { ICreateMessagesBodyResponse, IMessagesBodyRequest } from '../../models/sockets/messages'
+import { IPayloadsMessage } from '../../types/sockets/messages'
 
 type PayloadItems = {
     page: number
@@ -54,7 +54,7 @@ export const emitCreateWithOfferTopicMessage = async (toUserId: number, payloads
     })
 }
 
-export const emitViewedMessage = async (conversationId: string, userId: number) => {
+export const emitViewedMessage = async (conversationId: { conversationId: number }, userId: number) => {
     return await new Promise((resolve, reject) => {
         socketInstance?.emit('message:viewed', conversationId, userId, (response: any) => {
             try {
@@ -66,9 +66,21 @@ export const emitViewedMessage = async (conversationId: string, userId: number) 
     })
 }
 
-export const emitPaginateMessages = async (conversationId: number, payloads: PayloadItems) => {
+export const emitPaginateMessages = async (conversationId: { conversationId: number }, payloads: PayloadItems) => {
     return await new Promise<IMessagesBodyRequest>((resolve, reject) => {
         socketInstance?.emit('message:paginate', conversationId, payloads, (response: IMessagesBodyRequest) => {
+            try {
+                resolve(response)
+            } catch (e) {
+                reject(e)
+            }
+        })
+    })
+}
+
+export const emitGetConversationWithUserId = async (userId: number) => {
+    return await new Promise((resolve, reject) => {
+        socketInstance?.emit('conversation:getByUserId', userId, (response: any) => {
             try {
                 resolve(response)
             } catch (e) {

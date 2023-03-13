@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {BaseSyntheticEvent, useCallback, useEffect, useState} from 'react'
 import ChatPreview from './ChatPreview'
 
 import { Link } from 'react-router-dom'
@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store'
 import { showAlert } from '../../store/reducers/alertSlice'
 import { IUser } from '../../types/user'
 import AccountMenu from './AccountMenu'
+import CustomModal from "../../components/utils/CustomModal";
 
 export default function Chat() {
     const { isConnected } = useSocketConnect()
@@ -45,6 +46,14 @@ export default function Chat() {
     const [conversationId, setConversationId] = useState<number | null>(null)
     const [isFetching, setIsFetching] = useState<boolean>(true)
 
+    const [isShowMessageModal, setIsShowMessageModal] = useState(false)
+
+    function DelChat(e:BaseSyntheticEvent){
+        e.preventDefault()
+        setIsShowMessageModal(false)
+        setConversationId(beforeConversationId)
+    }
+
     useEffect(() => {
         if (isConnected && socketInstance) {
             socketInstance?.on('conversation:update', onConversationUpdate)
@@ -54,10 +63,8 @@ export default function Chat() {
             socketInstance?.off('conversation:update', onConversationUpdate)
         }
     }, [conversations])
-
     useEffect(() => {
         isFetching &&
-
             setTimeout(() => {
                 emitPaginateConversation({ page: selectedPage + 1, limit: generalLimit, orderBy: 'desc' })
                     .then(
@@ -94,6 +101,12 @@ export default function Chat() {
         }
     }
 
+    const [beforeConversationId, setBeforeConversationId]=useState<number | null>(null)
+    useEffect(()=>{
+        if(beforeConversationId){
+            setIsShowMessageModal(true)
+        }
+    }, [beforeConversationId])
     useEffect(() => {
         if (conversationId) {
             emitDeleteConversation(conversationId)
@@ -125,13 +138,13 @@ export default function Chat() {
                         paginationItems?.map((i) => {
                             return (
                                 <ChatPreview
-                                    getIdConver={getIdConversation}
+                                    getIdConver={setBeforeConversationId}
                                     converId={i.id}
                                     userId={i?.user?.id}
                                     offerId={i?.offerId}
                                     lastMessUserId={i?.lastMessage?.userId}
                                     key={i?.id}
-                                    imgURL={checkPhotoPath(i.user?.avatar)}
+                                    imgURL={i.user?.avatar}
                                     userName={i?.user?.fullName}
                                     title={i?.offer?.title}
                                     adURL={`/adv-page/${i?.offerId}`}
@@ -149,7 +162,6 @@ export default function Chat() {
                         <Loader color="#343434" />
                     </div>
                 )}
-
 
                 <div className="p-4">
                     {paginationItems?.length > 0 ? (
@@ -169,6 +181,28 @@ export default function Chat() {
                     )}
                 </div>
             </div>
+            <CustomModal
+                isShow={isShowMessageModal}
+                setIsShow={setIsShowMessageModal}
+                centered={false}
+                closeButton={true}
+                className="modal__messages"
+            >
+                <form>
+                    <div>Вы уверены, что хотите удалить диалог?</div>
+                    <div className="d-flex justify-content-center mt-5">
+                        <button
+                            className="btn_main btn_1"
+                            onClick={(event: BaseSyntheticEvent) =>
+                                DelChat(event)
+                            }
+                        >
+                            Удалить
+                        </button>
+                    </div>
+                </form>
+            </CustomModal>
+
         </>
     )
 }

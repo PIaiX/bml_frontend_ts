@@ -9,6 +9,11 @@ const apiRoutes: ApiRoutesTypes = {
     //banner
     GET_BANNER: 'banner',
 
+    // advertising
+    GET_ADVERTISING: 'ads/portions',
+    SET_ADVERTISING: 'ads',
+    GET_PRICES: 'ads/types',
+
     //feedback
     SEND_FEEDBACK: 'feedback',
 
@@ -36,6 +41,8 @@ const apiRoutes: ApiRoutesTypes = {
     ACTIONS_OFFER: 'offer',
     DELETE_OFFER_IMAGE: 'offer/deleteImage',
     GET_ALL_SUBSECTIONS: 'offer/subsection',
+    GET_PREMIUM_SLOTS:'offer/premium/slots?page=1',
+    SET_PREMIUM_FRANCHISES: 'offer/premium/franchises',
 
     //reports
     GET_USER_REPORT_TYPE: 'report/type/user',
@@ -52,13 +59,18 @@ const apiRoutes: ApiRoutesTypes = {
     GET_CURRENT_FRIENDS: 'user/friend/friends',
     UPDATE_PASSWORD: 'user/updatePassword',
     ACTIONS_USER: 'user',
+    GET_ID_CHAT:'conversation',
 
     //instructions
     GET_PARTNERS: 'partner',
     GET_TUTORIALS: 'uploadTutorial',
+
+    //subscription
+    ACTIONS_SUBSCRIBE: 'subscribe',
+
 }
 
 const BASE_URL: string | undefined = process.env.REACT_APP_BASE_URL
 const BASE_URL_SOCKET: string | undefined = process.env.REACT_APP_BASE_URL_FOR_SOCKET
 
-export {apiRoutes, BASE_URL, BASE_URL_SOCKET}
+export { apiRoutes, BASE_URL, BASE_URL_SOCKET }

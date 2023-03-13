@@ -6,11 +6,12 @@ import {IPagination, IUseStateItems} from '../../types'
 import {IOffersItem, IOffersMeta} from '../../types/offers'
 import {getFavorites} from '../../services/favorites'
 import {IUser} from '../../types/user'
-import {useAppSelector} from '../../hooks/store'
+import {useAppDispatch, useAppSelector} from '../../hooks/store'
 import usePagination from '../../hooks/pagination'
 import Loader from '../../components/utils/Loader'
 import Pagination from '../../components/utils/Pagination'
 import AccountMenu from "./AccountMenu";
+import {setInitialCount} from "../../store/reducers/favoriteCountSlice";
 
 const Favorites: FC = () => {
     const token = localStorage.getItem('token')
@@ -22,6 +23,7 @@ const Favorites: FC = () => {
     const generalLimit = 6
     const [click, setClick] = useState(false)
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const dispatch = useAppDispatch()
 
     const {paginationItems, pageCount, selectedPage, setSelectedPage, handlePageClick}: IPagination<IOffersItem> =
         usePagination(favoriteOffers?.items, generalLimit, favoriteOffers?.meta?.total)
@@ -30,7 +32,10 @@ const Favorites: FC = () => {
         if (user?.id) {
             getFavorites(user?.id, selectedPage + 1, generalLimit)
                 .then((res) => {
-                    res && setFavoriteOffers({isLoaded: true, items: res?.data, meta: res?.meta})
+                    if(res){
+                        dispatch(setInitialCount(res?.data.length))
+                        setFavoriteOffers({isLoaded: true, items: res?.data, meta: res?.meta})
+                    }
                 })
                 .catch((error) => setFavoriteOffers({isLoaded: true, items: null, meta: null}))
         }
@@ -61,7 +66,7 @@ const Favorites: FC = () => {
                 {favoriteOffers?.isLoaded ? (
                     paginationItems?.length > 0 ? (
                         paginationItems?.map((i) => (
-                            <div key={i.id}>
+                            <div key={i.id} style={{position:"relative"}}>
                                 <AdvPreview
                                     id={i.id}
                                     image={i.image}
@@ -73,7 +78,7 @@ const Favorites: FC = () => {
                             </div>
                         ))
                     ) : (
-                        <h6 className="w-100 p-5 text-center">Ничего нет</h6>
+                        <h6 className="w-100 p-5 text-center">В избранных пока ничего нет</h6>
                     )
                 ) : (<div className="p-5 w-100 d-flex justify-content-center">
                         <Loader color="#343434" />

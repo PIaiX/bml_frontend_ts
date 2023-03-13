@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { MdDeleteForever } from 'react-icons/md'
 import { IUser } from '../../types/user'
 import { useAppSelector } from '../../hooks/store'
+import {checkPhotoPath} from "../../helpers/photoLoader";
 
 type Props = {
     userId: number
@@ -24,7 +25,7 @@ const ChatPreview: FC<Props> = (props) => {
     return (
         <div className={`chat-preview ${props?.isViewed ? '' : 'new-message'}`}>
             <Link to={`/account/profile/user/${props.userId}`} className="user">
-                <img src={props.imgURL} alt={props.userName} />
+                <img src={checkPhotoPath(props.imgURL)} alt={props.userName} />
                 <div>{props.userName}</div>
             </Link>
             <div className="info">

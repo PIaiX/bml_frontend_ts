@@ -35,4 +35,5 @@ export type IUser = {
     outgoingStatus: boolean
     incomingStatus: boolean
     isFormCompleted:boolean
+    balance:number
 }

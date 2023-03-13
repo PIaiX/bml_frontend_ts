@@ -1,7 +1,5 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react'
 import AdvPreview from '../components/AdvPreview'
-import {Swiper, SwiperSlide} from 'swiper/react'
-import {Pagination} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import Loader from '../components/utils/Loader'
@@ -12,19 +10,21 @@ import SearchForm from '../components/forms/SearchForm'
 import PartnersSite from '../components/PartnersSite'
 import NewsContainer from '../components/containers/News'
 import BannerContainer from '../components/containers/Banner'
-import BlocksContainer from '../components/containers/Blocks'
 import {getAllAreas, getAllSubsections, getOffers} from '../services/offers'
 import {getCity} from '../services/city'
 import {IOffersAreaItem, IOffersItem, IOffersMeta, IOffersSubSectionsItem, IPayloadsFilter} from '../types/offers'
 import {useAppSelector} from '../hooks/store'
 import {IUser} from '../types/user'
 import {IUseStateItems} from '../types'
+import {getAdvertisings} from "../services/advertising";
+import {Advertisings} from "../types/advertising";
+import {checkPhotoPath} from "../helpers/photoLoader";
 
 const Service: FC = () => {
     const params = useParams()
     const categoryId = params.categoryId ? parseInt(params.categoryId) : 0
     const [orderBy, setOrderBy] = useState<string>('')
-    const limit = 24
+    const limit = 36
     const ref = useRef<HTMLElement>(null)
     const [areas, setAreas] = useState<Array<IOffersAreaItem | undefined>>([])
     const [subSections, setSubSections] = useState<Array<IOffersSubSectionsItem | undefined>>([])
@@ -35,6 +35,7 @@ const Service: FC = () => {
         items: null,
         meta: null,
     })
+    const [advertising, setAdvertising]=useState<Advertisings>()
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const {paginationItems, pageCount, selectedPage, handlePageClick, setSelectedPage} = usePagination(
         offers?.items,
@@ -46,9 +47,8 @@ const Service: FC = () => {
     })
 
     useEffect(() => {
-        if (ref.current !== null) {
+        if (ref.current !== null)
             window.scrollTo(0, ref?.current?.offsetTop - 130)
-        }
     }, [categoryId])
 
     useEffect(() => {
@@ -66,6 +66,10 @@ const Service: FC = () => {
     }, [])
 
     useEffect(() => {
+        getAdvertisings(1).then(res=>{
+            res && setAdvertising(res)
+        })
+
         if (localStorage.getItem('token')) {
             if (user?.id) {
                 getOffers(selectedPage + 1, limit, categoryId, user?.id, filters, false)
@@ -222,13 +226,15 @@ const Service: FC = () => {
                         {offers?.isLoaded ? (
                             offers?.items && offers?.items?.length ? (
                                 paginationItems?.slice(0, 12).map((item: IOffersItem) => (
-                                    <div className="col" key={item.id}>
+                                    <div className="col position-relative" key={item.id}>
                                         <AdvPreview
                                             id={item.id}
                                             image={item.image}
                                             title={item.title}
                                             investments={item.investments}
                                             favorite={item.isFavorite}
+                                            price={categoryId===3?item.price : undefined}
+                                            isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
                                         />
                                     </div>
                                 ))
@@ -240,38 +246,47 @@ const Service: FC = () => {
                                 <Loader color="#343434" />
                             </div>
                         )}
-                        <div className="col-12 w-100">
-                            <Swiper
-                                className="preview-slider"
-                                modules={[Pagination]}
-                                slidesPerView={1}
-                                pagination={{clickable: true}}
-                            >
-                                <SwiperSlide>
-                                    <img src="/images/slider_offers/slide1.jpg" alt="" className="img-fluid" />
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <img src="/images/slider_offers/slide2.jpg" alt="" className="img-fluid" />
-                                </SwiperSlide>
-                            </Swiper>
-                        </div>
+                        {advertising && advertising[0] && advertising[0].image &&
+                            <div className="blockAdvertising">
+                                <img className={"img-advertising"} src={checkPhotoPath(advertising[0].image)} alt="" />
+                            </div>}
                         {offers?.items && offers?.items?.length
-                            ? paginationItems?.slice(12, paginationItems.length).map((item: IOffersItem) => (
-                                  <div className="col" key={item.id}>
+                            ? paginationItems?.slice(12, 24).map((item: IOffersItem) => (
+                                  <div className="col position-relative" key={item.id}>
                                       <AdvPreview
                                           id={item.id}
                                           image={item.image}
                                           title={item.title}
                                           favorite={item.isFavorite}
                                           investments={item.investments}
+                                          price={categoryId===3?item.price : undefined}
+                                          isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
                                       />
                                   </div>
                               ))
                             : null}
+                        {advertising && advertising[1] && advertising[1]?.image &&
+                            <div className={"blockAdvertising"}>
+                                <img className={"img-advertising"} src={checkPhotoPath(advertising[1].image)} alt="" />
+                            </div>}
+                        {offers?.items && offers?.items?.length
+                            ? paginationItems?.slice(24, offers?.items?.length).map((item: IOffersItem) => (
+                                <div className="col position-relative" key={item.id}>
+                                    <AdvPreview
+                                        id={item.id}
+                                        image={item.image}
+                                        title={item.title}
+                                        favorite={item.isFavorite}
+                                        investments={item.investments}
+                                        price={categoryId===3?item.price : undefined}
+                                        isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
+                                    />
+                                </div>
+                            ))
+                            : null}
                     </div>
                 )}
-
-                {offers.isLoaded && (
+                    {offers.isLoaded && (
                     <div className="sort mt-4">
                         <ServicePagination
                             nextLabel="❯"

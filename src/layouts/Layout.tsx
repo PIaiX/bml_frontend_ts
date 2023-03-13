@@ -1,15 +1,16 @@
-import React, {FC, useEffect, useMemo} from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import {Outlet, ScrollRestoration} from 'react-router-dom'
+import {Outlet, ScrollRestoration, useLocation} from 'react-router-dom'
 import Alert from '../components/utils/Alert'
-import {useAppDispatch, useAppSelector} from '../hooks/store'
-import {resetAlert} from '../store/reducers/alertSlice'
+import { useAppDispatch, useAppSelector } from '../hooks/store'
+import { resetAlert } from '../store/reducers/alertSlice'
+import ActionNotification from '../components/utils/ActionNitification'
 
 const Layout: FC = () => {
     const alertState = useAppSelector((state) => state.alert)
     const dispatch = useAppDispatch()
-
+    const {pathname} = useLocation()
     useEffect(() => {
         if (alertState?.isShow) {
             setTimeout(() => {
@@ -17,6 +18,13 @@ const Layout: FC = () => {
             }, 2000)
         }
     }, [alertState?.isShow])
+
+    useEffect(()=>{
+        const timer = setTimeout(() => {
+            window.scrollTo(0,0)
+        }, 500);
+        return () => clearTimeout(timer);
+    },[pathname])
 
     return (
         <div className="root-wrapper">
@@ -26,6 +34,7 @@ const Layout: FC = () => {
                 <Outlet />
             </div>
             <Alert />
+            <ActionNotification delay={5000} />
             <Footer />
         </div>
     )

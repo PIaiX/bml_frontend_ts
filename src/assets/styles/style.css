@@ -61,20 +61,26 @@ header .btn-icon:focus,
 header .btn-icon:active {
     color: rgb(var(--color-2));
 }
-
-header .btn-icon span {
+.notificationAll{
     position: absolute;
-    bottom: 50%;
-    left: 65%;
-    background-color: rgb(var(--color-2));
-    color: #fff;
-    font-size: 12px;
     width: 21px;
     height: 21px;
-    line-height: 22px;
     text-align: center;
     border-radius: 50%;
     transition: var(--transition);
+    background-color: rgb(var(--color-2));
+    color: #fff;
+    font-size: 12px;
+    line-height: 22px;
+
+}
+.notification{
+    bottom: 70%;
+}
+
+header .btn-icon span  {
+    bottom: 50%;
+    left: 65%;
 }
 
 header .btn-icon:hover span,
@@ -486,7 +492,7 @@ block 3
 
 @media (max-width: 1399px) {
     .preview-small > img {
-        height: 165px;
+        height: 205px;
     }
 }
 
@@ -496,7 +502,7 @@ block 3
     }
 
     .preview-small > img {
-        height: 150px;
+        height: 180px;
     }
 
     .preview-slider img {
@@ -510,7 +516,7 @@ block 3
     }
 
     .preview-small > img {
-        height: 145px;
+        height: 175px;
     }
 
     .preview-slider img {
@@ -550,7 +556,7 @@ block 3
 
 @media (max-width: 767px) {
     .preview-small > img {
-        height: 160px;
+        height: 180px;
     }
 
     .preview-slider img {
@@ -564,7 +570,7 @@ block 3
     }
 
     .preview-small > img {
-        height: 30vw;
+        height: 40vw;
     }
 
     .preview-slider img {
@@ -1040,6 +1046,7 @@ section.anchor_block {
     border-radius: 20px;
     width: 100%;
     object-fit: cover;
+    aspect-ratio: 4/3
 }
 
 .blue-box {
@@ -1288,6 +1295,92 @@ personal account
     border-radius: 50%;
 }
 
+.acc-video2 {
+    margin-bottom: 5px;
+    overflow: hidden;
+    max-height:400px;
+}
+
+.acc-video2 video, .acc-video2 iframe {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    background: black;
+}
+@media (min-width: 1399px) {
+    .acc-video2 {
+        min-width:80%;
+        height: 30vw;
+    }
+}
+@media (max-width: 1399px) {
+    .user-photo {
+        height: 240px;
+    }
+    .acc-video2 {
+        min-width:80%;
+        height: 30vw;
+    }
+
+}
+
+@media (max-width: 1199px) {
+    .user-photo {
+        height: 200px;
+    }
+    .acc-video2 {
+        min-width:80%;
+        height: 30vw;
+    }
+
+
+}
+
+@media (max-width: 767px) {
+    .user-photo {
+        height: 450px;
+    }
+    .acc-video2 {
+        max-width:80%;
+        height: 45vw;
+         }
+
+}
+
+@media (max-width: 575px) {
+    .user-photo {
+        height: calc(100vw - 71px);
+    }
+
+    .acc-table {
+        font-size: .75em;
+    }
+
+    .acc-table td {
+        padding: 0.5rem 0rem;
+    }
+
+    .ads {
+        font-size: 10px;
+        padding: 0.5em 0.25em;
+    }
+
+    .ads-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .acc-video2 {
+        max-width:80%;
+        height: 55vw;
+    }
+}
+
+
+
+
+
+
 .acc-video {
     width: 100%;
     height: 200px;
@@ -1301,14 +1394,22 @@ personal account
     object-fit: contain;
     background: black;
 }
+.ads-img {
+    width: 85px;
+    height: 85px;
+    object-fit: cover;
+    border-radius: 50%;
+}
 
+@media (min-width: 1399px) {
+    .acc-video {
+        height: 175px;
+    }
+
+}
 @media (max-width: 1399px) {
     .user-photo {
         height: 240px;
-    }
-
-    .acc-video {
-        height: 175px;
     }
 }
 
@@ -1316,10 +1417,10 @@ personal account
     .user-photo {
         height: 200px;
     }
-
     .acc-video {
         height: 150px;
     }
+
 }
 
 @media (max-width: 767px) {
@@ -1355,6 +1456,26 @@ personal account
         height: 55vw;
     }
 }
+.acc-video-block > a {
+    color: #0c63e4;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* незаполненные блоки */
@@ -1865,7 +1986,6 @@ form.promo {
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: auto;
     grid-gap: 1em;
-    height: fit-content;
 }
 
 .photogallery a {
@@ -2423,9 +2543,9 @@ footer {
 
 @media (max-width: 767px) {
     footer {
-        background-color: #E2E8F4;
+        background-color: #2E5193;
         height: 40px;
-        color: #000;
+        color: white;
         position: sticky;
         bottom: 0px;
         left: 0px;
@@ -2838,3 +2958,44 @@ footer {
 .privacy .paragraph a{
     color:deepskyblue;
 }
+.img-advertising{
+    object-fit: cover;
+    width:100%;
+    height:100%
+}
+
+.blockAdvertising{
+    width:100%
+}
+
+@media (min-width: 1200px) {
+    .blockAdvertising{
+        height:353px;
+    }
+}
+@media (max-width: 1199px) {
+    .blockAdvertising{
+        height:323px;
+    }
+
+}
+
+@media (max-width: 991px) {
+    .blockAdvertising{
+        height:270px;
+    }
+
+}
+
+@media (max-width: 767px) {
+    .blockAdvertising{
+        height:221px;
+    }
+}
+
+@media (max-width: 575px) {
+    .blockAdvertising{
+        height:202px;
+    }
+}
+

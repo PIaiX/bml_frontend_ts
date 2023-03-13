@@ -16,7 +16,9 @@ const CitiesForm: FC<Props> = ({setVal, val = ''}) => {
             setVal(e.target.textContent)
         }
     }
-    useEffect(()=>setValue(val),[val])
+    useEffect(()=>{
+        setValue(val?val:'')
+    },[val])
     return (
         <div style={{position: 'relative'}} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}>
             <input
@@ -28,11 +30,11 @@ const CitiesForm: FC<Props> = ({setVal, val = ''}) => {
                 placeholder={'Введите город'}
             />
             {focus && (
-                <div className={'citiesSearch'} style={{backgroundColor: 'white', marginTop: '2px', zIndex: '99'}}>
+                <div className={'citiesSearch'} style={{backgroundColor: 'white', marginTop: '2px', zIndex: '11'}}>
                     {cities
                         .slice()
                         .sort()
-                        .filter((val) => val.toLowerCase().indexOf(value.toLowerCase()) !== -1)
+                        .filter((val) => val?.toLowerCase().indexOf(value?.toLowerCase()) !== -1)
                         .map((value, index) => (
                             <div
                                 key={index}

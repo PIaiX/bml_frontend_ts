@@ -2,18 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '../hooks/store'
 import { IUser } from '../types/user'
-import { socketInstance } from '../services/sockets/socketInstance'
 import useSocketConnect from '../hooks/socketConnect'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { showAlert } from '../store/reducers/alertSlice'
+import { subscribe } from '../services/subscription'
 
 export default function Footer() {
     const count = useAppSelector((state) => state?.favoritesCount?.count)
-    const {user}:{user: IUser | null} = useAppSelector((state) => state?.user)
-    const [countNewMessage, setCountNewMessage] = useState<null | number | undefined>(null)
-    const { isConnected } = useSocketConnect()
+    const { user }: { user: IUser | null } = useAppSelector((state) => state?.user)
     const dispatch = useDispatch()
+    const notification = useAppSelector((state) => state?.notification)
 
     const {
         register,
@@ -30,27 +29,20 @@ export default function Footer() {
     })
 
     useEffect(() => {
-        setTimeout(() => {
-            socketInstance?.on('conversation:countNewMessages', (count) => {
-                setCountNewMessage(count)
-            })
-        }, 100)
-    }, [isConnected])
-
-    useEffect(() => {
         if (user)
             setValue('email', user.email)
     }, [user])
 
     const submitSubscrition = (data: { email: string }) => {
         console.log(data)
-        // .then(() => {
-        dispatch(showAlert({ message: 'Вы успешно подписались', typeAlert: 'good' }))
-        reset()
-        // })
-        // .catch(() => {
-        //     dispatch(showAlert({message: 'Произошла ошибка, попробуйте позже.', typeAlert: 'bad'}))
-        // })
+        subscribe(data)
+            .then(() => {
+                dispatch(showAlert({ message: 'Вы успешно подписались', typeAlert: 'good' }))
+                reset()
+            })
+            .catch(() => {
+                dispatch(showAlert({ message: 'Произошла ошибка, попробуйте позже.', typeAlert: 'bad' }))
+            })
     }
 
     return (
@@ -97,7 +89,7 @@ export default function Footer() {
                                         <Link to="/news">Новости</Link>
                                     </li>
                                     <li>
-                                        <Link to="/privacy">Политика конфиденциальности</Link>
+                                        <Link to="/information">Информацию по сайту</Link>
                                     </li>
                                 </ul>
                             </nav>
@@ -129,7 +121,7 @@ export default function Footer() {
                                                 <Link to="/news">Новости</Link>
                                             </li>
                                             <li>
-                                                <Link to="/privacy">Политика конфиденциальности</Link>
+                                                <Link to="information">Информацию по сайту</Link>
                                             </li>
                                         </ul>
                                     </nav>
@@ -194,7 +186,7 @@ export default function Footer() {
                                     <div className="position-relative">
                                         <img src="/images/icons/messages.png" alt="Сообщения" />
                                         <div>Сообщения</div>
-                                        {countNewMessage && user && <div className="count">{countNewMessage}</div>}
+                                        {notification.unreadCount && user && <div className="count">{notification.unreadCount}</div>}
                                     </div>
                                 </Link>
                             </li>

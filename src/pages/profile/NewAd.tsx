@@ -11,7 +11,7 @@ import {
     deleteImageOffer,
     getAllAreas,
     getAllSubsections,
-    getOneOffer,
+    getOneOffer, setPremiumSlot,
     updateOffer,
 } from '../../services/offers'
 import { IOfferForm, IOfferItem, IOffersAreaItem, IOffersSubSectionsItem } from '../../types/offers'
@@ -26,6 +26,8 @@ import { checkPhotoPath } from '../../helpers/photoLoader'
 import { FromStringToNumber } from '../../helpers/FromStringToNumber'
 import FunctionForPrice from '../../helpers/FunctionForPrice'
 import CitiesForm from '../../components/forms/CitiesForm'
+import Premium from "./Premium";
+import {setBalance} from "../../store/reducers/userSlice";
 
 const NewAd = () => {
     const [category, setCategory] = useState<number | undefined>(0)
@@ -59,6 +61,10 @@ const NewAd = () => {
         item: null,
     })
     const [imagesFromServer, setImagesFromServer] = useState<any>(null)
+    const [isPricePerMonthAbsolute, setRoaloty]=useState<boolean>(false)
+    const [placedForMonths, setPlacedForMonths]=useState(3)
+    const [premiumInf, setPremiumInf]=useState<any>(null)
+    const [paymentType, setPaymentType] = useState('INTERNAL');
 
     const {
         register,
@@ -138,6 +144,7 @@ const NewAd = () => {
                         setValue('profit', FunctionForPrice(res?.profit) || '')
                         setValue('city', res?.city || '')
                         setCurrentArea(res?.subsection?.area?.id)
+                        setRoaloty(res?.isPricePerMonthAbsolute)
                     }
                 })
                 .catch()
@@ -201,6 +208,7 @@ const NewAd = () => {
 
     useEffect(() => { }, [textPhoto?.isInValidSize, textPhoto?.isInValidSizeMB])
 
+
     const createNewOffer = (data: IOfferForm) => {
         const formData = new FormData()
         let dateNew
@@ -213,24 +221,48 @@ const NewAd = () => {
             userId: user?.id,
             image: formInfo?.image || '',
             category: formInfo?.category,
-        }
+            isPricePerMonthAbsolute,
+            placedForMonths,
+            paymentType
+    }
         for (const key in req) {
             formData.append(key, req[key])
         }
         imageViewer.forEach((image: any) => {
             formData.append('images[]', image?.initialFile)
         })
+
         createOffer(formData)
-            .then(() => {
-                dispatch(
-                    showAlert({
-                        message: 'Объявление успешно создано! Ждите одобрения модерации...',
-                        typeAlert: 'good',
+            .then((res) => {
+                if(premium) setPremiumSlot({paymentMethod:paymentType, offerId:res.id, slot:premiumInf?.slot, placedForMonths:premiumInf?.placedForMonths*3})
+                    .then(res=>{
+                        if(res){
+                            alert(premiumInf?.sum)
+                            alert((placedForMonths===3?6000:11000)+premiumInf.sum)
+                            dispatch(setBalance((placedForMonths===3?6000:11000)+premiumInf.sum))
+                            dispatch(showAlert({
+                                message: 'Объявление успешно создано! Ждите одобрения модерации...',
+                                typeAlert: 'good'}))
+                            setTimeout(() => {
+                                navigate(-1)
+                            }, 1000)
+                        }
+                    }).catch(()=>{
+                        dispatch(setBalance(placedForMonths===3?6000:11000))
+                        dispatch(showAlert({ message: 'Ошибка с премиум размещением!', typeAlert: 'bad' }))
+                        setTimeout(() => {
+                            navigate(-1)
+                        }, 1000)
                     })
-                )
-                setTimeout(() => {
-                    navigate(-1)
-                }, 1000)
+                else{
+                    dispatch(setBalance(placedForMonths===3?6000:11000))
+                    dispatch(showAlert({
+                        message: 'Объявление успешно создано! Ждите одобрения модерации...',
+                        typeAlert: 'good'}))
+                    setTimeout(() => {
+                        navigate(-1)
+                    }, 1000)
+                }
             })
             .catch((error) => {
                 dispatch(showAlert({ message: 'Произошла ошибка!', typeAlert: 'bad' }))
@@ -248,6 +280,7 @@ const NewAd = () => {
             dateOfCreation: dateNew ? dateNew : '',
             userId: user?.id,
             image: formInfo?.image || '',
+            isPricePerMonthAbsolute
         }
         for (const key in req) {
             formData.append(key, req[key])
@@ -307,14 +340,15 @@ const NewAd = () => {
             [ValuesFroPrice[6][0]]: ValuesFroPrice[6][1],
             city: city,
         }
-        console.log(data);
         if (id) {
             saveChanges(data)
         } else {
-            createNewOffer(data)
+            if(!premium || user?.balance && user?.balance>=((placedForMonths===3?6000:11000)+premiumInf.sum))
+                createNewOffer(data)
+            else
+                dispatch(showAlert({message: 'Оплата не прошла', typeAlert: 'bad'}))
         }
     }
-
     const returnText = () => {
         if (id) {
             return 'Сохранить изменения'
@@ -345,6 +379,7 @@ const NewAd = () => {
         formInfo.image && setAdCover([formInfo.image])
     }, [formInfo])
 
+    const [premium, setPremium]=useState(false)
 
     return (
         <>
@@ -372,7 +407,7 @@ const NewAd = () => {
                             <option value={1}>Предложения инвесторов</option>
                             <option value={2}>Поиск бизнес партнёров</option>
                             <option value={3}>Продажа готового бизнеса</option>
-                            {user?.typeForUser !== 'Физ лицо' && <option value={4}>Франшизы</option>}
+                            {user?.type !== 0 && <option value={4}>Франшизы</option>}
                         </select>
                     </div>
                 </fieldset>
@@ -472,17 +507,13 @@ const NewAd = () => {
                     <div className="row mb-3 mb-sm-4">
                         <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0 pt-sm-2">
                             <div>
-                                {category === 0 || category === 2 || category === 4 ? (
-                                    <>
-                                        Условия сотрудничества<span className="red">*</span>
-                                    </>
-                                ) : category === 1 ? (
-                                    'Предполагаемые условия сотрудничества'
-                                ) : (
-                                    <>
-                                        Условия продажи<span className="red">*</span>
-                                    </>
-                                )}
+                                {category === 0 || category === 2 || category === 4 ?
+                                    'Условия сотрудничества'
+                                    : category === 1 ?
+                                        'Предполагаемые условия сотрудничества'
+                                        : 'Условия продажи'
+                                }
+                                <span className="red">*</span>
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-8">
@@ -507,7 +538,7 @@ const NewAd = () => {
                     {(category === 0 || category === 2 || category === 3 || category === 4) && (
                         <div className="row mb-3 mb-sm-4">
                             <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0 pt-sm-2">
-                                <div>Бизнес-план{category === 4 && <span className="red">*</span>}</div>
+                                <div>Бизнес-план<span className="red">*</span></div>
                             </div>
                             <div className="col-sm-6 col-lg-8">
                                 <ValidateWrapper error={errors?.businessPlan}>
@@ -741,7 +772,7 @@ const NewAd = () => {
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-8">
-                            <ValidateWrapper error={{ message: cityEr }}>
+                            <ValidateWrapper forCity={true} error={{ message: cityEr }}>
                                 <CitiesForm val={city} setVal={funcForCityEr} />
                             </ValidateWrapper>
                         </div>
@@ -889,7 +920,7 @@ const NewAd = () => {
                                         <input
                                             type="text"
                                             placeholder="0"
-                                            className="f_09"
+                                            className="f_09 input-price"
                                             {...register('price', {
                                                 required: 'Обязательное поле',
                                                 min: { value: 0, message: 'Минимум 0' },
@@ -902,7 +933,8 @@ const NewAd = () => {
                             <div className="row align-items-center mb-4">
                                 <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0">
                                     <div>
-                                        Роялти<span className="red">*</span>
+                                        Роялти
+                                        <span className="red">*</span>
                                     </div>
                                 </div>
                                 <div className="col-sm-6 col-lg-4">
@@ -910,7 +942,7 @@ const NewAd = () => {
                                         <input
                                             type="text"
                                             placeholder="0"
-                                            className="f_09"
+                                            className={`f_09 ${isPricePerMonthAbsolute?'input-procent':'input-price'}`}
                                             {...register('pricePerMonth', {
                                                 required: 'Обязательное поле',
                                                 min: { value: 0, message: 'Минимум 0' },
@@ -918,6 +950,32 @@ const NewAd = () => {
                                             })}
                                         />
                                     </ValidateWrapper>
+
+                                </div>
+                            </div>
+                            <div className="row align-items-center mb-4">
+                                <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0 pb-1">
+                                    <div>
+                                        Единица измерения<span className="red">*</span>
+                                    </div>
+                                </div>
+                                <div className="col-sm-2 col-lg-1 col-2">
+                                    <div className={"d-inline-block"}><input
+                                        name="roal-type"
+                                        checked={!isPricePerMonthAbsolute}
+                                        onChange={()=>setRoaloty(!isPricePerMonthAbsolute)}
+                                        type="radio"
+                                    /></div>
+                                    <div className={"d-inline-block"}>&nbsp;₽</div>
+                                </div>
+                                <div className="col-sm-2 col-lg-1 col-2">
+                                    <div className={"d-inline-block"}><input
+                                        name="raol-type"
+                                        checked={isPricePerMonthAbsolute}
+                                        onChange={()=>setRoaloty(!isPricePerMonthAbsolute)}
+                                        type="radio"
+                                    /></div>
+                                    <div className={"d-inline-block"}>&nbsp;%</div>
                                 </div>
                             </div>
                         </>
@@ -1084,25 +1142,20 @@ const NewAd = () => {
                     )}
                 </fieldset>
 
-                {category === 4 && (
+                {!id && category === 4 && (
                     <fieldset className="mt-3 mt-sm-4 mt-md-5">
                         <legend className="fw_7 f_10 text-uppercase mb-2 mb-sm-4">
                             Размещение объявления на 30 дней
                         </legend>
-                        <div className="f_xs_08 row gx-2 gx-sm-3 gx-xl-4">
+                        <div className="f_xs_08 row gx-2 gx-sm-3 gx-xl-4 mb-3 mb-sm-4">
                             <div className="col-5 col-md-4">
                                 <div className="acc-box w-100 h-100">
                                     <label className="mb-2 mb-xl-3">
                                         <input
                                             name="ad-type"
                                             type="radio"
-                                            value="6000"
-                                            onChange={(e) =>
-                                                setFormInfo((prevState: any) => ({
-                                                    ...prevState,
-                                                    [e.target.name]: e.target.value,
-                                                }))
-                                            }
+                                            checked={placedForMonths===3}
+                                            onChange={() => setPlacedForMonths(3)}
                                         />
                                         <span className="ms-1 ms-sm-2 ms-xl-3">Разместить</span>
                                     </label>
@@ -1115,35 +1168,59 @@ const NewAd = () => {
                                         <input
                                             name="ad-type"
                                             type="radio"
-                                            value="11 000"
-                                            onChange={(e) =>
-                                                setFormInfo((prevState: any) => ({
-                                                    ...prevState,
-                                                    [e.target.name]: e.target.value,
-                                                }))
-                                            }
+                                            checked={placedForMonths===6}
+                                            onChange={() => setPlacedForMonths(6)}
                                         />
                                         <span className="ms-1 ms-sm-2 ms-xl-3">Разместить</span>
                                     </label>
                                     <div className="fw_6 sky">6 мес. — 11 000 рублей</div>
                                 </div>
                             </div>
-                            <div className="col-12 col-md-4 mt-2 mt-sm-3 mt-md-0">
-                                <NavLink
-                                    to="/account/my-ads/premium"
-                                    state={{ data: formInfo }}
-                                    className="btn_main btn_5 f_13 w-100 h-100"
-                                >
+                            <div className="col-12 col-md-4 mt-2 mt-sm-3 mt-md-0" style={{cursor:"pointer"}} onClick={()=>{setPremium(!premium)}}>
+                                <div className="btn_main btn_5 f_13 w-100 h-100">
                                     Premium-размещение
-                                </NavLink>
+                                </div>
                             </div>
                         </div>
                     </fieldset>
                 )}
+                {!id && premium && <div className={"pt-4"}>
+                    <Premium setPayment={setPaymentType} setChange={setPremiumInf} priceWithoutPremium={placedForMonths===3?6000:11000} />
+                </div>}
+
+
+                {!id && !premium && category === 4 && <div className="row align-items-center mb-3 mb-sm-4">
+                    <div className="col-sm-6 col-lg-4">
+                        <div>Способ оплаты: </div>
+                    </div>
+                    <div className="col-sm-6 col-lg-4">
+                        <div>
+                            <div className={"d-inline-block"}><input
+                                name="payment-type"
+                                defaultChecked={true}
+                                onClick={()=>setPaymentType('INTERNAL')}
+                                type="radio"
+                            /></div>
+                            <div className={"d-inline-block px-2 mb-2"}>Кошелёк сайта</div>
+                        </div>
+                        <div>
+                            <div className={"d-inline-block"}><input
+                                name="payment-type"
+                                defaultChecked={false}
+                                onClick={()=>setPaymentType('card')}
+                                type="radio"
+                            /></div>
+                            <div className={"d-inline-block px-2"}>Банковской картой</div>
+                        </div>
+                    </div>
+                </div>}
+
+
                 <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={() => funcForCityEr(city)}>
                     {returnText()}
                 </button>
             </form>
+
         </>
     )
 }

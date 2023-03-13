@@ -20,7 +20,7 @@ const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, 
                         <div>
                             <div className="fw_5 mb-4">Поиск инвесторов</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">{investors?.total || 0}</span> зарегистрированных
+                                <span className="color-2 fw_7">{(investors && investors?.total>99)? investors?.total : 100}</span> зарегистрированных
                                 инвесторов
                             </div>
                         </div>
@@ -37,7 +37,7 @@ const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, 
                         <div>
                             <div className="fw_5 mb-4">Поиск бизнес парнёров</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">{businessPartners?.total || 0}</span> будущих
+                                <span className="color-2 fw_7">{(businessPartners && businessPartners?.total>99)? businessPartners?.total : 100}</span> зарегистрированных
                                 <br />
                                 партнёров по бизнесу
                             </div>
@@ -55,7 +55,7 @@ const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, 
                         <div>
                             <div className="fw_5 mb-4">Поиск бизнес проектов</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">{saleBusiness?.total || 0}</span> готовых бизнес проектов
+                                <span className="color-2 fw_7">{(saleBusiness && saleBusiness?.total>99)? saleBusiness?.total : 100}</span> зарегистрированных
                             </div>
                         </div>
                         <div>
@@ -70,7 +70,7 @@ const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, 
                         <div>
                             <div className="fw_5 mb-4">Поиск франшиз</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">{franchise?.total || 0}</span> размещенных франшиз
+                                <span className="color-2 fw_7">{(franchise && franchise?.total>99)? franchise?.total : 100}</span> зарегистрированных
                             </div>
                         </div>
                         <div>

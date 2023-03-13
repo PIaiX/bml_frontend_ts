@@ -8,6 +8,7 @@ import {convertLocaleDate} from '../../helpers/convertLocaleDate'
 import {showAlert} from '../../store/reducers/alertSlice'
 import {setUser} from '../../store/reducers/userSlice'
 import CitiesForm from './CitiesForm'
+import {selectToEnd} from "../../helpers/selectToEndForPhoneInput";
 
 type Props = {
     avatar: File
@@ -56,7 +57,7 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
         if (user) {
             setValue('firstName', user?.firstName)
             setValue('lastName', user?.lastName)
-            setValue('phone', user?.phone)
+            setValue('phone', user?.phone?user.phone:'')
             setValue('email', user?.email)
             setValue('birthday', user?.birthday)
         }
@@ -198,6 +199,11 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                     <ValidateWrapper error={errors?.phone}>
                         <input
                             type="tel"
+                            onClick={(e)=>{
+                                if(!getValues('phone') || getValues('phone').length===0)
+                                    setValue('phone', '+7')
+                                selectToEnd(e)
+                            }}
                             placeholder="+79000000000"
                             {...register('phone', {
                                 required: 'поле обязательно к заполнению',
@@ -205,6 +211,7 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                                     value: 12,
                                     message: 'Минимальная длина 12 символов',
                                 },
+                                onChange:(e)=>e.target.value.length<3 && setValue('phone', '+7'),
                                 maxLength: {
                                     value: 12,
                                     message: 'Максимальная длина 12 символов',
@@ -223,7 +230,7 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                     </h6>
                 </div>
                 <div className="col-sm-8">
-                    <ValidateWrapper error={{message: cityError}}>
+                    <ValidateWrapper  forCity={true} error={{message: cityError}}>
                         <CitiesForm val={city} setVal={setCity} />
                     </ValidateWrapper>
                 </div>

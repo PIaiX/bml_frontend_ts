@@ -1,7 +1,7 @@
 import React, {BaseSyntheticEvent, FC, useEffect, useState,} from 'react'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import AdvPreview from '../components/AdvPreview'
-import {NavLink, useParams} from 'react-router-dom'
+import {Link, NavLink, useNavigate, useParams} from 'react-router-dom'
 import {MdDateRange, MdInfoOutline, MdOutlinePlace, MdOutlineVisibility} from 'react-icons/md'
 import BtnFav from '../components/utils/BtnFav'
 import {PhotoProvider, PhotoView} from 'react-photo-view'
@@ -29,10 +29,15 @@ import {showAlert} from '../store/reducers/alertSlice'
 import {emitCreateWithOfferTopicMessage} from '../services/sockets/messages'
 import FunctionForPrice from '../helpers/FunctionForPrice'
 import {convertLocaleDate} from "../helpers/convertLocaleDate";
-import functionForPrice from "../helpers/FunctionForPrice";
+import {getIdChat} from "../services/users";
+import {getAdvertisings} from "../services/advertising";
+import {Advertisings} from "../types/advertising";
+
 
 const AdvPage: FC = () => {
+    const navigate = useNavigate()
     const {id} = useParams()
+    const [idChat, setIdChat] = useState();
     const [offer, setOffer] = useState<IUseStateItem<IOfferItem>>({
         isLoaded: false,
         item: null,
@@ -44,6 +49,7 @@ const AdvPage: FC = () => {
         items: null,
         meta: null,
     })
+    const [advertising, setAdvertising]=useState<Advertisings>()
     const [reportTypes, setReportTypes] = useState<IUseStateReportType>({
         isLoaded: true,
         error: null,
@@ -51,7 +57,6 @@ const AdvPage: FC = () => {
     })
     const {
         register,
-        getValues,
         formState: {errors},
         handleSubmit,
         setValue,
@@ -62,8 +67,20 @@ const AdvPage: FC = () => {
     const [messagePayload, setMessagePayload] = useState({
         text: '',
         offerId: id,
-        conversationId: 0,
+        conversationId: 0
     })
+
+    useEffect(()=>{
+        getAdvertisings(2).then(res=>{
+            setAdvertising(res)
+        })
+    }, [offer?.item?.id])
+
+    useEffect(() => {
+        if (user && offer?.item?.user?.id) {
+            getIdChat(offer?.item?.user?.id).then(res => res && setIdChat(res.id))
+        }
+    }, [offer])
 
     useEffect(() => {
         if (user && messagePayload.text === user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"')
@@ -71,6 +88,7 @@ const AdvPage: FC = () => {
     }, [messagePayload])
 
     useEffect(() => {
+
         if (id) {
             getOneOffer(id, user?.id)
                 .then((res) => {
@@ -91,13 +109,11 @@ const AdvPage: FC = () => {
     useEffect(() => {
         if (offer?.item) {
             const payloads = {}
-            if (user) {
-                getOffers(1, 10, offer?.item?.category, user?.id, payloads, true)
-                    .then((res) => setSimilarOffers({isLoaded: true, items: res?.data, meta: res?.meta}))
-                    .catch(() => setSimilarOffers({isLoaded: true, items: null, meta: null}))
-            }
+            getOffers(1, 10, offer?.item?.category, user ? user.id : null, payloads, true)
+                .then((res) => setSimilarOffers({isLoaded: true, items: res?.data, meta: res?.meta}))
+                .catch(() => setSimilarOffers({isLoaded: true, items: null, meta: null}))
         }
-    }, [offer?.item, user?.id])
+    }, [offer?.item])
 
     const returnDescriptionName = () => {
         const category = offer?.item?.category
@@ -111,7 +127,6 @@ const AdvPage: FC = () => {
             return 'Описание чего-то'
         }
     }
-
     const aboutMeBlock = () => {
         if (offer?.item?.category || offer?.item?.category === 0) {
             if (3 > offer?.item?.category) {
@@ -135,30 +150,41 @@ const AdvPage: FC = () => {
             .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
     }
     const [messageType, setMessageType] = useState<string>('0')
-
+    let swiperPB=250;
+    if(window. innerWidth>1400)swiperPB=350
     const createWithOfferTopicMessage = (e: BaseSyntheticEvent | null) => {
         e && e.preventDefault()
         if (offer.item) {
             emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
                 res?.status === 200 && dispatch(showAlert({message: messageType, typeAlert: 'good'}))
                 setIsShowMessageModal(false)
+                if (offer?.item?.user?.id) {
+                    getIdChat(offer?.item?.user?.id).then(res => setIdChat(res.id))
+                }
             })
         }
     }
-    console.log(offer?.item)
+    let srcToChat='/enter'
+    if(user)
+        srcToChat=`/account/chat/window/${idChat ? idChat : 'new'}`
+
+
+    const clickMessage = ()=>{
+        if(user)
+            navigate(srcToChat, {state:{ userName: offer?.item?.user.fullName, userId: offer?.item?.user.id, avatar: offer?.item?.user.avatar }})
+        else
+            dispatch(showAlert({message: 'Пожалуйста, зарегистрируйтесь или войдите в аккаунт для отправки сообщения. ', typeAlert: 'bad', withLink:true}))
+
+    }
+
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
                 <Breadcrumbs/>
             </div>
-
             <section id="offer-page" className="container">
                 <h1>{offer?.item?.title}</h1>
                 <div className="d-lg-flex justify-content-between align-items-center mb-2 mb-sm-4">
-                    <h2 className="mb-0">
-                        {offer?.item?.description.slice(0, 50)}
-                        {offer?.item?.description && offer?.item?.description.length > 50 && "..."}
-                    </h2>
                     <div className="short-info ms-auto mt-3 mt-sm-4 mt-lg-0">
                         <span>ID: {offer?.item?.id}</span>
                         <time className="d-flex align-items-center ms-3 ms-sm-4">
@@ -207,157 +233,228 @@ const AdvPage: FC = () => {
                                     </div>
                                 </div>
 
-                                {offer?.item?.category !== 4 &&
+                                {/* Blue Box ------------------------------------------------------------------- */}
+                                {offer?.item?.category === 0 && (
                                     <>
-                                        <div className="d-flex align-items-center mb-3">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">
-                                                {offer?.item?.category !== 3 ? 'Инвестиции' : 'Стоимость'}:
-                                            </span>
-                                            <span className="f_15 fw_5">
-                                                {offer?.item?.category !== 3
-                                                    ? FunctionForPrice(offer?.item?.investments) + ' '
-                                                    : FunctionForPrice(offer?.item?.price) + ' '}
-                                                ₽
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                        </div>
+
+                                        {offer?.item?.profitPerMonth &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span
+                                                    className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
+                                            </div>
+                                        }
+
+                                        {offer?.item?.paybackTimeForUser != '' &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                            </div>}
+
+                                        {offer?.item?.projectStage != 0 &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
+                                            </div>
+                                        }
+
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Сфера:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{offer?.item?.subsection?.area?.name}</span>
+                                        </div>
+                                    </>
+                                )}
+
+                                {offer?.item?.category === 1 && (
+                                    <>
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                        </div>
+
+                                        {offer?.item?.paybackTimeForUser != '' &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                            </div>
+                                        }
+
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Сфера:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{offer?.item?.subsection?.area?.name}</span>
+                                        </div>
+                                    </>
+                                )}
+
+
+                                {offer?.item?.category === 2 && (
+                                    <>
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                        </div>
+
+                                        {offer?.item?.profit &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span
+                                                    className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profit)} ₽</span>
+                                            </div>
+                                        }
+
+
+                                        {offer?.item?.paybackTimeForUser != '' &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                            </div>
+                                        }
+
+                                        {offer?.item?.projectStage != 0 &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
+                                            </div>
+                                        }
+
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Город:</span>
+                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.city}</span>
+                                        </div>
+                                    </>
+                                )}
+
+
+                                {offer?.item?.category === 3 && (
+                                    <>
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стоимость бизнеса:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
+                                        </div>
+                                        {offer?.item?.paybackTimeForUser &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                            </div>
+                                        }
+
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Оборот в месяц:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Чистая прибыль:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profit)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество точек:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Город:</span>
+                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.city}</span>
+                                        </div>
+                                    </>
+                                )}
+
+
+                                {offer?.item?.category === 4 && (
+                                    <>
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span
+                                                className="pt fw_7 gray f_11 me-2 me-sm-4">Стартовые инвестиции от:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Паушальный взнос:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
+                                        </div>
+
+                                        <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Роялти:</span>
+                                            <span
+                                                className="f_15 fw_5 text-nowrap">
+                                                {FunctionForPrice(offer?.item?.pricePerMonth)}
+                                                {offer?.item?.isPricePerMonthAbsolute && offer?.item?.category===4?' %':' ₽'}
                                             </span>
                                         </div>
-                                        {offer?.item?.category !== 1 && (
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Прибыль в месяц:</span>
-                                                <span className="f_15 fw_5">
-                                            {FunctionForPrice(offer?.item?.profitPerMonth)} ₽
-                                        </span>
-                                            </div>
-                                        )}
-                                    </>
-                                }
-                                {
-                                    offer?.item?.category === 0 && (
-                                        <>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
-                                                <span
-                                                    className="f_15 fw_5">{offer?.item?.paybackTimeForUser || 'Не указано'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
-                                                <span className="f_15 fw_5">{offer?.item?.projectStageForUser}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Сфера :</span>
-                                                <span className="f_15 fw_5">{offer?.item?.subsection.area.name}</span>
-                                            </div>
-                                        </>
-                                    )
-                                }
-                                {
-                                    offer?.item?.category === 1 && (
-                                        <>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
-                                                <span
-                                                    className="f_15 fw_5">{offer?.item?.paybackTimeForUser || 'Не указано'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Сфера :</span>
-                                                <span className="f_15 fw_5">{offer?.item?.subsection.area.name}</span>
-                                            </div>
-                                        </>
-                                    )
-                                }
-                                {
-                                    offer?.item?.category === 2 && (
-                                        <>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Сфера :</span>
-                                                <span className="f_15 fw_5">{offer?.item?.subsection.area.name}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
-                                                <span className="f_15 fw_5">{offer?.item?.projectStageForUser}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Город:</span>
-                                                <span className="f_15 fw_5">{offer?.item?.city}</span>
-                                            </div>
-                                        </>
-                                    )
-                                }
-                                {
-                                    offer?.item?.category === 3 && (
-                                        <>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
-                                                <span
-                                                    className="f_15 fw_5">{offer?.item?.paybackTimeForUser || 'Не указано'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Оборот в месяц:</span>
-                                                <span
-                                                    className="f_15 fw_5">{FunctionForPrice(offer?.item?.profitPerMonth) + ' ₽'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Чистая прибыль:</span>
-                                                <span
-                                                    className="f_15 fw_5">{FunctionForPrice(offer?.item?.profit) + ' ₽'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество точек:</span>
-                                                <span
-                                                    className="f_15 fw_5">{FunctionForPrice(offer?.item?.branchCount) + ' шт.'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Город:</span>
-                                                <span className="f_15 fw_5">{offer?.item?.city}</span>
-                                            </div>
-                                        </>
-                                    )
-                                }
-                                {
-                                    offer?.item?.category === 4 && (
-                                        <>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стартовые инвестиции от:</span>
-                                                <span className="f_15 fw_5">{functionForPrice(offer?.item?.investments)+ ' ₽'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Паушальный взнос:</span>
-                                                <span className="f_15 fw_5">{functionForPrice(offer?.item?.price)+ ' ₽'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Роялти:</span>
-                                                <span className="f_15 fw_5">{functionForPrice(offer?.item?.pricePerMonth)+ ' ₽'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Срок окупаемости:</span>
-                                                <span className="f_15 fw_5">{offer?.item?.paybackTimeForUser || 'Не указано'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
-                                                <span className="f_15 fw_5">{functionForPrice(offer?.item?.profitPerMonth)+ ' ₽'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Год основания компании:</span>
-                                                <span className="f_15 fw_5">{convertLocaleDate(offer?.item?.dateOfCreation)?.slice(-4)}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество собственных точек:</span>
-                                                <span className="f_15 fw_5">{functionForPrice(offer?.item?.branchCount)+ ' шт.'}</span>
-                                            </div>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество проданных франшиз:</span>
-                                                <span className="f_15 fw_5">{functionForPrice(offer?.item?.soldBranchCount)+ ' шт.'}</span>
-                                            </div>
 
-                                        </>
-                                    )
-                                }
+                                        {offer?.item?.paybackTimeForUser != '' &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span
+                                                    className="pt fw_7 gray f_11 me-2 me-sm-4">Срок окупаемости:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                            </div>}
+
+                                        {offer?.item?.profitPerMonth &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span
+                                                    className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
+                                            </div>
+                                        }
+
+                                        {offer?.item?.dateOfCreation &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                            <span
+                                                className="pt fw_7 gray f_11 me-2 me-sm-4">Год основания компании:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{convertLocaleDate(offer?.item?.dateOfCreation)?.slice(-4)}</span>
+                                            </div>
+                                        }
+                                        {offer?.item?.branchCount &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество собственных точек:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
+                                            </div>
+                                        }
+                                        {offer?.item?.soldBranchCount &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество проданных франшиз:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.soldBranchCount)} шт.</span>
+                                            </div>
+                                        }
+                                    </>
+                                )}
+
                             </div>
-                            {(user
-                                && <div>
-                                    <button
-                                        type="button"
-                                        className="btn_main btn-5 f_11 w-100"
-                                        onClick={(event) => {
+                            <div>
+                                <button
+                                    type="button"
+                                    className="btn_main btn-5 f_11 w-100"
+                                    onClick={(event) => {
+                                        if (user) {
                                             setMessageType(
                                                 'Запрос на бизнес план отправлен'
                                             )
@@ -366,23 +463,21 @@ const AdvPage: FC = () => {
                                                 text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"'
                                             }))
                                             createWithOfferTopicMessage(event)
-                                        }}
-
-                                    >
-                                        ПОЛУЧИТЬ БИЗНЕС-ПЛАН
-                                    </button>
+                                        } else{
+                                            dispatch(showAlert({message: 'Пожалуйста, зарегистрируйтесь или войдите в аккаунт для запроса бизнес плана. ', typeAlert: 'bad', withLink:true}))
+                                        }
+                                    }}
+                                >
+                                    ПОЛУЧИТЬ БИЗНЕС-ПЛАН
+                                </button>
+                                <div onClick={()=>clickMessage()}>
                                     <button
-                                        type="button"
-                                        className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3"
-                                        onClick={() => {
-                                            setMessageType('Сообщение успешно отправлено в онлайн чат.')
-                                            setIsShowMessageModal(true)
-                                            setMessagePayload((prevState) => ({...prevState, text: ''}))
-                                        }}
-                                    >
+                                    type="button"
+                                    className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3">
                                         НАПИСАТЬ СООБЩЕНИЕ
                                     </button>
-                                </div>)}
+                                </div>
+                            </div>
 
                             {(user
                                 && <button
@@ -403,22 +498,14 @@ const AdvPage: FC = () => {
                             <LeftMenuInOfferContainer category={offer?.item?.category} video={offer?.item?.video}/>
 
                             <div className="row justify-content-center g-4">
-                                <div className="col-8 col-sm-6 col-md-12 promo">
-                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2"/>
-                                    <h4 className="fw_7 mb-2">Акции от застройщиков</h4>
-                                    <h5 className="mb-0">
-                                        ТекстТекстТекст ТекстТекстТекст ТекстТекстТекстТекст Текст\Текст
-                                        ТекстТекстТекстТекстТекст
-                                    </h5>
-                                </div>
-                                <div className="col-8 col-sm-6 col-md-12 promo">
-                                    <img src="/images/img-0.jpg" alt="img" className="img-fluid mb-2"/>
-                                    <h4 className="fw_7 mb-2">Акции от застройщиков</h4>
-                                    <h5 className="mb-0">
-                                        ТекстТекстТекст ТекстТекстТекст ТекстТекстТекстТекст Текст\Текст
-                                        ТекстТекстТекстТекстТекст
-                                    </h5>
-                                </div>
+                                {advertising && advertising[0] && <div className="col-8 col-sm-6 col-md-12 promo">
+                                    <img src={checkPhotoPath(advertising[0].image)} alt="img" className="img-fluid mb-2"/>
+                                    <h4 className="fw_7 mb-2">{advertising[0].description}</h4>
+                                </div>}
+                                {advertising && advertising[1] && <div className="col-8 col-sm-6 col-md-12 promo">
+                                    <img src={checkPhotoPath(advertising[1].image)} alt="img" className="img-fluid mb-2"/>
+                                    <h4 className="fw_7 mb-2">{advertising[1].description}</h4>
+                                </div>}
                             </div>
                         </div>
                     </div>
@@ -488,6 +575,7 @@ const AdvPage: FC = () => {
                                 city={offer?.item?.city}
                                 dateOfCreation={offer?.item?.dateOfCreation}
                                 areaName={offer?.item?.subsection?.area?.name}
+                                isPricePerMonthAbsolute={offer?.item?.isPricePerMonthAbsolute}
                             />
 
                             <button
@@ -503,8 +591,9 @@ const AdvPage: FC = () => {
                                 <section className="anchor_block mb-4" id="anchor_video">
                                     <h4 className="fw_7">Видео</h4>
                                     <PhotoProvider maskOpacity={0.75}>
-                                        <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
-                                            <div className="acc-video">
+                                        <div
+                                            className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4 col">
+                                            <div className="acc-video2">
                                                 <iframe
                                                     src={offer?.item?.video}
                                                     title="YouTube video player"
@@ -545,7 +634,7 @@ const AdvPage: FC = () => {
                 <div className="container">
                     <h2 className="mt-sm-4">Похожие объявления</h2>
                     <Swiper
-                        className="pt-sm-4 pb-4 pb-sm-5"
+                        style={{paddingBottom:`${swiperPB}px`}}
                         modules={[Pagination]}
                         slidesPerView={2}
                         spaceBetween={6}
@@ -582,6 +671,7 @@ const AdvPage: FC = () => {
                                             title={offer.title}
                                             investments={offer.investments}
                                             favorite={false}
+                                            isPricePerMonthAbsolute={offer.isPricePerMonthAbsolute}
                                         />
                                     </SwiperSlide>
                                 ))
