@@ -15,12 +15,14 @@ type Props = {
     validity: string,
     isPricePerMonthAbsolute:boolean | null
     isVerified?:boolean,
+    isArchived?:boolean,
     timeBeforeArchive:string
     offerIdSeterForUnArchive?: (id: number) => void
     offerIdSeterForArchive?: (id: number) => void
 }
 
 const AdCard: FC<Props> = (props: any) => {
+    console.log(props)
     return (
         <div className={'mx-sm-4 my-md-5 my-sm-3 py-1 ad-preview ' + props.className}>
             <div className="d-flex flex-column flex-sm-row align-items-stretch flex-1">
@@ -40,7 +42,7 @@ const AdCard: FC<Props> = (props: any) => {
                         <div style={{color: "red"}}>
                             {
                                 <div style={{color: "red"}}>
-                                    {props.isVerified?props.timeBeforeArchive:'На модерации'}
+                                    {props.isArchived?'В Архиве' :  props.isVerified?props.timeBeforeArchive: 'На модерации'}
                                 </div>
                             }
                         </div>

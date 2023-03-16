@@ -24,7 +24,7 @@ export type IOffersSubSectionsItem = {
 
 export type IOffersItem = {
     id: number
-    isArchived: true
+    isArchived: boolean
     viewsCount: number
     slug: string
     title: string

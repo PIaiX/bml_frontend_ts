@@ -31,6 +31,7 @@ const apiRoutes: ApiRoutesTypes = {
     //offers
     GET_ARCHIVED_USERS_OFFERS: 'offer/user/archive/archived',
     GET_NOT_ARCHIVED_USERS_OFFERS: 'offer/user/archive/notArchived',
+    GET_MODERATION_USERS_OFFERS: 'offer/user/moderation',
     PATCH_ARCHIVE_OFFER: 'offer/user/archive',
     DELETE_ARCHIVE_OFFER: 'offer/user/archive',
     GET_ALL_AREAS: 'offer/area',

@@ -25,8 +25,10 @@ const ArchiveAds: FC<Props> = ({ tab, section }) => {
     const queryClient = useQueryClient()
     const [currentPage, setCurrentPage] = useState(0)
     const [offerId, setOfferId] = useState<number | null>(null)
+    let text = 'Ничего нет'
     const dispatch = useAppDispatch()
-
+    if (tab === 4 && user?.typeForUser === 'Физ лицо')
+        text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const archiveOffers = useQuery({
         queryKey: ['archive', user?.id, tab, currentPage],
         queryFn: async () => {
@@ -55,7 +57,6 @@ const ArchiveAds: FC<Props> = ({ tab, section }) => {
 
     const { paginationItems, pageCount, selectedPage, setSelectedPage, handlePageClick }: IPagination<IOffersItem> =
         usePagination(archiveOffers?.data?.data, generalLimit, archiveOffers?.data?.meta.total, currPage)
-
     const offerIdSeterForUnArchive = useCallback((id: number) => {
         setOfferId(id)
     }, [])
@@ -64,7 +65,7 @@ const ArchiveAds: FC<Props> = ({ tab, section }) => {
         mutationFn: () =>
             deleteWithArchive(offerId)
                 .then(() => {
-                    dispatch(showAlert({ message: 'Объявление успешно убрано из архива', typeAlert: 'good' }))
+                    dispatch(showAlert({ message: 'Объявление успешно отправлено на модерацию', typeAlert: 'good' }))
                 })
                 .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))),
         onSuccess: () => queryClient.invalidateQueries(['archive']),
@@ -104,13 +105,15 @@ const ArchiveAds: FC<Props> = ({ tab, section }) => {
                                 title={i.title}
                                 scope={i.subsection?.area?.name}
                                 investments={i?.investments}
+                                isVerified={i.isVerified}
+                                isArchived={i.isArchived}
                                 validity={i?.archiveExpire}
                                 offerIdSeterForUnArchive={offerIdSeterForUnArchive}
                                 isPricePerMonthAbsolute={i.isPricePerMonthAbsolute}
                             />
                         ))
                     ) : (
-                        <h6 className="w-100 p-5 text-center">Ничего нет</h6>
+                        <h6 className="w-100 p-5 text-center">{text}</h6>
                     )
                 ) : (
                     <div className="p-5 w-100 d-flex justify-content-center">
