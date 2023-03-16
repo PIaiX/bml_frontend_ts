@@ -19,10 +19,11 @@ type Props = {
     timeBeforeArchive:string
     offerIdSeterForUnArchive?: (id: number) => void
     offerIdSeterForArchive?: (id: number) => void
+    bannersType?:boolean
 }
 
 const AdCard: FC<Props> = (props: any) => {
-    console.log(props)
+    console.log(props.bannersType)
     return (
         <div className={'mx-sm-4 my-md-5 my-sm-3 py-1 ad-preview ' + props.className}>
             <div className="d-flex flex-column flex-sm-row align-items-stretch flex-1">
@@ -49,7 +50,6 @@ const AdCard: FC<Props> = (props: any) => {
                         <div className="l-gray f_08 mt-2">{props.scope}</div>
                     </div>
                     {props.investments && (
-                        // <div className="fw_5 f_09 mt-2">{FunctionForPrice(props.investments)}&nbsp;{props.isPricePerMonthAbsolute?' руб':' %'}</div>
                         <div className="fw_5 f_09 mt-2">{FunctionForPrice(props.investments)}&nbsp;{' руб'}</div>
                     )}
                     <div className="mt-2">
@@ -62,7 +62,11 @@ const AdCard: FC<Props> = (props: any) => {
             </div>
             <div className="btns row gx-2 mt-3 mt-md-0 mt-sm-4">
                 <div className="col-6">
-                    <NavLink to={`new-ad/${props?.id}`} className="btn_main btn_4 w-100 px-2 px-sm-3">
+                    <NavLink
+                        to={`${props.bannersType?'/account/advertising-section':'new-ad/'+props?.id}`}
+                        className="btn_main btn_4 w-100 px-2 px-sm-3"
+                        state={props}
+                    >
                         Редактировать
                     </NavLink>
                 </div>

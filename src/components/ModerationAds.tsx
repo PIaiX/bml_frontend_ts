@@ -17,8 +17,9 @@ import Pagination from "./utils/Pagination";
 type Props = {
     tab: number
     section: number
+    bannersType?:boolean
 }
-const ModerationAds: FC<Props> = ({ tab, section }) => {
+const ModerationAds: FC<Props> = ({ tab, section, bannersType }) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const [currentPage, setCurrentPage] = useState(0)
@@ -106,6 +107,7 @@ const ModerationAds: FC<Props> = ({ tab, section }) => {
                                 isVerified={i.isVerified}
                                 isArchived={i.isArchived}
                                 scope={i.subsection?.area?.name}
+                                bannersType={bannersType}
                                 investments={i?.investments}
                                 validity={i?.archiveExpire}
 

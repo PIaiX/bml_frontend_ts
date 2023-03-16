@@ -67,6 +67,9 @@ export default function AccountMenu() {
                             <NavLink to="advertising-section">Рекламный раздел</NavLink>
                         </li>
                         <li>
+                            <NavLink to="banners">Баннеры</NavLink>
+                        </li>
+                        <li>
                             <NavLink to="cart">Мои покупки</NavLink>
                         </li></>}
                     <li>

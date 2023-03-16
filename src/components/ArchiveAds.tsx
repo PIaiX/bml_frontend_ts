@@ -17,9 +17,10 @@ import { showAlert } from '../store/reducers/alertSlice'
 type Props = {
     tab: number
     section: number
+    bannersType?:boolean
 }
 
-const ArchiveAds: FC<Props> = ({ tab, section }) => {
+const ArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const queryClient = useQueryClient()
@@ -99,6 +100,7 @@ const ArchiveAds: FC<Props> = ({ tab, section }) => {
                                 id={i.id}
                                 key={i.id}
                                 type={tab}
+                                bannersType={bannersType}
                                 section={section}
                                 imgURL={i.image}
                                 timeBeforeArchive={i.timeBeforeArchive}

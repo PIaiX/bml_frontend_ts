@@ -19,6 +19,7 @@ import AccountMenu from '../pages/profile/AccountMenu'
 import {useRoutes} from 'react-router-dom'
 import Partners from '../pages/profile/Partners'
 import ChatWindowEmpty from "../pages/profile/ChatWindowEmpty";
+import Banners from "../pages/profile/Banners";
 
 type Props = {
     isMobile: boolean
@@ -45,6 +46,7 @@ const PersonalAccountRouter: FC<Props> = ({isMobile}) => {
                 {path: 'chat/window/:id', element: <ChatWindow />},
                 {path: 'chat/window/new', element: <ChatWindowEmpty />},
                 {path: 'wallet', element: <MyWallet />},
+                {path: 'banners', element: <Banners />},
                 {path: 'cart', element: <ShoppingCart />},
                 {path: 'advertising-section', element: <AdvertisingSection />},
                 {path: '*', element: <NotFound />},

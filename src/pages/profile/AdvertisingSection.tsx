@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import {useImageViewer} from '../../hooks/imageViewer'
 import {onImageHandler, onRadioHandler,} from '../../helpers/formHandlers'
@@ -17,6 +17,16 @@ import {showAlert} from "../../store/reducers/alertSlice";
 
 
 const AdvertisingSection = () => {
+
+
+
+    const {state} = useLocation()
+    useEffect(()=>{
+        state && alert('Будет редактирование')
+    }, [])
+
+
+
     const [data, setData] = useState<any>({
         lifeAd: '1',
         paymentType:'INTERNAL'

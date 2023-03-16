@@ -17,9 +17,10 @@ import { showAlert } from '../store/reducers/alertSlice'
 type Props = {
     tab: number
     section: number
+    bannersType?:boolean
 }
 
-const NotArchiveAds: FC<Props> = ({ tab, section }) => {
+const NotArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const [currentPage, setCurrentPage] = useState(0)
@@ -106,6 +107,7 @@ const NotArchiveAds: FC<Props> = ({ tab, section }) => {
                                 isVerified={i.isVerified}
                                 isArchived={i.isArchived}
                                 scope={i.subsection?.area?.name}
+                                bannersType={bannersType}
                                 investments={i?.investments}
                                 validity={i?.archiveExpire}
                                 offerIdSeterForArchive={offerIdSeterForArchive}
