@@ -22,7 +22,6 @@ type Props = {
 }
 
 const ShortInfoInOfferContainer: FC<Props> = (props) => {
-    console.log(props)
     if (props?.category === 0) {
         return (
             <section className="anchor_block" id="anchor_little_info">

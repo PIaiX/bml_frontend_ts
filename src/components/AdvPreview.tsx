@@ -25,7 +25,6 @@ const AdvPreview: FC<Props> = (props) => {
         e.stopPropagation();
         e.nativeEvent.stopImmediatePropagation();
     }
-    console.log(props.title,  !props.isPricePerMonthAbsolute)
     return (
         <>
             <div style={{
