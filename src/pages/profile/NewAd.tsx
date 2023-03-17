@@ -772,7 +772,14 @@ const NewAd = () => {
                             </div>
                             <div className="col-sm-6 col-lg-8">
                                 <ValidateWrapper error={errors?.video}>
-                                    <input type="text" placeholder="Вставить ссылку" {...register('video')} />
+                                    <input type="text" placeholder="Вставить ссылку" {
+                                        ...register('video', {
+                                            onChange:(e)=>{
+                                                const link:string = e.target.value;
+                                                link.indexOf('v=')!==-1 && setValue('video', link.replace('/watch?v=', '/embed/'))
+                                            }
+                                    })
+                                    } />
                                 </ValidateWrapper>
                             </div>
                         </div>

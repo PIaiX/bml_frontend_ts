@@ -109,7 +109,7 @@ const AdvertisingSection = () => {
                     dispatch(setBalance(data.sum))
                     dispatch(showAlert({message: 'Оплата прошла успешно! Ждите одобрения модерации...', typeAlert: 'good'}))
                     setTimeout(() => {
-                        navigate(-1)
+                        navigate('/account/banners', {state:{section:2}})
                     }, 1000)
 
                 }

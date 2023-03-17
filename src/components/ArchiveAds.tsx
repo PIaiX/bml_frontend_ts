@@ -31,12 +31,12 @@ const ArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
     if (tab === 4 && user?.typeForUser === 'Физ лицо')
         text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const archiveOffers = useQuery({
-        queryKey: ['archive', user?.id, tab, currentPage],
+        queryKey: [`${bannersType?'archiveBanners':'archiveAds'}`, user?.id, tab, currentPage],
         queryFn: async () => {
             try {
                 if (user?.id) {
                     const response = await $authApi.get<IOffersBodyRequest>(
-                        `${apiRoutes.GET_ARCHIVED_USERS_OFFERS}/${user?.id}?page=${currentPage + 1
+                        `${bannersType?apiRoutes.GET_MY_ARCHIVED_ADS:(apiRoutes.GET_ARCHIVED_USERS_OFFERS+'/'+user?.id)}?page=${currentPage + 1
                         }&limit=${generalLimit}&orderBy=${'desc'}${tab || tab === 0 ? `&category=${tab}` : ''}`
                     )
                     return response?.data?.body
@@ -69,7 +69,7 @@ const ArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
                     dispatch(showAlert({ message: 'Объявление успешно отправлено на модерацию', typeAlert: 'good' }))
                 })
                 .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))),
-        onSuccess: () => queryClient.invalidateQueries(['archive']),
+        onSuccess: () => queryClient.invalidateQueries([`${bannersType?'archiveBanners':'archiveAds'}`]),
     })
 
     useEffect(() => {

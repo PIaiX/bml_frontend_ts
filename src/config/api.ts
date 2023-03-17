@@ -13,6 +13,9 @@ const apiRoutes: ApiRoutesTypes = {
     GET_ADVERTISING: 'ads/portions',
     SET_ADVERTISING: 'ads',
     GET_PRICES: 'ads/types',
+    GET_MY_PUBLIC_ADS:'ads/my/public',
+    GET_MY_MODERATION_ADS:'ads/my/moderation',
+    GET_MY_ARCHIVED_ADS:'ads/my/archive',
 
     //feedback
     SEND_FEEDBACK: 'feedback',
@@ -32,6 +35,7 @@ const apiRoutes: ApiRoutesTypes = {
     GET_ARCHIVED_USERS_OFFERS: 'offer/user/archive/archived',
     GET_NOT_ARCHIVED_USERS_OFFERS: 'offer/user/archive/notArchived',
     GET_MODERATION_USERS_OFFERS: 'offer/user/moderation',
+    GET_BANNED_USERS_OFFERS: 'offer/user/banned',
     PATCH_ARCHIVE_OFFER: 'offer/user/archive',
     DELETE_ARCHIVE_OFFER: 'offer/user/archive',
     GET_ALL_AREAS: 'offer/area',

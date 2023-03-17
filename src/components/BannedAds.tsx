@@ -2,7 +2,7 @@ import React, {FC, useCallback, useEffect, useState} from 'react';
 import {IUser} from "../types/user";
 import {useAppDispatch, useAppSelector} from "../hooks/store";
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {$api, $authApi} from "../services/indexAuth";
+import {$authApi} from "../services/indexAuth";
 import {IOffersBodyRequest} from "../models/offers";
 import {apiRoutes} from "../config/api";
 import {IPagination} from "../types";
@@ -13,13 +13,12 @@ import {showAlert} from "../store/reducers/alertSlice";
 import AdCard from "../pages/profile/AdCard";
 import Loader from "./utils/Loader";
 import Pagination from "./utils/Pagination";
-
 type Props = {
     tab: number
     section: number
     bannersType?:boolean
 }
-const ModerationAds: FC<Props> = ({ tab, section, bannersType }) => {
+const BannedAds: FC<Props> = ({ tab, section, bannersType }) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const [currentPage, setCurrentPage] = useState(0)
@@ -30,12 +29,12 @@ const ModerationAds: FC<Props> = ({ tab, section, bannersType }) => {
     if (tab === 4 && user?.typeForUser === 'Физ лицо')
         text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const notArchiveOffers = useQuery({
-        queryKey: [`${bannersType?'moderationBanners':'moderationAds'}`, user?.id, tab, currentPage],
+        queryKey: ['moderation', user?.id, tab, currentPage],
         queryFn: async () => {
             try {
                 if (user?.id) {
                     const response = await $authApi.get<IOffersBodyRequest>(
-                        `${bannersType?apiRoutes.GET_MY_MODERATION_ADS:(apiRoutes.GET_MODERATION_USERS_OFFERS+'/'+user?.id)}?page=${currentPage + 1
+                        `${apiRoutes.GET_BANNED_USERS_OFFERS}/${user?.id}?page=${currentPage + 1
                         }&limit=${generalLimit}&orderBy=${'desc'}${tab || tab === 0 ? `&category=${tab}` : ''}`
                     )
                     return response?.data?.body
@@ -69,7 +68,7 @@ const ModerationAds: FC<Props> = ({ tab, section, bannersType }) => {
                     dispatch(showAlert({ message: 'Объявление успешно добавлено в архив', typeAlert: 'good' }))
                 })
                 .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))),
-        onSuccess: () => queryClient.invalidateQueries([`${bannersType?'moderationBanners':'moderationAds'}`]),
+        onSuccess: () => queryClient.invalidateQueries(['moderation']),
     })
 
     useEffect(() => {
@@ -101,6 +100,7 @@ const ModerationAds: FC<Props> = ({ tab, section, bannersType }) => {
                                 id={i.id}
                                 key={i.id}
                                 type={tab}
+                                isBlocked={true}
                                 section={section}
                                 imgURL={i.image}
                                 title={i.title}
@@ -143,4 +143,4 @@ const ModerationAds: FC<Props> = ({ tab, section, bannersType }) => {
     )
 };
 
-export default ModerationAds;
+export default BannedAds;

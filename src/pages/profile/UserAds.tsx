@@ -7,6 +7,7 @@ import {IUser} from "../../types/user";
 import {useAppSelector} from "../../hooks/store";
 import AccountMenu from "./AccountMenu";
 import ModerationAds from "../../components/ModerationAds";
+import BannedAds from "../../components/BannedAds";
 
 const UserAds: FC = () => {
     const [section, setSection] = useState<number>(0)
@@ -41,10 +42,18 @@ const UserAds: FC = () => {
                             </button>
                             <button
                                 type="button"
+                                className={section === 2 ? 'ms-4' : 'l-gray ms-4'}
+                                onClick={() => setSection(2)}
+                            >
+                                <span>На модерации</span>
+                                <span className="l-gray ms-2"></span>
+                            </button>
+                            <button
+                                type="button"
                                 className={section === 3 ? 'ms-4' : 'l-gray ms-4'}
                                 onClick={() => setSection(3)}
                             >
-                                <span>На модерации</span>
+                                <span>В блоке</span>
                                 <span className="l-gray ms-2"></span>
                             </button>
                         </div>
@@ -73,7 +82,10 @@ const UserAds: FC = () => {
                         <NotArchiveAds tab={tab} section={section}/>
                         : section === 1 ?
                             <ArchiveAds tab={tab} section={section}/>
-                            : <ModerationAds tab={tab} section={section}/>
+                            : section===2?
+                                <ModerationAds tab={tab} section={section} />
+                                : <BannedAds tab={tab} section={section} />
+                            // : <ModerationAds tab={tab} section={section}/>
                     }
                 </div>
             </>

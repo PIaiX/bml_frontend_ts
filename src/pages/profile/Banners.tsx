@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {IUser} from "../../types/user";
 import {useAppSelector} from "../../hooks/store";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {MdOutlineArrowBack} from "react-icons/md";
 import NotArchiveAds from "../../components/NotArchiveAds";
 import ArchiveAds from "../../components/ArchiveAds";
@@ -9,7 +9,8 @@ import ModerationAds from "../../components/ModerationAds";
 import AccountMenu from "./AccountMenu";
 
 const Banners = () => {
-    const [section, setSection] = useState<number>(0)
+    const {state} = useLocation()
+    const [section, setSection] = useState<number>(state?.section?state?.section:0)
     const [tab, setTab] = useState<number>(0)
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     return (
@@ -51,14 +52,6 @@ const Banners = () => {
                         <Link to="/account/advertising-section" className="btn_main btn_3">
                             Новый баннер
                         </Link>
-                    </div>
-                    <div className="tab-btns">
-                        <button type="button" className={tab === 0 ? 'active' : ''} onClick={() => setTab(0)}>
-                            Рекламный баннер (1200х400)
-                        </button>
-                        <button type="button" className={tab === 1 ? 'active' : ''} onClick={() => setTab(1)}>
-                            Рекламный баннер (250х160)
-                        </button>
                     </div>
                     {section === 0 ?
                         <NotArchiveAds bannersType={true} tab={tab} section={section}/>

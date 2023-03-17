@@ -16,6 +16,7 @@ type Props = {
     isPricePerMonthAbsolute:boolean | null
     isVerified?:boolean,
     isArchived?:boolean,
+    isBlocked?:boolean
     timeBeforeArchive:string
     offerIdSeterForUnArchive?: (id: number) => void
     offerIdSeterForArchive?: (id: number) => void
@@ -36,14 +37,14 @@ const AdCard: FC<Props> = (props: any) => {
                     <div>
                         <NavLink to={`/adv-page/${props?.id}`}>
                             <div>
-                                {props.title.slice(0,15)}
-                                {props.title.length>15 && '...'}
+                                {props?.title?.slice(0,15)}
+                                {props?.title?.length>15 && '...'}
                             </div>
                         </NavLink>
                         <div style={{color: "red"}}>
                             {
                                 <div style={{color: "red"}}>
-                                    {props.isArchived?'В Архиве' :  props.isVerified?props.timeBeforeArchive: 'На модерации'}
+                                    {props.isBlocked? 'Заблокировано' : props.isArchived?'В архиве' :  props.isVerified?props.timeBeforeArchive: 'На модерации'}
                                 </div>
                             }
                         </div>

@@ -9,7 +9,7 @@ import { IPagination, IUseStateItems } from '../types'
 import { IOffersItem, IOffersMeta } from '../types/offers'
 import usePagination from '../hooks/pagination'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { $api } from '../services/indexAuth'
+import { $authApi } from '../services/indexAuth'
 import { IOffersBodyRequest } from '../models/offers'
 import { apiRoutes } from '../config/api'
 import { showAlert } from '../store/reducers/alertSlice'
@@ -31,12 +31,12 @@ const NotArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
     if (tab === 4 && user?.typeForUser === 'Физ лицо')
         text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const notArchiveOffers = useQuery({
-        queryKey: ['notArchive', user?.id, tab, currentPage],
+        queryKey: [`${bannersType?'notArchiveBanners':'notArchiveAds'}`, user?.id, tab, currentPage],
         queryFn: async () => {
             try {
                 if (user?.id) {
-                    const response = await $api.get<IOffersBodyRequest>(
-                        `${apiRoutes.GET_NOT_ARCHIVED_USERS_OFFERS}/${user?.id}?page=${currentPage + 1
+                    const response = await $authApi .get<IOffersBodyRequest>(
+                        `${bannersType?apiRoutes.GET_MY_PUBLIC_ADS:(apiRoutes.GET_NOT_ARCHIVED_USERS_OFFERS+'/'+user?.id)}?page=${currentPage + 1
                         }&limit=${generalLimit}&orderBy=${'desc'}${tab || tab === 0 ? `&category=${tab}` : ''}`
                     )
                     return response?.data?.body
@@ -69,7 +69,7 @@ const NotArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
                     dispatch(showAlert({ message: 'Объявление успешно добавлено в архив', typeAlert: 'good' }))
                 })
                 .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))),
-        onSuccess: () => queryClient.invalidateQueries(['notArchive']),
+        onSuccess: () => queryClient.invalidateQueries([`${bannersType?'notArchiveBanners':'notArchiveAds'}`]),
     })
 
     useEffect(() => {
