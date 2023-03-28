@@ -34,14 +34,14 @@ const Instructions: FC = () => {
                                 <div key={i?.id}>
                                     <div className="acc-video">
                                         <iframe
-                                            src={i?.media}
+                                            src={i?.media?.replace('/watch?v=', '/embed/')}
                                             title="YouTube video player"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                             allowFullScreen
                                         />
                                     </div>
                                     {i?.isTitleLink ? (
-                                        <a href={i?.media}>{i?.title}</a>
+                                        <a href={i?.media} target="_blank" rel="noopener noreferrer" >{i?.title}</a>
                                     ) : (
                                         <div className="mt-2">{i?.title}</div>
                                     )}
@@ -54,7 +54,7 @@ const Instructions: FC = () => {
                                         </video>
                                     </div>
                                     {i?.isTitleLink ? (
-                                        <a href={i?.media}>{i?.title}</a>
+                                        <a href={i?.media} target="_blank" rel="noopener noreferrer">{i?.title}</a>
                                     ) : (
                                         <div className="mt-2">{i?.title}</div>
                                     )}
@@ -76,7 +76,7 @@ const Instructions: FC = () => {
                                 <div key={i?.id}>
                                     <div className="acc-video">
                                         <iframe
-                                            src={i?.media}
+                                            src={i?.media?.replace('/watch?v=', '/embed/')}
                                             title="YouTube video player"
                                             frameBorder="0"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -84,7 +84,7 @@ const Instructions: FC = () => {
                                         />
                                     </div>
                                     {i?.isTitleLink ? (
-                                        <a href={i?.media}>{i?.title}</a>
+                                        <a href={i?.media} target="_blank" rel="noopener noreferrer">{i?.title}</a>
                                     ) : (
                                         <div className="mt-2">{i?.title}</div>
                                     )}
@@ -95,7 +95,7 @@ const Instructions: FC = () => {
                                         <img src={checkPhotoPath(i?.media)} height={100 + '%'} width={100 + '%'} />
                                     </div>
                                     {i?.isTitleLink ? (
-                                        <a href={i?.media}>{i?.title}</a>
+                                        <a href={i?.media} target="_blank" rel="noopener noreferrer">{i?.title}</a>
                                     ) : (
                                         <div className="mt-2">{i?.title}</div>
                                     )}
