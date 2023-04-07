@@ -8,7 +8,7 @@ import { citySlice } from './reducers/citySlice'
 import { favoriteCountSlice } from './reducers/favoriteCountSlice'
 import { searchHeaderSlice } from './reducers/searchHeader'
 import notificationReducer from './reducers/notificationSlice'
-
+import {PartnersReducers,PartnersActions} from './reducers/partnersSlice'
 const store = configureStore({
     reducer: {
         [newsApi.reducerPath]: newsApi.reducer,
@@ -20,6 +20,7 @@ const store = configureStore({
         favoritesCount: favoriteCountSlice.reducer,
         search: searchHeaderSlice.reducer,
         notification: notificationReducer,
+        partners:PartnersReducers
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(newsApi.middleware).concat(bannerApi.middleware).concat(offersApi.middleware),

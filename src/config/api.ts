@@ -54,6 +54,9 @@ const apiRoutes: ApiRoutesTypes = {
     GET_OFFER_REPORT_TYPE: 'report/type/offer',
     REPORT: 'report',
 
+    //partners
+    GET_UR_PARTNERS:'ourPartners',
+
     //mainTitle
     GET_MAIN_TITLE: 'projectData',
 

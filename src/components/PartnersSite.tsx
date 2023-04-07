@@ -1,10 +1,23 @@
-import React, {FC} from 'react'
+import React, {FC, useEffect} from 'react'
 import {Swiper, SwiperSlide} from 'swiper/react'
 import {Pagination} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
+import {useAppSelector} from "../hooks/store";
+import {useDispatch} from "react-redux";
+import {getPartners} from "../services/partners";
+import {AppDispatch} from "../store/store";
+import {checkPhotoPath} from "../helpers/photoLoader";
 
 const PartnersSite: FC = () => {
+    const partners = useAppSelector(state => state.partners.partners)
+    const dispatch = useDispatch<AppDispatch>()
+    useEffect(()=>{
+        if(!partners){
+            dispatch(getPartners())
+        }
+    }, [partners])
+
     return (
         <section className="bg_l_blue">
             <div id="block_5" className="container">
@@ -20,59 +33,34 @@ const PartnersSite: FC = () => {
                     }}
                     breakpoints={{
                         576: {
-                            slidesPerView: 3,
+                            slidesPerView: partners && partners?.length>2?3:partners?.length,
                             spaceBetween: 15,
                         },
                         768: {
-                            slidesPerView: 5,
+                            slidesPerView: partners && partners?.length>4?5:partners?.length,
                             spaceBetween: 10,
                         },
                         992: {
-                            slidesPerView: 6,
+                            slidesPerView: partners && partners?.length>5?6:partners?.length,
                             spaceBetween: 15,
                         },
                         1200: {
-                            slidesPerView: 6,
+                            slidesPerView: partners && partners?.length>5?6:partners?.length,
                             spaceBetween: 30,
                         },
                     }}
                 >
-                    <SwiperSlide>
-                        <img src="/images/partners/image 10.jpg" alt="partners" />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/images/partners/image 11.jpg" alt="partners" />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/images/partners/image 12.jpg" alt="partners" />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/images/partners/image 13.jpg" alt="partners" />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/images/partners/image 14.jpg" alt="partners" />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/images/partners/image 15.jpg" alt="partners" />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/images/partners/image 10.jpg" alt="partners" />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/images/partners/image 11.jpg" alt="partners" />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/images/partners/image 12.jpg" alt="partners" />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/images/partners/image 13.jpg" alt="partners" />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/images/partners/image 14.jpg" alt="partners" />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/images/partners/image 15.jpg" alt="partners" />
-                    </SwiperSlide>
+                    {
+                        partners?.map((element, index:number)=>
+                            <SwiperSlide key={index}>
+                                <div className={'w-100 h-100 d-flex justify-content-center'}>
+                                    <img style={{cursor:"pointer"}} src={checkPhotoPath(element.image)} alt="partners"
+                                         onClick={()=>{window.open(element.link);}}
+                                    />
+                                </div>
+                            </SwiperSlide>
+                        )
+                    }
                 </Swiper>
             </div>
         </section>
