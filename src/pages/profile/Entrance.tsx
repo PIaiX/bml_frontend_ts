@@ -28,10 +28,11 @@ const Entrance: FC = () => {
                 else
                     navigate(`/account/settings`)
             })
-            .catch(() => {
+            .catch((e) => {
+                const message = e?.response?.data?.message
                 dispatch(
                     showAlert({
-                        message: 'Произошла ошибка, проверьте введенные данные или попробуйте позже',
+                        message: message?message:'Произошла ошибка, проверьте введенные данные или попробуйте позже',
                         typeAlert: 'bad',
                     })
                 )
