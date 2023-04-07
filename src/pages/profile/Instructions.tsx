@@ -91,7 +91,7 @@ const Instructions: FC = () => {
                                 </div>
                             ) : (
                                 <div key={i?.id}>
-                                    <div>
+                                    <div className="acc-video">
                                         <img src={checkPhotoPath(i?.media)} height={100 + '%'} width={100 + '%'} />
                                     </div>
                                     {i?.isTitleLink ? (
