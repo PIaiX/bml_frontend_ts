@@ -24,7 +24,8 @@ const BtnFav: FC<Props> = (props) => {
         }
     }, [props?.check])
 
-    const submitCreateFavorite = () => {
+    const submitCreateFavorite = (e:any) => {
+        e.preventDefault()
         if (user?.id && props?.offerId) {
             if (checked) {
                 deleteWithFavorite({userId: user?.id, offerId: props?.offerId})
@@ -53,8 +54,8 @@ const BtnFav: FC<Props> = (props) => {
 
     return (
         <button
-            onClick={() => {
-                submitCreateFavorite()
+            onClick={(e) => {
+                submitCreateFavorite(e)
             }}
             className={'btn-fav ' + props.className}
         >

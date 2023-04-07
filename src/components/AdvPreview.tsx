@@ -21,10 +21,6 @@ interface Props {
 
 
 const AdvPreview: FC<Props> = (props) => {
-    const stopPropagation = (e: any) => {
-        e.stopPropagation();
-        e.nativeEvent.stopImmediatePropagation();
-    }
     return (
         <>
             <div style={{
@@ -48,8 +44,7 @@ const AdvPreview: FC<Props> = (props) => {
                                 {props.isPricePerMonthAbsolute===undefined || props.isPricePerMonthAbsolute?' руб':' %'}
                             </div>
                         </div>
-                        <div className="d-flex align-items-center" onClick={(event) => { stopPropagation(event) }}>
-
+                        <div className="d-flex align-items-center">
                             <BtnFav
                                 check={props.favorite}
                                 className={'f_20 mr-2 ms-2'}
