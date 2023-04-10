@@ -23,7 +23,8 @@ const NewsPreview: FC<Props> = (props) => {
             </div>
             <div className="px-2 py-3">
                 <p className="title">{props.title}</p>
-                <p className="text">{props.text}</p>
+                <div className="text" dangerouslySetInnerHTML={{ __html:props?.text?props?.text:''}}>
+                </div>
                 <NavLink to={`${props.url}`} className="more">
                     Подробнее
                 </NavLink>

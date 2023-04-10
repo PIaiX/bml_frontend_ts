@@ -139,7 +139,7 @@ const News: FC = () => {
                                 setSelectedPage(0)
                             }}
                         >
-                            Смотреть еще 20
+                            Смотреть еще
                         </button>
                     </div>
                 </section>

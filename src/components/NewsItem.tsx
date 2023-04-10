@@ -74,7 +74,8 @@ const NewsItem = () => {
                                     <div className="lh_1 gray">мин</div>
                                 </div>
                                 <h3>{newsItem?.suptitle}</h3>
-                                <p>{newsItem?.description}</p>
+                                <div dangerouslySetInnerHTML={{ __html:newsItem?.description?newsItem?.description:''}}>
+                                </div>
                             </div>
                             <NavLink className="return" to="/news">
                                 <MdArrowBack />
