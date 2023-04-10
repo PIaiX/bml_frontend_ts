@@ -76,6 +76,9 @@ const apiRoutes: ApiRoutesTypes = {
     //subscription
     ACTIONS_SUBSCRIBE: 'subscribe',
 
+    //pay history
+    GET_PAY_HISTORY:'payments'
+
 }
 
 const BASE_URL: string | undefined = process.env.REACT_APP_BASE_URL

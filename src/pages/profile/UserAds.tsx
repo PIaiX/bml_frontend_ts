@@ -8,6 +8,7 @@ import {useAppSelector} from "../../hooks/store";
 import AccountMenu from "./AccountMenu";
 import ModerationAds from "../../components/ModerationAds";
 import BannedAds from "../../components/BannedAds";
+import {Row} from "react-bootstrap";
 
 const UserAds: FC = () => {
     const [section, setSection] = useState<number>(0)
@@ -24,17 +25,17 @@ const UserAds: FC = () => {
                 <div className="acc-box">
                     <div
                         className="d-flex flex-column-reverse flex-sm-row justify-content-between align-items-center mb-3 mb-md-4">
-                        <div className="d-flex align-items-center f_11 mt-3 mt-sm-0">
+                        <div className="d-flex align-items-center f_11 mt-3 mt-sm-0 flex-grow-1 row ">
                             <button
                                 type="button"
-                                className={section === 0 ? '' : 'l-gray'}
+                                className={`col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 ${section === 0 ? '' : 'l-gray '}`}
                                 onClick={() => setSection(0)}>
                                 <span>Объявления</span>
                                 <span className="l-gray ms-2"></span>
                             </button>
                             <button
                                 type="button"
-                                className={section === 1 ? 'ms-4' : 'l-gray ms-4'}
+                                className={`mt-2 mt-sm-0 col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 ${section === 1 ? '' : 'l-gray '}`}
                                 onClick={() => setSection(1)}
                             >
                                 <span>Архив</span>
@@ -42,7 +43,7 @@ const UserAds: FC = () => {
                             </button>
                             <button
                                 type="button"
-                                className={section === 2 ? 'ms-4' : 'l-gray ms-4'}
+                                className={`mt-2 mt-md-0 col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 ${section === 2 ? '' : 'l-gray '} d-inline-block`}
                                 onClick={() => setSection(2)}
                             >
                                 <span>На модерации</span>
@@ -50,7 +51,7 @@ const UserAds: FC = () => {
                             </button>
                             <button
                                 type="button"
-                                className={section === 3 ? 'ms-4' : 'l-gray ms-4'}
+                                className={`mt-2 mt-md-0 col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 ${section === 3 ? '' : 'l-gray '}`}
                                 onClick={() => setSection(3)}
                             >
                                 <span>В блоке</span>

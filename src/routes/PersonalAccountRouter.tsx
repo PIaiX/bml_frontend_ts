@@ -1,9 +1,8 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC} from 'react'
 import NotFound from '../pages/NotFound'
 import PersonalAccountLayout from '../components/PersonalAccountLayout'
 import UserProfile from '../pages/profile/UserProfile'
 import ViewProfile from '../pages/profile/ViewProfile'
-import PartnersSite from '../components/PartnersSite'
 import Instructions from '../pages/profile/Instructions'
 import ProfileSettings from '../pages/profile/ProfileSettings'
 import UserAds from '../pages/profile/UserAds'
@@ -13,13 +12,13 @@ import Favorites from '../pages/profile/Favorites'
 import Chat from '../pages/profile/Chat'
 import ChatWindow from '../pages/profile/ChatWindow'
 import MyWallet from '../pages/profile/MyWallet'
-import ShoppingCart from '../pages/profile/ShoppingCart'
 import AdvertisingSection from '../pages/profile/AdvertisingSection'
 import AccountMenu from '../pages/profile/AccountMenu'
 import {useRoutes} from 'react-router-dom'
 import Partners from '../pages/profile/Partners'
 import ChatWindowEmpty from "../pages/profile/ChatWindowEmpty";
 import Banners from "../pages/profile/Banners";
+import PayHistory from "../pages/PayHistory";
 
 type Props = {
     isMobile: boolean
@@ -38,6 +37,7 @@ const PersonalAccountRouter: FC<Props> = ({isMobile}) => {
                 {path: 'instructions', element: <Instructions />},
                 {path: 'settings', element: <ProfileSettings />},
                 {path: 'my-ads', element: <UserAds />},
+                {path: 'pay-history', element: <PayHistory />},
                 {path: 'my-ads/new-ad', element: <NewAd />},
                 {path: 'my-ads/new-ad/:id', element: <NewAd />},
                 {path: 'my-ads/premium', element: <Premium />},
@@ -47,7 +47,6 @@ const PersonalAccountRouter: FC<Props> = ({isMobile}) => {
                 {path: 'chat/window/new', element: <ChatWindowEmpty />},
                 {path: 'wallet', element: <MyWallet />},
                 {path: 'banners', element: <Banners />},
-                {path: 'cart', element: <ShoppingCart />},
                 {path: 'advertising-section', element: <AdvertisingSection />},
                 {path: '*', element: <NotFound />},
             ],
