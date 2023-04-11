@@ -13,6 +13,8 @@ import {showAlert} from "../store/reducers/alertSlice";
 import AdCard from "../pages/profile/AdCard";
 import Loader from "./utils/Loader";
 import Pagination from "./utils/Pagination";
+import CustomModal from "./utils/CustomModal";
+import ValidateWrapper from "./utils/ValidateWrapper";
 type Props = {
     tab: number
     section: number
@@ -88,7 +90,7 @@ const BannedAds: FC<Props> = ({ tab, section, bannersType }) => {
         setSelectedPage(0)
         setCurrentPage(0)
     }, [tab])
-
+    const [isShowModalReport, setIsShowModalReport] = useState<any>(false)
     return (
         <>
             <div className="acc-box">
@@ -106,11 +108,12 @@ const BannedAds: FC<Props> = ({ tab, section, bannersType }) => {
                                 title={i.title}
                                 isVerified={i.isVerified}
                                 isArchived={i.isArchived}
+                                setIsShowModalReport={setIsShowModalReport}
                                 scope={i.subsection?.area?.name}
                                 bannersType={bannersType}
                                 investments={i?.investments}
                                 validity={i?.archiveExpire}
-
+                                blockDescription={i?.blockDescription}
                                 offerIdSeterForArchive={offerIdSeterForArchive}
                                 isPricePerMonthAbsolute={i.isPricePerMonthAbsolute}
                             />
@@ -139,6 +142,17 @@ const BannedAds: FC<Props> = ({ tab, section, bannersType }) => {
             ) : (
                 ''
             )}
+            <CustomModal
+                isShow={isShowModalReport?true:false}
+                setIsShow={setIsShowModalReport}
+                centered={false}
+                closeButton={true}
+                className="modal__report"
+            >
+                <div>
+                    {isShowModalReport}
+                </div>
+            </CustomModal>
         </>
     )
 };

@@ -4,6 +4,7 @@ export type IPartnersItem = {
     title: string
     media: string
     mediaType: boolean
+    link:string
     createdAt: string
     updatedAt: string
     isVisibleForUser: string
@@ -25,6 +26,7 @@ export type ITutorialsItem = {
     id: number
     isEmbed: boolean
     isTitleLink: boolean
+    link:string
     title: string
     media: string
     createdAt: string

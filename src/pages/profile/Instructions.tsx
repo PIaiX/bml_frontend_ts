@@ -41,7 +41,7 @@ const Instructions: FC = () => {
                                         />
                                     </div>
                                     {i?.isTitleLink ? (
-                                        <a href={i?.media} target="_blank" rel="noopener noreferrer" >{i?.title}</a>
+                                        <a href={i?.link} target="_blank" rel="noopener noreferrer" >{i?.title}</a>
                                     ) : (
                                         <div className="mt-2">{i?.title}</div>
                                     )}
@@ -54,7 +54,7 @@ const Instructions: FC = () => {
                                         </video>
                                     </div>
                                     {i?.isTitleLink ? (
-                                        <a href={i?.media} target="_blank" rel="noopener noreferrer">{i?.title}</a>
+                                        <a href={i?.link} target="_blank" rel="noopener noreferrer">{i?.title}</a>
                                     ) : (
                                         <div className="mt-2">{i?.title}</div>
                                     )}
@@ -84,7 +84,7 @@ const Instructions: FC = () => {
                                         />
                                     </div>
                                     {i?.isTitleLink ? (
-                                        <a href={i?.media} target="_blank" rel="noopener noreferrer">{i?.title}</a>
+                                        <a href={i?.link} target="_blank" rel="noopener noreferrer">{i?.title}</a>
                                     ) : (
                                         <div className="mt-2">{i?.title}</div>
                                     )}
@@ -95,7 +95,7 @@ const Instructions: FC = () => {
                                         <img src={checkPhotoPath(i?.media)} height={100 + '%'} width={100 + '%'} />
                                     </div>
                                     {i?.isTitleLink ? (
-                                        <a href={i?.media} target="_blank" rel="noopener noreferrer">{i?.title}</a>
+                                        <a href={i?.link} target="_blank" rel="noopener noreferrer">{i?.title}</a>
                                     ) : (
                                         <div className="mt-2">{i?.title}</div>
                                     )}

@@ -8,7 +8,6 @@ import {useAppSelector} from "../../hooks/store";
 import AccountMenu from "./AccountMenu";
 import ModerationAds from "../../components/ModerationAds";
 import BannedAds from "../../components/BannedAds";
-import {Row} from "react-bootstrap";
 
 const UserAds: FC = () => {
     const [section, setSection] = useState<number>(0)

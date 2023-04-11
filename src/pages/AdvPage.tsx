@@ -175,7 +175,6 @@ const AdvPage: FC = () => {
         else
             dispatch(showAlert({message: 'Зарегистрируйтесь для отправки сообщений. ', typeAlert: 'neutral', withLink:true}))
     }
-    console.log(similarOffers)
 
     return (
         <main>
