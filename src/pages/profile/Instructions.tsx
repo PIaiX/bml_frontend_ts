@@ -10,16 +10,16 @@ const Instructions: FC = () => {
     const partners = useQuery({
         queryKey: ['partners'],
         queryFn: () => getPartners(1, 100),
-        cacheTime: 10 * 60 * 1000,
+        cacheTime: 0,
         staleTime: 10 * 60 * 1000,
     })
     const tutorial = useQuery({
         queryKey: ['tutor'],
         queryFn: () => getTutorials(1, 100),
-        cacheTime: 10 * 60 * 1000,
+        cacheTime: 0,
         staleTime: 10 * 60 * 1000,
     })
-
+    console.log(partners)
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
