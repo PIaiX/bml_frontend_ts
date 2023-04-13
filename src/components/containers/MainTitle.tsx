@@ -20,8 +20,7 @@ const MainTitle: FC<IMainTitle> = ({ title, description, videoPath }) => {
                             <img src={img} onClick={clickOnImg} />
                         </div>
                         <div style={{ display: display == 'inline-block' ? 'none' : 'inline-block' }}>
-                            <video controls playsInline>
-                                <source src={videoPath && checkPhotoPath(videoPath)} />
+                            <video controls playsInline src={videoPath && checkPhotoPath(videoPath)}>
                             </video>
                         </div>
                     </div>
