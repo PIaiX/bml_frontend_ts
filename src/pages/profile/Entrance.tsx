@@ -66,17 +66,17 @@ const Entrance: FC = () => {
                                         required: 'Введите пароль',
                                     })}
                                 />
-                                <label className="color-1 mt-3 mt-sm-4">
-                                    <input
-                                        name="offer"
-                                        type="checkbox"
-                                        defaultChecked={false}
-                                        onClick={(e) => setTypePassword(!typePassword)}
-                                    />
-                                    <span className="ms-3">Показать пароль</span>
-                                </label>
-
                             </ValidateWrapper>
+                            <label className="color-1 mt-3 mt-sm-4">
+                                <input
+                                    name="offer"
+                                    type="checkbox"
+                                    defaultChecked={false}
+                                    onClick={(e) => setTypePassword(!typePassword)}
+                                />
+                                <span className="ms-3">Показать пароль</span>
+                            </label>
+
                             <button className="btn_main btn_2 px-5 mx-auto mt-3 mt-sm-4">Войти</button>
                             <div className="mt-3">
                                 Ещё нет аккаунта?{' '}
