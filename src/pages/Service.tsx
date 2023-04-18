@@ -5,7 +5,7 @@ import 'swiper/css/pagination'
 import Loader from '../components/utils/Loader'
 import ServicePagination from '../components/utils/Pagination'
 import usePagination from '../hooks/pagination'
-import {useParams} from 'react-router-dom'
+import {useLocation, useParams} from 'react-router-dom'
 import SearchForm from '../components/forms/SearchForm'
 import PartnersSite from '../components/PartnersSite'
 import NewsContainer from '../components/containers/News'
@@ -32,6 +32,7 @@ const Service: FC = () => {
     const categoryId = params.categoryId ? parseInt(params.categoryId) : 0
     const [orderBy, setOrderBy] = useState<string>('')
     const limit = 36
+    const {pathname} = useLocation()
     const dispatch = useAppDispatch()
 
     const ref = useRef<HTMLElement>(null)
@@ -153,6 +154,13 @@ const Service: FC = () => {
             })
             .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
     }
+    useEffect(()=>{
+        const timer = setTimeout(() => {
+            window.scrollTo(0,0)
+        }, 500);
+        return () => clearTimeout(timer);
+    },[pathname])
+
 
     return (
         <main>

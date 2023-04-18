@@ -6,11 +6,13 @@ import Alert from '../components/utils/Alert'
 import { useAppDispatch, useAppSelector } from '../hooks/store'
 import { resetAlert } from '../store/reducers/alertSlice'
 import ActionNotification from '../components/utils/ActionNitification'
+import useAnchor from "../hooks/useAnchor";
 
-const Layout: FC = () => {
+const Layout = () => {
     const alertState = useAppSelector((state) => state.alert)
     const dispatch = useAppDispatch()
-    const {pathname} = useLocation()
+    const [myRef, executeScroll] = useAnchor()
+
     useEffect(() => {
         if (alertState?.isShow) {
             setTimeout(() => {
@@ -19,15 +21,9 @@ const Layout: FC = () => {
         }
     }, [alertState?.isShow])
 
-    useEffect(()=>{
-        const timer = setTimeout(() => {
-            window.scrollTo(0,0)
-        }, 500);
-        return () => clearTimeout(timer);
-    },[pathname])
-
     return (
         <div className="root-wrapper">
+            <div ref={myRef}></div>
             <ScrollRestoration />
             <Header />
             <div className="content-wrapper">
@@ -36,6 +32,7 @@ const Layout: FC = () => {
             <Alert />
             <ActionNotification delay={5000} />
             <Footer />
+            {executeScroll()}
         </div>
     )
 }

@@ -17,12 +17,12 @@ function MyWallet() {
                     Пополнить
                 </button>
                 <div className="f_11 fw_7 pt mt-3">Баланс: {FunctionForPrice(user?.balance)} ₽</div>
-                <form className="promo mt-3">
-                    <input type="text" />
-                    <button type="button" className="btn_main btn_3 w-100 mt-2">
-                        Ввести промокод
-                    </button>
-                </form>
+                {/*<form className="promo mt-3">*/}
+                {/*    <input type="text" />*/}
+                {/*    <button type="button" className="btn_main btn_3 w-100 mt-2">*/}
+                {/*        Ввести промокод*/}
+                {/*    </button>*/}
+                {/*</form>*/}
                 <div className="l-gray text-center mt-3">
                     Для пополнения счета по безналичному расчету
                     <br /> необходимо скачать и заполнить форму.
