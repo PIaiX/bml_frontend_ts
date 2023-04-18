@@ -1,6 +1,6 @@
 import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react'
 import { Link, NavLink, useNavigate, useParams } from 'react-router-dom'
-import { MdOutlineArrowBack, MdOutlineQuestionAnswer } from 'react-icons/md'
+import {MdInfoOutline, MdOutlineArrowBack, MdOutlineQuestionAnswer} from 'react-icons/md'
 import { IUseStateItem, IUseStateItems } from '../../types'
 import { IUser } from '../../types/user'
 import { getIdChat, getUserInfo } from '../../services/users'
@@ -13,9 +13,14 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store'
 import { emitCreateWithoutTopicMessage } from '../../services/sockets/messages'
 import { showAlert } from '../../store/reducers/alertSlice'
 import CustomModal from '../../components/utils/CustomModal'
+import {IUseStateReportType} from "../../types/report";
+import {createReport, getAdvReportType, getUserReportType} from "../../services/reports";
+import ValidateWrapper from "../../components/utils/ValidateWrapper";
+import {useForm} from "react-hook-form";
 
 const ViewProfile: FC = () => {
     const { id } = useParams()
+    const {register, setValue, formState: {errors}, handleSubmit, reset} = useForm()
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [userInfo, setUserInfo] = useState<IUseStateItem<IUser>>({
         isLoaded: false,
@@ -32,6 +37,21 @@ const ViewProfile: FC = () => {
         conversationId: 0,
     })
     const [idChat, setIdChat] = useState()
+
+    const [isShowModalReport, setIsShowModalReport] = useState<boolean>(false)
+    const [reportUserTypes, setReportUserTypes] = useState<IUseStateReportType>({
+        isLoaded: true,
+        error: null,
+        items: null,
+    })
+
+    useEffect(() => {
+        getUserReportType()
+            .then((res) => res && setReportUserTypes({isLoaded: true, items: res, error: null}))
+            .catch(() => setReportUserTypes({isLoaded: true, items: null, error: 'Произошла ошибка'}))
+    }, [])
+
+
     const [isShowMessageModal, setIsShowMessageModal] = useState(false)
     const dispatch = useAppDispatch()
 
@@ -76,6 +96,17 @@ const ViewProfile: FC = () => {
                 })
                 .catch(() => console.log())
         }
+    }
+    const onSubmit=(data:any)=>{
+        const req = {...data, toId:userInfo?.item?.id, userId:user?.id}
+        createReport(req)
+            .then(() => {
+                dispatch(showAlert({message: 'Жалоба успешно отправлена', typeAlert: 'good'}))
+                setIsShowModalReport(false)
+                reset()
+            })
+            .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
+
     }
     const onSubmitRemoveFromFriend = () => {
         if (user && id) {
@@ -196,7 +227,7 @@ const ViewProfile: FC = () => {
                             className="user-photo"
                         />
                         {user?.id != id && userInfo?.item && (
-                            <div className="acc-box mt-3 mt-xl-4">
+                            <div className="acc-box mt-3 mt-xl-4 position-relative">
                                 <>
                                     <Link
                                         to={`/account/chat/window/${idChat ? idChat : 'new'}`}
@@ -256,6 +287,15 @@ const ViewProfile: FC = () => {
                                         Удалить из партнёров
                                     </button>
                                 )}
+                                {
+                                    <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
+                                        setIsShowModalReport(true)
+                                    }}>
+                                        <MdInfoOutline className="f_11 gray"/>
+                                    </div>
+
+                                }
+
                             </div>
                         )}
                     </div>
@@ -403,6 +443,58 @@ const ViewProfile: FC = () => {
                         </button>
                     </div>
                 </form>
+            </CustomModal>
+            <CustomModal
+                isShow={isShowModalReport}
+                setIsShow={setIsShowModalReport}
+                centered={false}
+                closeButton={true}
+                className="modal__report"
+            >
+                <div>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div>
+                            <label className="fs-12">Выберите причину жалобы: </label>
+                            <ValidateWrapper error={errors.reportTypeId}>
+                                <select
+                                    {...register('reportTypeId', {
+                                        required: 'Обязательное поле',
+                                    })}
+                                >
+                                    {reportUserTypes?.isLoaded ? (
+                                        reportUserTypes?.items?.map((i) => (
+                                            <option value={i.id} key={i.id}>
+                                                {i.name}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option>Загрузка</option>
+                                    )}
+                                </select>
+                            </ValidateWrapper>
+                        </div>
+                        <div className="mt-3 mb-3">
+                            <label className="fs-12">Текст жалобы: </label>
+                            <ValidateWrapper error={errors.description}>
+                                <textarea
+                                    {...register('description', {
+                                        required: 'Обязательное поле',
+                                        minLength: {value: 5, message: 'Минимум 5 символов'},
+                                        maxLength: {value: 250, message: 'Максимум 250 символов'},
+                                    })}
+                                />
+                            </ValidateWrapper>
+                        </div>
+                        <div className="d-flex justify-content-center">
+                            <button
+                                type="submit"
+                                className="btn_main btn_1"
+                            >
+                                Отправить
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </CustomModal>
         </>
     )

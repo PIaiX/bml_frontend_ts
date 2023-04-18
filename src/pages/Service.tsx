@@ -24,7 +24,7 @@ import CustomModal from "../components/utils/CustomModal";
 import ValidateWrapper from "../components/utils/ValidateWrapper";
 import {useForm} from "react-hook-form";
 import {IUseStateReportType} from "../types/report";
-import {createReport, getOfferReportType} from "../services/reports";
+import {createReport, getAdvReportType} from "../services/reports";
 import {showAlert} from "../store/reducers/alertSlice";
 
 const Service: FC = () => {
@@ -71,7 +71,7 @@ const Service: FC = () => {
     }, [categoryId])
 
     useEffect(() => {
-        getOfferReportType()
+        getAdvReportType()
             .then((res) => res && setReportTypes({isLoaded: true, items: res, error: null}))
             .catch(() => setReportTypes({isLoaded: true, items: null, error: 'Произошла ошибка'}))
     }, [])
@@ -143,8 +143,8 @@ const Service: FC = () => {
         setSelectedPage(0)
     }, [categoryId])
 
-    const onSubmit = ({description, reportTypeId}: any) => {
-        const req = {description, reportTypeId, userId: user?.id, advertisementId: idAdvForBad}
+    const onSubmit = ({description, reportTypeId, advertisementId}: any) => {
+        const req = {description, reportTypeId, userId: user?.id, advertisementId}
         createReport(req)
             .then(() => {
                 dispatch(showAlert({message: 'Жалоба успешно отправлена', typeAlert: 'good'}))
@@ -287,12 +287,14 @@ const Service: FC = () => {
                         {advertising && advertising[0] && advertising[0].image &&
                             <div className="blockAdvertising position-relative">
                                 <img className={"img-advertising"} src={checkPhotoPath(advertising[0].image)} alt=""/>
-                                <div className={'badAdv'} onClick={() => {
-                                    setIdAdvForBad(advertising[0].id)
-                                    setIsShowModalReport(true)
-                                }}>
-                                    <MdInfoOutline className="f_11 gray"/>
-                                </div>
+                                {user &&
+                                    <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
+                                        setIdAdvForBad(advertising[0].id)
+                                        setIsShowModalReport(true)
+                                    }}>
+                                        <MdInfoOutline className="f_11 gray"/>
+                                    </div>
+                                }
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(12, 24).map((item: IOffersItem) => (
@@ -312,13 +314,14 @@ const Service: FC = () => {
                         {advertising && advertising[1] && advertising[1]?.image &&
                             <div className={"blockAdvertising position-relative"}>
                                 <img className={"img-advertising"} src={checkPhotoPath(advertising[1].image)} alt=""/>
-                                <div className={'badAdv'} onClick={() => {
-                                    setIdAdvForBad(advertising[0].id)
-                                    setIsShowModalReport(true)
-                                }}>
-                                    <MdInfoOutline className="f_11 gray"/>
-                                </div>
-
+                                {user &&
+                                    <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
+                                        setIdAdvForBad(advertising[0].id)
+                                        setIsShowModalReport(true)
+                                    }}>
+                                        <MdInfoOutline className="f_11 gray"/>
+                                    </div>
+                                }
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(24, offers?.items?.length).map((item: IOffersItem) => (
@@ -420,7 +423,7 @@ const Service: FC = () => {
                                     if (user) {
                                         setValue('userId', user?.id)
                                     }
-                                    setValue('offerId', idAdvForBad)
+                                    setValue('advertisementId', idAdvForBad)
                                 }}
                             >
                                 Отправить

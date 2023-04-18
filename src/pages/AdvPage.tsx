@@ -540,12 +540,14 @@ const AdvPage: FC = () => {
                                         <div className={'position-relative'}>
                                             <img src={checkPhotoPath(advertising[0].image)} alt="img"
                                                  className="img-fluid mb-2"/>
-                                            <div className={'badAdv'} onClick={() => {
-                                                setIdAdvForBad(advertising[0].id)
-                                                setIsShowModalReport(true)
-                                            }}>
-                                                <MdInfoOutline className="f_11 gray"/>
-                                            </div>
+                                            {user &&
+                                                <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
+                                                    setIdAdvForBad(advertising[0].id)
+                                                    setIsShowModalReport(true)
+                                                }}>
+                                                    <MdInfoOutline className="f_11 gray"/>
+                                                </div>
+                                            }
 
                                         </div>
                                         <h4 className="fw_7 mb-2">{advertising[0].description}</h4>
@@ -555,12 +557,14 @@ const AdvPage: FC = () => {
                                         <div className={'position-relative'}>
                                             <img src={checkPhotoPath(advertising[1].image)} alt="img"
                                                  className="img-fluid mb-2"/>
-                                            <div className={'badAdv'} onClick={() => {
-                                                setIdAdvForBad(advertising[0].id)
-                                                setIsShowModalReport(true)
-                                            }}>
-                                                <MdInfoOutline className="f_11 gray"/>
-                                            </div>
+                                            {user &&
+                                                <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
+                                                    setIdAdvForBad(advertising[0].id)
+                                                    setIsShowModalReport(true)
+                                                }}>
+                                                    <MdInfoOutline className="f_11 gray"/>
+                                                </div>
+                                            }
 
                                         </div>
                                         <h4 className="fw_7 mb-2">{advertising[1].description}</h4>
