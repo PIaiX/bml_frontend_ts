@@ -9,6 +9,9 @@ const apiRoutes: ApiRoutesTypes = {
     //banner
     GET_BANNER: 'banner',
 
+    //promocode
+    GET_PROMOCODE:'promo',
+
     // advertising
     GET_ADVERTISING: 'ads/portions',
     SET_ADVERTISING: 'ads',

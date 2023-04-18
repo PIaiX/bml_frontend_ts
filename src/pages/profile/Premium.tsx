@@ -14,9 +14,10 @@ import {showAlert} from "../../store/reducers/alertSlice";
 interface propsType{
     setChange?:(s:any)=>void
     priceWithoutPremium?:number
+    promo?:number
     setPayment?:(s:string)=>void
 }
-const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) => {
+const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment, promo=0}) => {
     const loc: any = useLocation()
     const [data, setData] = useState<any>({littleBanner: null, sum: 0, placedForMonths: '1'})
     const lookBigPicture = useImageViewer(data?.bigBanner)
@@ -165,7 +166,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment}) =>
                         <div className="f_12 fw_6">Сумма к оплате</div>
                     </div>
                     <div className="col-sm-6 col-lg-4 mb-3 mb-sm-2">
-                        <span className="f_12 fw_6">{priceWithoutPremium?functionForPrice(priceWithoutPremium+data?.sum):data?.sum?data?.sum:0} ₽</span>
+                        <span className="f_12 fw_6">{priceWithoutPremium?functionForPrice(priceWithoutPremium+data?.sum-promo):data?.sum?data?.sum:0} ₽</span>
                     </div>
                 </div>
                 <div className="row align-items-center mb-3 mb-sm-4">
