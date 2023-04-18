@@ -17,7 +17,7 @@ import {IOfferItem, IOffersItem, IOffersMeta} from '../types/offers'
 import {checkPhotoPath} from '../helpers/photoLoader'
 import LeftMenuInOfferContainer from '../components/containers/LeftMenuInOffer'
 import ShortInfoInOfferContainer from '../components/containers/ShortInfoInOffer'
-import {createReport, getOfferReportType} from '../services/reports'
+import {createReport, getAdvReportType, getOfferReportType} from '../services/reports'
 import {IUser} from '../types/user'
 import {useAppDispatch, useAppSelector} from '../hooks/store'
 import Loader from '../components/utils/Loader'
@@ -51,10 +51,10 @@ const AdvPage: FC = () => {
     })
     const [idAdvForBad, setIdAdvForBad] = useState<number | undefined>()
 
-    useEffect(()=>{
-        if(!setIsShowModalReport)
+    useEffect(() => {
+        if (!isShowModalReport)
             setIdAdvForBad(undefined)
-    }, [setIsShowModalReport])
+    }, [isShowModalReport])
 
     const [advertising, setAdvertising] = useState<Advertisings>()
     const [reportTypes, setReportTypes] = useState<IUseStateReportType>({
@@ -62,6 +62,12 @@ const AdvPage: FC = () => {
         error: null,
         items: null,
     })
+    const [reportAdsTypes, setReportAdsTypes] = useState<IUseStateReportType>({
+        isLoaded: true,
+        error: null,
+        items: null,
+    })
+
     const {
         register,
         formState: {errors},
@@ -114,6 +120,12 @@ const AdvPage: FC = () => {
     }, [])
 
     useEffect(() => {
+        getAdvReportType()
+            .then((res) => res && setReportAdsTypes({isLoaded: true, items: res, error: null}))
+            .catch(() => setReportAdsTypes({isLoaded: true, items: null, error: 'Произошла ошибка'}))
+    }, [])
+
+    useEffect(() => {
         if (offer?.item) {
             const payloads = {}
             getOffers(1, 10, offer?.item?.category, user ? user.id : null, payloads, true)
@@ -148,10 +160,10 @@ const AdvPage: FC = () => {
     }
 
     const onSubmit = (data: PayloadsReport) => {
-        let req:any = {...data}
-        if(idAdvForBad){
+        let req: any = {...data}
+        if (idAdvForBad) {
             const {description, reportTypeId} = req
-            req={description, reportTypeId, userId: user?.id, advertisementId: idAdvForBad}
+            req = {description, reportTypeId, userId: user?.id, advertisementId: idAdvForBad}
         }
         createReport(req)
             .then(() => {
@@ -526,7 +538,8 @@ const AdvPage: FC = () => {
                                 {advertising && advertising[0] &&
                                     <div className="col-8 col-sm-6 col-md-12 promo">
                                         <div className={'position-relative'}>
-                                            <img src={checkPhotoPath(advertising[0].image)} alt="img" className="img-fluid mb-2"/>
+                                            <img src={checkPhotoPath(advertising[0].image)} alt="img"
+                                                 className="img-fluid mb-2"/>
                                             <div className={'badAdv'} onClick={() => {
                                                 setIdAdvForBad(advertising[0].id)
                                                 setIsShowModalReport(true)
@@ -540,7 +553,8 @@ const AdvPage: FC = () => {
                                 {advertising && advertising[1] &&
                                     <div className="col-8 col-sm-6 col-md-12 promo">
                                         <div className={'position-relative'}>
-                                            <img src={checkPhotoPath(advertising[1].image)} alt="img" className="img-fluid mb-2"/>
+                                            <img src={checkPhotoPath(advertising[1].image)} alt="img"
+                                                 className="img-fluid mb-2"/>
                                             <div className={'badAdv'} onClick={() => {
                                                 setIdAdvForBad(advertising[0].id)
                                                 setIsShowModalReport(true)
@@ -782,7 +796,17 @@ const AdvPage: FC = () => {
                                         required: 'Обязательное поле',
                                     })}
                                 >
-                                    {reportTypes?.isLoaded ? (
+                                    {idAdvForBad &&
+                                    reportAdsTypes?.isLoaded ? (
+                                        reportAdsTypes?.items?.map((i) => (
+                                            <option value={i.id} key={i.id}>
+                                                {i.name}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option>Загрузка</option>
+                                    )}
+                                    {!idAdvForBad && reportTypes?.isLoaded ? (
                                         reportTypes?.items?.map((i) => (
                                             <option value={i.id} key={i.id}>
                                                 {i.name}

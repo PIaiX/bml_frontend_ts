@@ -21,6 +21,15 @@ export const getOfferReportType = async () => {
     }
 }
 
+export const getAdvReportType = async () => {
+    try {
+        const response = await $authApi.get<ReportsTypeBodyRequest>(`${apiRoutes.GET_ADS_REPORT_TYPE}`)
+        return response?.data?.body
+    } catch (error) {
+        throw error
+    }
+}
+
 export const createReport = async (payloads: PayloadsReport | any) => {
     try {
         const response = await $authApi.post(`${apiRoutes.REPORT}`, payloads)

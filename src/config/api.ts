@@ -52,6 +52,7 @@ const apiRoutes: ApiRoutesTypes = {
     //reports
     GET_USER_REPORT_TYPE: 'report/type/user',
     GET_OFFER_REPORT_TYPE: 'report/type/offer',
+    GET_ADS_REPORT_TYPE: 'report/type/ads',
     REPORT: 'report',
 
     //partners
