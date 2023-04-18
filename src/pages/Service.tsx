@@ -157,7 +157,7 @@ const Service: FC = () => {
     useEffect(()=>{
         const timer = setTimeout(() => {
             window.scrollTo(0,0)
-        }, 500);
+        }, 200);
         return () => clearTimeout(timer);
     },[pathname])
 

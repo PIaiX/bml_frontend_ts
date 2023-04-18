@@ -11,6 +11,7 @@ import useAnchor from "../hooks/useAnchor";
 const Layout = () => {
     const alertState = useAppSelector((state) => state.alert)
     const dispatch = useAppDispatch()
+    const {pathname} = useLocation()
     const [myRef, executeScroll] = useAnchor()
 
     useEffect(() => {
@@ -20,6 +21,14 @@ const Layout = () => {
             }, 2000)
         }
     }, [alertState?.isShow])
+
+    useEffect(()=>{
+        const timer = setTimeout(() => {
+            window.scrollTo(0,0)
+        }, 200);
+        return () => clearTimeout(timer);
+    },[pathname])
+
 
     return (
         <div className="root-wrapper">
