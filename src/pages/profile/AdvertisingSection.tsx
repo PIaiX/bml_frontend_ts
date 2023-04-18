@@ -432,6 +432,13 @@ const AdvertisingSection = () => {
                             if(status!=='Фото загружено')setError('image', {message:'Загрузите фото'})
                             else clearErrors(["image"])
                         }}>
+                    Ввести промокод
+                </button>
+                <button type="submit" className="btn_main btn_4 fw_4 mt-sm-5 py-1"
+                        onClick={()=>{
+                            if(status!=='Фото загружено')setError('image', {message:'Загрузите фото'})
+                            else clearErrors(["image"])
+                        }}>
                     Создать и перейти к оплате
                 </button>
             </div>}

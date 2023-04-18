@@ -13,29 +13,48 @@ import BannerContainer from '../components/containers/Banner'
 import {getAllAreas, getAllSubsections, getOffers} from '../services/offers'
 import {getCity} from '../services/city'
 import {IOffersAreaItem, IOffersItem, IOffersMeta, IOffersSubSectionsItem, IPayloadsFilter} from '../types/offers'
-import {useAppSelector} from '../hooks/store'
+import {useAppDispatch, useAppSelector} from '../hooks/store'
 import {IUser} from '../types/user'
 import {IUseStateItems} from '../types'
 import {getAdvertisings} from "../services/advertising";
 import {Advertisings} from "../types/advertising";
 import {checkPhotoPath} from "../helpers/photoLoader";
+import {MdInfoOutline} from "react-icons/md";
+import CustomModal from "../components/utils/CustomModal";
+import ValidateWrapper from "../components/utils/ValidateWrapper";
+import {useForm} from "react-hook-form";
+import {IUseStateReportType} from "../types/report";
+import {createReport, getOfferReportType} from "../services/reports";
+import {showAlert} from "../store/reducers/alertSlice";
 
 const Service: FC = () => {
     const params = useParams()
     const categoryId = params.categoryId ? parseInt(params.categoryId) : 0
     const [orderBy, setOrderBy] = useState<string>('')
     const limit = 36
+    const dispatch = useAppDispatch()
+
     const ref = useRef<HTMLElement>(null)
     const [areas, setAreas] = useState<Array<IOffersAreaItem | undefined>>([])
     const [subSections, setSubSections] = useState<Array<IOffersSubSectionsItem | undefined>>([])
     const [currentArea, setCurrentArea] = useState<number | undefined>(undefined)
     const [cities, setCities] = useState<Array<string> | undefined>([])
+
+    const [idAdvForBad, setIdAdvForBad] = useState<number | undefined>()
+    const [reportTypes, setReportTypes] = useState<IUseStateReportType>({
+        isLoaded: true,
+        error: null,
+        items: null,
+    })
+
+    const [isShowModalReport, setIsShowModalReport] = useState<boolean>(false)
+    const {register, setValue, formState: {errors}, handleSubmit, reset} = useForm()
     const [offers, setOffers] = useState<IUseStateItems<IOffersItem, IOffersMeta>>({
         isLoaded: false,
         items: null,
         meta: null,
     })
-    const [advertising, setAdvertising]=useState<Advertisings>()
+    const [advertising, setAdvertising] = useState<Advertisings>()
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const {paginationItems, pageCount, selectedPage, handlePageClick, setSelectedPage} = usePagination(
         offers?.items,
@@ -52,6 +71,13 @@ const Service: FC = () => {
     }, [categoryId])
 
     useEffect(() => {
+        getOfferReportType()
+            .then((res) => res && setReportTypes({isLoaded: true, items: res, error: null}))
+            .catch(() => setReportTypes({isLoaded: true, items: null, error: 'Произошла ошибка'}))
+    }, [])
+
+
+    useEffect(() => {
         getAllAreas().then((res) => res && setAreas(res))
     }, [])
 
@@ -66,7 +92,7 @@ const Service: FC = () => {
     }, [])
 
     useEffect(() => {
-        getAdvertisings(1).then(res=>{
+        getAdvertisings(1).then(res => {
             res && setAdvertising(res)
         })
 
@@ -112,13 +138,25 @@ const Service: FC = () => {
         setFilters(data)
     }
 
+
     useEffect(() => {
         setSelectedPage(0)
     }, [categoryId])
 
+    const onSubmit = ({description, reportTypeId}: any) => {
+        const req = {description, reportTypeId, userId: user?.id, advertisementId: idAdvForBad}
+        createReport(req)
+            .then(() => {
+                dispatch(showAlert({message: 'Жалоба успешно отправлена', typeAlert: 'good'}))
+                setIsShowModalReport(false)
+                reset()
+            })
+            .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
+    }
+
     return (
         <main>
-            <BannerContainer />
+            <BannerContainer/>
 
             <section className="block_3 container" ref={ref}>
                 <h1 className="inner mt-4">
@@ -233,7 +271,7 @@ const Service: FC = () => {
                                             title={item.title}
                                             investments={item.investments}
                                             favorite={item.isFavorite}
-                                            price={categoryId===3?item.price : undefined}
+                                            price={categoryId === 3 ? item.price : undefined}
                                             isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
                                         />
                                     </div>
@@ -243,31 +281,44 @@ const Service: FC = () => {
                             )
                         ) : (
                             <div className="p-5 w-100 d-flex justify-content-center">
-                                <Loader color="#343434" />
+                                <Loader color="#343434"/>
                             </div>
                         )}
                         {advertising && advertising[0] && advertising[0].image &&
-                            <div className="blockAdvertising">
-                                <img className={"img-advertising"} src={checkPhotoPath(advertising[0].image)} alt="" />
+                            <div className="blockAdvertising position-relative">
+                                <img className={"img-advertising"} src={checkPhotoPath(advertising[0].image)} alt=""/>
+                                <div className={'badAdv'} onClick={() => {
+                                    setIdAdvForBad(advertising[0].id)
+                                    setIsShowModalReport(true)
+                                }}>
+                                    <MdInfoOutline className="f_11 gray"/>
+                                </div>
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(12, 24).map((item: IOffersItem) => (
-                                  <div className="col position-relative" key={item.id}>
-                                      <AdvPreview
-                                          id={item.id}
-                                          image={item.image}
-                                          title={item.title}
-                                          favorite={item.isFavorite}
-                                          investments={item.investments}
-                                          price={categoryId===3?item.price : undefined}
-                                          isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
-                                      />
-                                  </div>
-                              ))
+                                <div className="col position-relative" key={item.id}>
+                                    <AdvPreview
+                                        id={item.id}
+                                        image={item.image}
+                                        title={item.title}
+                                        favorite={item.isFavorite}
+                                        investments={item.investments}
+                                        price={categoryId === 3 ? item.price : undefined}
+                                        isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
+                                    />
+                                </div>
+                            ))
                             : null}
                         {advertising && advertising[1] && advertising[1]?.image &&
-                            <div className={"blockAdvertising"}>
-                                <img className={"img-advertising"} src={checkPhotoPath(advertising[1].image)} alt="" />
+                            <div className={"blockAdvertising position-relative"}>
+                                <img className={"img-advertising"} src={checkPhotoPath(advertising[1].image)} alt=""/>
+                                <div className={'badAdv'} onClick={() => {
+                                    setIdAdvForBad(advertising[0].id)
+                                    setIsShowModalReport(true)
+                                }}>
+                                    <MdInfoOutline className="f_11 gray"/>
+                                </div>
+
                             </div>}
                         {offers?.items && offers?.items?.length
                             ? paginationItems?.slice(24, offers?.items?.length).map((item: IOffersItem) => (
@@ -278,7 +329,7 @@ const Service: FC = () => {
                                         title={item.title}
                                         favorite={item.isFavorite}
                                         investments={item.investments}
-                                        price={categoryId===3?item.price : undefined}
+                                        price={categoryId === 3 ? item.price : undefined}
                                         isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
                                     />
                                 </div>
@@ -286,7 +337,7 @@ const Service: FC = () => {
                             : null}
                     </div>
                 )}
-                    {offers.isLoaded && (
+                {offers.isLoaded && (
                     <div className="sort mt-4">
                         <ServicePagination
                             nextLabel="❯"
@@ -320,10 +371,67 @@ const Service: FC = () => {
                     </div>
                 )}
             </section>
+            <CustomModal
+                isShow={isShowModalReport}
+                setIsShow={setIsShowModalReport}
+                centered={false}
+                closeButton={true}
+                className="modal__report"
+            >
+                <div>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div>
+                            <label className="fs-12">Выберите причину жалобы: </label>
+                            <ValidateWrapper error={errors.reportTypeId}>
+                                <select
+                                    {...register('reportTypeId', {
+                                        required: 'Обязательное поле',
+                                    })}
+                                >
+                                    {reportTypes?.isLoaded ? (
+                                        reportTypes?.items?.map((i) => (
+                                            <option value={i.id} key={i.id}>
+                                                {i.name}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option>Загрузка</option>
+                                    )}
+                                </select>
+                            </ValidateWrapper>
+                        </div>
+                        <div className="mt-3 mb-3">
+                            <label className="fs-12">Текст жалобы: </label>
+                            <ValidateWrapper error={errors.description}>
+                                <textarea
+                                    {...register('description', {
+                                        required: 'Обязательное поле',
+                                        minLength: {value: 5, message: 'Минимум 5 символов'},
+                                        maxLength: {value: 250, message: 'Максимум 250 символов'},
+                                    })}
+                                />
+                            </ValidateWrapper>
+                        </div>
+                        <div className="d-flex justify-content-center">
+                            <button
+                                type="submit"
+                                className="btn_main btn_1"
+                                onClick={() => {
+                                    if (user) {
+                                        setValue('userId', user?.id)
+                                    }
+                                    setValue('offerId', idAdvForBad)
+                                }}
+                            >
+                                Отправить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </CustomModal>
+            <NewsContainer/>
 
-            <NewsContainer />
-
-            <PartnersSite />
+            <PartnersSite/>
         </main>
     )
 }

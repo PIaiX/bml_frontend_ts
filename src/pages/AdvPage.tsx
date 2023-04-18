@@ -1,7 +1,7 @@
 import React, {BaseSyntheticEvent, FC, useEffect, useState,} from 'react'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import AdvPreview from '../components/AdvPreview'
-import {Link, NavLink, useNavigate, useParams} from 'react-router-dom'
+import {NavLink, useNavigate, useParams} from 'react-router-dom'
 import {MdDateRange, MdInfoOutline, MdOutlinePlace, MdOutlineVisibility} from 'react-icons/md'
 import BtnFav from '../components/utils/BtnFav'
 import {PhotoProvider, PhotoView} from 'react-photo-view'
@@ -49,7 +49,14 @@ const AdvPage: FC = () => {
         items: null,
         meta: null,
     })
-    const [advertising, setAdvertising]=useState<Advertisings>()
+    const [idAdvForBad, setIdAdvForBad] = useState<number | undefined>()
+
+    useEffect(()=>{
+        if(!setIsShowModalReport)
+            setIdAdvForBad(undefined)
+    }, [setIsShowModalReport])
+
+    const [advertising, setAdvertising] = useState<Advertisings>()
     const [reportTypes, setReportTypes] = useState<IUseStateReportType>({
         isLoaded: true,
         error: null,
@@ -70,8 +77,8 @@ const AdvPage: FC = () => {
         conversationId: 0
     })
 
-    useEffect(()=>{
-        getAdvertisings(2).then(res=>{
+    useEffect(() => {
+        getAdvertisings(2).then(res => {
             setAdvertising(res)
         })
     }, [offer?.item?.id])
@@ -141,7 +148,12 @@ const AdvPage: FC = () => {
     }
 
     const onSubmit = (data: PayloadsReport) => {
-        createReport(data)
+        let req:any = {...data}
+        if(idAdvForBad){
+            const {description, reportTypeId} = req
+            req={description, reportTypeId, userId: user?.id, advertisementId: idAdvForBad}
+        }
+        createReport(req)
             .then(() => {
                 dispatch(showAlert({message: 'Жалоба успешно отправлена', typeAlert: 'good'}))
                 setIsShowModalReport(false)
@@ -150,8 +162,8 @@ const AdvPage: FC = () => {
             .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
     }
     const [messageType, setMessageType] = useState<string>('0')
-    let swiperPB=250;
-    if(window. innerWidth>1400)swiperPB=350
+    let swiperPB = 250;
+    if (window.innerWidth > 1400) swiperPB = 350
     const createWithOfferTopicMessage = (e: BaseSyntheticEvent | null) => {
         e && e.preventDefault()
         if (offer.item) {
@@ -164,16 +176,26 @@ const AdvPage: FC = () => {
             })
         }
     }
-    let srcToChat='/enter'
-    if(user)
-        srcToChat=`/account/chat/window/${idChat ? idChat : 'new'}`
+    let srcToChat = '/enter'
+    if (user)
+        srcToChat = `/account/chat/window/${idChat ? idChat : 'new'}`
 
 
-    const clickMessage = ()=>{
-        if(user)
-            navigate(srcToChat, {state:{ userName: offer?.item?.user.fullName, userId: offer?.item?.user.id, avatar: offer?.item?.user.avatar }})
+    const clickMessage = () => {
+        if (user)
+            navigate(srcToChat, {
+                state: {
+                    userName: offer?.item?.user.fullName,
+                    userId: offer?.item?.user.id,
+                    avatar: offer?.item?.user.avatar
+                }
+            })
         else
-            dispatch(showAlert({message: 'Зарегистрируйтесь для отправки сообщений. ', typeAlert: 'neutral', withLink:true}))
+            dispatch(showAlert({
+                message: 'Зарегистрируйтесь для отправки сообщений. ',
+                typeAlert: 'neutral',
+                withLink: true
+            }))
     }
 
     return (
@@ -401,7 +423,7 @@ const AdvPage: FC = () => {
                                             <span
                                                 className="f_15 fw_5 text-nowrap">
                                                 {FunctionForPrice(offer?.item?.pricePerMonth)}
-                                                {offer?.item?.isPricePerMonthAbsolute && offer?.item?.category===4?' ₽': '%'}
+                                                {offer?.item?.isPricePerMonthAbsolute && offer?.item?.category === 4 ? ' ₽' : '%'}
                                             </span>
                                         </div>
 
@@ -462,17 +484,21 @@ const AdvPage: FC = () => {
                                                 text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"'
                                             }))
                                             createWithOfferTopicMessage(event)
-                                        } else{
-                                            dispatch(showAlert({message: 'Зарегистрируйтесь для запроса бизнес плана. ', typeAlert: 'neutral', withLink:true}))
+                                        } else {
+                                            dispatch(showAlert({
+                                                message: 'Зарегистрируйтесь для запроса бизнес плана. ',
+                                                typeAlert: 'neutral',
+                                                withLink: true
+                                            }))
                                         }
                                     }}
                                 >
                                     ПОЛУЧИТЬ БИЗНЕС-ПЛАН
                                 </button>
-                                <div onClick={()=>clickMessage()}>
+                                <div onClick={() => clickMessage()}>
                                     <button
-                                    type="button"
-                                    className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3">
+                                        type="button"
+                                        className="btn_main btn-6 f_11 w-100 mt-2 mt-sm-3">
                                         НАПИСАТЬ СООБЩЕНИЕ
                                     </button>
                                 </div>
@@ -497,14 +523,34 @@ const AdvPage: FC = () => {
                             <LeftMenuInOfferContainer category={offer?.item?.category} video={offer?.item?.video}/>
 
                             <div className="row justify-content-center g-4">
-                                {advertising && advertising[0] && <div className="col-8 col-sm-6 col-md-12 promo">
-                                    <img src={checkPhotoPath(advertising[0].image)} alt="img" className="img-fluid mb-2"/>
-                                    <h4 className="fw_7 mb-2">{advertising[0].description}</h4>
-                                </div>}
-                                {advertising && advertising[1] && <div className="col-8 col-sm-6 col-md-12 promo">
-                                    <img src={checkPhotoPath(advertising[1].image)} alt="img" className="img-fluid mb-2"/>
-                                    <h4 className="fw_7 mb-2">{advertising[1].description}</h4>
-                                </div>}
+                                {advertising && advertising[0] &&
+                                    <div className="col-8 col-sm-6 col-md-12 promo">
+                                        <div className={'position-relative'}>
+                                            <img src={checkPhotoPath(advertising[0].image)} alt="img" className="img-fluid mb-2"/>
+                                            <div className={'badAdv'} onClick={() => {
+                                                setIdAdvForBad(advertising[0].id)
+                                                setIsShowModalReport(true)
+                                            }}>
+                                                <MdInfoOutline className="f_11 gray"/>
+                                            </div>
+
+                                        </div>
+                                        <h4 className="fw_7 mb-2">{advertising[0].description}</h4>
+                                    </div>}
+                                {advertising && advertising[1] &&
+                                    <div className="col-8 col-sm-6 col-md-12 promo">
+                                        <div className={'position-relative'}>
+                                            <img src={checkPhotoPath(advertising[1].image)} alt="img" className="img-fluid mb-2"/>
+                                            <div className={'badAdv'} onClick={() => {
+                                                setIdAdvForBad(advertising[0].id)
+                                                setIsShowModalReport(true)
+                                            }}>
+                                                <MdInfoOutline className="f_11 gray"/>
+                                            </div>
+
+                                        </div>
+                                        <h4 className="fw_7 mb-2">{advertising[1].description}</h4>
+                                    </div>}
                             </div>
                         </div>
                     </div>
@@ -632,7 +678,7 @@ const AdvPage: FC = () => {
                 <div className="container">
                     <h2 className="mt-sm-4">Похожие объявления</h2>
                     <Swiper
-                        style={{paddingBottom:`${swiperPB}px`}}
+                        style={{paddingBottom: `${swiperPB}px`}}
                         modules={[Pagination]}
                         slidesPerView={2}
                         spaceBetween={6}
@@ -667,7 +713,7 @@ const AdvPage: FC = () => {
                                             id={offer.id}
                                             image={offer.image}
                                             title={offer.title}
-                                            investments={offer.investments?offer.investments:offer.price}
+                                            investments={offer.investments ? offer.investments : offer.price}
                                             favorite={false}
                                             isPricePerMonthAbsolute={offer.isPricePerMonthAbsolute}
                                         />

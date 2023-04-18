@@ -3059,3 +3059,12 @@ footer {
         height: 202px;
     }
 }
+.badAdv{
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    display: block;
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px;
+}
