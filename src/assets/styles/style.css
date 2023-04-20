@@ -2598,7 +2598,7 @@ footer {
 @media (max-width: 767px) {
     footer {
         background-color: #2E5193;
-        height: 40px;
+        height: 48px;
         color: white;
         position: sticky;
         bottom: 0px;
