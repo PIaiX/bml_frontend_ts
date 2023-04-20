@@ -20,8 +20,8 @@ const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, 
                         <div>
                             <div className="fw_5 mb-4">Поиск инвесторов</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">{(investors && investors?.total>99)? investors?.total : 100}</span> зарегистрированных
-                                инвесторов
+                                {/*<span className="color-2 fw_7">{(investors && investors?.total>99)? investors?.total : 100}</span> зарегистрированных*/}
+                                Более <span className="color-2 fw_7">400</span> зарегистрированных инвесторов
                             </div>
                         </div>
                         <div>
@@ -37,9 +37,8 @@ const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, 
                         <div>
                             <div className="fw_5 mb-4">Поиск бизнес парнёров</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">{(businessPartners && businessPartners?.total>99)? businessPartners?.total : 100}</span> зарегистрированных
-                                <br />
-                                партнёров по бизнесу
+                                Более <span className="color-2 fw_7">700</span> зарегистрированных партнёров по бизнесу
+                                {/*<span className="color-2 fw_7">{(businessPartners && businessPartners?.total>99)? businessPartners?.total : 100}</span> зарегистрированных партнёров по бизнесу*/}
                             </div>
                         </div>
                         <div>
@@ -55,7 +54,8 @@ const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, 
                         <div>
                             <div className="fw_5 mb-4">Поиск бизнес проектов</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">{(saleBusiness && saleBusiness?.total>99)? saleBusiness?.total : 100}</span> зарегистрированных
+                                Более <span className="color-2 fw_7">600</span> проданных объектов
+                                {/*<span className="color-2 fw_7">{(saleBusiness && saleBusiness?.total>99)? saleBusiness?.total : 100}</span> зарегистрированных*/}
                             </div>
                         </div>
                         <div>
@@ -70,7 +70,8 @@ const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, 
                         <div>
                             <div className="fw_5 mb-4">Поиск франшиз</div>
                             <div className="f_09 pt">
-                                <span className="color-2 fw_7">{(franchise && franchise?.total>99)? franchise?.total : 100}</span> зарегистрированных
+                                Более <span className="color-2 fw_7">50</span> компаний
+                                {/*<span className="color-2 fw_7">{(franchise && franchise?.total>99)? franchise?.total : 100}</span> зарегистрированных*/}
                             </div>
                         </div>
                         <div>
