@@ -57,7 +57,7 @@ const UserAds: FC = () => {
                                 <span className="l-gray ms-2"></span>
                             </button>
                         </div>
-                        <Link to="new-ad" className="btn_main btn_3">
+                        <Link to="new-ad" className={`btn_main btn_3 btn_add_ad`}>
                             Новое объявление
                         </Link>
                     </div>

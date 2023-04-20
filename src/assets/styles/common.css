@@ -460,6 +460,14 @@ button {
     background-color: rgb(var(--color-1) / 20%);
 }
 
+
+@media (max-width: 767px) {
+    .btn_add_ad{
+        color: #fff;
+        background-color: rgb(var(--color-1));
+    }
+
+}
 .btn_3:hover,
 .btn_3:focus,
 .btn_3:active {
