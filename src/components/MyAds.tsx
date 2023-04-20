@@ -11,7 +11,7 @@ import {apiRoutes} from "../config/api";
 import {IPagination} from "../types";
 import {IOffersItem} from "../types/offers";
 import usePagination from "../hooks/pagination";
-import {addInArchive} from "../services/offers";
+import {addInArchive, deleteWithArchive} from "../services/offers";
 import {showAlert} from "../store/reducers/alertSlice";
 import OfferCard from "../pages/profile/OfferCard";
 type propsType={
@@ -26,18 +26,19 @@ const MyAds:FC<propsType> = ({section, bannersType}) => {
     const generalLimit = 5
     const [currentPage, setCurrentPage] = useState(0)
     const [offerId, setOfferId] = useState<number | null>(null)
+    const [offerId2, setOfferId2] = useState<number | null>(null)
     const dispatch = useAppDispatch()
     const queryClient = useQueryClient()
     let text = 'Ничего нет'
     if (user?.typeForUser === 'Физ лицо')
         text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const notArchiveOffers = useQuery({
-        queryKey: [`${bannersType?'notArchiveBanners':`${section}-${currentPage}`}`],
+        queryKey: [`${section}-${currentPage}`],
         queryFn: async () => {
             try {
                 if (user?.id) {
                     const response = await $authApi .get<IOffersBodyRequest>(
-                        `${bannersType?apiRoutes.GET_MY_PUBLIC_ADS:(apiRoutes.GET_MY_OFFERS)}?page=${currentPage + 1
+                        `${apiRoutes.GET_MY_OFFERS}?page=${currentPage + 1
                         }&limit=${generalLimit}&orderBy=${'desc'}&category=${section}`
                     )
                     return response?.data?.body
@@ -58,7 +59,7 @@ const MyAds:FC<propsType> = ({section, bannersType}) => {
         (page: number) => {
             setCurrentPage(page)
         },
-        [section, tab]
+        [section]
     )
 
     const { paginationItems, pageCount, selectedPage, setSelectedPage, handlePageClick }: IPagination<IOffersItem> =
@@ -66,6 +67,10 @@ const MyAds:FC<propsType> = ({section, bannersType}) => {
     const offerIdSeterForArchive = useCallback((id: number) => {
         setOfferId(id)
     }, [])
+    const offerIdSeterForUnArchive = useCallback((id: number) => {
+        setOfferId2(id)
+    }, [])
+
 
     const mutation = useMutation({
         mutationFn: () =>
@@ -74,8 +79,19 @@ const MyAds:FC<propsType> = ({section, bannersType}) => {
                     dispatch(showAlert({ message: 'Объявление успешно добавлено в архив', typeAlert: 'good' }))
                 })
                 .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))),
-        onSuccess: () => queryClient.invalidateQueries([`${bannersType?'notArchiveBanners':'notArchiveAds'}`]),
+        onSuccess: () => queryClient.invalidateQueries([`${section}-${currentPage}`]),
     })
+
+    const mutation2 = useMutation({
+        mutationFn: () =>
+            deleteWithArchive(offerId2)
+                .then(() => {
+                    dispatch(showAlert({ message: 'Объявление успешно отправлено на модерацию', typeAlert: 'good' }))
+                })
+                .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))),
+        onSuccess: () => queryClient.invalidateQueries([`${section}-${currentPage}`]),
+    })
+
 
     useEffect(() => {
         if (offerId) {
@@ -84,16 +100,18 @@ const MyAds:FC<propsType> = ({section, bannersType}) => {
     }, [offerId])
 
     useEffect(() => {
+        if (offerId2) {
+            mutation2.mutate()
+        }
+    }, [offerId2])
+
+    useEffect(() => {
         if (paginationItems?.length === 0) {
             setSelectedPage(0)
             setCurrentPage(0)
         }
     }, [paginationItems?.length])
 
-    useEffect(() => {
-        setSelectedPage(0)
-        setCurrentPage(0)
-    }, [tab])
 
     return (
         <>
@@ -108,6 +126,8 @@ const MyAds:FC<propsType> = ({section, bannersType}) => {
                                 scope={i.subsection?.area?.name}
                                 bannersType={bannersType}
                                 validity={i?.archiveExpire}
+                                offerIdSeterForArchive={offerIdSeterForArchive}
+                                offerIdSeterForUnArchive={offerIdSeterForUnArchive}
                             />
                         ))
                     ) : (
