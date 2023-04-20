@@ -24,9 +24,8 @@ type Props = {
 }
 
 const OfferCard: FC<Props> = (props: any) => {
-    const {section, title, image, id, className, isBanned, isArchived, isVerified, timeBeforeArchive} = props
+    const {section, title, image, id, className, isBanned, isArchived, isVerified, timeBeforeArchive,blockDescription } = props
 
-    console.log(title+' '+isBanned+' '+isVerified)
     return (
         <div className={'mx-sm-4 my-md-5 my-sm-3 py-1 ad-preview ' + className}>
             <div className="d-flex flex-column flex-sm-row align-items-stretch flex-1">
@@ -53,7 +52,7 @@ const OfferCard: FC<Props> = (props: any) => {
                                             timeBeforeArchive
                                             : 'На модерации'}
                             </div>
-                            {props?.blockDescription &&
+                            {isBanned && blockDescription &&
                                 <div className={'d-inline-block'} onClick={() => props?.setIsShowModalReport && props?.setIsShowModalReport(props?.blockDescription)}>
                                     <AiOutlineQuestionCircle color={'black'} title={props?.blockDescription} />
                                 </div>
