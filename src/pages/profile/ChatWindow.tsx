@@ -96,7 +96,6 @@ const ChatWindow = () => {
     const createMessage = (payload: IPayloadsMessage) => {
         emitCreateMessage(payload)
             .then((res) => {
-                console.log(res)
                 res.status === 200 &&
                     setMessages((prevState) => ({
                         ...prevState,

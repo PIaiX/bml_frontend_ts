@@ -85,6 +85,7 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                     dispatch(showAlert({message: 'Информация успешно изменена', typeAlert: 'good'}))
                 })
                 .catch((error) => {
+                    alert(2)
                     error?.response?.data?.body?.errors?.forEach((i: any) => {
                         if (
                             i?.field === 'phone' &&
@@ -205,11 +206,11 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
                                     value: 13,
-                                    message: 'Необходимо ввести минимум 13 символ',
+                                    message: 'Минимум 13 символ',
                                 },
                                 maxLength: {
                                     value: 13,
-                                    message: 'Максимальное количество символов 13',
+                                    message: 'Максимум символов 13',
                                 }
                             })}
                         />
@@ -224,6 +225,7 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                             type="text"
                             placeholder="ИНН"
                             {...register('taxpayerIdentificationNumber', {
+                                required: 'поле обязательно к заполнению',
                                 minLength: {
                                     value: 10,
                                     message: 'Минимум 10 символов',

@@ -179,15 +179,29 @@ const AdvPage: FC = () => {
     const createWithOfferTopicMessage = (e: BaseSyntheticEvent | null) => {
         e && e.preventDefault()
         if (offer.item) {
-            emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
-                res?.status === 200 && dispatch(showAlert({message: messageType, typeAlert: 'good'}))
-                setIsShowMessageModal(false)
-                if (offer?.item?.user?.id) {
-                    getIdChat(offer?.item?.user?.id).then(res => setIdChat(res.id))
-                }
-            })
+            // emitCreateMessage({ userId: offer.item?.userId, text: messagePayload?.text })
+
+            // emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
+            //     res?.status === 200 && dispatch(showAlert({message: messageType, typeAlert: 'good'}))
+            //     setIsShowMessageModal(false)
+            //     if (offer?.item?.user?.id) {
+            //         getIdChat(offer?.item?.user?.id).then(res => setIdChat(res.id))
+            //     }
+            // })
         }
     }
+    // conversationId
+    //     :
+    //     "143"
+    // fromId
+    //     :
+    //     79
+    // offerId
+    //     :
+    //     undefined
+    // text
+    //     :
+    //     "1"
     let srcToChat = '/enter'
     if (user)
         srcToChat = `/account/chat/window/${idChat ? idChat : 'new'}`
@@ -488,15 +502,17 @@ const AdvPage: FC = () => {
                                     className="btn_main btn-5 f_11 w-100"
                                     onClick={(event) => {
                                         if (user) {
-                                            setMessageType(
-                                                'Запрос на бизнес план отправлен'
-                                            )
+                                            dispatch(showAlert({
+                                                message: 'Запрос на бизнес план отправлен',
+                                                typeAlert: 'good'
+                                            }))
                                             setMessagePayload((prevState) => ({
                                                 ...prevState,
                                                 text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"'
                                             }))
                                             createWithOfferTopicMessage(event)
-                                        } else {
+                                        }
+                                        else {
                                             dispatch(showAlert({
                                                 message: 'Зарегистрируйтесь для запроса бизнес плана. ',
                                                 typeAlert: 'neutral',

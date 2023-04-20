@@ -213,11 +213,11 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
                                     value: 13,
-                                    message: 'Необходимо ввести минимум 13 символ',
+                                    message: 'Минимум 13 символ',
                                 },
                                 maxLength: {
                                     value: 13,
-                                    message: 'Максимальное количество символов 13',
+                                    message: 'Максимум 13 символов',
                                 },
                             })}
                         />
@@ -232,6 +232,7 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
                             type="text"
                             placeholder="ИНН"
                             {...register('taxpayerIdentificationNumber', {
+                                required: 'поле обязательно к заполнению',
                                 minLength: {
                                     value: 10,
                                     message: 'Минимум 10 символов',
