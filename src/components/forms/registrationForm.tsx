@@ -128,7 +128,7 @@ const RegistrationForm: FC = () => {
                         <option value={'start'} disabled>
                             Выберите тип профиля
                         </option>
-                        <option value={0}>Физ лицо</option>
+                        <option value={0}>Физические лица и самозанятые</option>
                         <option value={1}>ИП (Больше рекламных возможностей)</option>
                         <option value={2}>ООО (Больше рекламных возможностей)</option>
                     </select>
@@ -238,8 +238,8 @@ const RegistrationForm: FC = () => {
                                     message: 'Минимум 6 символов',
                                 },
                                 maxLength: {
-                                    value: 15,
-                                    message: 'Максимум 15 символов',
+                                    value: 20,
+                                    message: 'Максимум 20 символов',
                                 },
                                 pattern: {
                                     value: /(.*[0-9].*[A-z])|(.*[A-z].*[0-9])/gm,
@@ -250,7 +250,7 @@ const RegistrationForm: FC = () => {
                     </ValidateWrapper>
                     <div className={"mt-3 opacity-50"}>
                         <div>* Минимум 6 символов</div>
-                        <div>* Максимум 15 символов</div>
+                        <div>* Максимум 20 символов</div>
                         <div>* В пароле должна присутствовать буква и цифра</div>
                     </div>
 
@@ -269,8 +269,8 @@ const RegistrationForm: FC = () => {
                                     message: 'Минимум 6 символов',
                                 },
                                 maxLength: {
-                                    value: 15,
-                                    message: 'Максимум 15 символов',
+                                    value: 20,
+                                    message: 'Максимум 20 символов',
                                 },
                             })}
                         />
