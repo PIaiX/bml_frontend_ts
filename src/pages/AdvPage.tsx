@@ -26,7 +26,7 @@ import CustomModal from '../components/utils/CustomModal'
 import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../components/utils/ValidateWrapper'
 import {showAlert} from '../store/reducers/alertSlice'
-import {emitCreateWithOfferTopicMessage} from '../services/sockets/messages'
+import {emitCreateMessage, emitCreateWithOfferTopicMessage} from '../services/sockets/messages'
 import FunctionForPrice from '../helpers/FunctionForPrice'
 import {convertLocaleDate} from "../helpers/convertLocaleDate";
 import {getIdChat} from "../services/users";
@@ -179,29 +179,21 @@ const AdvPage: FC = () => {
     const createWithOfferTopicMessage = (e: BaseSyntheticEvent | null) => {
         e && e.preventDefault()
         if (offer.item) {
-            // emitCreateMessage({ userId: offer.item?.userId, text: messagePayload?.text })
+                emitCreateMessage({ userId: offer.item?.userId, text: messagePayload?.text})
+                    .then(res=>{
+                        if(offer?.item?.user?.id)
+                            getIdChat(offer?.item?.user?.id).then(res => res && setIdChat(res.id))
+                        dispatch(showAlert({
+                            message: 'Запрос на бизнес план отправлен',
+                            typeAlert: 'good'
+                        }))
 
-            // emitCreateWithOfferTopicMessage(offer.item?.userId, messagePayload).then((res) => {
-            //     res?.status === 200 && dispatch(showAlert({message: messageType, typeAlert: 'good'}))
-            //     setIsShowMessageModal(false)
-            //     if (offer?.item?.user?.id) {
-            //         getIdChat(offer?.item?.user?.id).then(res => setIdChat(res.id))
-            //     }
-            // })
+                    })
+                    .catch(e=>{
+                        dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'}))
+                    })
         }
     }
-    // conversationId
-    //     :
-    //     "143"
-    // fromId
-    //     :
-    //     79
-    // offerId
-    //     :
-    //     undefined
-    // text
-    //     :
-    //     "1"
     let srcToChat = '/enter'
     if (user)
         srcToChat = `/account/chat/window/${idChat ? idChat : 'new'}`
@@ -502,10 +494,6 @@ const AdvPage: FC = () => {
                                     className="btn_main btn-5 f_11 w-100"
                                     onClick={(event) => {
                                         if (user) {
-                                            dispatch(showAlert({
-                                                message: 'Запрос на бизнес план отправлен',
-                                                typeAlert: 'good'
-                                            }))
                                             setMessagePayload((prevState) => ({
                                                 ...prevState,
                                                 text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"'
