@@ -69,7 +69,7 @@ const Header: FC = () => {
                         </NavLink>
 
                         {user?.id ? (
-                            <NavLink to={srcForProfile} className={"d-none d-md-block"}>
+                            <NavLink to={srcForProfile} className={" d-md-block"}>
                                 {window.innerWidth <= 400 ? (
                                     <img src="/images/icons/profile.svg" />
                                 ) : (
