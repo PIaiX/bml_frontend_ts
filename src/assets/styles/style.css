@@ -292,7 +292,7 @@ block 1
     }
 
     .swiper-1 .swiper-slide {
-        height: auto;
+        height: 50vw;
         padding: 3em 0px;
     }
 }
