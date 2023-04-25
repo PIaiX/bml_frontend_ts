@@ -35,7 +35,8 @@ export const userSlice = createSlice({
             state.user = initialState.user
         },
         setBalance(user, action:PayloadAction<number>){
-            if(user?.user?.balance)user.user.balance -= action.payload;
+            if(user?.user?.balance)
+                user.user.balance = action.payload;
 }
     },
     extraReducers: {
@@ -52,4 +53,4 @@ export const userSlice = createSlice({
     },
 })
 
-export const { setUser, resetUser, setBalance } = userSlice.actions
+export const { setUser, resetUser, setBalance} = userSlice.actions

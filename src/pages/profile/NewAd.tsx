@@ -30,6 +30,7 @@ import CitiesForm from '../../components/forms/CitiesForm'
 import Premium from "./Premium";
 import {setBalance} from "../../store/reducers/userSlice";
 import {GetPromo} from "../../services/Promo";
+import {getBalance} from "../../services/users";
 
 const NewAd = () => {
     const [category, setCategory] = useState<number | undefined>(0)
@@ -269,33 +270,37 @@ const NewAd = () => {
                 })
                     .then(res => {
                         if (res) {
-                            alert(premiumInf?.sum)
-                            alert((placedForMonths === 3 ? 6000 : 11000) + premiumInf.sum)
-                            dispatch(setBalance((placedForMonths === 3 ? 6000 : 11000) + premiumInf.sum - promoData?Number(promoData?.discountPrice):0))
-                            dispatch(showAlert({
-                                message: 'Объявление успешно создано! Ждите одобрения модерации...',
-                                typeAlert: 'good'
-                            }))
+                            getBalance().then(res=> {
+                                dispatch(setBalance(res))
+                                dispatch(showAlert({
+                                    message: 'Объявление успешно создано! Ждите одобрения модерации...',
+                                    typeAlert: 'good'
+                                }))
+                                setTimeout(() => {
+                                    navigate(-1)
+                                }, 1000)
+                            })
+                        }
+                    }).catch(() => {
+                        getBalance().then(res=> {
+                            dispatch(setBalance(res))
+                            dispatch(showAlert({message: 'Ошибка с премиум размещением!', typeAlert: 'bad'}))
                             setTimeout(() => {
                                 navigate(-1)
                             }, 1000)
-                        }
-                    }).catch(() => {
-                        dispatch(setBalance(placedForMonths === 3 ? 6000 : 11000 - promoData?Number(promoData?.discountPrice):0))
-                        dispatch(showAlert({message: 'Ошибка с премиум размещением!', typeAlert: 'bad'}))
+                        })
+                    })
+                else {
+                    getBalance().then(res=> {
+                        dispatch(setBalance(res))
+                        dispatch(showAlert({
+                            message: 'Объявление успешно создано! Ждите одобрения модерации...',
+                            typeAlert: 'good'
+                        }))
                         setTimeout(() => {
                             navigate(-1)
                         }, 1000)
                     })
-                else {
-                    dispatch(setBalance(placedForMonths === 3 ? 6000 : 11000 - promoData?Number(promoData?.discountPrice):0))
-                    dispatch(showAlert({
-                        message: 'Объявление успешно создано! Ждите одобрения модерации...',
-                        typeAlert: 'good'
-                    }))
-                    setTimeout(() => {
-                        navigate(-1)
-                    }, 1000)
                 }
             })
             .catch((error) => {

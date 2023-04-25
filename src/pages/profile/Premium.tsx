@@ -9,6 +9,7 @@ import {getPremiumSlots, setPremiumSlot} from "../../services/offers";
 import {useAppDispatch} from "../../hooks/store";
 import {setBalance} from "../../store/reducers/userSlice";
 import {showAlert} from "../../store/reducers/alertSlice";
+import {getBalance} from "../../services/users";
 
 
 interface propsType{
@@ -72,11 +73,13 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment, pro
        setPremiumSlot({paymentMethod:paymentType, offerId:data?.id, slot:data?.slot, placedForMonths:data?.placedForMonths*3})
            .then(res=>{
                if(res){
-                   dispatch(setBalance(data.sum))
-                   dispatch(showAlert({message: 'Оплата прошла успешно! Ждите одобрения модерации...', typeAlert: 'good'}))
-                   setTimeout(() => {
-                       navigate(-1)
-                   }, 1000)
+                   getBalance().then(res=>{
+                       dispatch(setBalance(res))
+                       dispatch(showAlert({message: 'Оплата прошла успешно! Ждите одобрения модерации...', typeAlert: 'good'}))
+                       setTimeout(() => {
+                           navigate(-1)
+                       }, 1000)
+                   })
                }
                else
                    dispatch(showAlert({message: 'Оплата не прошла', typeAlert: 'bad'}))

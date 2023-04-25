@@ -14,6 +14,7 @@ import {useImagesViewer} from "../../hooks/imagesViewer";
 import {Row} from "react-bootstrap";
 import {setBalance} from "../../store/reducers/userSlice";
 import {showAlert} from "../../store/reducers/alertSlice";
+import {getBalance} from "../../services/users";
 
 
 const AdvertisingSection = () => {
@@ -106,12 +107,13 @@ const AdvertisingSection = () => {
         setNewAdvertisings(formData)
             .then(res=>{
                 if(res) {
-                    dispatch(setBalance(data.sum))
-                    dispatch(showAlert({message: 'Оплата прошла успешно! Ждите одобрения модерации...', typeAlert: 'good'}))
-                    setTimeout(() => {
-                        navigate('/account/banners', {state:{section:2}})
-                    }, 1000)
-
+                    getBalance().then(res=> {
+                        dispatch(setBalance(res))
+                        dispatch(showAlert({message: 'Оплата прошла успешно! Ждите одобрения модерации...', typeAlert: 'good'}))
+                        setTimeout(() => {
+                            navigate('/account/banners', {state:{section:2}})
+                        }, 1000)
+                    })
                 }
                 else
                     dispatch(showAlert({message: 'Оплата не прошла', typeAlert: 'bad'}))
