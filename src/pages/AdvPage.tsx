@@ -174,13 +174,13 @@ const AdvPage: FC = () => {
             })
             .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
     }
-    const [messageType, setMessageType] = useState<string>('0')
     let swiperPB = 250;
+
     if (window.innerWidth > 1400) swiperPB = 350
     const createWithOfferTopicMessage = (e: BaseSyntheticEvent | null) => {
         e && e.preventDefault()
         if (offer.item) {
-                emitCreateMessage({ userId: offer.item?.userId, text: messagePayload?.text})
+                emitCreateMessage({ userId: offer.item?.userId, text: messagePayload?.text, topic:offer.item?.title})
                     .then(res=>{
                         if(offer?.item?.user?.id)
                             getIdChat(offer?.item?.user?.id).then(res => res && setIdChat(res.id))
@@ -206,7 +206,8 @@ const AdvPage: FC = () => {
                 state: {
                     userName: offer?.item?.user.fullName,
                     userId: offer?.item?.user.id,
-                    avatar: offer?.item?.user.avatar
+                    avatar: offer?.item?.user.avatar,
+                    topic:offer.item?.title
                 }
             })
         else
@@ -431,20 +432,23 @@ const AdvPage: FC = () => {
                                                 className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
                                         </div>
 
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Паушальный взнос:</span>
-                                            <span
-                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
-                                        </div>
+                                        {(offer?.item?.price!=0 && offer?.item?.price &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Паушальный взнос:</span>
+                                                <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
+                                            </div>
+                                        )}
 
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Роялти:</span>
-                                            <span
-                                                className="f_15 fw_5 text-nowrap">
+                                        {offer?.item?.pricePerMonth!=0 && offer?.item?.pricePerMonth &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Роялти:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">
                                                 {FunctionForPrice(offer?.item?.pricePerMonth)}
-                                                {offer?.item?.isPricePerMonthAbsolute && offer?.item?.category === 4 ? ' ₽' : '%'}
+                                                    {offer?.item?.isPricePerMonthAbsolute && offer?.item?.category === 4 ? ' ₽' : '%'}
                                             </span>
-                                        </div>
+                                            </div>
+                                        }
 
                                         {offer?.item?.paybackTimeForUser != '' &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">

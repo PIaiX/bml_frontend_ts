@@ -4,4 +4,5 @@ export type IPayloadsMessage = {
     fromId?: number
     userId?: number
     offerId?: string
+    topic?:string
 }

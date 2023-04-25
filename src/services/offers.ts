@@ -11,7 +11,9 @@ import { IPayloadsFilter } from '../types/offers'
 export const getAllAreas = async () => {
     try {
         const response = await $api.get<IOffersAreaBodyRequest>(`${apiRoutes.GET_ALL_AREAS}`)
-        return response?.data?.body
+        const arr = response?.data?.body?.filter(element=>element?.name!='Другое')
+        const el = response?.data?.body?.find(element=>element?.name=='Другое')
+        return [...arr, el]
     } catch (error) {
         console.log(error)
     }
@@ -20,7 +22,10 @@ export const getAllAreas = async () => {
 export const getAllSubsections = async (areaId: number) => {
     try {
         const response = await $api.get<IOffersSubSectionsBodyRequest>(`${apiRoutes.GET_ALL_SUBSECTIONS}/${areaId}`)
-        return response?.data?.body
+
+        const arr = response?.data?.body?.filter(element=>element?.name!='Другое')
+        const el = response?.data?.body?.find(element=>element?.name=='Другое')
+        return [...arr, el]
     } catch (error) {
         console.log(error)
     }
