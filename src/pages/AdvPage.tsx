@@ -32,6 +32,7 @@ import {convertLocaleDate} from "../helpers/convertLocaleDate";
 import {getIdChat} from "../services/users";
 import {getAdvertisings} from "../services/advertising";
 import {Advertisings} from "../types/advertising";
+import {MyEditor} from "../components/MyEditor/MyEditor";
 
 
 const AdvPage: FC = () => {
@@ -152,7 +153,7 @@ const AdvPage: FC = () => {
                 return (
                     <section className="anchor_block" id="anchor_about_me">
                         <h4 className="fw_7">О себе</h4>
-                        <p>{offer?.item?.about}</p>
+                        <MyEditor readOnly={true} value={offer?.item?.about} />
                     </section>
                 )
             }
@@ -588,7 +589,7 @@ const AdvPage: FC = () => {
                             {offer?.item?.category === 4 ? (
                                 <section className="anchor_block" id="anchor_company_info">
                                     <h4 className="fw_7">Описание компании</h4>
-                                    <p>{offer?.item?.aboutCompany}</p>
+                                    <MyEditor readOnly={true} value={offer?.item?.aboutCompany}/>
                                 </section>
                             ) : (
                                 ''
@@ -596,13 +597,13 @@ const AdvPage: FC = () => {
 
                             <section className="anchor_block" id="anchor_description">
                                 <h4 className="fw_7">{returnDescriptionName()}</h4>
-                                <p>{offer?.item?.description}</p>
+                                <MyEditor readOnly={true} value={offer?.item?.description}/>
                             </section>
 
                             {offer?.item?.category === 4 ? (
                                 <section className="anchor_block" id="anchor_benefits">
                                     <h4 className="fw_7">Преимущества франшизы</h4>
-                                    <p>{offer?.item?.benefits}</p>
+                                    <MyEditor readOnly={true} value={offer?.item?.benefits}/>
                                 </section>
                             ) : (
                                 ''
@@ -612,13 +613,13 @@ const AdvPage: FC = () => {
                                 <h4 className="fw_7">
                                     {offer?.item?.category !== 3 ? 'Условия сотрудничества' : 'Условия продажи'}
                                 </h4>
-                                <p>{offer?.item?.cooperationTerms}</p>
+                                <MyEditor readOnly={true} value={offer?.item?.cooperationTerms}/>
                             </section>
 
                             {offer?.item?.category !== 1 ? (
                                 <section className="anchor_block" id="anchor_business_plan">
                                     <h4 className="fw_7">Бизнес-план</h4>
-                                    <p>{offer?.item?.businessPlan}</p>
+                                    <MyEditor readOnly={true} value={offer?.item?.businessPlan}/>
                                 </section>
                             ) : (
                                 ''
