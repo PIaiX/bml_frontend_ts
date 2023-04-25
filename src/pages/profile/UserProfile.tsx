@@ -121,7 +121,7 @@ const UserProfile: FC = () => {
                             <div className="d-flex flex-column align-items-center">
                                 <Link to="/account/profile/partners">
                                     <span>Бизнес-партнёры</span>
-                                    <span className="l-gray ms-2">{currentFriends?.meta?.total || 0}</span>
+                                    <div className="notificationAll d-inline mx-2">{currentFriends?.meta?.total || 0}</div>
                                 </Link>
                                 <NavLink
                                     to="/account/profile/partners"

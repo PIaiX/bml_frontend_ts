@@ -31,7 +31,7 @@ const ChatPreview: FC<Props> = (props) => {
             </Link>
             <div className="info">
                 {props.topic &&
-                    <div className="color-1 mb-2">
+                    <div className="color-1 mb-2 mx-5">
                         Тема: <NavLink to={props.adURL}> {props.topic}</NavLink>
                     </div>
                 }

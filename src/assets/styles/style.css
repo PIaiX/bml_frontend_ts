@@ -2234,7 +2234,7 @@ CHAT
     }
 
     .chat-preview .text {
-        margin-left: 2em;
+        margin-left: 4em;
     }
 
     .message,
@@ -2255,7 +2255,7 @@ CHAT
     }
 
     .chat-preview .text {
-        margin-left: 1em;
+        margin-left: 4em;
         font-size: .85em;
     }
 
