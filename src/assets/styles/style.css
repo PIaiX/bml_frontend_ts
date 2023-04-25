@@ -292,7 +292,7 @@ block 1
     }
 
     .swiper-1 .swiper-slide {
-        height: auto;
+        height: 50vw;
         padding: 3em 0px;
     }
 }
@@ -1202,7 +1202,7 @@ section.anchor_block {
 
 
 /***************
-personal account 
+personal account
 ****************/
 .acc-box {
     border: 1px solid #E7E8EC;
@@ -2234,7 +2234,7 @@ CHAT
     }
 
     .chat-preview .text {
-        margin-left: 2em;
+        margin-left: 4em;
     }
 
     .message,
@@ -2255,7 +2255,7 @@ CHAT
     }
 
     .chat-preview .text {
-        margin-left: 1em;
+        margin-left: 4em;
         font-size: .85em;
     }
 
@@ -3067,4 +3067,12 @@ footer {
     background-color: white;
     border-radius: 10px;
     padding: 5px;
+}
+.validate-error-textarea {
+    top: auto;
+    bottom: -8px;
+}
+
+.validate-wrapper_error>.RichEditor-root{
+    border-color: red;
 }

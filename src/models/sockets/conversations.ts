@@ -5,6 +5,7 @@ export type IConversationsItem = {
     createdAt: string
     fromId: number
     id: number
+    topic:string | null
     lastMessage: {
         conversationId: number
         createdAt: string

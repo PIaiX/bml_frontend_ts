@@ -126,7 +126,6 @@ export default function Chat() {
     }, [conversationId])
 
     if (!user) return <AccountMenu />
-
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -145,6 +144,7 @@ export default function Chat() {
                                     lastMessUserId={i?.lastMessage?.userId}
                                     key={i?.id}
                                     imgURL={i.user?.avatar}
+                                    topic={i?.topic}
                                     userName={i?.user?.fullName}
                                     title={i?.offer?.title}
                                     adURL={`/adv-page/${i?.offerId}`}

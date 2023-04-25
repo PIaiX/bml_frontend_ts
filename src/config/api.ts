@@ -73,6 +73,7 @@ const apiRoutes: ApiRoutesTypes = {
     UPDATE_PASSWORD: 'user/updatePassword',
     ACTIONS_USER: 'user',
     GET_ID_CHAT:'conversation',
+    GET_BALANCE:'user/balance',
 
     //instructions
     GET_PARTNERS: 'partner',

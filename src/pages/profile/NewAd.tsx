@@ -19,7 +19,7 @@ import {IOfferForm, IOfferItem, IOffersAreaItem, IOffersSubSectionsItem} from '.
 import {useAppDispatch, useAppSelector} from '../../hooks/store'
 import {IUser} from '../../types/user'
 import ValidateWrapper from '../../components/utils/ValidateWrapper'
-import {useForm} from 'react-hook-form'
+import {useForm, Controller} from 'react-hook-form'
 import {convertLocaleDate} from '../../helpers/convertLocaleDate'
 import {showAlert} from '../../store/reducers/alertSlice'
 import {IUseStateItem} from '../../types'
@@ -30,6 +30,8 @@ import CitiesForm from '../../components/forms/CitiesForm'
 import Premium from "./Premium";
 import {setBalance} from "../../store/reducers/userSlice";
 import {GetPromo} from "../../services/Promo";
+import {getBalance} from "../../services/users";
+import {MyEditor} from "../../components/MyEditor/MyEditor";
 
 const NewAd = () => {
     const [category, setCategory] = useState<number | undefined>(0)
@@ -93,7 +95,8 @@ const NewAd = () => {
         handleSubmit,
         setError,
         getValues,
-        clearErrors
+        clearErrors,
+        control
     } = useForm<IOfferForm>({
         mode: 'onSubmit',
         reValidateMode: 'onChange',
@@ -231,12 +234,17 @@ const NewAd = () => {
     useEffect(() => {
     }, [textPhoto?.isInValidSize, textPhoto?.isInValidSizeMB])
 
-
     const createNewOffer = (data: IOfferForm) => {
         const formData = new FormData()
         let dateNew
         if (data?.dateOfCreation) {
-            dateNew = convertLocaleDate(data?.dateOfCreation)
+            dateNew = convertLocaleDate(data?.dateOfCreation)?.replaceAll('/', '.')
+            if (dateNew){
+                if(dateNew[1]=='.')
+                    dateNew='0'+dateNew
+                if (dateNew[4]=='.')
+                    dateNew=dateNew.slice(0, 3)+'0'+dateNew.slice(3, 9)
+            }
         }
         const req: any = {
             ...data,
@@ -254,7 +262,6 @@ const NewAd = () => {
         imageViewer.forEach((image: any) => {
             formData.append('images[]', image?.initialFile)
         })
-
         createOffer(formData)
             .then((res) => {
                 if (premium) setPremiumSlot({
@@ -265,33 +272,37 @@ const NewAd = () => {
                 })
                     .then(res => {
                         if (res) {
-                            alert(premiumInf?.sum)
-                            alert((placedForMonths === 3 ? 6000 : 11000) + premiumInf.sum)
-                            dispatch(setBalance((placedForMonths === 3 ? 6000 : 11000) + premiumInf.sum - promoData?Number(promoData?.discountPrice):0))
-                            dispatch(showAlert({
-                                message: 'Объявление успешно создано! Ждите одобрения модерации...',
-                                typeAlert: 'good'
-                            }))
+                            getBalance().then(res=> {
+                                dispatch(setBalance(res))
+                                dispatch(showAlert({
+                                    message: 'Объявление успешно создано! Ждите одобрения модерации...',
+                                    typeAlert: 'good'
+                                }))
+                                setTimeout(() => {
+                                    navigate(-1)
+                                }, 1000)
+                            })
+                        }
+                    }).catch(() => {
+                        getBalance().then(res=> {
+                            dispatch(setBalance(res))
+                            dispatch(showAlert({message: 'Ошибка с премиум размещением!', typeAlert: 'bad'}))
                             setTimeout(() => {
                                 navigate(-1)
                             }, 1000)
-                        }
-                    }).catch(() => {
-                        dispatch(setBalance(placedForMonths === 3 ? 6000 : 11000 - promoData?Number(promoData?.discountPrice):0))
-                        dispatch(showAlert({message: 'Ошибка с премиум размещением!', typeAlert: 'bad'}))
+                        })
+                    })
+                else {
+                    getBalance().then(res=> {
+                        dispatch(setBalance(res))
+                        dispatch(showAlert({
+                            message: 'Объявление успешно создано! Ждите одобрения модерации...',
+                            typeAlert: 'good'
+                        }))
                         setTimeout(() => {
                             navigate(-1)
                         }, 1000)
                     })
-                else {
-                    dispatch(setBalance(placedForMonths === 3 ? 6000 : 11000 - promoData?Number(promoData?.discountPrice):0))
-                    dispatch(showAlert({
-                        message: 'Объявление успешно создано! Ждите одобрения модерации...',
-                        typeAlert: 'good'
-                    }))
-                    setTimeout(() => {
-                        navigate(-1)
-                    }, 1000)
                 }
             })
             .catch((error) => {
@@ -478,20 +489,20 @@ const NewAd = () => {
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-8">
-                            <ValidateWrapper error={errors.description}>
-                                <textarea
-                                    rows={4}
-                                    placeholder={
-                                        category === 0 || category === 1 || category === 2
-                                            ? 'Описание объявления'
-                                            : category === 3
-                                                ? 'Описание бизнеса'
-                                                : 'Описание компании'
+                            <ValidateWrapper error={errors.description} textarea={true}>
+                                <Controller
+                                    name="description"
+                                    control={control}
+                                    rules={{required: 'Обязательное поле'}}
+                                    render={({field: {value, onChange}}:any) =>
+                                        <MyEditor value={value} onChange={onChange} placeholder={
+                                            category === 0 || category === 1 || category === 2
+                                                ? 'Описание объявления'
+                                                : category === 3
+                                                    ? 'Описание бизнеса'
+                                                    : 'Описание компании'
+                                        }/>
                                     }
-                                    {...register('description', {
-                                        required: 'Обязательное поле',
-                                        minLength: {value: 4, message: 'Минимальная длина 4 символа'},
-                                    })}
                                 />
                             </ValidateWrapper>
                         </div>
@@ -505,14 +516,14 @@ const NewAd = () => {
                                     </div>
                                 </div>
                                 <div className="col-sm-6 col-lg-8">
-                                    <ValidateWrapper error={errors?.aboutCompany}>
-                                        <textarea
-                                            rows={4}
-                                            placeholder="Описание франшизы"
-                                            {...register('aboutCompany', {
-                                                required: 'Обязательное поле',
-                                                minLength: {value: 4, message: 'Минимальная длина 4 символа'},
-                                            })}
+                                    <ValidateWrapper error={errors.aboutCompany} textarea={true}>
+                                        <Controller
+                                            name="aboutCompany"
+                                            control={control}
+                                            rules={{required: 'Обязательное поле'}}
+                                            render={({field: {value, onChange}}:any) =>
+                                                <MyEditor value={value} onChange={onChange} placeholder="Описание франшизы"/>
+                                            }
                                         />
                                     </ValidateWrapper>
                                 </div>
@@ -522,15 +533,17 @@ const NewAd = () => {
                                     <div>Преимущества франшизы</div>
                                 </div>
                                 <div className="col-sm-6 col-lg-8">
-                                    <ValidateWrapper error={errors?.benefits}>
-                                        <textarea
-                                            rows={4}
-                                            placeholder="Преимущества франшизы"
-                                            {...register('benefits', {
-                                                minLength: {value: 4, message: 'Минимальная длина 4 символа'},
-                                            })}
+                                    <ValidateWrapper error={errors.benefits} textarea={true}>
+                                        <Controller
+                                            name="benefits"
+                                            control={control}
+                                            rules={{required: 'Обязательное поле'}}
+                                            render={({field: {value, onChange}}:any) =>
+                                                <MyEditor value={value} onChange={onChange} placeholder="Преимущества франшизы"/>
+                                            }
                                         />
                                     </ValidateWrapper>
+
                                 </div>
                             </div>
                         </>
@@ -548,20 +561,20 @@ const NewAd = () => {
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-8">
-                            <ValidateWrapper error={errors?.cooperationTerms}>
-                                <textarea
-                                    rows={4}
-                                    placeholder={
-                                        category === 0 || category === 2 || category === 4
-                                            ? 'Условия сотрудничества'
-                                            : category === 1
-                                                ? 'Предполагаемые условия сотрудничества'
-                                                : 'Условия продажи'
+                            <ValidateWrapper error={errors.cooperationTerms} textarea={true}>
+                                <Controller
+                                    name="cooperationTerms"
+                                    control={control}
+                                    rules={{required: 'Обязательное поле'}}
+                                    render={({field: {value, onChange}}:any) =>
+                                        <MyEditor value={value} onChange={onChange} placeholder={
+                                            category === 0 || category === 2 || category === 4
+                                                ? 'Условия сотрудничества'
+                                                : category === 1
+                                                    ? 'Предполагаемые условия сотрудничества'
+                                                    : 'Условия продажи'
+                                        }/>
                                     }
-                                    {...register('cooperationTerms', {
-                                        required: 'Обязательное поле',
-                                        minLength: {value: 4, message: 'Минимальная длина 4 символа'},
-                                    })}
                                 />
                             </ValidateWrapper>
                         </div>
@@ -569,17 +582,17 @@ const NewAd = () => {
                     {(category === 0 || category === 2 || category === 3 || category === 4) && (
                         <div className="row mb-3 mb-sm-4">
                             <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0 pt-sm-2">
-                                <div>Бизнес-план<span className="red">*</span></div>
+                                <div>Бизнес-план</div>
                             </div>
                             <div className="col-sm-6 col-lg-8">
-                                <ValidateWrapper error={errors?.businessPlan}>
-                                    <textarea
-                                        rows={4}
-                                        placeholder="Бизнес-план"
-                                        {...register('businessPlan', {
-                                            required: 'Обязательное поле',
-                                            minLength: {value: 4, message: 'Минимальная длина 4 символа'},
-                                        })}
+                                <ValidateWrapper error={errors.businessPlan} textarea={true}>
+                                    <Controller
+                                        name="businessPlan"
+                                        control={control}
+                                        rules={{required: 'Обязательное поле'}}
+                                        render={({field: {value, onChange}}:any) =>
+                                            <MyEditor value={value} onChange={onChange} placeholder="Бизнес-план"/>
+                                        }
                                     />
                                 </ValidateWrapper>
                             </div>
@@ -591,13 +604,14 @@ const NewAd = () => {
                                 <div>О себе</div>
                             </div>
                             <div className="col-sm-6 col-lg-8">
-                                <ValidateWrapper error={errors.about}>
-                                    <textarea
-                                        rows={4}
-                                        placeholder="О себе"
-                                        {...register('about', {
-                                            minLength: {value: 4, message: 'Минимальная длина 4 символа'},
-                                        })}
+                                <ValidateWrapper error={errors.about} textarea={true}>
+                                    <Controller
+                                        name="about"
+                                        control={control}
+                                        rules={{required: 'Обязательное поле'}}
+                                        render={({field: {value, onChange}}:any) =>
+                                            <MyEditor value={value} onChange={onChange} placeholder="О себе"/>
+                                        }
                                     />
                                 </ValidateWrapper>
                             </div>
@@ -1037,8 +1051,6 @@ const NewAd = () => {
                                             min: {value: 0, message: 'Минимум 0'},
                                             minLength: {value: 0, message: 'Минимальная длина 0 символа'},
                                             validate: e => {
-                                                console.log(Number(String(e).replaceAll(' ', '')))
-                                                console.log(Number(String(getValues('pricePerMonth')).replaceAll(' ', '')))
                                                 if (e && category === 4 && isPricePerMonthAbsolute && Number(String(e).replaceAll(' ', '')) < Number(String(getValues('pricePerMonth')).replaceAll(' ', '')))
                                                     return `Не меньше роялти`
                                                 return true;
@@ -1146,6 +1158,7 @@ const NewAd = () => {
                                     <input
                                         type="date"
                                         placeholder="0"
+                                        data-date-format="DD.MMMM.YYYY"
                                         className="f_09"
                                         {...register('dateOfCreation')}
                                     />

@@ -29,7 +29,8 @@ const ChatWindow = () => {
 
     const createMessage = ({ text }: any) => {
         if (state && state.userId) {
-            emitCreateMessage({ userId: state.userId, text: text })
+            const {topic} = state
+            emitCreateMessage({ userId: state.userId, text: text, topic:topic })
                 .then((res: any) => {
                     navigate(`/account/chat/window/${res.body.conversationId}`, {
                         replace: true,

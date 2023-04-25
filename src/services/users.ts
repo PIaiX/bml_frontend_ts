@@ -31,3 +31,12 @@ export const getIdChat = async (userId: number) => {
         console.log(error)
     }
 }
+
+export const getBalance = async () => {
+    try {
+        const response = await $authApi.get(`${apiRoutes.GET_BALANCE}`)
+        return response?.data?.body
+    } catch (error) {
+        console.log(error)
+    }
+}

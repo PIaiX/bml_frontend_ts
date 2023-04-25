@@ -18,6 +18,7 @@ type Props = {
     getIdConver: (converId: number) => void
     lastMessUserId?: number
     newMessagesCount?: string
+    topic:string | null
 }
 
 const ChatPreview: FC<Props> = (props) => {
@@ -29,9 +30,11 @@ const ChatPreview: FC<Props> = (props) => {
                 <div>{props.userName}</div>
             </Link>
             <div className="info">
-                <div className="color-1 mb-2">
-                    Тема: <NavLink to={props.adURL}> {props.title}</NavLink>
-                </div>
+                {props.topic &&
+                    <div className="color-1 mb-2 mx-5">
+                        Тема: <NavLink to={props.adURL}> {props.topic}</NavLink>
+                    </div>
+                }
             </div>
             <div className="text">
                 <Link
