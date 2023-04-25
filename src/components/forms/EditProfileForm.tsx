@@ -124,13 +124,9 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                             placeholder="Фамилия"
                             {...register('lastName', {
                                 required: 'поле обязательно к заполнению',
-                                minLength: {
-                                    value: 1,
-                                    message: 'необходимо ввести минимум 1 символ',
-                                },
                                 maxLength: {
                                     value: 50,
-                                    message: 'максимальное количество символов - 50',
+                                    message: 'Максимум 50 символов',
                                 },
                             })}
                         />
@@ -148,13 +144,9 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                             placeholder="Имя"
                             {...register('firstName', {
                                 required: 'поле обязательно к заполнению',
-                                minLength: {
-                                    value: 1,
-                                    message: 'необходимо ввести минимум 1 символ',
-                                },
                                 maxLength: {
                                     value: 50,
-                                    message: 'максимальное количество символов - 50',
+                                    message: 'Максимум 50 символов',
                                 },
                             })}
                         />
@@ -209,12 +201,12 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
                                     value: 12,
-                                    message: 'Минимальная длина 12 символов',
+                                    message: 'Минимум 12 символов',
                                 },
                                 onChange:(e)=>e.target.value.length<3 && setValue('phone', '+7'),
                                 maxLength: {
                                     value: 12,
-                                    message: 'Максимальная длина 12 символов',
+                                    message: 'Максимум 12 символов',
                                 },
                                 pattern: {
                                     value: /\+[7][0-9]{10}/,

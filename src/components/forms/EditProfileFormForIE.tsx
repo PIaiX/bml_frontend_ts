@@ -132,13 +132,9 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                             placeholder="Название ИП"
                             {...register('companyName', {
                                 required: 'поле обязательно к заполнению',
-                                minLength: {
-                                    value: 1,
-                                    message: 'необходимо ввести минимум 1 символ',
-                                },
                                 maxLength: {
                                     value: 50,
-                                    message: 'максимальное количество символов - 50',
+                                    message: 'Максимум 50 символов',
                                 },
                             })}
                         />
@@ -156,13 +152,9 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                             placeholder="Имя ответственного лица"
                             {...register('firstName', {
                                 required: 'поле обязательно к заполнению',
-                                minLength: {
-                                    value: 1,
-                                    message: 'необходимо ввести минимум 1 символ',
-                                },
                                 maxLength: {
                                     value: 50,
-                                    message: 'максимальное количество символов - 50',
+                                    message: 'Максимум 50 символов',
                                 },
                             })}
                         />
@@ -180,13 +172,9 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                             placeholder="Фамилия ответственного лица"
                             {...register('lastName', {
                                 required: 'поле обязательно к заполнению',
-                                minLength: {
-                                    value: 1,
-                                    message: 'необходимо ввести минимум 1 символ',
-                                },
                                 maxLength: {
                                     value: 50,
-                                    message: 'максимальное количество символов - 50',
+                                    message: 'Максимум 50 символов',
                                 },
                             })}
                         />
@@ -205,12 +193,12 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                             {...register('mainStateRegistrationNumber', {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
-                                    value: 13,
-                                    message: 'Минимум 13 символ',
+                                    value: 11,
+                                    message: 'Минимум 11 символ',
                                 },
                                 maxLength: {
-                                    value: 13,
-                                    message: 'Максимум символов 13',
+                                    value: 16,
+                                    message: 'Максимум символов 16',
                                 }
                             })}
                         />
@@ -227,12 +215,12 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                             {...register('taxpayerIdentificationNumber', {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
-                                    value: 10,
-                                    message: 'Минимум 10 символов',
+                                    value: 11,
+                                    message: 'Минимум 11 символов',
                                 },
                                 maxLength: {
-                                    value: 12,
-                                    message: 'Максимальное количество символов 12',
+                                    value: 16,
+                                    message: 'Максимум 16 символов',
                                 },
                             })}
                         />
@@ -280,12 +268,12 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
 
                                 minLength: {
                                     value: 12,
-                                    message: 'Минимальная длина 12 символов',
+                                    message: 'Минимум 12 символов',
                                 },
                                 onChange:(e)=>e.target.value.length<3 && setValue('phone', '+7'),
                                 maxLength: {
                                     value: 12,
-                                    message: 'Максимальная длина 12 символов',
+                                    message: 'Максимум 12 символов',
                                 },
                                 pattern: {
                                     value: /\+[7][0-9]{10}/,

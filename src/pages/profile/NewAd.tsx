@@ -231,12 +231,17 @@ const NewAd = () => {
     useEffect(() => {
     }, [textPhoto?.isInValidSize, textPhoto?.isInValidSizeMB])
 
-
     const createNewOffer = (data: IOfferForm) => {
         const formData = new FormData()
         let dateNew
         if (data?.dateOfCreation) {
-            dateNew = convertLocaleDate(data?.dateOfCreation)
+            dateNew = convertLocaleDate(data?.dateOfCreation)?.replaceAll('/', '.')
+            if (dateNew){
+                if(dateNew[1]=='.')
+                    dateNew='0'+dateNew
+                if (dateNew[4]=='.')
+                    dateNew=dateNew.slice(0, 3)+'0'+dateNew.slice(3, 9)
+            }
         }
         const req: any = {
             ...data,
@@ -254,7 +259,6 @@ const NewAd = () => {
         imageViewer.forEach((image: any) => {
             formData.append('images[]', image?.initialFile)
         })
-
         createOffer(formData)
             .then((res) => {
                 if (premium) setPremiumSlot({
@@ -569,7 +573,7 @@ const NewAd = () => {
                     {(category === 0 || category === 2 || category === 3 || category === 4) && (
                         <div className="row mb-3 mb-sm-4">
                             <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0 pt-sm-2">
-                                <div>Бизнес-план<span className="red">*</span></div>
+                                <div>Бизнес-план</div>
                             </div>
                             <div className="col-sm-6 col-lg-8">
                                 <ValidateWrapper error={errors?.businessPlan}>
@@ -577,7 +581,6 @@ const NewAd = () => {
                                         rows={4}
                                         placeholder="Бизнес-план"
                                         {...register('businessPlan', {
-                                            required: 'Обязательное поле',
                                             minLength: {value: 4, message: 'Минимальная длина 4 символа'},
                                         })}
                                     />
@@ -1037,8 +1040,6 @@ const NewAd = () => {
                                             min: {value: 0, message: 'Минимум 0'},
                                             minLength: {value: 0, message: 'Минимальная длина 0 символа'},
                                             validate: e => {
-                                                console.log(Number(String(e).replaceAll(' ', '')))
-                                                console.log(Number(String(getValues('pricePerMonth')).replaceAll(' ', '')))
                                                 if (e && category === 4 && isPricePerMonthAbsolute && Number(String(e).replaceAll(' ', '')) < Number(String(getValues('pricePerMonth')).replaceAll(' ', '')))
                                                     return `Не меньше роялти`
                                                 return true;
@@ -1146,6 +1147,7 @@ const NewAd = () => {
                                     <input
                                         type="date"
                                         placeholder="0"
+                                        data-date-format="DD.MMMM.YYYY"
                                         className="f_09"
                                         {...register('dateOfCreation')}
                                     />
