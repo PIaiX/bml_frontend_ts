@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../utils/ValidateWrapper'
 import {IUser} from '../../types/user'
@@ -12,6 +12,7 @@ import {selectToEnd} from "../../helpers/selectToEndForPhoneInput";
 
 type Props = {
     avatar: File
+    setImageError: Dispatch<SetStateAction<string | undefined>>
 }
 
 type UserForm = {
@@ -26,7 +27,7 @@ type UserForm = {
     type: number
 }
 
-const EditProfileForm: FC<Props> = ({avatar}) => {
+const EditProfileForm: FC<Props> = ({avatar, setImageError}) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const dispatch = useAppDispatch()
     const {
@@ -34,7 +35,6 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
         formState: {errors},
         handleSubmit,
         setValue,
-        watch,
         setError,
         getValues,
     } = useForm<UserForm>({
@@ -64,17 +64,20 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
     }, [user])
 
     const submitUpdateUserInfo = (data: any) => {
-        let req
-        const newDate = getValues('birthday') ? convertLocaleDate(getValues('birthday')) : ''
-
-        if (user?.city !== city)
-            req = {...data, birthday: newDate, avatar: avatar ? avatar : '', city: city}
-        else req = {...data, birthday: newDate, avatar: avatar ? avatar : ''}
 
         const formData = new FormData()
-        for (const key in req) {
-            formData.append(key, req[key])
+
+        for (const key in data) {
+            formData.append(key, data[key])
         }
+        const newDate = getValues('birthday') ? convertLocaleDate(getValues('birthday')) : ''
+        if(newDate)
+            formData.append('birthday', newDate)
+        if (city)
+            formData.append('city', city)
+        if(avatar)
+            formData.append('avatar', avatar)
+
         if (user) {
             updateUserInfo(user?.id, formData)
                 .then((res) => {
@@ -227,8 +230,17 @@ const EditProfileForm: FC<Props> = ({avatar}) => {
                     </ValidateWrapper>
                 </div>
             </div>
-            <button type="submit" className="btn_main btn_1 mt-4">
-                Cохранить
+            <button type="submit" className="btn_main btn_1 mt-4"
+                    onClick={()=>{
+                        if(!avatar && !user?.avatar){
+                            setImageError('Поле обязательно к заполнению')
+                            window.scrollTo(0, 0)
+                        }
+                        else
+                            setImageError(undefined)
+                    }}
+            >
+                Сохранить
             </button>
         </form>
     )

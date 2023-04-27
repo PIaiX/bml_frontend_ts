@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react'
 import { IUser } from '../../types/user'
 import { useAppDispatch, useAppSelector } from '../../hooks/store'
 import { useForm } from 'react-hook-form'
@@ -11,6 +11,7 @@ import {selectToEnd} from "../../helpers/selectToEndForPhoneInput";
 
 type Props = {
     avatar: File
+    setImageError: Dispatch<SetStateAction<string | undefined>>
 }
 
 type FormInfo = {
@@ -28,7 +29,7 @@ type FormInfo = {
     type: number
 }
 
-const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
+const EditProfileFormForOoo: FC<Props> = ({ avatar, setImageError }) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [city, setCity] = useState(user?.city)
     const [cityError, setCityError] = useState('')
@@ -73,18 +74,20 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
         }
     }, [user])
 
-    const submitUpdateUserInfo = (data: any) => {
-        let req
-
-        if (user?.city !== city) {
-            req = { ...data, avatar: avatar ? avatar : '', city: city}
-        } else req = { ...data, avatar: avatar ? avatar : ''}
-
+    const submitUpdateUserInfo = ({legalAddress, ...data}:any) => {
 
         const formData = new FormData()
-        for (const key in req) {
-            formData.append(key, req[key])
+
+        for (const key in data) {
+            formData.append(key, data[key])
         }
+        if (city)
+            formData.append('city', city)
+        if(avatar)
+            formData.append('avatar', avatar)
+        if(legalAddress)
+            formData.append('legalAddress', legalAddress)
+
         if (user) {
             updateUserInfo(user?.id, formData)
                 .then((res) => {
@@ -322,8 +325,17 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar }) => {
                     </ValidateWrapper>
                 </div>
             </div>
-            <button type="submit" className="btn_main btn_1 mt-4">
-                Cохранить
+            <button type="submit" className="btn_main btn_1 mt-4"
+                    onClick={()=>{
+                        if(!avatar && !user?.avatar){
+                            setImageError('Поле обязательно к заполнению')
+                            window.scrollTo(0, 0)
+                        }
+                        else
+                            setImageError(undefined)
+                    }}
+            >
+                Сохранить
             </button>
         </form>
     )

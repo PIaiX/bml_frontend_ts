@@ -7,6 +7,10 @@ import { useAppDispatch, useAppSelector } from '../hooks/store'
 import { resetAlert } from '../store/reducers/alertSlice'
 import ActionNotification from '../components/utils/ActionNitification'
 import useAnchor from "../hooks/useAnchor";
+import axios from "axios";
+import {IRegister} from "../models/auth";
+import {apiRoutes, BASE_URL} from "../config/api";
+import {$authApi} from "../services/indexAuth";
 
 const Layout = () => {
     const alertState = useAppSelector((state) => state.alert)

@@ -279,12 +279,14 @@ const UserProfile: FC = () => {
                                                             : 'Не установлено'}
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td className="l-gray">Юридический адрес:</td>
-                                                    <td className="color-1">
-                                                        {user?.legalAddress ? user?.legalAddress : 'Не установлено'}
-                                                    </td>
-                                                </tr>
+                                                {user?.legalAddress &&
+                                                    <tr>
+                                                        <td className="l-gray">Юридический адрес:</td>
+                                                        <td className="color-1">
+                                                            {user?.legalAddress ? user?.legalAddress : 'Не установлено'}
+                                                        </td>
+                                                    </tr>
+                                                }
                                                 <tr>
                                                     <td className="l-gray">Город:</td>
                                                     <td className="color-1">

@@ -177,6 +177,7 @@ export type IOfferItem = {
 export type IOfferForm = {
     about: string
     area: string | number
+    image:string
     businessPlan: string
     category: string | number
     city: string

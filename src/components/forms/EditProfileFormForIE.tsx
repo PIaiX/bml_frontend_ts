@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react'
 import {IUser} from '../../types/user'
 import {useAppDispatch, useAppSelector} from '../../hooks/store'
 import {useForm} from 'react-hook-form'
@@ -12,6 +12,7 @@ import {selectToEnd} from "../../helpers/selectToEndForPhoneInput";
 
 type Props = {
     avatar: File
+    setImageError: Dispatch<SetStateAction<string | undefined>>
 }
 
 type FormInfo = {
@@ -26,8 +27,9 @@ type FormInfo = {
     isShowEmail: false
     isShowPhone: false
     type: 1
+    avatar:string
 }
-const EditProfileFormForIe: FC<Props> = ({avatar}) => {
+const EditProfileFormForIe: FC<Props> = ({avatar, setImageError}) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [city, setCity] = useState(user?.city)
     const [cityError, setCityError] = useState('')
@@ -65,19 +67,20 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
             setValue('mainStateRegistrationNumber', user?.mainStateRegistrationNumber)
             setValue('email', user?.email)
             setValue('phone', user?.phone?user.phone:'')
+            setValue('avatar', user?.avatar)
         }
     }, [user])
     const submitUpdateUserInfo = (data: any) => {
-        let req
-        if (user?.city !== city) {
-            req = {...data, avatar: avatar ? avatar : '', city: city}
-        }
-        else req = {...data, avatar: avatar ? avatar : ''}
 
         const formData = new FormData()
-        for (const key in req) {
-            formData.append(key, req[key])
+
+        for (const key in data) {
+            formData.append(key, data[key])
         }
+        if (city)
+            formData.append('city', city)
+        if(avatar)
+            formData.append('avatar', avatar)
         if (user) {
             updateUserInfo(user?.id, formData)
                 .then((res) => {
@@ -85,7 +88,6 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                     dispatch(showAlert({message: 'Информация успешно изменена', typeAlert: 'good'}))
                 })
                 .catch((error) => {
-                    alert(2)
                     error?.response?.data?.body?.errors?.forEach((i: any) => {
                         if (
                             i?.field === 'phone' &&
@@ -294,8 +296,17 @@ const EditProfileFormForIe: FC<Props> = ({avatar}) => {
                     </ValidateWrapper>
                 </div>
             </div>
-            <button type="submit" className="btn_main btn_1 mt-4">
-                Cохранить
+            <button type="submit" className="btn_main btn_1 mt-4"
+                    onClick={()=>{
+                        if(!avatar && !user?.avatar){
+                            setImageError('Поле обязательно к заполнению')
+                            window.scrollTo(0, 0)
+                        }
+                        else
+                            setImageError(undefined)
+                    }}
+            >
+                Сохранить
             </button>
         </form>
     )
