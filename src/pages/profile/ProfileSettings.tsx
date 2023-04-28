@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import {useImageViewer} from '../../hooks/imageViewer'
@@ -10,11 +10,18 @@ import {useAppSelector} from '../../hooks/store'
 import {checkPhotoPath} from '../../helpers/photoLoader'
 import EditProfileFormForIe from '../../components/forms/EditProfileFormForIE'
 import EditProfileFormForOoo from '../../components/forms/EditProfileFormForOOO'
+import useAnchor from "../../hooks/useAnchor";
 
 const ProfileSettings = () => {
     const {user}:{user: IUser | null} = useAppSelector((state) => state?.user)
     const [avatar, setAvatar] = useState<any>(null)
+    const [imageError, setImageError] = useState<string | undefined>()
     let photo = useImageViewer(avatar)
+    useEffect(()=>{
+        if(avatar){
+            setImageError(undefined)
+        }
+    }, [avatar])
 
     return (
         <div>
@@ -26,14 +33,15 @@ const ProfileSettings = () => {
             <div className="bg_light p-3 text-center mb-4">
                 Размещение объявлений и полный доступ будет предоставлен после заполнения всех обязательных полей
             </div>
-            <h6 className="f_11 mb-3">Фото:</h6>
+            <h6 className="f_11 mb-3">Фото<span className="red">*</span></h6>
             <div className="acc-box">
                 <div className="row align-items-center">
-                    <div className="col-md-4 mb-4 mb-md-0">
+                    <div className={`col-md-4 mb-4 mb-md-0`}>
                         <img
                             src={avatar ? photo?.data_url : checkPhotoPath(user?.avatar)}
                             alt={user?.fullName}
                             className="user-photo"
+                            style={imageError?{border:'2px solid red'}:{}}
                         />
                     </div>
                     <div className="col-md-8">
@@ -52,9 +60,9 @@ const ProfileSettings = () => {
             </div>
 
             <h6 className="f_11 mb-2 mt-4 mb-sm-3 mt-sm-5">Личные данные профиля</h6>
-            {user?.type === 0 && <EditProfileForm avatar={avatar} />}
-            {user?.type === 1 && <EditProfileFormForIe avatar={avatar} />}
-            {user?.type === 2 && <EditProfileFormForOoo avatar={avatar} />}
+            {user?.type === 0 && <EditProfileForm avatar={avatar} setImageError={setImageError}  />}
+            {user?.type === 1 && <EditProfileFormForIe avatar={avatar} setImageError={setImageError} />}
+            {user?.type === 2 && <EditProfileFormForOoo avatar={avatar}  setImageError={setImageError} />}
 
             <h6 className="f_11 mb-2 mt-4 mb-sm-3 mt-sm-5">Сменить пароль</h6>
             <EditPasswordForm />

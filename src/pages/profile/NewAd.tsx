@@ -32,12 +32,14 @@ import {setBalance} from "../../store/reducers/userSlice";
 import {GetPromo} from "../../services/Promo";
 import {getBalance} from "../../services/users";
 import {MyEditor} from "../../components/MyEditor/MyEditor";
+import useAnchor from "../../hooks/useAnchor";
 
 const NewAd = () => {
     const [category, setCategory] = useState<number | undefined>(0)
     const [formInfo, setFormInfo] = useState<any>({
         category: 0,
     })
+    const [anchor, functionForAnchor]:any = useAnchor()
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [loadPhotoModal, setLoadPhotoModal] = useState<boolean>(false)
     const photoInfo = useImageViewer(formInfo?.image)
@@ -139,6 +141,12 @@ const NewAd = () => {
         }
     }, [currentArea])
 
+    useEffect(()=>{
+        if(adCoverViewer[0]?.info?.data_url){
+            clearErrors('image')
+        }
+    },[adCoverViewer[0]?.info?.data_url])
+
     useEffect(() => {
         if (id) {
             getOneOffer(id)
@@ -168,6 +176,7 @@ const NewAd = () => {
                         setValue('video', res?.video || '')
                         setValue('profit', FunctionForPrice(res?.profit) || '')
                         setValue('city', res?.city || '')
+                        setValue('image', res?.image)
                         setCurrentArea(res?.subsection?.area?.id)
                         setRoaloty(res?.isPricePerMonthAbsolute)
                     }
@@ -603,7 +612,7 @@ const NewAd = () => {
                             <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0 pt-sm-2">
                                 <div>О себе</div>
                             </div>
-                            <div className="col-sm-6 col-lg-8">
+                            <div className="col-sm-6 col-lg-8"  ref={anchor}>
                                 <ValidateWrapper error={errors.about} textarea={true}>
                                     <Controller
                                         name="about"
@@ -619,14 +628,14 @@ const NewAd = () => {
                     )}
                     <div className="row mb-3 mb-sm-4">
                         <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0">
-                            <div>Обложка объявления</div>
+                            <div>Обложка объявления<span className="red">*</span></div>
                             <div className="l-gray f_09 mt-1">
                                 Рекомендуемый размер 600х400, размер файла не более 5 мб.
                             </div>
                         </div>
                         <div className="col-sm-6 col-lg-8">
                             <div className="file-upload">
-                                <button className="btn_main btn_2 fw_4">Загрузить</button>
+                                <button className="btn_main btn_2 fw_4" style={errors?.image?{color:'red', border:'2px solid red'}:{}}>Загрузить</button>
                                 <input
                                     type="file"
                                     onChange={(e) => {
@@ -634,11 +643,15 @@ const NewAd = () => {
                                     }}
                                 />
                             </div>
-                            {adCoverViewer?.length > 0 &&
+                            {(adCoverViewer?.length > 0 || getValues('image')) &&
                                 <div className="photos-window">
                                     <div className="photos-items-preview">
                                         <img
-                                            src={adCoverViewer[0]?.info?.data_url}
+                                            src={
+                                                adCoverViewer[0]?.info?.data_url?
+                                                    adCoverViewer[0]?.info?.data_url
+                                                    : checkPhotoPath(getValues('image'))
+                                            }
                                         />
                                     </div>
                                 </div>}
@@ -1300,7 +1313,15 @@ const NewAd = () => {
                 }
 
 
-                <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={() => funcForCityEr(city)}>
+                <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={() => {
+                    funcForCityEr(city)
+                    if(adCoverViewer?.length == 0 && !getValues('image')){
+                        setError('image', {message:'поле обязательно к заполнению'})
+                        functionForAnchor()
+                    }
+                    else
+                        clearErrors('image')
+                }}>
                     {returnText()}
                 </button>
             </form>

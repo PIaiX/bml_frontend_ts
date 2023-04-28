@@ -499,11 +499,16 @@ const AdvPage: FC = () => {
                                     className="btn_main btn-5 f_11 w-100"
                                     onClick={(event) => {
                                         if (user) {
-                                            setMessagePayload((prevState) => ({
-                                                ...prevState,
-                                                text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"'
-                                            }))
-                                            createWithOfferTopicMessage(event)
+                                            if(user?.isFormCompleted){
+                                                setMessagePayload((prevState) => ({
+                                                    ...prevState,
+                                                    text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"'
+                                                }))
+                                                createWithOfferTopicMessage(event)
+                                            }
+                                            else{
+                                                navigate('/account/settings')
+                                            }
                                         }
                                         else {
                                             dispatch(showAlert({
