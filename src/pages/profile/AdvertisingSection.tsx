@@ -15,12 +15,13 @@ import {Row} from "react-bootstrap";
 import {setBalance} from "../../store/reducers/userSlice";
 import {showAlert} from "../../store/reducers/alertSlice";
 import {getBalance} from "../../services/users";
+import {GetPromo} from "../../services/Promo";
 
 
 const AdvertisingSection = () => {
 
-
-
+    const [promoData, setPromoData] = useState<any>()
+    const [promo, setPromo] = useState<string>()
     const {state} = useLocation()
     useEffect(()=>{
         state && alert('Будет редактирование')
@@ -66,6 +67,14 @@ const AdvertisingSection = () => {
             return 'Размеры не подходят'
         }
     }
+    const getPromo = (value: string) => {
+        GetPromo(value).then((res: any) => {
+            if (res) {
+                setPromoData(res)
+            }
+        })
+    }
+
     const [areas, setAreas] = useState<Array<IOffersAreaItem | undefined>>([])
     const [subSections, setSubSections] = useState<Array<IOffersSubSectionsItem | undefined>>([])
     const [currentArea, setCurrentArea] = useState<number | undefined>(undefined)
@@ -99,7 +108,8 @@ const AdvertisingSection = () => {
             userId: user?.id,
             image: data.image,
             adsTypeId:data.adv+1,
-            paymentMethod:data.paymentType
+            paymentMethod:data.paymentType,
+            promoCode: promoData?promoData?.code:''
         }
         for (const key in req) {
             formData.append(key, req[key])
@@ -428,14 +438,19 @@ const AdvertisingSection = () => {
 
                     </div>
                 </div>
+                {
+                    promoData
+                    && <div>Промокод активирован!</div>
+                    || <div className="promo mt-3 d-block col-5 col-lg-3">
+                        <input type="text" value={promo} onChange={(e) => setPromo(e.target.value)}/>
+                        <button type="button" className="btn_main btn_3 w-100 mt-2"
+                                onClick={() => getPromo(promo ? promo : '')}
+                        >
+                            Ввести промокод
+                        </button>
+                    </div>
+                }
 
-                <button type="submit" className="btn_main btn_4 fw_4 mt-sm-5"
-                        onClick={()=>{
-                            if(status!=='Фото загружено')setError('image', {message:'Загрузите фото'})
-                            else clearErrors(["image"])
-                        }}>
-                    Ввести промокод
-                </button>
                 <button type="submit" className="btn_main btn_4 fw_4 mt-sm-5 py-1"
                         onClick={()=>{
                             if(status!=='Фото загружено')setError('image', {message:'Загрузите фото'})

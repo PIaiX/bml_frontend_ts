@@ -14,14 +14,14 @@ import usePagination from "../hooks/pagination";
 import {addInArchive, deleteWithArchive} from "../services/offers";
 import {showAlert} from "../store/reducers/alertSlice";
 import OfferCard from "../pages/profile/OfferCard";
+import CustomModal from "./utils/CustomModal";
 type propsType={
     section:number
     bannersType?:boolean
 }
 const MyAds:FC<propsType> = ({section, bannersType}) => {
 
-    const tab=0
-
+    const [isShowModalReport, setIsShowModalReport] = useState<any>(false)
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const [currentPage, setCurrentPage] = useState(0)
@@ -123,6 +123,7 @@ const MyAds:FC<propsType> = ({section, bannersType}) => {
                                 key={i.id}
                                 {...i}
                                 section={section}
+                                setIsShowModalReport={setIsShowModalReport}
                                 scope={i.subsection?.area?.name}
                                 bannersType={bannersType}
                                 validity={i?.archiveExpire}
@@ -154,6 +155,18 @@ const MyAds:FC<propsType> = ({section, bannersType}) => {
             ) : (
                 ''
             )}
+            <CustomModal
+                isShow={isShowModalReport?true:false}
+                setIsShow={setIsShowModalReport}
+                centered={false}
+                closeButton={true}
+                className="modal__report"
+            >
+                <div>
+                    {isShowModalReport}
+                </div>
+            </CustomModal>
+
         </>
     )
 }
