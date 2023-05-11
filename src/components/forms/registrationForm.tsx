@@ -160,7 +160,7 @@ const RegistrationForm: FC = () => {
                         <input
                             type="text"
                             className="mt-3"
-                            placeholder={profileType === 1 ? 'Введите Имя' : 'Введите Имя ответственного лица'}
+                            placeholder={profileType === 0 || profileType === 1 ? 'Введите Имя' : 'Введите Имя ответственного лица'}
                             {...register('firstName', {
                                 required: 'Поле обязательно к заполнению',
                                 maxLength: {
@@ -174,7 +174,7 @@ const RegistrationForm: FC = () => {
                         <input
                             type="text"
                             className="mt-3"
-                            placeholder={profileType === 1 ? 'Введите Фамилию' : 'Введите Фамилию ответственного лица'}
+                            placeholder={profileType === 0 || profileType === 1? 'Введите Фамилию' : 'Введите Фамилию ответственного лица'}
                             {...register('lastName', {
                                 required: 'Поле обязательно к заполнению',
                                 maxLength: {

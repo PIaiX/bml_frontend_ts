@@ -3076,3 +3076,8 @@ footer {
 .validate-wrapper_error>.RichEditor-root{
     border-color: red;
 }
+input::placeholder {
+    font-weight: 400;
+    opacity: 0.6;
+    color: black;
+}

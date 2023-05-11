@@ -35,9 +35,9 @@ const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, 
                     <NavLink to={'/category/2'}>
                     <div className="white_box box_shad info_in_nums">
                         <div>
-                            <div className="fw_5 mb-4">Поиск бизнес парнёров</div>
+                            <div className="fw_5 mb-4">Зарегистрировано пользователей</div>
                             <div className="f_09 pt">
-                                Более <span className="color-2 fw_7">700</span> зарегистрированных партнёров по бизнесу
+                                Более <span className="color-2 fw_7">7000</span> предпринимателей
                                 {/*<span className="color-2 fw_7">{(businessPartners && businessPartners?.total>99)? businessPartners?.total : 100}</span> зарегистрированных партнёров по бизнесу*/}
                             </div>
                         </div>
@@ -52,7 +52,7 @@ const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, 
                     <NavLink to={'/category/3'}>
                     <div className="white_box box_shad info_in_nums">
                         <div>
-                            <div className="fw_5 mb-4">Поиск бизнес проектов</div>
+                            <div className="fw_5 mb-4">Продажа бизнеса</div>
                             <div className="f_09 pt">
                                 Более <span className="color-2 fw_7">600</span> проданных объектов
                                 {/*<span className="color-2 fw_7">{(saleBusiness && saleBusiness?.total>99)? saleBusiness?.total : 100}</span> зарегистрированных*/}
