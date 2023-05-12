@@ -25,6 +25,7 @@ type UserForm = {
     isShowEmail: boolean
     isShowPhone: boolean
     type: number
+    avatar:string
 }
 
 const EditProfileForm: FC<Props> = ({avatar, setImageError}) => {
@@ -36,6 +37,7 @@ const EditProfileForm: FC<Props> = ({avatar, setImageError}) => {
         handleSubmit,
         setValue,
         setError,
+        clearErrors,
         getValues,
     } = useForm<UserForm>({
         mode: 'onSubmit',
@@ -67,12 +69,13 @@ const EditProfileForm: FC<Props> = ({avatar, setImageError}) => {
 
         const formData = new FormData()
 
+        const newDate = getValues('birthday') ? convertLocaleDate(getValues('birthday')) : ''
+
         for (const key in data) {
             formData.append(key, data[key])
         }
-        const newDate = getValues('birthday') ? convertLocaleDate(getValues('birthday')) : ''
         if(newDate)
-            formData.append('birthday', newDate)
+            formData.set('birthday', newDate)
         if (city)
             formData.append('city', city)
         if(avatar)
@@ -156,11 +159,11 @@ const EditProfileForm: FC<Props> = ({avatar, setImageError}) => {
                     </ValidateWrapper>
                 </div>
                 <div className="col-sm-4">
-                    <h6>Дата рождения</h6>
+                    <h6>Дата рождения<span className="red">*</span></h6>
                 </div>
                 <div className="col-sm-8">
                     <ValidateWrapper error={errors?.birthday}>
-                        <input type="date" min="1950-01-01" {...register('birthday')} />
+                        <input type="date" min="1950-01-01" {...register('birthday', {required:'поле обязательно к заполнению'})} />
                     </ValidateWrapper>
                 </div>
                 <div className="col-sm-4">
@@ -233,11 +236,14 @@ const EditProfileForm: FC<Props> = ({avatar, setImageError}) => {
             <button type="submit" className="btn_main btn_1 mt-4"
                     onClick={()=>{
                         if(!avatar && !user?.avatar){
+                            setError('avatar', {message:'Поле обязательно к заполнению'})
                             setImageError('Поле обязательно к заполнению')
                             window.scrollTo(0, 0)
                         }
-                        else
+                        else{
+                            clearErrors('avatar')
                             setImageError(undefined)
+                        }
                     }}
             >
                 Сохранить

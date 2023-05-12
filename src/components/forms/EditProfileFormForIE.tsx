@@ -40,6 +40,7 @@ const EditProfileFormForIe: FC<Props> = ({avatar, setImageError}) => {
         handleSubmit,
         setValue,
         setError,
+        clearErrors,
         getValues,
     } = useForm<FormInfo>({
         mode: 'onSubmit',
@@ -67,12 +68,12 @@ const EditProfileFormForIe: FC<Props> = ({avatar, setImageError}) => {
             setValue('mainStateRegistrationNumber', user?.mainStateRegistrationNumber)
             setValue('email', user?.email)
             setValue('phone', user?.phone?user.phone:'')
-            setValue('avatar', user?.avatar)
         }
     }, [user])
     const submitUpdateUserInfo = (data: any) => {
 
         const formData = new FormData()
+        console.log(data)
 
         for (const key in data) {
             formData.append(key, data[key])
@@ -299,11 +300,14 @@ const EditProfileFormForIe: FC<Props> = ({avatar, setImageError}) => {
             <button type="submit" className="btn_main btn_1 mt-4"
                     onClick={()=>{
                         if(!avatar && !user?.avatar){
+                            setError('avatar', {message:'Поле обязательно к заполнению'})
                             setImageError('Поле обязательно к заполнению')
                             window.scrollTo(0, 0)
                         }
-                        else
+                        else{
+                            clearErrors('avatar')
                             setImageError(undefined)
+                        }
                     }}
             >
                 Сохранить
