@@ -43,6 +43,7 @@ export const MyEditor = (props) => {
     }, [editorState])
 
 
+    console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())))
     const handleKeyCommand = (command) => {
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
@@ -93,22 +94,25 @@ export const MyEditor = (props) => {
     }
 
     return (
-        <div className={`RichEditor-root${readOnly ? '-read' : ''}`}>
-            <div className={className} onClick={focus}>
-                <Editor
-                    blockStyleFn={getBlockStyle}
-                    customStyleMap={styleMap}
-                    editorState={editorState}
-                    handleKeyCommand={handleKeyCommand}
-                    onChange={setEditorState}
-                    onTab={onTab}
-                    placeholder={placeholder}
-                    ref={editor}
-                    spellCheck={true}
-                    readOnly={readOnly}
-                />
+        <>
+            <textarea>{value}</textarea>
+            <div className={`RichEditor-root${readOnly ? '-read' : ''}`}>
+                <div className={className} onClick={focus}>
+                    <Editor
+                        blockStyleFn={getBlockStyle}
+                        customStyleMap={styleMap}
+                        editorState={editorState}
+                        handleKeyCommand={handleKeyCommand}
+                        onChange={setEditorState}
+                        onTab={onTab}
+                        placeholder={placeholder}
+                        ref={editor}
+                        spellCheck={true}
+                        readOnly={readOnly}
+                    />
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
