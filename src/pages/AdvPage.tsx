@@ -326,8 +326,9 @@ const AdvPage: FC = () => {
                                         {offer?.item?.paybackTimeForUser != '' &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
-                                                <span
-                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                                <span className="f_15 fw_5 d-flex">
+                                                    {offer?.item?.paybackTimeForUser}
+                                                </span>
                                             </div>
                                         }
 
