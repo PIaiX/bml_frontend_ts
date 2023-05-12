@@ -75,20 +75,29 @@ const RegistrationForm: FC = () => {
                 reset()
                 navigate(`/enter`)
             })
-            .catch(() => {
-                dispatch(showAlert({message: 'Произошла ошибка, попробуйте позже.', typeAlert: 'bad'}))
+            .catch((error) => {
+                error?.response?.data?.message &&
+                dispatch(showAlert({message: `${error?.response?.data?.message}`, typeAlert: 'bad'}))
+
+                error?.response?.data?.errors?.errors &&
+                error?.response?.data?.errors?.errors.forEach((i: any) => {
+                    dispatch(showAlert({message: `${i.field} : ${i.message}`, typeAlert: 'bad'}))
+                    setErrorsFromServ({[i.field]: i.message})
+                })
             })
     }
 
     const onSubmitConfirmEmail = (email: string) => {
         confirmEmail(email)
             .then(() => {
+                dispatch(showAlert({message: 'Пароль отправлен на почту', typeAlert: 'good'}))
                 setButtonText('Проверьте почту')
             })
             .catch((error) => {
                 setButtonText('Произошла ошибка')
                 error &&
                     error.forEach((i: any) => {
+                        dispatch(showAlert({message: `${i.field} : ${i.message}`, typeAlert: 'bad'}))
                         setErrorsFromServ({[i.field]: i.message})
                     })
             })
@@ -284,20 +293,20 @@ const RegistrationForm: FC = () => {
                         />
                         <span className="ms-3">Показать пароль</span>
                     </label>
+                    <label className="color-1 mt-3 mt-sm-4">
+                        <input
+                            name="offer"
+                            type="checkbox"
+                            defaultChecked={false}
+                            onClick={() => setConfirmRadio(!confirmRadio)}
+                        />
+                        <span className="ms-3">
+                    Я соглашаюсь с правилами сайта и даю согласие на обработку персональных данных.
+                </span>
+                    </label>
 
                 </>
             )}
-            <label className="color-1 mt-3 mt-sm-4">
-                <input
-                    name="offer"
-                    type="checkbox"
-                    defaultChecked={false}
-                    onClick={() => setConfirmRadio(!confirmRadio)}
-                />
-                <span className="ms-3">
-                    Я соглашаюсь с правилами сайта и даю согласие на обработку персональных данных.
-                </span>
-            </label>
             <div className="row flex-sm-row-reverse align-items-center mt-3 mt-sm-4">
                 <div className="col-sm-8">
                     <button
