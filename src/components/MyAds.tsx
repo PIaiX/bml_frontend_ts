@@ -29,8 +29,9 @@ const MyAds:FC<propsType> = ({section, bannersType}) => {
     const [offerId2, setOfferId2] = useState<number | null>(null)
     const dispatch = useAppDispatch()
     const queryClient = useQueryClient()
+    console.log(user)
     let text = 'Ничего нет'
-    if (user?.typeForUser === 'Физ лицо')
+    if (user?.type == 0 && section==4)
         text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const notArchiveOffers = useQuery({
         queryKey: [`${section}-${currentPage}`],

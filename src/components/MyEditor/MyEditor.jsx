@@ -94,18 +94,6 @@ export const MyEditor = (props) => {
 
     return (
         <div className={`RichEditor-root${readOnly ? '-read' : ''}`}>
-            {!readOnly &&
-                <BlockStyleControls
-                    editorState={editorState}
-                    onToggle={toggleBlockType}
-                />
-            }
-            {!readOnly &&
-                <InlineStyleControls
-                    editorState={editorState}
-                    onToggle={toggleInlineStyle}
-                />
-            }
             <div className={className} onClick={focus}>
                 <Editor
                     blockStyleFn={getBlockStyle}
