@@ -7,6 +7,7 @@ import { IUser } from '../types/user'
 import { setInitialCount } from '../store/reducers/favoriteCountSlice'
 import FunctionForPrice from "../helpers/FunctionForPrice"
 import { setSearch } from '../store/reducers/searchHeader'
+import {checkPhotoPath} from "../helpers/photoLoader";
 
 const Header: FC = () => {
     const { user }: { user: IUser | null } = useAppSelector((state) => state?.user)
@@ -16,7 +17,7 @@ const Header: FC = () => {
     const navigate = useNavigate();
     const [srcForProfile, setSrcForProfile] = useState<string>('')
     const notification = useAppSelector((state) => state?.notification)
-
+    const [more400, setMore400] = useState(false)
 
     useEffect(() => {
         if (user) {
@@ -34,6 +35,12 @@ const Header: FC = () => {
         e.preventDefault()
         navigate("/search")
     }
+    window.addEventListener('resize', ()=>{
+        if(window.innerWidth>400)
+            setMore400(true)
+        else
+            setMore400(false)
+    })
     return (
         <>
             <header>
@@ -63,15 +70,14 @@ const Header: FC = () => {
                                 "btn-icon2 d-none d-md-block"
                             }
                         >
-
                             <MdStarOutline />
                             {user && <span className="count notificationAll">{count}</span>}
                         </NavLink>
 
                         {user?.id ? (
                             <NavLink to={srcForProfile} className={" d-md-block"}>
-                                {window.innerWidth <= 400 ? (
-                                    <img src="/images/icons/profile.svg" />
+                                {!more400 ? (
+                                    <img src={checkPhotoPath(user.avatar)} style={{height:'40px', width:'40px', objectFit:'cover', borderRadius:'20px'}} />
                                 ) : (
                                     <div>
                                         <span>{user?.fullName}</span>

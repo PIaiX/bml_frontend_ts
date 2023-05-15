@@ -74,7 +74,7 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar, setImageError }) => {
         }
     }, [user])
 
-    const submitUpdateUserInfo = ({legalAddress, ...data}:any) => {
+    const submitUpdateUserInfo = (data:any) => {
 
         const formData = new FormData()
 
@@ -85,8 +85,6 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar, setImageError }) => {
             formData.append('city', city)
         if(avatar)
             formData.append('avatar', avatar)
-        if(legalAddress)
-            formData.append('legalAddress', legalAddress)
 
         if (user) {
             updateUserInfo(user?.id, formData)
@@ -215,7 +213,7 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar, setImageError }) => {
                     </ValidateWrapper>
                 </div>
                 <div className="col-sm-4">
-                    <h6>ИНН</h6>
+                    <h6>ИНН<span className="red">*</span></h6>
                 </div>
                 <div className="col-sm-8">
                     <ValidateWrapper error={errors?.taxpayerIdentificationNumber}>

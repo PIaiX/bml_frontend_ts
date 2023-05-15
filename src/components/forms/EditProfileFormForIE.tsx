@@ -208,7 +208,7 @@ const EditProfileFormForIe: FC<Props> = ({avatar, setImageError}) => {
                     </ValidateWrapper>
                 </div>
                 <div className="col-sm-4">
-                    <h6>ИНН</h6>
+                    <h6>ИНН<span className="red">*</span></h6>
                 </div>
                 <div className="col-sm-8">
                     <ValidateWrapper error={errors?.taxpayerIdentificationNumber}>
