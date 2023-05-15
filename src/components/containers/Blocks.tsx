@@ -68,7 +68,7 @@ const BlocksContainer: FC<Props> = ({investors, businessPartners, saleBusiness, 
                     <NavLink to={'/category/4'}>
                     <div className="white_box box_shad info_in_nums">
                         <div>
-                            <div className="fw_5 mb-4">Поиск франшиз</div>
+                            <div className="fw_5 mb-4">Поиск франшизы</div>
                             <div className="f_09 pt">
                                 Более <span className="color-2 fw_7">50</span> компаний
                                 {/*<span className="color-2 fw_7">{(franchise && franchise?.total>99)? franchise?.total : 100}</span> зарегистрированных*/}

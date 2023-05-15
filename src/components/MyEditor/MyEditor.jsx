@@ -95,7 +95,6 @@ export const MyEditor = (props) => {
 
     return (
         <>
-            <textarea>{value}</textarea>
             <div className={`RichEditor-root${readOnly ? '-read' : ''}`}>
                 <div className={className} onClick={focus}>
                     <Editor
