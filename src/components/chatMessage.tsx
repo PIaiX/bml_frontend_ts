@@ -22,7 +22,9 @@ const ChatMessage: FC<Props> = ({ avatarUser, keyArr, arr }) => {
 
     const newDate = keyArr && convertLocaleDate(keyArr, true)
     const convertedDate = new Date(newDate)
-
+    function createMarkup(i:any) {
+        return {__html: i?.text};
+    }
     return (
         <>
             <div className="text-center l-gray my-4">
@@ -48,7 +50,9 @@ const ChatMessage: FC<Props> = ({ avatarUser, keyArr, arr }) => {
                                 {i.offerInfo.price && <div><span className="f_09 l-gray">Цена:</span> {i.offerInfo.price}</div>}
                             </div>
                         }
-                        <div className="text-break">{i?.text}</div>
+                        <div className="text-break"
+                            dangerouslySetInnerHTML={createMarkup(i)}
+                        />
                     </div>
                 </div>
             ))}

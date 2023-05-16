@@ -1,4 +1,4 @@
-import React, {BaseSyntheticEvent, FC, useEffect, useState,} from 'react'
+import React, {FC, useEffect, useState,} from 'react'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import AdvPreview from '../components/AdvPreview'
 import {NavLink, useNavigate, useParams} from 'react-router-dom'
@@ -22,11 +22,9 @@ import {IUser} from '../types/user'
 import {useAppDispatch, useAppSelector} from '../hooks/store'
 import Loader from '../components/utils/Loader'
 import {IUseStateReportType, PayloadsReport} from '../types/report'
-import CustomModal from '../components/utils/CustomModal'
 import {useForm} from 'react-hook-form'
-import ValidateWrapper from '../components/utils/ValidateWrapper'
 import {showAlert} from '../store/reducers/alertSlice'
-import {emitCreateMessage, emitCreateWithOfferTopicMessage} from '../services/sockets/messages'
+import {emitCreateMessage} from '../services/sockets/messages'
 import FunctionForPrice from '../helpers/FunctionForPrice'
 import {convertLocaleDate} from "../helpers/convertLocaleDate";
 import {getIdChat} from "../services/users";
@@ -85,6 +83,10 @@ const AdvPage: FC = () => {
     })
 
     useEffect(() => {
+        createWithOfferTopicMessage()
+    }, [messagePayload])
+
+    useEffect(() => {
         getAdvertisings(2).then(res => {
             setAdvertising(res)
         })
@@ -95,11 +97,6 @@ const AdvPage: FC = () => {
             getIdChat(offer?.item?.user?.id).then(res => res && setIdChat(res.id))
         }
     }, [offer])
-
-    useEffect(() => {
-        if (user && messagePayload.text === user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"')
-            createWithOfferTopicMessage(null)
-    }, [messagePayload])
 
     useEffect(() => {
 
@@ -153,7 +150,7 @@ const AdvPage: FC = () => {
                 return (
                     <section className="anchor_block" id="anchor_about_me">
                         <h4 className="fw_7">О себе</h4>
-                        <MyEditor readOnly={true} value={offer?.item?.about} />
+                        <MyEditor readOnly={true} value={offer?.item?.about}/>
                     </section>
                 )
             }
@@ -177,22 +174,20 @@ const AdvPage: FC = () => {
     let swiperPB = 250;
 
     if (window.innerWidth > 1400) swiperPB = 350
-    const createWithOfferTopicMessage = (e: BaseSyntheticEvent | null) => {
-        e && e.preventDefault()
+    const createWithOfferTopicMessage = () => {
         if (offer.item) {
-                emitCreateMessage({ userId: offer.item?.userId, text: messagePayload?.text, topic:offer.item?.title})
-                    .then(res=>{
-                        if(offer?.item?.user?.id)
-                            getIdChat(offer?.item?.user?.id).then(res => res && setIdChat(res.id))
-                        dispatch(showAlert({
-                            message: 'Запрос на бизнес план отправлен',
-                            typeAlert: 'good'
-                        }))
-
-                    })
-                    .catch(e=>{
-                        dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'}))
-                    })
+            emitCreateMessage({userId: offer.item?.userId, text: messagePayload?.text, topic: offer.item?.title})
+                .then(res => {
+                    if (offer?.item?.user?.id)
+                        getIdChat(offer?.item?.user?.id).then(res => res && setIdChat(res.id))
+                    dispatch(showAlert({
+                        message: 'Запрос на бизнес план отправлен',
+                        typeAlert: 'good'
+                    }))
+                })
+                .catch(e => {
+                    dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'}))
+                })
         }
     }
     let srcToChat = '/enter'
@@ -207,7 +202,7 @@ const AdvPage: FC = () => {
                     userName: offer?.item?.user.fullName,
                     userId: offer?.item?.user.id,
                     avatar: offer?.item?.user.avatar,
-                    topic:offer.item?.title
+                    topic: offer.item?.title
                 }
             })
         else
@@ -433,14 +428,16 @@ const AdvPage: FC = () => {
                                                 className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
                                         </div>
 
-                                        {(offer?.item?.price!=0 && offer?.item?.price &&
+                                        {(offer?.item?.price != 0 && offer?.item?.price &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
-                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Паушальный взнос:</span>
-                                                <span className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
+                                                <span
+                                                    className="pt fw_7 gray f_11 me-2 me-sm-4">Паушальный взнос:</span>
+                                                <span
+                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
                                             </div>
                                         )}
 
-                                        {offer?.item?.pricePerMonth!=0 && offer?.item?.pricePerMonth &&
+                                        {offer?.item?.pricePerMonth != 0 && offer?.item?.pricePerMonth &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Роялти:</span>
                                                 <span
@@ -500,18 +497,15 @@ const AdvPage: FC = () => {
                                     className="btn_main btn-5 f_11 w-100"
                                     onClick={(event) => {
                                         if (user) {
-                                            if(user?.isFormCompleted){
+                                            if (user?.isFormCompleted) {
                                                 setMessagePayload((prevState) => ({
                                                     ...prevState,
-                                                    text: user.fullName + ' запросил бизнес план с объявления "' + window.location.href + '"'
+                                                    text: user.fullName + ' запросил бизнес план с объявления <a href="' + window.location.href + '" target="_blank">' + window.location.href + '</a>'
                                                 }))
-                                                createWithOfferTopicMessage(event)
-                                            }
-                                            else{
+                                            } else {
                                                 navigate('/account/settings')
                                             }
-                                        }
-                                        else {
+                                        } else {
                                             dispatch(showAlert({
                                                 message: 'Зарегистрируйтесь для запроса бизнес плана. ',
                                                 typeAlert: 'neutral',
@@ -763,109 +757,6 @@ const AdvPage: FC = () => {
                     </Swiper>
                 </div>
             </section>
-            <CustomModal
-                isShow={isShowMessageModal}
-                setIsShow={setIsShowMessageModal}
-                centered={false}
-                closeButton={true}
-                className="modal__messages"
-            >
-                <form>
-                    <div className="m-3">
-                        <label>Текст сообщения:</label>
-                        <textarea
-                            placeholder="Введите сообщение..."
-                            value={messagePayload.text || ''}
-                            onChange={(e) => setMessagePayload((prevState) => ({...prevState, text: e.target.value}))}
-                        />
-                        {messagePayload?.text?.length === 0 ? (
-                            <span className="gray-text">
-                                <sup>*</sup>Минимум 1 знак
-                            </span>
-                        ) : null}
-                    </div>
-                    <div className="d-flex justify-content-center mt-5">
-                        <button
-                            className="btn_main btn_1"
-                            onClick={(event: BaseSyntheticEvent) =>
-                                messagePayload?.text?.length >= 1
-                                    ? createWithOfferTopicMessage(event)
-                                    : event.preventDefault()
-                            }
-                        >
-                            Отправить
-                        </button>
-                    </div>
-                </form>
-            </CustomModal>
-            <CustomModal
-                isShow={isShowModalReport}
-                setIsShow={setIsShowModalReport}
-                centered={false}
-                closeButton={true}
-                className="modal__report"
-            >
-                <div>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <div>
-                            <label className="fs-12">Выберите причину жалобы: </label>
-                            <ValidateWrapper error={errors.reportTypeId}>
-                                <select
-                                    {...register('reportTypeId', {
-                                        required: 'Обязательное поле',
-                                    })}
-                                >
-                                    {idAdvForBad &&
-                                    reportAdsTypes?.isLoaded ? (
-                                        reportAdsTypes?.items?.map((i) => (
-                                            <option value={i.id} key={i.id}>
-                                                {i.name}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option>Загрузка</option>
-                                    )}
-                                    {!idAdvForBad && reportTypes?.isLoaded ? (
-                                        reportTypes?.items?.map((i) => (
-                                            <option value={i.id} key={i.id}>
-                                                {i.name}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option>Загрузка</option>
-                                    )}
-                                </select>
-                            </ValidateWrapper>
-                        </div>
-                        <div className="mt-3 mb-3">
-                            <label className="fs-12">Текст жалобы: </label>
-                            <ValidateWrapper error={errors.description}>
-                                <textarea
-                                    {...register('description', {
-                                        required: 'Обязательное поле',
-                                        minLength: {value: 5, message: 'Минимум 5 символов'},
-                                        maxLength: {value: 250, message: 'Максимум 250 символов'},
-                                    })}
-                                />
-                            </ValidateWrapper>
-                        </div>
-                        <div className="d-flex justify-content-center">
-                            <button
-                                type="submit"
-                                className="btn_main btn_1"
-                                onClick={() => {
-                                    if (user) {
-                                        setValue('userId', user?.id)
-                                    }
-                                    setValue('offerId', id)
-                                }}
-                            >
-                                Отправить
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </CustomModal>
             <PartnersSite/>
         </main>
     )

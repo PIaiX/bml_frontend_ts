@@ -16,7 +16,8 @@ export const MyEditor = (props) => {
             EditorState.createWithContent(convertFromRaw(JSON.parse(value)))
             : EditorState.createEmpty()
     }catch (e){
-        console.log(e)
+        const x = () => {
+        }
     }
 
     const [editorState, setEditorState] = useState(forOldEvent)
@@ -29,7 +30,8 @@ export const MyEditor = (props) => {
                     : EditorState.createEmpty())
             }
         }catch (e){
-            console.log(e)
+            const x = () => {
+            }
         }
     }, [value])
 
@@ -43,7 +45,6 @@ export const MyEditor = (props) => {
     }, [editorState])
 
 
-    console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())))
     const handleKeyCommand = (command) => {
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
