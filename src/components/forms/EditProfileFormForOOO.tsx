@@ -68,9 +68,11 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar, setImageError }) => {
             setValue('lastName', user?.lastName)
             setValue('taxpayerIdentificationNumber', user?.taxpayerIdentificationNumber)
             setValue('mainStateRegistrationNumber', user?.mainStateRegistrationNumber)
-            setValue('legalAddress', user?.legalAddress)
             setValue('phone', user?.phone?user.phone:'')
             setValue('email', user?.email)
+            if (user?.legalAddress)
+                setValue('legalAddress', user?.legalAddress)
+
         }
     }, [user])
 
