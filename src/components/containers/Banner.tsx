@@ -4,6 +4,7 @@ import { Autoplay, Pagination } from 'swiper'
 import { useGetBannerQuery } from '../../services/RTK/bannerApi'
 import Loader from '../utils/Loader'
 import { checkPhotoPath } from '../../helpers/photoLoader'
+import {useAppSelector} from "../../hooks/store";
 
 type Props = {
     swiperDelay?: number
@@ -11,7 +12,6 @@ type Props = {
 
 const BannerContainer: FC<Props> = ({ swiperDelay }) => {
     const { data, error, isLoading } = useGetBannerQuery()
-
     if (!swiperDelay) return null
 
     return (
@@ -32,7 +32,9 @@ const BannerContainer: FC<Props> = ({ swiperDelay }) => {
                                     <div className="row">
                                         <div className="col-md-9 col-lg-7">
                                             <h2>{item?.title}</h2>
-                                            <h5 dangerouslySetInnerHTML={{ __html: item?.description }} />
+                                            <div className={'d-none d-sm-inline '}>
+                                                <h5 dangerouslySetInnerHTML={{ __html: item?.description }} />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

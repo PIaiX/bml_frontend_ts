@@ -269,7 +269,7 @@ block 1
 .swiper-1 .swiper-slide .container {
     position: relative;
     z-index: 1;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .swiper-1 .swiper-pagination {
@@ -288,11 +288,11 @@ block 1
 
 @media (max-width: 575px) {
     .swiper-1 h2 {
-        font-size: 2em;
+        font-size: 1.2em;
     }
 
     .swiper-1 .swiper-slide {
-        height: 50vw;
+        height: 30vw;
         padding: 3em 0px;
     }
 }
