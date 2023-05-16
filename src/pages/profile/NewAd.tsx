@@ -594,16 +594,13 @@ const NewAd = () => {
                                 <div>Бизнес-план</div>
                             </div>
                             <div className="col-sm-6 col-lg-8">
-                                <ValidateWrapper error={errors.businessPlan} textarea={true}>
                                     <Controller
                                         name="businessPlan"
                                         control={control}
-                                        rules={{required: 'Обязательное поле'}}
                                         render={({field: {value, onChange}}:any) =>
                                             <MyEditor value={value} onChange={onChange} placeholder="Бизнес-план"/>
                                         }
                                     />
-                                </ValidateWrapper>
                             </div>
                         </div>
                     )}
@@ -613,16 +610,13 @@ const NewAd = () => {
                                 <div>О себе</div>
                             </div>
                             <div className="col-sm-6 col-lg-8"  ref={anchor}>
-                                <ValidateWrapper error={errors.about} textarea={true}>
                                     <Controller
                                         name="about"
                                         control={control}
-                                        rules={{required: 'Обязательное поле'}}
                                         render={({field: {value, onChange}}:any) =>
                                             <MyEditor value={value} onChange={onChange} placeholder="О себе"/>
                                         }
                                     />
-                                </ValidateWrapper>
                             </div>
                         </div>
                     )}
