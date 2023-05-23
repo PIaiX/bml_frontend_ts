@@ -919,7 +919,7 @@ ul.simple_list>li::before {
     height: calc((100% - 20px) / 2);
 }
 
-.swiper-slide a {
+.swiper-slide .alink {
     position: absolute;
     width: 100%;
     height: 100%;

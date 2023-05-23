@@ -14,21 +14,17 @@ type Props = {
 const NewsPreview: FC<Props> = (props) => {
     return (
         <article className="news-preview">
-            <img src={checkPhotoPath(props.imgUrl)} alt={props.title} />
-            <div className="time">
-                <div className="lh_1">
-                    {props?.readingTimeFrom} - {props?.readingTimeTo}
+            <NavLink to={`${props.url}`}>
+                <img src={checkPhotoPath(props.imgUrl)} onLoad={()=>window.scrollTo(0,0)} alt={props.title}/>
+                <div className="px-2 py-3">
+                    <p className="title">{props.title}</p>
+                    <div className="text" dangerouslySetInnerHTML={{__html: props?.text ? props?.text : ''}}>
+                    </div>
+                    <NavLink to={`${props.url}`} className="alink more">
+                        Подробнее
+                    </NavLink>
                 </div>
-                <div className="lh_1 gray">мин</div>
-            </div>
-            <div className="px-2 py-3">
-                <p className="title">{props.title}</p>
-                <div className="text" dangerouslySetInnerHTML={{ __html:props?.text?props?.text:''}}>
-                </div>
-                <NavLink to={`${props.url}`} className="more">
-                    Подробнее
-                </NavLink>
-            </div>
+            </NavLink>
         </article>
     )
 }

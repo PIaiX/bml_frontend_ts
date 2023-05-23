@@ -309,7 +309,7 @@ const AdvertisingSection = () => {
                     </div>
                     <div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">
                         <ValidateWrapper error={errors.link}>
-                            <input type={'url'}
+                            <input type={'text'}
                                    placeholder={'Введите ссылку'}
                                    {...register('link', {
                                        required: 'Поле обязательно к заполнению',
@@ -403,7 +403,13 @@ const AdvertisingSection = () => {
                         <div className="f_12 fw_6">Сумма к оплате</div>
                     </div>
                     <div className="col-sm-8 col-md-4 col-xxl-3 mb-3 mb-sm-0">
-                        <span className="f_12 fw_6">{data.sum?FunctionForPrice(data.sum):0} ₽</span>
+                        <span className="f_12 fw_6">{
+                            data.sum?
+                                promoData?.discountPrice?
+                                    FunctionForPrice(data.sum-promoData?.discountPrice)
+                                    :FunctionForPrice(data.sum)
+                                :0} ₽</span>
+                        {/*<span className="f_12 fw_6">{data.sum?FunctionForPrice(data.sum):0} ₽</span>*/}
                     </div>
                 </div>
                 <div className="row align-items-center mb-3 mb-sm-4 mt-3">

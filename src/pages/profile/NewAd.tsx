@@ -1304,6 +1304,16 @@ const NewAd = () => {
                     </div>
                 )
                 }
+                {!id && !premium && category === 4 &&
+                    <div className="col-sm-6 col-lg-4 mb-2 mt-2 mb-sm-0">
+                        <div className="f_12 fw_6">Сумма к оплате: {
+                            promoData?.discountPrice?
+                                FunctionForPrice((placedForMonths === 3 ? 6000 : 11000)-promoData?.discountPrice)
+                                :FunctionForPrice(placedForMonths === 3 ? 6000 : 11000)
+                        }
+                        </div>
+                    </div>
+                }
 
 
                 <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={() => {
