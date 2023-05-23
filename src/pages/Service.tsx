@@ -280,7 +280,7 @@ const Service: FC = () => {
                                             investments={item.investments}
                                             favorite={item.isFavorite}
                                             price={categoryId === 3 ? item.price : undefined}
-                                            isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
+                                            isPricePerMonthAbsolute={true}
                                         />
                                     </div>
                                 ))
@@ -314,7 +314,7 @@ const Service: FC = () => {
                                         favorite={item.isFavorite}
                                         investments={item.investments}
                                         price={categoryId === 3 ? item.price : undefined}
-                                        isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
+                                        isPricePerMonthAbsolute={true}
                                     />
                                 </div>
                             ))
@@ -341,7 +341,7 @@ const Service: FC = () => {
                                         favorite={item.isFavorite}
                                         investments={item.investments}
                                         price={categoryId === 3 ? item.price : undefined}
-                                        isPricePerMonthAbsolute={item.isPricePerMonthAbsolute}
+                                        isPricePerMonthAbsolute={true}
                                     />
                                 </div>
                             ))

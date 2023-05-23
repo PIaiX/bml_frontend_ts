@@ -26,13 +26,13 @@ const Layout = () => {
         }
     }, [alertState?.isShow])
 
-    useEffect(()=>{
-        const timer = setTimeout(() => {
-            window.scrollTo(0,0)
-        }, 200);
-        return () => clearTimeout(timer);
-    },[pathname])
-
+    // useEffect(()=>{
+    //     const timer = setTimeout(() => {
+    //         window.scrollTo(0,0)
+    //     }, 200);
+    //     return () => clearTimeout(timer);
+    // },[pathname])
+    //
 
     return (
         <div className="root-wrapper">
