@@ -213,6 +213,7 @@ const AdvPage: FC = () => {
             }))
     }
 
+    useEffect(()=>window.scrollTo(0,0), [offer])
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
@@ -236,7 +237,7 @@ const AdvPage: FC = () => {
 
                 <div className="row mb-3 mb-sm-4 mb-md-5">
                     <div className="col-lg-7 col-xl-8 mb-4 mb-lg-0">
-                        <img src={checkPhotoPath(offer?.item?.image)} alt={offer?.item?.title} className="main-img"/>
+                        <img src={checkPhotoPath(offer?.item?.image)} alt={offer?.item?.title} onLoad={()=>window.scrollTo(0,0)} className="main-img"/>
                     </div>
                     <div className="col-lg-5 col-xl-4">
                         <div className="blue-box h-100 d-flex flex-column justify-content-between">
@@ -547,8 +548,7 @@ const AdvPage: FC = () => {
                                 {advertising && advertising[0] &&
                                     <div className="col-8 col-sm-6 col-md-12 promo">
                                         <div className={'position-relative'}>
-                                            <img src={checkPhotoPath(advertising[0].image)} alt="img"
-                                                 className="img-fluid mb-2"/>
+                                            <img src={checkPhotoPath(advertising[0].image)} alt="img" onClick={()=>window.open(`${advertising[0].link}`)} className="img-fluid mb-2"/>
                                             {user &&
                                                 <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
                                                     setIdAdvForBad(advertising[0].id)
@@ -563,20 +563,19 @@ const AdvPage: FC = () => {
                                     </div>}
                                 {advertising && advertising[1] &&
                                     <div className="col-8 col-sm-6 col-md-12 promo">
-                                        <div className={'position-relative'}>
-                                            <img src={checkPhotoPath(advertising[1].image)} alt="img"
-                                                 className="img-fluid mb-2"/>
-                                            {user &&
-                                                <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
-                                                    setIdAdvForBad(advertising[0].id)
-                                                    setIsShowModalReport(true)
-                                                }}>
-                                                    <MdInfoOutline className="f_11 gray"/>
-                                                </div>
-                                            }
+                                            <div className={'position-relative'}>
+                                                <img src={checkPhotoPath(advertising[1].image)} alt="img"  onClick={()=>window.open(`${advertising[1].link}`)} className="img-fluid mb-2"/>
+                                                {user &&
+                                                    <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
+                                                        setIdAdvForBad(advertising[0].id)
+                                                        setIsShowModalReport(true)
+                                                    }}>
+                                                        <MdInfoOutline className="f_11 gray"/>
+                                                    </div>
+                                                }
 
-                                        </div>
-                                        <h4 className="fw_7 mb-2">{advertising[1].description}</h4>
+                                            </div>
+                                            <h4 className="fw_7 mb-2">{advertising[1].description}</h4>
                                     </div>}
                             </div>
                         </div>

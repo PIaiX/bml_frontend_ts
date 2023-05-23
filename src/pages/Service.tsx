@@ -294,7 +294,7 @@ const Service: FC = () => {
                         )}
                         {advertising && advertising[0] && advertising[0].image &&
                             <div className="blockAdvertising position-relative">
-                                <img className={"img-advertising"} src={checkPhotoPath(advertising[0].image)} alt=""/>
+                                <img className={"img-advertising"} src={checkPhotoPath(advertising[0].image)} alt="" onClick={()=>window.open(`${advertising[0]?.link}`)} />
                                 {user &&
                                     <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
                                         setIdAdvForBad(advertising[0].id)
@@ -321,7 +321,7 @@ const Service: FC = () => {
                             : null}
                         {advertising && advertising[1] && advertising[1]?.image &&
                             <div className={"blockAdvertising position-relative"}>
-                                <img className={"img-advertising"} src={checkPhotoPath(advertising[1].image)} alt=""/>
+                                <img className={"img-advertising"} src={checkPhotoPath(advertising[1].image)} alt="" onClick={()=>window.open(`${advertising[1]?.link}`)} />
                                 {user &&
                                     <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
                                         setIdAdvForBad(advertising[0].id)
