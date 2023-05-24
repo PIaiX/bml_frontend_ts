@@ -15,8 +15,8 @@ import {$authApi} from "../services/indexAuth";
 const Layout = () => {
     const alertState = useAppSelector((state) => state.alert)
     const dispatch = useAppDispatch()
-    const {pathname} = useLocation()
-    const [myRef, executeScroll] = useAnchor()
+    // const {pathname} = useLocation()
+    // const [myRef, executeScroll] = useAnchor()
 
     useEffect(() => {
         if (alertState?.isShow) {
@@ -36,7 +36,7 @@ const Layout = () => {
 
     return (
         <div className="root-wrapper">
-            <div ref={myRef}></div>
+            {/*<div ref={myRef}></div>*/}
             <ScrollRestoration />
             <Header />
             <div className="content-wrapper">
@@ -45,7 +45,7 @@ const Layout = () => {
             <Alert />
             <ActionNotification delay={5000} />
             <Footer />
-            {executeScroll()}
+            {/*{executeScroll()}*/}
         </div>
     )
 }

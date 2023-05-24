@@ -39,7 +39,7 @@ const NewAd = () => {
     const [formInfo, setFormInfo] = useState<any>({
         category: 0,
     })
-    const [anchor, functionForAnchor]:any = useAnchor()
+    const [anchor, functionForAnchor]: any = useAnchor()
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [loadPhotoModal, setLoadPhotoModal] = useState<boolean>(false)
     const photoInfo = useImageViewer(formInfo?.image)
@@ -69,11 +69,22 @@ const NewAd = () => {
         item: null,
     })
     const getPromo = (value: string) => {
-        GetPromo(value).then((res: any) => {
-            if (res) {
-                setPromoData(res)
-            }
-        })
+        GetPromo(value)
+            .then((res: any) => {
+                if (res) {
+                    setPromoData(res)
+                    dispatch(showAlert({
+                        message: 'Промокод активирован!',
+                        typeAlert: 'good'
+                    }))
+                }})
+            .catch(e => {
+                setPromo('')
+                dispatch(showAlert({
+                    message: 'Промокод не найден!',
+                    typeAlert: 'bad'
+                }))
+            })
     }
     const [imagesFromServer, setImagesFromServer] = useState<any>(null)
     const [isPricePerMonthAbsolute, setRoaloty] = useState<boolean>(true)
@@ -141,11 +152,11 @@ const NewAd = () => {
         }
     }, [currentArea])
 
-    useEffect(()=>{
-        if(adCoverViewer[0]?.info?.data_url){
+    useEffect(() => {
+        if (adCoverViewer[0]?.info?.data_url) {
             clearErrors('image')
         }
-    },[adCoverViewer[0]?.info?.data_url])
+    }, [adCoverViewer[0]?.info?.data_url])
 
     useEffect(() => {
         if (id) {
@@ -248,11 +259,11 @@ const NewAd = () => {
         let dateNew
         if (data?.dateOfCreation) {
             dateNew = convertLocaleDate(data?.dateOfCreation)?.replaceAll('/', '.')
-            if (dateNew){
-                if(dateNew[1]=='.')
-                    dateNew='0'+dateNew
-                if (dateNew[4]=='.')
-                    dateNew=dateNew.slice(0, 3)+'0'+dateNew.slice(3, 9)
+            if (dateNew) {
+                if (dateNew[1] == '.')
+                    dateNew = '0' + dateNew
+                if (dateNew[4] == '.')
+                    dateNew = dateNew.slice(0, 3) + '0' + dateNew.slice(3, 9)
             }
         }
         const req: any = {
@@ -281,7 +292,7 @@ const NewAd = () => {
                 })
                     .then(res => {
                         if (res) {
-                            getBalance().then(res=> {
+                            getBalance().then(res => {
                                 dispatch(setBalance(res))
                                 dispatch(showAlert({
                                     message: 'Объявление успешно создано! Ждите одобрения модерации...',
@@ -293,7 +304,7 @@ const NewAd = () => {
                             })
                         }
                     }).catch(() => {
-                        getBalance().then(res=> {
+                        getBalance().then(res => {
                             dispatch(setBalance(res))
                             dispatch(showAlert({message: 'Ошибка с премиум размещением!', typeAlert: 'bad'}))
                             setTimeout(() => {
@@ -302,7 +313,7 @@ const NewAd = () => {
                         })
                     })
                 else {
-                    getBalance().then(res=> {
+                    getBalance().then(res => {
                         dispatch(setBalance(res))
                         dispatch(showAlert({
                             message: 'Объявление успешно создано! Ждите одобрения модерации...',
@@ -389,7 +400,7 @@ const NewAd = () => {
             [ValuesFroPrice[5][0]]: ValuesFroPrice[5][1],
             [ValuesFroPrice[6][0]]: ValuesFroPrice[6][1],
             city: city,
-            promoCode: promoData?promoData?.code:''
+            promoCode: promoData ? promoData?.code : ''
         }
         if (id) {
             saveChanges(data)
@@ -503,7 +514,7 @@ const NewAd = () => {
                                     name="description"
                                     control={control}
                                     rules={{required: 'Обязательное поле'}}
-                                    render={({field: {value, onChange}}:any) =>
+                                    render={({field: {value, onChange}}: any) =>
                                         <MyEditor value={value} onChange={onChange} placeholder={
                                             category === 0 || category === 1 || category === 2
                                                 ? 'Описание объявления'
@@ -530,8 +541,9 @@ const NewAd = () => {
                                             name="aboutCompany"
                                             control={control}
                                             rules={{required: 'Обязательное поле'}}
-                                            render={({field: {value, onChange}}:any) =>
-                                                <MyEditor value={value} onChange={onChange} placeholder="Описание франшизы"/>
+                                            render={({field: {value, onChange}}: any) =>
+                                                <MyEditor value={value} onChange={onChange}
+                                                          placeholder="Описание франшизы"/>
                                             }
                                         />
                                     </ValidateWrapper>
@@ -547,8 +559,9 @@ const NewAd = () => {
                                             name="benefits"
                                             control={control}
                                             rules={{required: 'Обязательное поле'}}
-                                            render={({field: {value, onChange}}:any) =>
-                                                <MyEditor value={value} onChange={onChange} placeholder="Преимущества франшизы"/>
+                                            render={({field: {value, onChange}}: any) =>
+                                                <MyEditor value={value} onChange={onChange}
+                                                          placeholder="Преимущества франшизы"/>
                                             }
                                         />
                                     </ValidateWrapper>
@@ -575,7 +588,7 @@ const NewAd = () => {
                                     name="cooperationTerms"
                                     control={control}
                                     rules={{required: 'Обязательное поле'}}
-                                    render={({field: {value, onChange}}:any) =>
+                                    render={({field: {value, onChange}}: any) =>
                                         <MyEditor value={value} onChange={onChange} placeholder={
                                             category === 0 || category === 2 || category === 4
                                                 ? 'Условия сотрудничества'
@@ -594,13 +607,13 @@ const NewAd = () => {
                                 <div>Бизнес-план</div>
                             </div>
                             <div className="col-sm-6 col-lg-8">
-                                    <Controller
-                                        name="businessPlan"
-                                        control={control}
-                                        render={({field: {value, onChange}}:any) =>
-                                            <MyEditor value={value} onChange={onChange} placeholder="Бизнес-план"/>
-                                        }
-                                    />
+                                <Controller
+                                    name="businessPlan"
+                                    control={control}
+                                    render={({field: {value, onChange}}: any) =>
+                                        <MyEditor value={value} onChange={onChange} placeholder="Бизнес-план"/>
+                                    }
+                                />
                             </div>
                         </div>
                     )}
@@ -609,14 +622,14 @@ const NewAd = () => {
                             <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0 pt-sm-2">
                                 <div>О себе</div>
                             </div>
-                            <div className="col-sm-6 col-lg-8"  ref={anchor}>
-                                    <Controller
-                                        name="about"
-                                        control={control}
-                                        render={({field: {value, onChange}}:any) =>
-                                            <MyEditor value={value} onChange={onChange} placeholder="О себе"/>
-                                        }
-                                    />
+                            <div className="col-sm-6 col-lg-8" ref={anchor}>
+                                <Controller
+                                    name="about"
+                                    control={control}
+                                    render={({field: {value, onChange}}: any) =>
+                                        <MyEditor value={value} onChange={onChange} placeholder="О себе"/>
+                                    }
+                                />
                             </div>
                         </div>
                     )}
@@ -629,7 +642,9 @@ const NewAd = () => {
                         </div>
                         <div className="col-sm-6 col-lg-8">
                             <div className="file-upload">
-                                <button className="btn_main btn_2 fw_4" style={errors?.image?{color:'red', border:'2px solid red'}:{}}>Загрузить</button>
+                                <button className="btn_main btn_2 fw_4"
+                                        style={errors?.image ? {color: 'red', border: '2px solid red'} : {}}>Загрузить
+                                </button>
                                 <input
                                     type="file"
                                     onChange={(e) => {
@@ -642,7 +657,7 @@ const NewAd = () => {
                                     <div className="photos-items-preview">
                                         <img
                                             src={
-                                                adCoverViewer[0]?.info?.data_url?
+                                                adCoverViewer[0]?.info?.data_url ?
                                                     adCoverViewer[0]?.info?.data_url
                                                     : checkPhotoPath(getValues('image'))
                                             }
@@ -1259,7 +1274,7 @@ const NewAd = () => {
                 {!id && premium && <div className={"pt-4"}>
                     <Premium setPayment={setPaymentType}
                              setChange={setPremiumInf}
-                             promo={promoData?promoData?.discountPrice:0}
+                             promo={promoData ? promoData?.discountPrice : 0}
                              priceWithoutPremium={placedForMonths === 3 ? 6000 : 11000}
                     />
                 </div>}
@@ -1307,9 +1322,9 @@ const NewAd = () => {
                 {!id && !premium && category === 4 &&
                     <div className="col-sm-6 col-lg-4 mb-2 mt-2 mb-sm-0">
                         <div className="f_12 fw_6">Сумма к оплате: {
-                            promoData?.discountPrice?
-                                FunctionForPrice((placedForMonths === 3 ? 6000 : 11000)-promoData?.discountPrice)
-                                :FunctionForPrice(placedForMonths === 3 ? 6000 : 11000)
+                            promoData?.discountPrice ?
+                                FunctionForPrice((placedForMonths === 3 ? 6000 : 11000) - promoData?.discountPrice)
+                                : FunctionForPrice(placedForMonths === 3 ? 6000 : 11000)
                         }
                         </div>
                     </div>
@@ -1318,11 +1333,10 @@ const NewAd = () => {
 
                 <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={() => {
                     funcForCityEr(city)
-                    if(adCoverViewer?.length == 0 && !getValues('image')){
-                        setError('image', {message:'поле обязательно к заполнению'})
+                    if (adCoverViewer?.length == 0 && !getValues('image')) {
+                        setError('image', {message: 'поле обязательно к заполнению'})
                         functionForAnchor()
-                    }
-                    else
+                    } else
                         clearErrors('image')
                 }}>
                     {returnText()}

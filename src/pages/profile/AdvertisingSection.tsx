@@ -23,15 +23,14 @@ const AdvertisingSection = () => {
     const [promoData, setPromoData] = useState<any>()
     const [promo, setPromo] = useState<string>()
     const {state} = useLocation()
-    useEffect(()=>{
+    useEffect(() => {
         state && alert('Будет редактирование')
     }, [])
 
 
-
     const [data, setData] = useState<any>({
         lifeAd: '1',
-        paymentType:'INTERNAL'
+        paymentType: 'INTERNAL'
     })
     const {
         register,
@@ -42,11 +41,18 @@ const AdvertisingSection = () => {
         setError,
         clearErrors,
         getValues,
-    } = useForm<{image:string, placedForMonths:string, link:string, description:string, adsTypeId:string, subsectionId:string}>()
-    const [prices, setPrices]=useState()
-    useEffect(()=>{
+    } = useForm<{
+        image: string,
+        placedForMonths: string,
+        link: string,
+        description: string,
+        adsTypeId: string,
+        subsectionId: string
+    }>()
+    const [prices, setPrices] = useState()
+    useEffect(() => {
         getAdvertisingsPrices().then(setPrices)
-    },[])
+    }, [])
 
     const [adCover, setAdCover] = useState<any>([])
     const adCoverViewer = useImagesViewer(adCover)
@@ -58,31 +64,49 @@ const AdvertisingSection = () => {
     const navigate = useNavigate()
     const viewPhoto = useImageViewer(data?.image)
     const user = useAppSelector(state => state.user.user)
-    const validLittlePhoto = (photo: any):string => {
+    const validLittlePhoto = (photo: any): string => {
         if (photo?.width === undefined && photo?.height === undefined) {
             return 'Фото не загружено'
-        } else if (data?.adv === 1 && photo?.width >=200 && photo?.height >= 120) {
+        } else if (data?.adv === 1 && photo?.width >= 200 && photo?.height >= 120) {
             return 'Фото загружено'
         } else {
             return 'Размеры не подходят'
         }
     }
     const getPromo = (value: string) => {
-        GetPromo(value).then((res: any) => {
-            if (res) {
-                setPromoData(res)
-            }
-        })
+        GetPromo(value)
+            .then((res: any) => {
+                if (res) {
+                    setPromoData(res)
+                    dispatch(showAlert({
+                        message: 'Промокод активирован!',
+                        typeAlert: 'good'
+                    }))
+
+                }
+            })
+            .catch(e => {
+                setPromo('')
+                dispatch(showAlert({
+                    message: 'Промокод не найден!',
+                    typeAlert: 'bad'
+                }))
+            })
+
     }
 
     const [areas, setAreas] = useState<Array<IOffersAreaItem | undefined>>([])
     const [subSections, setSubSections] = useState<Array<IOffersSubSectionsItem | undefined>>([])
     const [currentArea, setCurrentArea] = useState<number | undefined>(undefined)
-    useEffect(()=>{setValue('adsTypeId', '')},[areas])
-    useEffect(()=>{setValue('subsectionId', '')},[subSections])
+    useEffect(() => {
+        setValue('adsTypeId', '')
+    }, [areas])
+    useEffect(() => {
+        setValue('subsectionId', '')
+    }, [subSections])
 
     useEffect(() => {
-        getAllAreas().then(res=>res && setAreas(res))
+        getAllAreas().then(res => res && setAreas(res))
     }, [])
 
     useEffect(() => {
@@ -91,65 +115,67 @@ const AdvertisingSection = () => {
         }
     }, [currentArea])
 
-    const validBigPhoto = (photo: any):string => {
+    const validBigPhoto = (photo: any): string => {
         if (photo?.width === undefined && photo?.height === undefined) {
             return 'Фото не загружено'
-        } else if ( data?.adv === 0 && photo?.width>=800 && photo.height>=300) {
+        } else if (data?.adv === 0 && photo?.width >= 800 && photo.height >= 300) {
             return 'Фото загружено'
-        } else{
+        } else {
             return 'Размеры не подходят'
         }
     }
 
-    const NewAdvertisings=(dat:any)=>{
+    const NewAdvertisings = (dat: any) => {
         const formData = new FormData()
         const req: any = {
             ...dat,
             userId: user?.id,
             image: data.image,
-            adsTypeId:data.adv+1,
-            paymentMethod:data.paymentType,
-            promoCode: promoData?promoData?.code:''
+            adsTypeId: data.adv + 1,
+            paymentMethod: data.paymentType,
+            promoCode: promoData ? promoData?.code : ''
         }
         for (const key in req) {
             formData.append(key, req[key])
         }
         setNewAdvertisings(formData)
-            .then(res=>{
-                if(res) {
-                    getBalance().then(res=> {
+            .then(res => {
+                if (res) {
+                    getBalance().then(res => {
                         dispatch(setBalance(res))
-                        dispatch(showAlert({message: 'Оплата прошла успешно! Ждите одобрения модерации...', typeAlert: 'good'}))
+                        dispatch(showAlert({
+                            message: 'Оплата прошла успешно! Ждите одобрения модерации...',
+                            typeAlert: 'good'
+                        }))
                         setTimeout(() => {
-                            navigate('/account/banners', {state:{section:2}})
+                            navigate('/account/banners', {state: {section: 2}})
                         }, 1000)
                     })
-                }
-                else
+                } else
                     dispatch(showAlert({message: 'Оплата не прошла', typeAlert: 'bad'}))
             })
-            .catch(e=>console.log(e))
+            .catch(e => console.log(e))
     }
 
-    const ref1=useRef<HTMLInputElement>(null)
-    const ref2=useRef<HTMLInputElement>(null)
-    const refClick=(ref:number)=>{
-        if(ref===1 && ref1.current){
+    const ref1 = useRef<HTMLInputElement>(null)
+    const ref2 = useRef<HTMLInputElement>(null)
+    const refClick = (ref: number) => {
+        if (ref === 1 && ref1.current) {
             ref1.current.click()
         }
-        if(ref===2 && ref2.current){
+        if (ref === 2 && ref2.current) {
             ref2.current.click()
         }
     }
-    let status:string=''
-        if(data.adv== 1)
-            status=validLittlePhoto(viewPhoto)
-        if(data.adv== 0)
-            status = validBigPhoto(viewPhoto)
+    let status: string = ''
+    if (data.adv == 1)
+        status = validLittlePhoto(viewPhoto)
+    if (data.adv == 0)
+        status = validBigPhoto(viewPhoto)
     return (
         <form onSubmit={handleSubmit(NewAdvertisings)}>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
-                <MdOutlineArrowBack />
+                <MdOutlineArrowBack/>
                 <span className="ms-2">Назад</span>
             </Link>
             {prices && <div>
@@ -161,7 +187,7 @@ const AdvertisingSection = () => {
                     получения конверсий, используйте баннеры, которые раскрывают главные возможности продукта. Либо
                     напомните пользователю о том, что он забыл оформить заявку или подписаться на вас.
                 </p>
-                <hr />
+                <hr/>
                 <div className="row">
                     <div className="col-sm-6 col-md-4 mb-3 mb-sm-0">
                         <h6 className="f_11 fw_5 mb-3">
@@ -177,7 +203,7 @@ const AdvertisingSection = () => {
                         />
                     </div>
                 </div>
-                <hr />
+                <hr/>
                 <div className="row">
                     <div className="col-sm-6 col-md-4 mb-3 mb-sm-0">
                         <label className=" mb-3">
@@ -191,7 +217,7 @@ const AdvertisingSection = () => {
                                     delete data?.image
                                     setData((prevState: any) => ({
                                         ...prevState,
-                                        sum: prices[0][data.lifeAd=='1'?'priceThreeMonths':'priceSixMonths']
+                                        sum: prices[0][data.lifeAd == '1' ? 'priceThreeMonths' : 'priceSixMonths']
                                     }))
                                     onRadioHandler(e, setData, true)
                                 }}
@@ -208,13 +234,16 @@ const AdvertisingSection = () => {
                         <div className="f_09 l-gray mt-1">Размер баннера 1200*400</div>
                         <div className="file-upload mt-2">
                             <button className="btn_main btn_2 fw_4">Загрузить</button>
-                            <input type="file" onClick={()=>refClick(1)} onChange={(e) => onImageHandler(e, setData,'image')} />
-                            {data?.adv === 0 && status==='Фото загружено' &&
+                            <input type="file" onClick={() => refClick(1)}
+                                   onChange={(e) => onImageHandler(e, setData, 'image')}/>
+                            {data?.adv === 0 && status === 'Фото загружено' &&
                                 <Row className={'py-1'}>
-                                    <img style={{objectFit:'cover', aspectRatio:'3/1'}} src={adCoverViewer[0]?.info?.data_url} alt={'Баннер 250*160'}/>
+                                    <img style={{objectFit: 'cover', aspectRatio: '3/1'}}
+                                         src={adCoverViewer[0]?.info?.data_url} alt={'Баннер 250*160'}/>
                                 </Row>
                             }
-                            {data?.adv === 0 && <span style={{color:`${status!=='Фото загружено'?'red':''}`}}>{status}</span>}
+                            {data?.adv === 0 &&
+                                <span style={{color: `${status !== 'Фото загружено' ? 'red' : ''}`}}>{status}</span>}
                         </div>
                     </div>
                     <div className="col-sm-6 col-md-8">
@@ -225,7 +254,7 @@ const AdvertisingSection = () => {
                         />
                     </div>
                 </div>
-                <hr />
+                <hr/>
                 <div className="row">
                     <div className="col-sm-6 col-md-4 mb-3 mb-sm-0">
                         <label className=" mb-3">
@@ -240,7 +269,7 @@ const AdvertisingSection = () => {
                                     refClick(2)
                                     setData((prevState: any) => ({
                                         ...prevState,
-                                        sum: prices[1][data.lifeAd=='1'?'priceThreeMonths':'priceSixMonths']
+                                        sum: prices[1][data.lifeAd == '1' ? 'priceThreeMonths' : 'priceSixMonths']
                                     }))
                                     onRadioHandler(e, setData, true)
                                 }}
@@ -258,18 +287,20 @@ const AdvertisingSection = () => {
                         <div className="file-upload mt-2">
                             <button className="btn_main btn_2 fw_4">Загрузить</button>
                             <input
-                                onClick={()=>refClick(2)}
+                                onClick={() => refClick(2)}
                                 type="file"
                                 onChange={(e) => {
                                     onImageHandler(e, setData, 'image')
                                 }}
                             />
-                            {data?.adv === 1 && status==='Фото загружено' &&
+                            {data?.adv === 1 && status === 'Фото загружено' &&
                                 <Row className={'py-1'}>
-                                    <img style={{objectFit:'cover', aspectRatio:'25/16'}} src={adCoverViewer[0]?.info?.data_url} alt={'Баннер 250*160'}/>
+                                    <img style={{objectFit: 'cover', aspectRatio: '25/16'}}
+                                         src={adCoverViewer[0]?.info?.data_url} alt={'Баннер 250*160'}/>
                                 </Row>
                             }
-                            {data?.adv === 1 && <span style={{color:`${status!=='Фото загружено'?'red':''}`}}>{status}</span>}
+                            {data?.adv === 1 &&
+                                <span style={{color: `${status !== 'Фото загружено' ? 'red' : ''}`}}>{status}</span>}
                         </div>
                     </div>
                     <div className="col-sm-6 col-md-8">
@@ -292,7 +323,7 @@ const AdvertisingSection = () => {
                                 setData((prevState: any) => ({
                                     ...prevState,
                                     lifeAd: e.target.value,
-                                    sum: data.adv!==undefined?(e.target.value === '3' && prices[data.adv]['priceThreeMonths']) || (e.target.value === '6' && prices[data.adv]['priceSixMonths']):'0',
+                                    sum: data.adv !== undefined ? (e.target.value === '3' && prices[data.adv]['priceThreeMonths']) || (e.target.value === '6' && prices[data.adv]['priceSixMonths']) : '0',
                                 }))
                             }}
                         >
@@ -322,7 +353,7 @@ const AdvertisingSection = () => {
                         </ValidateWrapper>
                     </div>
 
-                    {data?.adv ==1 &&
+                    {data?.adv == 1 &&
                         <>
                             <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
                                 <div>Название объявления</div>
@@ -333,16 +364,16 @@ const AdvertisingSection = () => {
                                         type={'text'}
                                         placeholder={'Введите название'}
                                         {...register('description', {
-                                               required: 'Поле обязательно к заполнению',
-                                               minLength: {
-                                                   value: 10,
-                                                   message: 'Минимум 10 символов',
-                                               },
-                                               maxLength: {
-                                                   value: 30,
-                                                   message: 'Максимум 30 символов',
-                                               },
-                                           })}
+                                            required: 'Поле обязательно к заполнению',
+                                            minLength: {
+                                                value: 10,
+                                                message: 'Минимум 10 символов',
+                                            },
+                                            maxLength: {
+                                                value: 30,
+                                                message: 'Максимум 30 символов',
+                                            },
+                                        })}
                                     />
                                 </ValidateWrapper>
                             </div>
@@ -355,7 +386,7 @@ const AdvertisingSection = () => {
                             <select
                                 {...register('adsTypeId', {
                                     required: 'Выберите значение!',
-                                    onChange:(e)=>setCurrentArea(e.target.value)
+                                    onChange: (e) => setCurrentArea(e.target.value)
                                 })}
                             >
                                 <option value={''} disabled>
@@ -404,26 +435,26 @@ const AdvertisingSection = () => {
                     </div>
                     <div className="col-sm-8 col-md-4 col-xxl-3 mb-3 mb-sm-0">
                         <span className="f_12 fw_6">{
-                            data.sum?
-                                promoData?.discountPrice?
-                                    FunctionForPrice(data.sum-promoData?.discountPrice)
-                                    :FunctionForPrice(data.sum)
-                                :0} ₽</span>
+                            data.sum ?
+                                promoData?.discountPrice ?
+                                    FunctionForPrice(data.sum - promoData?.discountPrice)
+                                    : FunctionForPrice(data.sum)
+                                : 0} ₽</span>
                         {/*<span className="f_12 fw_6">{data.sum?FunctionForPrice(data.sum):0} ₽</span>*/}
                     </div>
                 </div>
                 <div className="row align-items-center mb-3 mb-sm-4 mt-3">
                     <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
-                        <div>Способ оплаты: </div>
+                        <div>Способ оплаты:</div>
                     </div>
                     <div className="col-sm-8 col-md-4 col-xxl-3 mb-3 mb-sm-0">
                         <div>
                             <div className={"d-inline-block"}><input
                                 name="payment-type"
                                 defaultChecked={true}
-                                onClick={()=> setData((prevState: any) => ({
+                                onClick={() => setData((prevState: any) => ({
                                     ...prevState,
-                                    paymentType:'INTERNAL'
+                                    paymentType: 'INTERNAL'
                                 }))}
                                 type="radio"
                             /></div>
@@ -433,9 +464,9 @@ const AdvertisingSection = () => {
                             <div className={"d-inline-block"}><input
                                 name="payment-type"
                                 defaultChecked={false}
-                                onClick={()=> setData((prevState: any) => ({
+                                onClick={() => setData((prevState: any) => ({
                                     ...prevState,
-                                    paymentType:'card'
+                                    paymentType: 'card'
                                 }))}
                                 type="radio"
                             /></div>
@@ -458,8 +489,8 @@ const AdvertisingSection = () => {
                 }
 
                 <button type="submit" className="btn_main btn_4 fw_4 mt-sm-5 py-1"
-                        onClick={()=>{
-                            if(status!=='Фото загружено')setError('image', {message:'Загрузите фото'})
+                        onClick={() => {
+                            if (status !== 'Фото загружено') setError('image', {message: 'Загрузите фото'})
                             else clearErrors(["image"])
                         }}>
                     Создать и перейти к оплате
