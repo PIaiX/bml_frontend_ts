@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState,} from 'react'
+import React, {BaseSyntheticEvent, FC, useEffect, useState,} from 'react'
 import Breadcrumbs from '../components/utils/Breadcrumbs'
 import AdvPreview from '../components/AdvPreview'
 import {NavLink, useNavigate, useParams} from 'react-router-dom'
@@ -31,6 +31,8 @@ import {getIdChat} from "../services/users";
 import {getAdvertisings} from "../services/advertising";
 import {Advertisings} from "../types/advertising";
 import {MyEditor} from "../components/MyEditor/MyEditor";
+import CustomModal from "../components/utils/CustomModal";
+import ValidateWrapper from "../components/utils/ValidateWrapper";
 
 
 const AdvPage: FC = () => {
@@ -598,12 +600,14 @@ const AdvPage: FC = () => {
                                 ''
                             )}
 
-                            <section className="anchor_block" id="anchor_description">
-                                <h4 className="fw_7">{returnDescriptionName()}</h4>
-                                <MyEditor readOnly={true} value={offer?.item?.description}/>
-                            </section>
+                            {offer?.item?.description &&
+                                <section className="anchor_block" id="anchor_description">
+                                    <h4 className="fw_7">{returnDescriptionName()}</h4>
+                                    <MyEditor readOnly={true} value={offer?.item?.description}/>
+                                </section>
+                            }
 
-                            {offer?.item?.category === 4 ? (
+                            {offer?.item?.category === 4 && offer?.item?.benefits? (
                                 <section className="anchor_block" id="anchor_benefits">
                                     <h4 className="fw_7">Преимущества франшизы</h4>
                                     <MyEditor readOnly={true} value={offer?.item?.benefits}/>
@@ -612,14 +616,17 @@ const AdvPage: FC = () => {
                                 ''
                             )}
 
-                            <section className="anchor_block" id="anchor_terms_coop">
-                                <h4 className="fw_7">
-                                    {offer?.item?.category !== 3 ? 'Условия сотрудничества' : 'Условия продажи'}
-                                </h4>
-                                <MyEditor readOnly={true} value={offer?.item?.cooperationTerms}/>
-                            </section>
+                            {
+                                offer?.item?.cooperationTerms &&
+                                <section className="anchor_block" id="anchor_terms_coop">
+                                    <h4 className="fw_7">
+                                        {offer?.item?.category !== 3 ? 'Условия сотрудничества' : 'Условия продажи'}
+                                    </h4>
+                                    <MyEditor readOnly={true} value={offer?.item?.cooperationTerms}/>
+                                </section>
+                            }
 
-                            {offer?.item?.category !== 1 ? (
+                            {offer?.item?.category !== 1 && offer?.item?.businessPlan ? (
                                 <section className="anchor_block" id="anchor_business_plan">
                                     <h4 className="fw_7">Бизнес-план</h4>
                                     <MyEditor readOnly={true} value={offer?.item?.businessPlan}/>
@@ -628,7 +635,7 @@ const AdvPage: FC = () => {
                                 ''
                             )}
 
-                            {aboutMeBlock()}
+                            {offer?.item?.about && aboutMeBlock()}
 
                             <ShortInfoInOfferContainer
                                 category={offer?.item?.category}
@@ -677,24 +684,27 @@ const AdvPage: FC = () => {
                                 </section>
                             )}
 
-                            <section className="anchor_block mb-4" id="anchor_photo">
-                                <h4 className="fw_7">Фотогалерея</h4>
-                                <PhotoProvider maskOpacity={0.75}>
-                                    <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
-                                        {offer?.item?.images.map((i) => (
-                                            <div key={i.id}>
-                                                <PhotoView src={checkPhotoPath(i.image)}>
-                                                    <img
-                                                        src={checkPhotoPath(i.image)}
-                                                        alt={i.createdAt}
-                                                        className="photogallery"
-                                                    />
-                                                </PhotoView>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </PhotoProvider>
-                            </section>
+                            {
+                                offer?.item?.images && offer?.item?.images?.length>0 &&
+                                <section className="anchor_block mb-4" id="anchor_photo">
+                                    <h4 className="fw_7">Фотогалерея</h4>
+                                    <PhotoProvider maskOpacity={0.75}>
+                                        <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
+                                            {offer?.item?.images.map((i) => (
+                                                <div key={i.id}>
+                                                    <PhotoView src={checkPhotoPath(i.image)}>
+                                                        <img
+                                                            src={checkPhotoPath(i.image)}
+                                                            alt={i.createdAt}
+                                                            className="photogallery"
+                                                        />
+                                                    </PhotoView>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </PhotoProvider>
+                                </section>
+                            }
                         </div>
                     </div>
                 </div>
@@ -756,6 +766,110 @@ const AdvPage: FC = () => {
                     </Swiper>
                 </div>
             </section>
+            <CustomModal
+                isShow={isShowMessageModal}
+                setIsShow={setIsShowMessageModal}
+                centered={false}
+                closeButton={true}
+                className="modal__messages"
+            >
+                <form>
+                    <div className="m-3">
+                        <label>Текст сообщения:</label>
+                        <textarea
+                            placeholder="Введите сообщение..."
+                            value={messagePayload.text || ''}
+                            onChange={(e) => setMessagePayload((prevState) => ({...prevState, text: e.target.value}))}
+                        />
+                        {messagePayload?.text?.length === 0 ? (
+                            <span className="gray-text">
+                                <sup>*</sup>Минимум 1 знак
+                            </span>
+                        ) : null}
+                    </div>
+                    <div className="d-flex justify-content-center mt-5">
+                        <button
+                            className="btn_main btn_1"
+                            onClick={(event: BaseSyntheticEvent) =>
+                                messagePayload?.text?.length >= 1
+                                    ? createWithOfferTopicMessage()
+                                    : event.preventDefault()
+                            }
+                        >
+                            Отправить
+                        </button>
+                    </div>
+                </form>
+            </CustomModal>
+            <CustomModal
+                isShow={isShowModalReport}
+                setIsShow={setIsShowModalReport}
+                centered={false}
+                closeButton={true}
+                className="modal__report"
+            >
+                <div>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div>
+                            <label className="fs-12">Выберите причину жалобы: </label>
+                            <ValidateWrapper error={errors.reportTypeId}>
+                                <select
+                                    {...register('reportTypeId', {
+                                        required: 'Обязательное поле',
+                                    })}
+                                >
+                                    {idAdvForBad &&
+                                    reportAdsTypes?.isLoaded ? (
+                                        reportAdsTypes?.items?.map((i) => (
+                                            <option value={i.id} key={i.id}>
+                                                {i.name}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option>Загрузка</option>
+                                    )}
+                                    {!idAdvForBad && reportTypes?.isLoaded ? (
+                                        reportTypes?.items?.map((i) => (
+                                            <option value={i.id} key={i.id}>
+                                                {i.name}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option>Загрузка</option>
+                                    )}
+                                </select>
+                            </ValidateWrapper>
+                        </div>
+                        <div className="mt-3 mb-3">
+                            <label className="fs-12">Текст жалобы: </label>
+                            <ValidateWrapper error={errors.description}>
+                                <textarea
+                                    {...register('description', {
+                                        required: 'Обязательное поле',
+                                        minLength: {value: 5, message: 'Минимум 5 символов'},
+                                        maxLength: {value: 250, message: 'Максимум 250 символов'},
+                                    })}
+                                />
+                            </ValidateWrapper>
+                        </div>
+                        <div className="d-flex justify-content-center">
+                            <button
+                                type="submit"
+                                className="btn_main btn_1"
+                                onClick={() => {
+                                    if (user) {
+                                        setValue('userId', user?.id)
+                                    }
+                                    setValue('offerId', id)
+                                }}
+                            >
+                                Отправить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </CustomModal>
+
             <PartnersSite/>
         </main>
     )
