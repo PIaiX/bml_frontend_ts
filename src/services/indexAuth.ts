@@ -37,6 +37,7 @@ $authApi.interceptors.response.use(
             try {
                 const response = await $api.get(`${apiRoutes.REFRESH_TOKEN}`)
                 localStorage.setItem('token', response?.data?.body?.token)
+                return $authApi.request(error.config);
             } catch (e) {
                 console.log('No auth')
             }
