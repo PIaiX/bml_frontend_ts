@@ -20,6 +20,8 @@ import {GetPromo} from "../../services/Promo";
 
 const AdvertisingSection = () => {
 
+    // subsectionId: 86
+
     const [promoData, setPromoData] = useState<any>()
     const [promo, setPromo] = useState<string>()
     const {state} = useLocation()
@@ -32,6 +34,7 @@ const AdvertisingSection = () => {
         lifeAd: '1',
         paymentType: 'INTERNAL'
     })
+    console.log(data)
     const {
         register,
         formState: {errors},
@@ -47,7 +50,7 @@ const AdvertisingSection = () => {
         link: string,
         description: string,
         adsTypeId: string,
-        subsectionId: string
+        // subsectionId: string
     }>()
     const [prices, setPrices] = useState()
     useEffect(() => {
@@ -101,9 +104,9 @@ const AdvertisingSection = () => {
     useEffect(() => {
         setValue('adsTypeId', '')
     }, [areas])
-    useEffect(() => {
-        setValue('subsectionId', '')
-    }, [subSections])
+    // useEffect(() => {
+    //     setValue('subsectionId', '')
+    // }, [subSections])
 
     useEffect(() => {
         getAllAreas().then(res => res && setAreas(res))
@@ -130,6 +133,7 @@ const AdvertisingSection = () => {
         const req: any = {
             ...dat,
             userId: user?.id,
+            subsectionId: 86,
             image: data.image,
             adsTypeId: data.adv + 1,
             paymentMethod: data.paymentType,
@@ -378,57 +382,57 @@ const AdvertisingSection = () => {
                                 </ValidateWrapper>
                             </div>
                         </>}
-                    <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
-                        <div>Сфера</div>
-                    </div>
-                    <div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">
-                        <ValidateWrapper error={errors?.adsTypeId}>
-                            <select
-                                {...register('adsTypeId', {
-                                    required: 'Выберите значение!',
-                                    onChange: (e) => setCurrentArea(e.target.value)
-                                })}
-                            >
-                                <option value={''} disabled>
-                                    Сфера
-                                </option>
-                                {areas ? (
-                                    areas.map((i) => (
-                                        <option key={i?.id} value={i?.id}>
-                                            {i?.name}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option disabled>Пусто</option>
-                                )}
-                            </select>
-                        </ValidateWrapper>
-                    </div>
-                    <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
-                        <div>Категория</div>
-                    </div>
-                    <div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">
-                        <ValidateWrapper error={errors?.subsectionId}>
-                            <select
-                                {...register('subsectionId', {
-                                    required: 'Выберите значение!',
-                                })}
-                            >
-                                <option value={''} disabled>
-                                    Категория
-                                </option>
-                                {subSections ? (
-                                    subSections.map((i) => (
-                                        <option key={i?.id} value={i?.id}>
-                                            {i?.name}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option disabled>Пусто</option>
-                                )}
-                            </select>
-                        </ValidateWrapper>
-                    </div>
+                    {/*<div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">*/}
+                    {/*    <div>Сфера</div>*/}
+                    {/*</div>*/}
+                    {/*<div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">*/}
+                    {/*    <ValidateWrapper error={errors?.adsTypeId}>*/}
+                    {/*        <select*/}
+                    {/*            {...register('adsTypeId', {*/}
+                    {/*                required: 'Выберите значение!',*/}
+                    {/*                onChange: (e) => setCurrentArea(e.target.value)*/}
+                    {/*            })}*/}
+                    {/*        >*/}
+                    {/*            <option value={''} disabled>*/}
+                    {/*                Сфера*/}
+                    {/*            </option>*/}
+                    {/*            {areas ? (*/}
+                    {/*                areas.map((i) => (*/}
+                    {/*                    <option key={i?.id} value={i?.id}>*/}
+                    {/*                        {i?.name}*/}
+                    {/*                    </option>*/}
+                    {/*                ))*/}
+                    {/*            ) : (*/}
+                    {/*                <option disabled>Пусто</option>*/}
+                    {/*            )}*/}
+                    {/*        </select>*/}
+                    {/*    </ValidateWrapper>*/}
+                    {/*</div>*/}
+                    {/*<div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">*/}
+                    {/*    <div>Категория</div>*/}
+                    {/*</div>*/}
+                    {/*<div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">*/}
+                    {/*    <ValidateWrapper error={errors?.subsectionId}>*/}
+                    {/*        <select*/}
+                    {/*            {...register('subsectionId', {*/}
+                    {/*                required: 'Выберите значение!',*/}
+                    {/*            })}*/}
+                    {/*        >*/}
+                    {/*            <option value={''} disabled>*/}
+                    {/*                Категория*/}
+                    {/*            </option>*/}
+                    {/*            {subSections ? (*/}
+                    {/*                subSections.map((i) => (*/}
+                    {/*                    <option key={i?.id} value={i?.id}>*/}
+                    {/*                        {i?.name}*/}
+                    {/*                    </option>*/}
+                    {/*                ))*/}
+                    {/*            ) : (*/}
+                    {/*                <option disabled>Пусто</option>*/}
+                    {/*            )}*/}
+                    {/*        </select>*/}
+                    {/*    </ValidateWrapper>*/}
+                    {/*</div>*/}
 
                     <div className="col-sm-4 col-xxl-3 mb-2 mb-sm-0">
                         <div className="f_12 fw_6">Сумма к оплате</div>
