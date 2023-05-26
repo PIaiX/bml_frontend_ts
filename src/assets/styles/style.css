@@ -856,7 +856,9 @@ nav>ul.pagination .page-item:last-child .page-link {
 ************/
 #block_5 .swiper-slide img {
     height: 90px;
-    object-fit: scale-down;
+    object-fit: cover;
+    cursor:pointer;
+    width:100%;
     object-position: center;
     border: 1px solid #DDDDDD;
     border-radius: 5px;
@@ -870,6 +872,16 @@ nav>ul.pagination .page-item:last-child .page-link {
 @media (max-width: 575px) {
     #block_5 .swiper-slide img {
         height: 28vw;
+    }
+}
+@media (min-width: 992px) {
+    #block_5 .swiper-slide img {
+        height: 100px;
+    }
+}
+@media (min-width: 1200px) {
+    #block_5 .swiper-slide img {
+        height: 120px;
     }
 }
 

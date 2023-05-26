@@ -33,19 +33,23 @@ const PartnersSite: FC = () => {
                     }}
                     breakpoints={{
                         576: {
-                            slidesPerView: partners && partners?.length>2?3:partners?.length,
+                            // slidesPerView: partners && partners?.length>2?3:partners?.length,
+                            slidesPerView: 3,
                             spaceBetween: 15,
                         },
                         768: {
-                            slidesPerView: partners && partners?.length>4?5:partners?.length,
+                            // slidesPerView: partners && partners?.length>4?5:partners?.length,
+                            slidesPerView: 5,
                             spaceBetween: 10,
                         },
                         992: {
-                            slidesPerView: partners && partners?.length>5?6:partners?.length,
+                            // slidesPerView: partners && partners?.length>5?6:partners?.length,
+                            slidesPerView: 5,
                             spaceBetween: 15,
                         },
                         1200: {
-                            slidesPerView: partners && partners?.length>5?6:partners?.length,
+                            // slidesPerView: partners && partners?.length>5?6:partners?.length,
+                            slidesPerView: 5,
                             spaceBetween: 30,
                         },
                     }}
@@ -53,8 +57,8 @@ const PartnersSite: FC = () => {
                     {
                         partners?.map((element, index:number)=>
                             <SwiperSlide key={index}>
-                                <div className={'w-100 h-100 d-flex justify-content-center'}>
-                                    <img style={{cursor:"pointer"}} src={checkPhotoPath(element.image)} alt="partners"
+                                <div className={'d-flex justify-content-center'}>
+                                    <img src={checkPhotoPath(element.image)} alt="partners"
                                          onClick={()=>{window.open(element.link);}}
                                     />
                                 </div>

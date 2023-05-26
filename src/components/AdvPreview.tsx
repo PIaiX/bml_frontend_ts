@@ -38,7 +38,7 @@ const AdvPreview: FC<Props> = (props) => {
                     </div>
                     <div className="layer2">
                         <div className="white d-flex flex-wrap align-items-center d-lg-block">
-                            <div className="f_08 me-1 me-sm-3">{props.price?'Стоимость бизнеса':'Инвестиции от'}</div>
+                            <div className="w-100 f_08 me-1 me-sm-3">{props.price?'Стоимость бизнеса':'Инвестиции от'}</div>
                             <div>
                                 {FunctionForPrice(props.price?props.price:props.investments)}
                                 {props.isPricePerMonthAbsolute===undefined || props.isPricePerMonthAbsolute?' руб':' %'}

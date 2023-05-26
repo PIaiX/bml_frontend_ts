@@ -751,7 +751,8 @@ const AdvPage: FC = () => {
                                             title={offer.title}
                                             investments={offer.investments ? offer.investments : offer.price}
                                             favorite={false}
-                                            isPricePerMonthAbsolute={offer.isPricePerMonthAbsolute}
+                                            isPricePerMonthAbsolute={true}
+                                            // isPricePerMonthAbsolute={offer.isPricePerMonthAbsolute}
                                         />
                                     </SwiperSlide>
                                 ))
