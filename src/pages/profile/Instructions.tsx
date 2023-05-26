@@ -1,35 +1,37 @@
-import React, { FC } from 'react'
-import { Link } from 'react-router-dom'
-import { MdOutlineArrowBack } from 'react-icons/md'
-import { useQuery } from 'react-query'
-import { getPartners, getTutorials } from '../../services/instructions'
-import { checkPhotoPath } from '../../helpers/photoLoader'
+import React, {FC, useEffect, useState} from 'react'
+import {Link} from 'react-router-dom'
+import {MdOutlineArrowBack} from 'react-icons/md'
+import {useQuery} from 'react-query'
+import {getPartners, getTutorials} from '../../services/instructions'
+import {checkPhotoPath} from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'
+import {IPartnersItem, ITutorialsItem} from "../../types/instructions";
 
 const Instructions: FC = () => {
-    const partners = useQuery({
-        queryKey: ['partners'],
-        queryFn: () => getPartners(1, 100),
-        cacheTime: 0,
-        staleTime: 10 * 60 * 1000,
-    })
-    const tutorial = useQuery({
-        queryKey: ['tutor'],
-        queryFn: () => getTutorials(1, 100),
-        cacheTime: 0,
-        staleTime: 10 * 60 * 1000,
-    })
-    console.log(partners)
+
+    const [partners, setPartners] = useState<Array<IPartnersItem>>()
+    const [tutorial, setTutorial] = useState<Array<ITutorialsItem>>()
+
+    useEffect(()=>{
+        getTutorials(1, 100)
+            .then(res=>{if(res)setTutorial(res)})
+    }, [])
+
+    useEffect(()=>{
+        if(tutorial)
+            getPartners(1, 100).then(res=>{if(res)setPartners(res)})
+    }, [tutorial])
+
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
-                <MdOutlineArrowBack /> <span className="ms-2">Назад</span>
+                <MdOutlineArrowBack/> <span className="ms-2">Назад</span>
             </Link>
             <div className="acc-box">
                 <h4>Как загрузить объявление и пользоваться сайтом</h4>
                 <div className="row row-cols-sm-2 row-cols-md-3 g-4">
-                    {!tutorial?.isLoading ? (
-                        tutorial?.data?.data?.map((i) =>
+                    {tutorial? (
+                        tutorial?.map(i =>
                             i?.isEmbed ? (
                                 <div key={i?.id}>
                                     <div className="acc-video">
@@ -41,7 +43,7 @@ const Instructions: FC = () => {
                                         />
                                     </div>
                                     {i?.isTitleLink ? (
-                                        <a href={i?.link} target="_blank" rel="noopener noreferrer" >{i?.title}</a>
+                                        <a href={i?.link} target="_blank" rel="noopener noreferrer">{i?.title}</a>
                                     ) : (
                                         <div className="mt-2">{i?.title}</div>
                                     )}
@@ -50,7 +52,7 @@ const Instructions: FC = () => {
                                 <div key={i?.id} className="acc-video-block">
                                     <div className="acc-video">
                                         <video controls playsInline>
-                                            <source src={checkPhotoPath(i?.media)} />
+                                            <source src={checkPhotoPath(i?.media)}/>
                                         </video>
                                     </div>
                                     {i?.isTitleLink ? (
@@ -63,15 +65,15 @@ const Instructions: FC = () => {
                         )
                     ) : (
                         <div className="p-2 w-100 d-flex justify-content-center">
-                            <Loader color="#343434" />
+                            <Loader color="#343434"/>
                         </div>
                     )}
                 </div>
-                <hr />
+                <hr/>
                 <h4>Партнёры</h4>
                 <div className="row row-cols-sm-2 row-cols-md-3 g-4">
-                    {!partners?.isLoading ? (
-                        partners?.data?.data?.map((i) =>
+                    {partners ? (
+                        partners?.map((i) =>
                             i?.mediaType ? (
                                 <div key={i?.id}>
                                     <div className="acc-video">
@@ -92,7 +94,7 @@ const Instructions: FC = () => {
                             ) : (
                                 <div key={i?.id}>
                                     <div className="acc-video">
-                                        <img src={checkPhotoPath(i?.media)} height={100 + '%'} width={100 + '%'} />
+                                        <img src={checkPhotoPath(i?.media)} height={100 + '%'} width={100 + '%'}/>
                                     </div>
                                     {i?.isTitleLink ? (
                                         <a href={i?.link} target="_blank" rel="noopener noreferrer">{i?.title}</a>
@@ -104,7 +106,7 @@ const Instructions: FC = () => {
                         )
                     ) : (
                         <div className="p-2 w-100 d-flex justify-content-center">
-                            <Loader color="#343434" />
+                            <Loader color="#343434"/>
                         </div>
                     )}
                 </div>

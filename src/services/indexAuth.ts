@@ -32,7 +32,7 @@ $authApi.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config
-        if (error.response.status === 401 && originalRequest && !originalRequest._isRetry) {
+        if (error.response.status === 403 && originalRequest && !originalRequest._isRetry) {
             originalRequest._isRetry = true
             try {
                 const response = await $api.get(`${apiRoutes.REFRESH_TOKEN}`)

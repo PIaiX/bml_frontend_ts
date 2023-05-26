@@ -173,9 +173,9 @@ const AdvPage: FC = () => {
             })
             .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
     }
-    let swiperPB = 250;
+    let swiperPB = 50;
 
-    if (window.innerWidth > 1400) swiperPB = 350
+    // if (window.innerWidth > 1400) swiperPB = 50
     const createWithOfferTopicMessage = () => {
         if (offer.item) {
             emitCreateMessage({userId: offer.item?.userId, text: messagePayload?.text, topic: offer.item?.title})

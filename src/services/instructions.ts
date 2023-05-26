@@ -7,7 +7,7 @@ export const getTutorials = async (page: number, limit: number) => {
         const response = await $authApi.get<ITutorialsBodyRequest>(
             `${apiRoutes.GET_TUTORIALS}?page=${page}&limit=${limit}&orderBy=desc`
         )
-        return response?.data?.body
+        return response?.data?.body?.data
     } catch (error) {
         console.log(error)
     }
@@ -18,7 +18,7 @@ export const getPartners = async (page: number, limit: number) => {
         const response = await $authApi.get<IPartnersBodyRequest>(
             `${apiRoutes.GET_PARTNERS}?page=${page}&limit=${limit}&orderBy=desc`
         )
-        return response?.data?.body
+        return response?.data?.body?.data
     } catch (error) {
         console.log(error)
     }
