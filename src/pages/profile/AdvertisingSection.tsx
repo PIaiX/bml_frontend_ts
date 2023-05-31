@@ -34,7 +34,6 @@ const AdvertisingSection = () => {
         lifeAd: '1',
         paymentType: 'INTERNAL'
     })
-    console.log(data)
     const {
         register,
         formState: {errors},
@@ -70,7 +69,7 @@ const AdvertisingSection = () => {
     const validLittlePhoto = (photo: any): string => {
         if (photo?.width === undefined && photo?.height === undefined) {
             return 'Фото не загружено'
-        } else if (data?.adv === 1 && photo?.width >= 200 && photo?.height >= 120) {
+        } else if (data?.adv === 1) {
             return 'Фото загружено'
         } else {
             return 'Размеры не подходят'
@@ -121,7 +120,7 @@ const AdvertisingSection = () => {
     const validBigPhoto = (photo: any): string => {
         if (photo?.width === undefined && photo?.height === undefined) {
             return 'Фото не загружено'
-        } else if (data?.adv === 0 && photo?.width >= 800 && photo.height >= 300) {
+        } else if (data?.adv === 0) {
             return 'Фото загружено'
         } else {
             return 'Размеры не подходят'

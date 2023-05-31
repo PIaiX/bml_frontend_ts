@@ -54,13 +54,17 @@ const EditPasswordForm: FC = () => {
                             placeholder="Введите старый пароль"
                             {...register('oldPassword', {
                                 required: 'Поле обязательно к заполнению',
-                                pattern: {
-                                    value: /(.*[0-9].*[A-Z])|(.*[A-Z].*[0-9])/gm,
-                                    message: 'Отсутствует заглавная буква или цифра',
-                                },
                                 minLength: {
-                                    value: 8,
-                                    message: 'Минимальная длина 8 символов',
+                                    value: 6,
+                                    message: 'Минимум 6 символов',
+                                },
+                                maxLength: {
+                                    value: 20,
+                                    message: 'Максимум 20 символов',
+                                },
+                                pattern: {
+                                    value: /(.*[0-9].*[A-z])|(.*[A-z].*[0-9])/gm,
+                                    message: 'Отсутствует буква или цифра',
                                 },
                             })}
                         />
@@ -73,13 +77,17 @@ const EditPasswordForm: FC = () => {
                             placeholder="Придумайте новый пароль"
                             {...register('password', {
                                 required: 'Поле обязательно к заполнению',
-                                pattern: {
-                                    value: /(.*[0-9].*[A-Z])|(.*[A-Z].*[0-9])/gm,
-                                    message: 'Отсутствует заглавная буква или цифра',
-                                },
                                 minLength: {
-                                    value: 8,
-                                    message: 'Минимальная длина 8 символов',
+                                    value: 6,
+                                    message: 'Минимум 6 символов',
+                                },
+                                maxLength: {
+                                    value: 20,
+                                    message: 'Максимум 20 символов',
+                                },
+                                pattern: {
+                                    value: /(.*[0-9].*[A-z])|(.*[A-z].*[0-9])/gm,
+                                    message: 'Отсутствует буква или цифра',
                                 },
                             })}
                         />

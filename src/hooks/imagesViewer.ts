@@ -9,11 +9,10 @@ export const useImagesViewer = (files: any) => {
             files.forEach((file: any) => {
                 const fileReader = new FileReader()
                 fileReader.readAsDataURL(file)
-                const sizeMB = file?.size / 1000000
                 fileReader.onload = (e) => {
                     const {result}: any = e.target
                     if (result) {
-                        if (formatsPhoto.includes(file?.type) && sizeMB < 5) {
+                        if (formatsPhoto.includes(file?.type)) {
                             setImages((prevState: any) => [
                                 ...prevState,
                                 {

@@ -85,7 +85,8 @@ const AdvPage: FC = () => {
     })
 
     useEffect(() => {
-        createWithOfferTopicMessage()
+        if(messagePayload?.text!=='')
+            createWithOfferTopicMessage()
     }, [messagePayload])
 
     useEffect(() => {
@@ -278,7 +279,7 @@ const AdvPage: FC = () => {
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
                                             <span
-                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                                className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
                                         </div>
 
                                         {offer?.item?.profitPerMonth &&
@@ -286,7 +287,7 @@ const AdvPage: FC = () => {
                                                 <span
                                                     className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
+                                                    className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
                                             </div>
                                         }
 
@@ -294,21 +295,21 @@ const AdvPage: FC = () => {
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                                    className="f_13 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
                                             </div>}
 
                                         {offer?.item?.projectStage != 0 &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
+                                                    className="f_13 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
                                             </div>
                                         }
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Сфера:</span>
                                             <span
-                                                className="f_15 fw_5 text-nowrap">{offer?.item?.subsection?.area?.name}</span>
+                                                className="f_13 fw_5 text-nowrap">{offer?.item?.subsection?.area?.name}</span>
                                         </div>
                                     </>
                                 )}
@@ -318,13 +319,13 @@ const AdvPage: FC = () => {
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
                                             <span
-                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                                className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
                                         </div>
 
                                         {offer?.item?.paybackTimeForUser != '' &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
-                                                <span className="f_15 fw_5 d-flex">
+                                                <span className="f_13 fw_5 d-flex">
                                                     {offer?.item?.paybackTimeForUser}
                                                 </span>
                                             </div>
@@ -333,7 +334,7 @@ const AdvPage: FC = () => {
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Сфера:</span>
                                             <span
-                                                className="f_15 fw_5 text-nowrap">{offer?.item?.subsection?.area?.name}</span>
+                                                className="f_13 fw_5 text-nowrap">{offer?.item?.subsection?.area?.name}</span>
                                         </div>
                                     </>
                                 )}
@@ -344,7 +345,7 @@ const AdvPage: FC = () => {
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Инвестиции:</span>
                                             <span
-                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                                className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
                                         </div>
 
                                         {offer?.item?.profit &&
@@ -352,7 +353,7 @@ const AdvPage: FC = () => {
                                                 <span
                                                     className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profit)} ₽</span>
+                                                    className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profit)} ₽</span>
                                             </div>
                                         }
 
@@ -361,7 +362,7 @@ const AdvPage: FC = () => {
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                                    className="f_13 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
                                             </div>
                                         }
 
@@ -369,13 +370,13 @@ const AdvPage: FC = () => {
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стадия проекта:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
+                                                    className="f_13 fw_5 text-nowrap">{offer?.item?.projectStageForUser?.toLowerCase()}</span>
                                             </div>
                                         }
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Город:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.city}</span>
+                                            <span className="f_13 fw_5 text-nowrap">{offer?.item?.city}</span>
                                         </div>
                                     </>
                                 )}
@@ -386,37 +387,37 @@ const AdvPage: FC = () => {
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Стоимость бизнеса:</span>
                                             <span
-                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
+                                                className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
                                         </div>
                                         {offer?.item?.paybackTimeForUser &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                                    className="f_13 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
                                             </div>
                                         }
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Оборот в месяц:</span>
                                             <span
-                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
+                                                className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Чистая прибыль:</span>
                                             <span
-                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profit)} ₽</span>
+                                                className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profit)} ₽</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество точек:</span>
                                             <span
-                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
+                                                className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Город:</span>
-                                            <span className="f_15 fw_5 text-nowrap">{offer?.item?.city}</span>
+                                            <span className="f_13 fw_5 text-nowrap">{offer?.item?.city}</span>
                                         </div>
                                     </>
                                 )}
@@ -428,7 +429,7 @@ const AdvPage: FC = () => {
                                             <span
                                                 className="pt fw_7 gray f_11 me-2 me-sm-4">Стартовые инвестиции от:</span>
                                             <span
-                                                className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
+                                                className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.investments)} ₽</span>
                                         </div>
 
                                         {(offer?.item?.price != 0 && offer?.item?.price &&
@@ -436,7 +437,7 @@ const AdvPage: FC = () => {
                                                 <span
                                                     className="pt fw_7 gray f_11 me-2 me-sm-4">Паушальный взнос:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
+                                                    className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.price)} ₽</span>
                                             </div>
                                         )}
 
@@ -444,9 +445,9 @@ const AdvPage: FC = () => {
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Роялти:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">
+                                                    className="f_13 fw_5 text-nowrap">
                                                 {FunctionForPrice(offer?.item?.pricePerMonth)}
-                                                    {offer?.item?.isPricePerMonthAbsolute && offer?.item?.category === 4 ? ' ₽' : '%'}
+                                                    {offer?.item?.isPricePerMonthAbsolute && offer?.item?.category === 4 ? ' ₽' : ' %'}
                                             </span>
                                             </div>
                                         }
@@ -456,15 +457,14 @@ const AdvPage: FC = () => {
                                                 <span
                                                     className="pt fw_7 gray f_11 me-2 me-sm-4">Срок окупаемости:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                                    className="f_13 fw_5 text-nowrap"><div dangerouslySetInnerHTML={{__html:offer?.item?.paybackTimeForUser?.replace('цев до', 'цев<br/>до')}}></div></span>
                                             </div>}
-
                                         {offer?.item?.profitPerMonth &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span
                                                     className="pt fw_7 gray f_11 me-2 me-sm-4">Предполагаемая прибыль:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
+                                                    className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
                                             </div>
                                         }
 
@@ -473,21 +473,21 @@ const AdvPage: FC = () => {
                                             <span
                                                 className="pt fw_7 gray f_11 me-2 me-sm-4">Год основания компании:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{convertLocaleDate(offer?.item?.dateOfCreation)?.slice(-4)}</span>
+                                                    className="f_13 fw_5 text-nowrap">{convertLocaleDate(offer?.item?.dateOfCreation)?.slice(-4)}</span>
                                             </div>
                                         }
                                         {offer?.item?.branchCount &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество собственных точек:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
+                                                    className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.branchCount)} шт.</span>
                                             </div>
                                         }
                                         {offer?.item?.soldBranchCount &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Количество проданных франшиз:</span>
                                                 <span
-                                                    className="f_15 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.soldBranchCount)} шт.</span>
+                                                    className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.soldBranchCount)} шт.</span>
                                             </div>
                                         }
                                     </>
@@ -664,7 +664,7 @@ const AdvPage: FC = () => {
                                 <span className="ms-2 fw_7 f_12">Пожаловаться</span>
                             </button>
 
-                            {offer?.item?.video && (
+                            {offer?.item?.video?.includes('https') && (
                                 <section className="anchor_block mb-4" id="anchor_video">
                                     <h4 className="fw_7">Видео</h4>
                                     <PhotoProvider maskOpacity={0.75}>
