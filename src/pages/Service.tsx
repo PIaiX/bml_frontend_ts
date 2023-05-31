@@ -154,14 +154,8 @@ const Service: FC = () => {
             })
             .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
     }
-    useEffect(()=>{
-        const timer = setTimeout(() => {
-            window.scrollTo(0,0)
-        }, 200);
-        return () => clearTimeout(timer);
-    },[pathname])
-
-
+    if(!offers.isLoaded)
+        return <main className={'d-flex justify-content-center py-5'}><Loader color={'#2E5193'} /></main>
     return (
         <main>
             <BannerContainer/>

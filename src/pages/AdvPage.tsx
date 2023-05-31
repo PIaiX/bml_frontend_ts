@@ -216,7 +216,8 @@ const AdvPage: FC = () => {
             }))
     }
 
-    useEffect(()=>window.scrollTo(0,0), [offer])
+    if(!offer.isLoaded)
+        return <main className={'d-flex justify-content-center py-5'}><Loader color={'#2E5193'} /></main>
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
@@ -240,7 +241,7 @@ const AdvPage: FC = () => {
 
                 <div className="row mb-3 mb-sm-4 mb-md-5">
                     <div className="col-lg-7 col-xl-8 mb-4 mb-lg-0">
-                        <img src={checkPhotoPath(offer?.item?.image)} alt={offer?.item?.title} onLoad={()=>window.scrollTo(0,0)} className="main-img"/>
+                        <img src={checkPhotoPath(offer?.item?.image)} alt={offer?.item?.title} className="main-img"/>
                     </div>
                     <div className="col-lg-5 col-xl-4">
                         <div className="blue-box h-100 d-flex flex-column justify-content-between">
