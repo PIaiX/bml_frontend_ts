@@ -10,11 +10,12 @@ interface Props {
 }
 
 const NewsMini: React.FC<Props> = (props) => {
+    const {className, date, title, url} = props
     return (
-        <article className={'news-mini ' + props.className}>
-            <time className="fw_7 mb-1">{convertLocaleDate(props.date)}</time>
+        <article className={'news-mini ' + className}>
+            <time className="fw_7 mb-1">{convertLocaleDate(date)}</time>
             <h6>
-                <Link to={props.url}>{props.title}</Link>
+                <Link to={`news/${url}`}>{title}</Link>
             </h6>
         </article>
     )

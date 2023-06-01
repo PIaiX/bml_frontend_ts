@@ -16,13 +16,13 @@ const NewsPreview: FC<Props> = (props) => {
         <article className="news-preview">
             <NavLink to={`${props.url}`}>
                 <img src={checkPhotoPath(props.imgUrl)} alt={props.title}/>
-                <div className="px-2 py-5">
+                <div className="px-2">
                     <p className="title">{props.title}</p>
                     <div className="text" dangerouslySetInnerHTML={{__html: props?.text ? props?.text : ''}}>
                     </div>
-                    <NavLink to={`${props.url}`} className="alink more px-1">
+                    <div className={'p-3 '}>
                         Подробнее
-                    </NavLink>
+                    </div>
                 </div>
             </NavLink>
         </article>
