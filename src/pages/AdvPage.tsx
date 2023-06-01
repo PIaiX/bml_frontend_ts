@@ -665,20 +665,16 @@ const AdvPage: FC = () => {
                                 <span className="ms-2 fw_7 f_12">Пожаловаться</span>
                             </button>
 
-                            {offer?.item?.video?.includes('https') && (
+                            {offer?.item?.video &&  (
                                 <section className="anchor_block mb-4" id="anchor_video">
                                     <h4 className="fw_7">Видео</h4>
                                     <PhotoProvider maskOpacity={0.75}>
                                         <div
                                             className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4 col">
                                             <div className="acc-video2">
-                                                <iframe
-                                                    src={offer?.item?.video}
-                                                    title="YouTube video player"
-                                                    frameBorder="0"
-                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                    allowFullScreen
-                                                />
+                                                <video controls width="640" height="360" title="Video player">
+                                                    <source src={offer?.item?.video} type="video/mp4" />
+                                                </video>
                                             </div>
                                         </div>
                                     </PhotoProvider>

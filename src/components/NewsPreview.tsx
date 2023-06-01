@@ -15,7 +15,7 @@ const NewsPreview: FC<Props> = (props) => {
     return (
         <article className="news-preview">
             <NavLink to={`${props.url}`}>
-                <img src={checkPhotoPath(props.imgUrl)} onLoad={()=>window.scrollTo(0,0)} alt={props.title}/>
+                <img src={checkPhotoPath(props.imgUrl)} alt={props.title}/>
                 <div className="px-2 py-5">
                     <p className="title">{props.title}</p>
                     <div className="text" dangerouslySetInnerHTML={{__html: props?.text ? props?.text : ''}}>
