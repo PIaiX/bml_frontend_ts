@@ -2,14 +2,12 @@ import React, { FC, useState } from 'react'
 import { IMainTitle } from '../../types/mainTitle'
 import { checkPhotoPath } from '../../helpers/photoLoader'
 
-const img = require('./Group 5.png')
-const MainTitle: FC<IMainTitle> = ({ title, description, videoPath }) => {
+const MainTitle: FC<IMainTitle> = ({ title, description, videoPath, imagePath }) => {
     const [display, setDisplay] = useState('inline-block')
 
     const clickOnImg = () => {
         setDisplay('none')
     }
-    var td: any = document.getElementById('mytd')
 
     return (
         <section className="bg_l_blue">
@@ -17,7 +15,7 @@ const MainTitle: FC<IMainTitle> = ({ title, description, videoPath }) => {
                 <div className="row align-items-center">
                     <div className="col-12 col-md-4 mb-4 mb-md-0">
                         <div style={{ display: display }} id={'imgForVideo'}>
-                            <img src={img} onClick={clickOnImg} />
+                            <img src={checkPhotoPath(imagePath)} onClick={clickOnImg} />
                         </div>
                         <div style={{ display: display == 'inline-block' ? 'none' : 'inline-block' }}>
                             <video controls playsInline src={videoPath && checkPhotoPath(videoPath)}>

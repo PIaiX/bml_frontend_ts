@@ -34,13 +34,8 @@ const Instructions: FC = () => {
                         tutorial?.map(i =>
                             i?.isEmbed ? (
                                 <div key={i?.id}>
-                                    <div className="acc-video">
-                                        <iframe
-                                            src={i?.media?.replace('/watch?v=', '/embed/')}
-                                            title="YouTube video player"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                        />
+                                    <div className="acc-video" onClick={()=>window.open(i.link)}>
+                                        <img src={checkPhotoPath(i.image)} style={{width:'100%', objectFit:'cover', cursor:'pointer'}} />
                                     </div>
                                     {i?.isTitleLink ? (
                                         <a href={i?.link} target="_blank" rel="noopener noreferrer">{i?.title}</a>
@@ -50,10 +45,8 @@ const Instructions: FC = () => {
                                 </div>
                             ) : (
                                 <div key={i?.id} className="acc-video-block">
-                                    <div className="acc-video">
-                                        <video controls playsInline>
-                                            <source src={checkPhotoPath(i?.media)}/>
-                                        </video>
+                                    <div className="acc-video" onClick={()=>window.open(i.link)}>
+                                        <img src={checkPhotoPath(i.image)} style={{width:'100%', objectFit:'cover', cursor:'pointer'}} />
                                     </div>
                                     {i?.isTitleLink ? (
                                         <a href={i?.link} target="_blank" rel="noopener noreferrer">{i?.title}</a>
@@ -93,7 +86,7 @@ const Instructions: FC = () => {
                                 </div>
                             ) : (
                                 <div key={i?.id}>
-                                    <div className="acc-video">
+                                    <div className="acc-video" onClick={()=>window.open(i.link)}>
                                         <img src={checkPhotoPath(i?.media)} height={100 + '%'} width={100 + '%'}/>
                                     </div>
                                     {i?.isTitleLink ? (

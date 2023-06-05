@@ -672,9 +672,10 @@ const AdvPage: FC = () => {
                                         <div
                                             className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4 col">
                                             <div className="acc-video2">
-                                                <video controls width="640" height="360" title="Video player">
-                                                    <source src={offer?.item?.video} type="video/mp4" />
-                                                </video>
+                                                <img src={checkPhotoPath(offer?.item?.videoThumbnail)}
+                                                    style={{width:'100%', objectFit:'cover', cursor:'pointer'}}
+                                                     onClick={()=>window.open(offer?.item?.video)}
+                                                />
                                             </div>
                                         </div>
                                     </PhotoProvider>

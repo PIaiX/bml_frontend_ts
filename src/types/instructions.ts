@@ -27,6 +27,7 @@ export type ITutorialsItem = {
     isEmbed: boolean
     isTitleLink: boolean
     link:string
+    image:string
     title: string
     media: string
     createdAt: string

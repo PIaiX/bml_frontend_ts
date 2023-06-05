@@ -109,15 +109,7 @@ const Home: FC = () => {
                 franchise={franchise?.meta}
             />
 
-            <MainTitle
-                title={mainTitle?.item?.title}
-                // description={
-                //     'Посмотрите видео о работе портала: для инвесторов и партнеров, с помощью которого, не отрываясь от бизнес процессов, можно рассматривать перспективные проекты и узнавать о трендах рынка'
-                // }
-                description={mainTitle?.item?.description}
-
-                videoPath={mainTitle?.item?.videoPath}
-            />
+            <MainTitle {...mainTitle?.item} />
 
             <HomeCategoriesContainer
                 isLoadingInvestors={isLoadingInvestors}

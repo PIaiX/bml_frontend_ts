@@ -48,7 +48,9 @@ const NewAd = () => {
     const [files, setFiles] = useState<any>([])
     const imageViewer = useImagesViewer(files)
     const [adCover, setAdCover] = useState<any>([])
+    const [adCover2, setAdCover2] = useState<any>([])
     const adCoverViewer = useImagesViewer(adCover)
+    const adCoverViewer2 = useImagesViewer(adCover2)
     const [cities, setCities] = useState<Array<string> | undefined>([])
     const [areas, setAreas] = useState<Array<IOffersAreaItem | undefined>>([])
     const [subSections, setSubSections] = useState<Array<IOffersSubSectionsItem | undefined>>([])
@@ -188,6 +190,7 @@ const NewAd = () => {
                         setValue('profit', FunctionForPrice(res?.profit) || '')
                         setValue('city', res?.city || '')
                         setValue('image', res?.image)
+                        setValue('videoThumbnail', res?.videoThumbnail)
                         setCurrentArea(res?.subsection?.area?.id)
                         setRoaloty(res?.isPricePerMonthAbsolute)
                     }
@@ -266,7 +269,7 @@ const NewAd = () => {
                     dateNew = dateNew.slice(0, 3) + '0' + dateNew.slice(3, 9)
             }
         }
-        const req: any = {
+        let req: any = {
             ...data,
             dateOfCreation: dateNew ? dateNew : '',
             userId: user?.id,
@@ -276,6 +279,9 @@ const NewAd = () => {
             placedForMonths,
             paymentType
         }
+        if(formInfo?.videoThumbnail)
+            req={...req, videoThumbnail:formInfo?.videoThumbnail}
+
         for (const key in req) {
             formData.append(key, req[key])
         }
@@ -330,19 +336,31 @@ const NewAd = () => {
             })
     }
 
-    const saveChanges = (data: IOfferForm) => {
+    const saveChanges = (props:IOfferForm) => {
+        const {videoThumbnail, video, ...data}= props
         const formData = new FormData()
         let dateNew
         if (data?.dateOfCreation) {
             dateNew = convertLocaleDate(data?.dateOfCreation)
         }
-        const req: any = {
+        let req: any = {
             ...data,
             dateOfCreation: dateNew ? dateNew : '',
             userId: user?.id,
             image: formInfo?.image || '',
             isPricePerMonthAbsolute
         }
+        if(video!=currentOffer?.item?.video){
+            if(video){
+                req={...req, videoThumbnail:formInfo?.videoThumbnail, video}
+            }
+            else{
+                alert(2)
+                console.log('-'+video+'-')
+                req={...req, video:null}
+            }
+        }
+
         for (const key in req) {
             formData.append(key, req[key])
         }
@@ -438,7 +456,8 @@ const NewAd = () => {
 
 
     useEffect(() => {
-        formInfo.image && setAdCover([formInfo.image])
+        formInfo?.image && setAdCover([formInfo.image])
+        formInfo?.videoThumbnail && setAdCover2([formInfo.videoThumbnail])
     }, [formInfo])
 
     const [premium, setPremium] = useState(false)
@@ -821,23 +840,65 @@ const NewAd = () => {
                         </div>
                     </div>
                     {category === 4 && (
-                        <div className="row mb-3 mb-sm-4">
-                            <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0">
-                                <div>Загрузить видео</div>
+                        <>
+                            <div className="row mb-3 mb-sm-4">
+                                <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0">
+                                    <div>Загрузить видео</div>
+                                </div>
+                                <div className="col-sm-6 col-lg-8">
+                                    <ValidateWrapper error={errors?.video}>
+                                        <input type="text" placeholder="Вставить ссылку" {
+                                            ...register('video', {
+                                                onChange: (e) => {
+                                                    const link: string = e.target.value;
+                                                    link.indexOf('v=') !== -1 && setValue('video', link.replace('/watch?v=', '/embed/'))
+                                                }
+                                            })
+                                        } />
+                                    </ValidateWrapper>
+                                </div>
                             </div>
-                            <div className="col-sm-6 col-lg-8">
-                                <ValidateWrapper error={errors?.video}>
-                                    <input type="text" placeholder="Вставить ссылку" {
-                                        ...register('video', {
-                                            onChange: (e) => {
-                                                const link: string = e.target.value;
-                                                link.indexOf('v=') !== -1 && setValue('video', link.replace('/watch?v=', '/embed/'))
-                                            }
-                                        })
-                                    } />
-                                </ValidateWrapper>
+                            <div className="row mb-3 mb-sm-4">
+                                <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0">
+                                    <div>
+                                        Загрузить обложку к видео
+                                        {getValues('video')?.length>0?
+                                            <span className="red">*</span>
+                                            :<></>
+                                        }
+                                    </div>
+                                </div>
+                                <div className="col-sm-6 col-lg-8">
+                                    <div className="file-upload">
+                                        <button className="btn_main btn_2 fw_4"
+                                                style={getValues('video')?.length>0 && !getValues('videoThumbnail') ? {color: 'red', border: '2px solid red'}:{}}>Загрузить
+                                        </button>
+                                        <input
+                                            type="file"
+                                            onChange={(e) => {
+                                                onImageHandler(e, setFormInfo, 'videoThumbnail')
+                                            }}
+                                        />
+                                    </div>
+                                    {(adCoverViewer2?.length > 0 || getValues('videoThumbnail')) &&
+                                        <div className="photos-window">
+                                            <div className="photos-items-preview">
+                                                <img
+                                                    src={
+                                                        adCoverViewer2[0]?.info?.data_url ?
+                                                            adCoverViewer2[0]?.info?.data_url
+                                                            : checkPhotoPath(getValues('videoThumbnail'))
+                                                    }
+                                                />
+                                            </div>
+                                        </div>}
+                                    {textPhoto?.text}
+                                    {textPhoto?.size}
+
+                                </div>
                             </div>
-                        </div>
+
+                        </>
                     )}
                     <div className="row align-items-center mb-3 mb-sm-4">
                         <div className="col-sm-6 col-lg-4 mb-1 mb-sm-0">

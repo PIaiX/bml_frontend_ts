@@ -111,6 +111,7 @@ export type IOfferItem = {
     isArchived: false
     viewsCount: number
     slug: string
+    videoThumbnail:string
     title: string
     description: string
     city: string
@@ -178,6 +179,7 @@ export type IOfferForm = {
     about: string
     area: string | number
     image:string
+    videoThumbnail?:string
     businessPlan: string
     category: string | number
     city: string
