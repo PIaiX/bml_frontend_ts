@@ -350,16 +350,12 @@ const NewAd = () => {
             image: formInfo?.image || '',
             isPricePerMonthAbsolute
         }
-        if(video!=currentOffer?.item?.video){
-            if(video){
-                req={...req, videoThumbnail:formInfo?.videoThumbnail, video}
-            }
-            else{
-                alert(2)
-                console.log('-'+video+'-')
-                req={...req, video:null}
-            }
+
+        if(video!=''){
+            if(formInfo?.videoThumbnail)
+                formData.append('videoThumbnail', formInfo?.videoThumbnail)
         }
+        formData.append('video', video)
 
         for (const key in req) {
             formData.append(key, req[key])
