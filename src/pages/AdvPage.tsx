@@ -670,13 +670,18 @@ const AdvPage: FC = () => {
                                     <PhotoProvider maskOpacity={0.75}>
                                         <div
                                             className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4 col">
-                                            <div className="acc-video2 position-relative d-flex align-items-center">
-                                                <div className={'position-absolute w-100 h-100 d-flex justify-content-center align-items-center'}>
-                                                    <img src='../images/icons/buttonVideo.png' style={{width:'80px', height:'80px'}} />
+                                            <div className="acc-video2 position-relative d-flex align-items-center" style={{cursor:'pointer'}}>
+                                                <div
+                                                    className={'position-absolute w-100 h-100 d-flex justify-content-center align-items-center'}
+                                                    onClick={()=>window.open(offer?.item?.video)}
+                                                >
+                                                    <img
+                                                        src='../images/icons/buttonVideo.png'
+                                                        style={{width:'80px', height:'80px'}}
+                                                    />
                                                 </div>
                                                 <img src={checkPhotoPath(offer?.item?.videoThumbnail)}
                                                     style={{width:'100%', objectFit:'cover', cursor:'pointer'}}
-                                                     onClick={()=>window.open(offer?.item?.video)}
                                                 />
                                             </div>
                                         </div>

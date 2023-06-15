@@ -34,13 +34,17 @@ $authApi.interceptors.response.use(
         const originalRequest = error.config
         if (error.response.status === 403 && originalRequest && !originalRequest._isRetry) {
             originalRequest._isRetry = true
+            console.log(localStorage.getItem('token'))
             try {
                 const response = await $api.get(`${apiRoutes.REFRESH_TOKEN}`)
-                localStorage.setItem('token', response?.data?.body?.token)
+                await localStorage.setItem('token', response?.data?.body?.token)
                 return $authApi.request(error.config);
             } catch (e) {
                 console.log('No auth')
             }
+        }
+        else{
+            // запрос на сервер
         }
         return Promise.reject(error)
     }
