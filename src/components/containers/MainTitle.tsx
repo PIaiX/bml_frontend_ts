@@ -1,11 +1,13 @@
-import React, { FC, useState } from 'react'
+import React, {FC, useRef, useState} from 'react'
 import { IMainTitle } from '../../types/mainTitle'
 import { checkPhotoPath } from '../../helpers/photoLoader'
 const MainTitle: FC<IMainTitle> = ({ title, description, videoPath, imagePath }) => {
     const [display, setDisplay] = useState('inline-block')
+    const ref= useRef<HTMLVideoElement>(null)
 
     const clickOnImg = () => {
         setDisplay('none')
+        ref?.current?.play()
     }
 
     return (
@@ -24,7 +26,7 @@ const MainTitle: FC<IMainTitle> = ({ title, description, videoPath, imagePath })
                             <img src={checkPhotoPath(imagePath)} />
                         </div>
                         <div style={{ display: display == 'inline-block' ? 'none' : 'inline-block' }}>
-                            <video controls playsInline src={videoPath && checkPhotoPath(videoPath)}>
+                            <video ref={ref} controls playsInline src={videoPath && checkPhotoPath(videoPath)}>
                             </video>
                         </div>
                     </div>
