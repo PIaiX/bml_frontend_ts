@@ -369,8 +369,8 @@ const AdvertisingSection = () => {
                                         {...register('description', {
                                             required: 'Поле обязательно к заполнению',
                                             minLength: {
-                                                value: 10,
-                                                message: 'Минимум 10 символов',
+                                                value: 5,
+                                                message: 'Минимум 5 символов',
                                             },
                                             maxLength: {
                                                 value: 30,

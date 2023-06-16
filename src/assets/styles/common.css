@@ -873,10 +873,15 @@ h6 {
 }
 
 .img-fluid {
-    WIDTH:100%;
+    /*width:100%;*/
+    /*max-height: 30vh;*/
+
+    width: 250px;
+    height: 160px;
+
     display: block;
+    cursor: pointer;
     object-fit: cover;
-    max-height: 30vh;
 }
 
 

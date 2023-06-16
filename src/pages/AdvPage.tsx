@@ -549,7 +549,7 @@ const AdvPage: FC = () => {
                             <div className="row justify-content-center g-4">
                                 {advertising && advertising[0] &&
                                     <div className="col-8 col-sm-6 col-md-12 promo">
-                                        <div className={'position-relative'}>
+                                        <div className={'position-relative'} style={{width: '250px', height: '160px'}}>
                                             <img src={checkPhotoPath(advertising[0].image)} alt="img" onClick={()=>window.open(`${advertising[0].link}`)} className="img-fluid mb-2"/>
                                             {user &&
                                                 <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
@@ -565,8 +565,8 @@ const AdvPage: FC = () => {
                                     </div>}
                                 {advertising && advertising[1] &&
                                     <div className="col-8 col-sm-6 col-md-12 promo">
-                                            <div className={'position-relative'}>
-                                                <img src={checkPhotoPath(advertising[1].image)} alt="img"  onClick={()=>window.open(`${advertising[1].link}`)} className="img-fluid mb-2"/>
+                                            <div className={'position-relative'} style={{width: '250px', height: '160px'}}>
+                                                <img src={checkPhotoPath(advertising[1].image)} alt="img" onClick={()=>window.open(`${advertising[1].link}`)} className="img-fluid mb-2"/>
                                                 {user &&
                                                     <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
                                                         setIdAdvForBad(advertising[0].id)
@@ -587,7 +587,7 @@ const AdvPage: FC = () => {
                             <hr className="mt-md-0"/>
                             <div className="d-flex align-items-center f_09 mb-4 mb-lg-5">
                                 <MdOutlinePlace className="color-1"/>
-                                <span className="gray ms-2">Регионы продаж:</span>
+                                <span className="gray ms-2">Регион:</span>
                                 <span className="ms-3">{offer?.item?.city}</span>
                             </div>
 

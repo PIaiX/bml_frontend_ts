@@ -3082,6 +3082,7 @@ footer {
     background-color: white;
     border-radius: 10px;
     padding: 5px;
+    cursor: pointer;
 }
 .validate-error-textarea {
     top: auto;

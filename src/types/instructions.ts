@@ -5,6 +5,7 @@ export type IPartnersItem = {
     media: string
     mediaType: boolean
     link:string
+    videoThumbnail:string
     createdAt: string
     updatedAt: string
     isVisibleForUser: string

@@ -76,13 +76,14 @@ const Instructions: FC = () => {
                             i?.mediaType ? (
                                 <div key={i?.id}>
                                     <div className="acc-video">
-                                        <iframe
-                                            src={i?.media?.replace('/watch?v=', '/embed/')}
-                                            title="YouTube video player"
-                                            frameBorder="0"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                        />
+                                        <img src={checkPhotoPath(i?.videoThumbnail)} height={100 + '%'} width={100 + '%'}/>
+                                        {/*<iframe*/}
+                                        {/*    src={i?.media?.replace('/watch?v=', '/embed/')}*/}
+                                        {/*    title="YouTube video player"*/}
+                                        {/*    frameBorder="0"*/}
+                                        {/*    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"*/}
+                                        {/*    allowFullScreen*/}
+                                        {/*/>*/}
                                     </div>
                                     {i?.isTitleLink ? (
                                         <a href={i?.link} target="_blank" rel="noopener noreferrer">{i?.title}</a>
