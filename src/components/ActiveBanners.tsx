@@ -10,17 +10,16 @@ import {IOffersItem} from "../types/offers";
 import usePagination from "../hooks/pagination";
 import {addInArchive} from "../services/offers";
 import {showAlert} from "../store/reducers/alertSlice";
-import AdCard from "../pages/profile/AdCard";
+import BannerCard from "../pages/profile/BannerCard";
 import Loader from "./utils/Loader";
 import Pagination from "./utils/Pagination";
-import CustomModal from "./utils/CustomModal";
-import ValidateWrapper from "./utils/ValidateWrapper";
+
 type Props = {
     tab: number
     section: number
-    bannersType?:boolean
 }
-const BannedAds: FC<Props> = ({ tab, section, bannersType }) => {
+
+const ActiveBanners: FC<Props> = ({ tab, section }) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const [currentPage, setCurrentPage] = useState(0)
@@ -31,12 +30,12 @@ const BannedAds: FC<Props> = ({ tab, section, bannersType }) => {
     if (tab === 4 && user?.typeForUser === 'Физ лицо')
         text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const notArchiveOffers = useQuery({
-        queryKey: ['moderation', user?.id, tab, currentPage],
+        queryKey: ['notArchiveBanners', user?.id, tab, currentPage],
         queryFn: async () => {
             try {
                 if (user?.id) {
-                    const response = await $authApi.get<IOffersBodyRequest>(
-                        `${apiRoutes.GET_BANNED_USERS_OFFERS}/${user?.id}?page=${currentPage + 1
+                    const response = await $authApi .get<IOffersBodyRequest>(
+                        `${apiRoutes.GET_MY_PUBLIC_ADS}?page=${currentPage + 1
                         }&limit=${generalLimit}&orderBy=${'desc'}${tab || tab === 0 ? `&category=${tab}` : ''}`
                     )
                     return response?.data?.body
@@ -58,7 +57,6 @@ const BannedAds: FC<Props> = ({ tab, section, bannersType }) => {
 
     const { paginationItems, pageCount, selectedPage, setSelectedPage, handlePageClick }: IPagination<IOffersItem> =
         usePagination(notArchiveOffers?.data?.data, generalLimit, notArchiveOffers?.data?.meta.total, currPage)
-
     const offerIdSeterForArchive = useCallback((id: number) => {
         setOfferId(id)
     }, [])
@@ -70,7 +68,7 @@ const BannedAds: FC<Props> = ({ tab, section, bannersType }) => {
                     dispatch(showAlert({ message: 'Объявление успешно добавлено в архив', typeAlert: 'good' }))
                 })
                 .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))),
-        onSuccess: () => queryClient.invalidateQueries(['moderation']),
+        onSuccess: () => queryClient.invalidateQueries(['notArchiveBanners']),
     })
 
     useEffect(() => {
@@ -90,30 +88,26 @@ const BannedAds: FC<Props> = ({ tab, section, bannersType }) => {
         setSelectedPage(0)
         setCurrentPage(0)
     }, [tab])
-    const [isShowModalReport, setIsShowModalReport] = useState<any>(false)
+
     return (
         <>
             <div className="acc-box">
                 {!notArchiveOffers?.isLoading ? (
                     paginationItems?.length > 0 ? (
                         paginationItems?.map((i: any) => (
-                            <AdCard
+                            <BannerCard
                                 timeBeforeArchive={i.timeBeforeArchive}
                                 id={i.id}
                                 key={i.id}
                                 type={tab}
-                                isBlocked={true}
                                 section={section}
                                 imgURL={i.image}
                                 title={i.title}
                                 isVerified={i.isVerified}
                                 isArchived={i.isArchived}
-                                setIsShowModalReport={setIsShowModalReport}
                                 scope={i.subsection?.area?.name}
-                                bannersType={bannersType}
                                 investments={i?.investments}
                                 validity={i?.archiveExpire}
-                                blockDescription={i?.blockDescription}
                                 offerIdSeterForArchive={offerIdSeterForArchive}
                                 isPricePerMonthAbsolute={i.isPricePerMonthAbsolute}
                             />
@@ -142,19 +136,8 @@ const BannedAds: FC<Props> = ({ tab, section, bannersType }) => {
             ) : (
                 ''
             )}
-            <CustomModal
-                isShow={isShowModalReport?true:false}
-                setIsShow={setIsShowModalReport}
-                centered={false}
-                closeButton={true}
-                className="modal__report"
-            >
-                <div>
-                    {isShowModalReport}
-                </div>
-            </CustomModal>
         </>
     )
 };
 
-export default BannedAds;
+export default ActiveBanners;

@@ -1,7 +1,6 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {IUser} from "../types/user";
 import {useAppDispatch, useAppSelector} from "../hooks/store";
-import AdCard from "../pages/profile/AdCard";
 import Loader from "./utils/Loader";
 import Pagination from "./utils/Pagination";
 import {useMutation, useQuery, useQueryClient} from "react-query";
@@ -15,6 +14,7 @@ import {addInArchive, deleteWithArchive} from "../services/offers";
 import {showAlert} from "../store/reducers/alertSlice";
 import OfferCard from "../pages/profile/OfferCard";
 import CustomModal from "./utils/CustomModal";
+
 type propsType={
     section:number
     bannersType?:boolean

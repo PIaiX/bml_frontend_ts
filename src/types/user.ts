@@ -21,7 +21,6 @@ export type IUser = {
     roleId: number
     createdAt: string
     updatedAt: string
-    blockedUntil: string
     fullName: string
     createdAtForUser: string
     blockedUntilForUser: string
@@ -36,4 +35,6 @@ export type IUser = {
     incomingStatus: boolean
     isFormCompleted:boolean
     balance:number
+    blockedUntil: string
+    blockDescription:string
 }

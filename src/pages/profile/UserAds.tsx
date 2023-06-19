@@ -1,17 +1,12 @@
 import React, {FC, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
-import NotArchiveAds from '../../components/NotArchiveAds'
-import ArchiveAds from '../../components/ArchiveAds'
 import {IUser} from "../../types/user";
 import {useAppSelector} from "../../hooks/store";
 import AccountMenu from "./AccountMenu";
-import ModerationAds from "../../components/ModerationAds";
-import BannedAds from "../../components/BannedAds";
 import MyAds from "../../components/MyAds";
 
 const UserAds: FC = () => {
-    const [section, setSection] = useState<number>(0)
     const [tab, setTab] = useState<number>(0)
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     return (

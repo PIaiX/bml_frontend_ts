@@ -1,26 +1,24 @@
-import React, { Dispatch, FC, SetStateAction, useCallback, useEffect, useState } from 'react'
-import AdCard from '../pages/profile/AdCard'
-import Loader from './utils/Loader'
-import Pagination from './utils/Pagination'
-import { addInArchive, deleteWithArchive, getUsersOffersNotArchive } from '../services/offers'
-import { IUser } from '../types/user'
-import { useAppDispatch, useAppSelector } from '../hooks/store'
-import { IPagination, IUseStateItems } from '../types'
-import { IOffersItem, IOffersMeta } from '../types/offers'
-import usePagination from '../hooks/pagination'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { $authApi } from '../services/indexAuth'
-import { IOffersBodyRequest } from '../models/offers'
-import { apiRoutes } from '../config/api'
-import { showAlert } from '../store/reducers/alertSlice'
-
+import React, {FC, useCallback, useEffect, useState} from 'react';
+import {IUser} from "../types/user";
+import {useAppDispatch, useAppSelector} from "../hooks/store";
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {$authApi} from "../services/indexAuth";
+import {IOffersBodyRequest} from "../models/offers";
+import {apiRoutes} from "../config/api";
+import {IPagination} from "../types";
+import {IOffersItem} from "../types/offers";
+import usePagination from "../hooks/pagination";
+import {addInArchive} from "../services/offers";
+import {showAlert} from "../store/reducers/alertSlice";
+import BannerCard from "../pages/profile/BannerCard";
+import Loader from "./utils/Loader";
+import Pagination from "./utils/Pagination";
 type Props = {
     tab: number
     section: number
-    bannersType?:boolean
 }
 
-const NotArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
+const ModerationBanners: FC<Props> = ({ tab, section }) => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const [currentPage, setCurrentPage] = useState(0)
@@ -31,12 +29,12 @@ const NotArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
     if (tab === 4 && user?.typeForUser === 'Физ лицо')
         text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const notArchiveOffers = useQuery({
-        queryKey: [`${bannersType?'notArchiveBanners':'notArchiveAds'}`, user?.id, tab, currentPage],
+        queryKey: ['moderationBanners', user?.id, tab, currentPage],
         queryFn: async () => {
             try {
                 if (user?.id) {
-                    const response = await $authApi .get<IOffersBodyRequest>(
-                        `${bannersType?apiRoutes.GET_MY_PUBLIC_ADS:(apiRoutes.GET_NOT_ARCHIVED_USERS_OFFERS+'/'+user?.id)}?page=${currentPage + 1
+                    const response = await $authApi.get<IOffersBodyRequest>(
+                        `${apiRoutes.GET_MY_MODERATION_ADS}?page=${currentPage + 1
                         }&limit=${generalLimit}&orderBy=${'desc'}${tab || tab === 0 ? `&category=${tab}` : ''}`
                     )
                     return response?.data?.body
@@ -58,6 +56,7 @@ const NotArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
 
     const { paginationItems, pageCount, selectedPage, setSelectedPage, handlePageClick }: IPagination<IOffersItem> =
         usePagination(notArchiveOffers?.data?.data, generalLimit, notArchiveOffers?.data?.meta.total, currPage)
+
     const offerIdSeterForArchive = useCallback((id: number) => {
         setOfferId(id)
     }, [])
@@ -69,7 +68,7 @@ const NotArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
                     dispatch(showAlert({ message: 'Объявление успешно добавлено в архив', typeAlert: 'good' }))
                 })
                 .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))),
-        onSuccess: () => queryClient.invalidateQueries([`${bannersType?'notArchiveBanners':'notArchiveAds'}`]),
+        onSuccess: () => queryClient.invalidateQueries(['moderationBanners']),
     })
 
     useEffect(() => {
@@ -96,7 +95,7 @@ const NotArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
                 {!notArchiveOffers?.isLoading ? (
                     paginationItems?.length > 0 ? (
                         paginationItems?.map((i: any) => (
-                            <AdCard
+                            <BannerCard
                                 timeBeforeArchive={i.timeBeforeArchive}
                                 id={i.id}
                                 key={i.id}
@@ -107,9 +106,9 @@ const NotArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
                                 isVerified={i.isVerified}
                                 isArchived={i.isArchived}
                                 scope={i.subsection?.area?.name}
-                                bannersType={bannersType}
                                 investments={i?.investments}
                                 validity={i?.archiveExpire}
+
                                 offerIdSeterForArchive={offerIdSeterForArchive}
                                 isPricePerMonthAbsolute={i.isPricePerMonthAbsolute}
                             />
@@ -140,6 +139,6 @@ const NotArchiveAds: FC<Props> = ({ tab, section, bannersType }) => {
             )}
         </>
     )
-}
+};
 
-export default NotArchiveAds
+export default ModerationBanners;

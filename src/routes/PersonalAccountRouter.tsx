@@ -21,6 +21,7 @@ import Banners from "../pages/profile/Banners";
 import PayHistory from "../pages/PayHistory";
 import {IUser} from "../types/user";
 import {useAppSelector} from "../hooks/store";
+import ProfileBanned from "../wrapper/ProfileBanned";
 
 type Props = {
     isMobile: boolean
@@ -43,18 +44,18 @@ const PersonalAccountRouter: FC<Props> = ({isMobile}) => {
                 {path: 'settings', element: <ProfileSettings />},
 
                 {path: 'profile/partners', element:isVerify(<Partners />)},
-                {path: 'my-ads', element:isVerify(isVerify(<UserAds />))},
-                {path: 'my-ads/new-ad', element:isVerify(<NewAd />)},
-                {path: 'my-ads/new-ad/:id', element:isVerify(<NewAd />)},
-                {path: 'my-ads/premium', element:isVerify(<Premium />)},
+                {path: 'my-ads', element:isVerify(isVerify(<ProfileBanned><UserAds /></ProfileBanned>))},
+                {path: 'my-ads/new-ad', element:isVerify(<ProfileBanned><NewAd /></ProfileBanned>)},
+                {path: 'my-ads/new-ad/:id', element:isVerify(<ProfileBanned><NewAd /></ProfileBanned>)},
+                {path: 'my-ads/premium', element:isVerify(<ProfileBanned><Premium /></ProfileBanned>)},
                 {path: 'pay-history', element:isVerify(<PayHistory />)},
-                {path: 'favorites', element:isVerify(<Favorites />)},
-                {path: 'chat', element:isVerify(<Chat />)},
-                {path: 'chat/window/:id', element:isVerify(<ChatWindow/>)},
-                {path: 'chat/window/new', element:isVerify(<ChatWindowEmpty />)},
-                {path: 'wallet', element:isVerify(<MyWallet />)},
-                {path: 'banners', element:isVerify(<Banners />)},
-                {path: 'advertising-section', element:isVerify(<AdvertisingSection />)},
+                {path: 'favorites', element:isVerify(<ProfileBanned><Favorites /></ProfileBanned>)},
+                {path: 'chat', element:isVerify(<ProfileBanned><Chat /></ProfileBanned>)},
+                {path: 'chat/window/:id', element:isVerify(<ProfileBanned><ChatWindow/></ProfileBanned>)},
+                {path: 'chat/window/new', element:isVerify(<ProfileBanned><ChatWindowEmpty /></ProfileBanned>)},
+                {path: 'wallet', element:isVerify(<ProfileBanned><MyWallet /></ProfileBanned>)},
+                {path: 'banners', element:isVerify(<ProfileBanned><Banners /></ProfileBanned>)},
+                {path: 'advertising-section', element:isVerify(<ProfileBanned><AdvertisingSection /></ProfileBanned>)},
 
                 {path: '*', element: <NotFound />},
             ],

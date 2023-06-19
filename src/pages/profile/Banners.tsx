@@ -1,18 +1,24 @@
-import React, {useState} from 'react';
+import React, {BaseSyntheticEvent, useState} from 'react';
 import {IUser} from "../../types/user";
 import {useAppSelector} from "../../hooks/store";
 import {Link, useLocation} from "react-router-dom";
 import {MdOutlineArrowBack} from "react-icons/md";
-import NotArchiveAds from "../../components/NotArchiveAds";
-import ArchiveAds from "../../components/ArchiveAds";
-import ModerationAds from "../../components/ModerationAds";
 import AccountMenu from "./AccountMenu";
+import ModerationBanners from "../../components/ModerationBanners";
+import ActiveBanners from "../../components/ActiveBanners";
+import ArchiveBanners from "../../components/ArchiveBanners";
+import CustomModal from "../../components/utils/CustomModal";
 
 const Banners = () => {
     const {state} = useLocation()
     const [section, setSection] = useState<number>(state?.section?state?.section:0)
     const [tab, setTab] = useState<number>(0)
+    const [isShowMessageModal, setIsShowMessageModal] = useState(false)
+    const [idForDelBanner, setIdForDelBanner] = useState()
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
+    const DelBanner = () =>{
+
+    }
     return (
         <>{user ?
             <>
@@ -53,13 +59,36 @@ const Banners = () => {
                             Новый баннер
                         </Link>
                     </div>
+                    {/* Тут нужно прокинуть контекст, чтобы можно было удалять */}
                     {section === 0 ?
-                        <NotArchiveAds bannersType={true} tab={tab} section={section}/>
+                        <ActiveBanners tab={tab} section={section}/>
                         : section === 1 ?
-                            <ArchiveAds bannersType={true} tab={tab} section={section}/>
-                            : <ModerationAds bannersType={true} tab={tab} section={section}/>
+                            <ArchiveBanners tab={tab} section={section}/>
+                            : <ModerationBanners tab={tab} section={section}/>
                     }
                 </div>
+                <CustomModal
+                    isShow={isShowMessageModal}
+                    setIsShow={setIsShowMessageModal}
+                    centered={false}
+                    closeButton={true}
+                    className="modal__messages"
+                >
+                    <form>
+                        <div>Вы уверены, что хотите удалить диалог?</div>
+                        <div className="d-flex justify-content-center mt-5">
+                            <button
+                                className="btn_main btn_1"
+                                onClick={(event: BaseSyntheticEvent) =>
+                                    DelBanner()
+                                }
+                            >
+                                Удалить
+                            </button>
+                        </div>
+                    </form>
+                </CustomModal>
+
             </>
             : <AccountMenu></AccountMenu>}
         </>

@@ -1,8 +1,9 @@
-import React, {FC, useState} from 'react'
-import {Link, NavLink} from 'react-router-dom'
-import {checkPhotoPath} from '../../helpers/photoLoader'
-import FunctionForPrice from '../../helpers/FunctionForPrice'
-import {AiOutlineQuestionCircle} from 'react-icons/ai'
+import React, {FC} from 'react';
+import {Link, NavLink} from "react-router-dom";
+import {checkPhotoPath} from "../../helpers/photoLoader";
+import {AiOutlineQuestionCircle} from "react-icons/ai";
+import FunctionForPrice from "../../helpers/FunctionForPrice";
+
 type Props = {
     className?: string
     imgURL: string
@@ -20,11 +21,12 @@ type Props = {
     timeBeforeArchive:string
     offerIdSeterForUnArchive?: (id: number) => void
     offerIdSeterForArchive?: (id: number) => void
+    bannersType?:boolean
     blockDescription?:string | null
     setIsShowModalReport?:any
 }
 
-const AdCard: FC<Props> = (props: any) => {
+const BannerCard: FC<Props> = (props: any) => {
     return (
         <div className={'mx-sm-4 my-md-5 my-sm-3 py-1 ad-preview ' + props.className}>
             <div className="d-flex flex-column flex-sm-row align-items-stretch flex-1">
@@ -48,7 +50,7 @@ const AdCard: FC<Props> = (props: any) => {
                             {props?.blockDescription &&
                                 <div className={'d-inline-block'} onClick={() => props?.setIsShowModalReport && props?.setIsShowModalReport(props?.blockDescription)}>
                                     <AiOutlineQuestionCircle color={'black'} title={props?.blockDescription} />
-                            </div>
+                                </div>
                             }
 
                         </div>
@@ -68,7 +70,7 @@ const AdCard: FC<Props> = (props: any) => {
             <div className="btns row gx-2 mt-3 mt-md-0 mt-sm-4">
                 <div className="col-6">
                     <NavLink
-                        to={'new-ad/'+props?.id}
+                        to={`${props.bannersType?'/account/advertising-section':'new-ad/'+props?.id}`}
                         className="btn_main btn_4 w-100 px-2 px-sm-3"
                     >
                         Редактировать
@@ -91,20 +93,13 @@ const AdCard: FC<Props> = (props: any) => {
                                 props?.offerIdSeterForArchive(props?.id)
                             }}
                         >
-                            Снять с публикации
+                            Удалить
                         </button>
                     )}
                 </div>
-                {props.type === 4 && (
-                    <div className="col-12 mt-2">
-                        <Link to="/account/my-ads/premium" className="btn_main btn_5 w-100 px-2 px-sm-3" state={{data:{id:props.id}}}>
-                            Premium-размещение
-                        </Link>
-                    </div>
-                )}
             </div>
         </div>
     )
 }
 
-export default AdCard
+export default BannerCard;
