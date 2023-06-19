@@ -3,20 +3,13 @@ import {useForm} from 'react-hook-form'
 import {IFeedBackForm} from '../../types/feedback'
 import {sendFeedBack} from '../../services/feedback'
 import ValidateWrapper from '../utils/ValidateWrapper'
-
-type AlertState = {
-    isShow: boolean
-    message: string
-    status: number
-}
+import {showAlert} from "../../store/reducers/alertSlice";
+import {useDispatch} from "react-redux";
 
 const FeedbackForm: FC = () => {
     const [proPerData, setProPerData] = useState<boolean>(false)
-    const [alert, setAlert] = useState<AlertState>({
-        isShow: false,
-        message: '',
-        status: 0,
-    })
+    const dispatch = useDispatch()
+
     const {
         register,
         formState: {errors},
@@ -30,36 +23,15 @@ const FeedbackForm: FC = () => {
     const onSubmit = (data: IFeedBackForm) => {
         sendFeedBack(data)
             .then(() => {
+                dispatch(showAlert({message: 'Вопрос успешно отправлен!', typeAlert: 'good'}))
+                setProPerData(false)
                 reset()
-                setAlert({
-                    isShow: true,
-                    message: 'Вопрос успешно отправлен!',
-                    status: 1,
-                })
             })
             .catch(() => {
-                setAlert({
-                    isShow: true,
-                    message: 'Произошла ошибка, попробуйте позже!',
-                    status: 2,
-                })
+                dispatch(showAlert({message: 'Произошла ошибка, попробуйте позже!', typeAlert: 'bad'}))
+                setProPerData(false)
             })
     }
-
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            if (alert.isShow) {
-                setAlert({
-                    isShow: false,
-                    message: '',
-                    status: 0,
-                })
-            }
-        }, 1500)
-        return () => {
-            clearTimeout(timeoutId)
-        }
-    }, [alert.isShow])
 
     return (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -142,11 +114,6 @@ const FeedbackForm: FC = () => {
             >
                 Отправить
             </button>
-            {alert?.isShow && (
-                <h4 style={{color: alert.status === 1 ? 'green' : 'red'}} className="mt-3 mb-0">
-                    {alert.message}
-                </h4>
-            )}
         </form>
     )
 }
