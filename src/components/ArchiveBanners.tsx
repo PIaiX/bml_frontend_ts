@@ -13,13 +13,8 @@ import {showAlert} from "../store/reducers/alertSlice";
 import BannerCard from "../pages/profile/BannerCard";
 import Loader from "./utils/Loader";
 import Pagination from "./utils/Pagination";
-type Props = {
-    tab: number
-    section: number
-    bannersType?:boolean
-}
 
-const ArchiveBanners: FC<Props> = ({ tab, section, bannersType }) => {
+const ArchiveBanners= () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const queryClient = useQueryClient()
@@ -27,16 +22,16 @@ const ArchiveBanners: FC<Props> = ({ tab, section, bannersType }) => {
     const [offerId, setOfferId] = useState<number | null>(null)
     let text = 'Ничего нет'
     const dispatch = useAppDispatch()
-    if (tab === 4 && user?.typeForUser === 'Физ лицо')
+    if (user?.typeForUser === 'Физ лицо')
         text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const archiveOffers = useQuery({
-        queryKey: [`${bannersType?'archiveBanners':'archiveAds'}`, user?.id, tab, currentPage],
+        queryKey: ['archiveBanners', user?.id, currentPage],
         queryFn: async () => {
             try {
                 if (user?.id) {
                     const response = await $authApi.get<IOffersBodyRequest>(
-                        `${bannersType?apiRoutes.GET_MY_ARCHIVED_ADS:(apiRoutes.GET_ARCHIVED_USERS_OFFERS+'/'+user?.id)}?page=${currentPage + 1
-                        }&limit=${generalLimit}&orderBy=${'desc'}${tab || tab === 0 ? `&category=${tab}` : ''}`
+                        `${apiRoutes.GET_MY_ARCHIVED_ADS}?page=${currentPage + 1
+                        }&limit=${generalLimit}&orderBy=desc&category=0`
                     )
                     return response?.data?.body
                 }
@@ -52,14 +47,11 @@ const ArchiveBanners: FC<Props> = ({ tab, section, bannersType }) => {
         (page: number) => {
             setCurrentPage(page)
         },
-        [section, tab]
+        []
     )
 
     const { paginationItems, pageCount, selectedPage, setSelectedPage, handlePageClick }: IPagination<IOffersItem> =
         usePagination(archiveOffers?.data?.data, generalLimit, archiveOffers?.data?.meta.total, currPage)
-    const offerIdSeterForUnArchive = useCallback((id: number) => {
-        setOfferId(id)
-    }, [])
 
     const mutation = useMutation({
         mutationFn: () =>
@@ -68,7 +60,7 @@ const ArchiveBanners: FC<Props> = ({ tab, section, bannersType }) => {
                     dispatch(showAlert({ message: 'Объявление успешно отправлено на модерацию', typeAlert: 'good' }))
                 })
                 .catch(() => dispatch(showAlert({ message: 'Произошла ошибка', typeAlert: 'bad' }))),
-        onSuccess: () => queryClient.invalidateQueries([`${bannersType?'archiveBanners':'archiveAds'}`]),
+        onSuccess: () => queryClient.invalidateQueries(['archiveBanners']),
     })
 
     useEffect(() => {
@@ -87,7 +79,7 @@ const ArchiveBanners: FC<Props> = ({ tab, section, bannersType }) => {
     useEffect(() => {
         setSelectedPage(0)
         setCurrentPage(0)
-    }, [tab])
+    }, [])
 
     return (
         <>
@@ -96,21 +88,9 @@ const ArchiveBanners: FC<Props> = ({ tab, section, bannersType }) => {
                     paginationItems?.length > 0 ? (
                         paginationItems?.map((i: any) => (
                             <BannerCard
-                                id={i.id}
                                 key={i.id}
-                                type={tab}
-                                bannersType={bannersType}
-                                section={section}
-                                imgURL={i.image}
-                                timeBeforeArchive={i.timeBeforeArchive}
-                                title={i.title}
-                                scope={i.subsection?.area?.name}
-                                investments={i?.investments}
-                                isVerified={i.isVerified}
-                                isArchived={i.isArchived}
-                                validity={i?.archiveExpire}
-                                offerIdSeterForUnArchive={offerIdSeterForUnArchive}
-                                isPricePerMonthAbsolute={i.isPricePerMonthAbsolute}
+                                section={1}
+                                {...i}
                             />
                         ))
                     ) : (

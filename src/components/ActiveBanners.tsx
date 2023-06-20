@@ -13,13 +13,9 @@ import {showAlert} from "../store/reducers/alertSlice";
 import BannerCard from "../pages/profile/BannerCard";
 import Loader from "./utils/Loader";
 import Pagination from "./utils/Pagination";
+import {IBannerCard} from "../types/Banner";
 
-type Props = {
-    tab: number
-    section: number
-}
-
-const ActiveBanners: FC<Props> = ({ tab, section }) => {
+const ActiveBanners = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const [currentPage, setCurrentPage] = useState(0)
@@ -27,16 +23,16 @@ const ActiveBanners: FC<Props> = ({ tab, section }) => {
     const dispatch = useAppDispatch()
     const queryClient = useQueryClient()
     let text = 'Ничего нет'
-    if (tab === 4 && user?.typeForUser === 'Физ лицо')
+    if (user?.typeForUser === 'Физ лицо')
         text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const notArchiveOffers = useQuery({
-        queryKey: ['notArchiveBanners', user?.id, tab, currentPage],
+        queryKey: ['notArchiveBanners', user?.id, currentPage],
         queryFn: async () => {
             try {
                 if (user?.id) {
                     const response = await $authApi .get<IOffersBodyRequest>(
                         `${apiRoutes.GET_MY_PUBLIC_ADS}?page=${currentPage + 1
-                        }&limit=${generalLimit}&orderBy=${'desc'}${tab || tab === 0 ? `&category=${tab}` : ''}`
+                        }&limit=${generalLimit}&orderBy=${'desc'}${`&category=0`}`
                     )
                     return response?.data?.body
                 }
@@ -52,7 +48,7 @@ const ActiveBanners: FC<Props> = ({ tab, section }) => {
         (page: number) => {
             setCurrentPage(page)
         },
-        [section, tab]
+        []
     )
 
     const { paginationItems, pageCount, selectedPage, setSelectedPage, handlePageClick }: IPagination<IOffersItem> =
@@ -87,29 +83,18 @@ const ActiveBanners: FC<Props> = ({ tab, section }) => {
     useEffect(() => {
         setSelectedPage(0)
         setCurrentPage(0)
-    }, [tab])
+    }, [])
 
     return (
         <>
             <div className="acc-box">
                 {!notArchiveOffers?.isLoading ? (
                     paginationItems?.length > 0 ? (
-                        paginationItems?.map((i: any) => (
+                        paginationItems?.map((i:any) => (
                             <BannerCard
-                                timeBeforeArchive={i.timeBeforeArchive}
-                                id={i.id}
                                 key={i.id}
-                                type={tab}
-                                section={section}
-                                imgURL={i.image}
-                                title={i.title}
-                                isVerified={i.isVerified}
-                                isArchived={i.isArchived}
-                                scope={i.subsection?.area?.name}
-                                investments={i?.investments}
-                                validity={i?.archiveExpire}
-                                offerIdSeterForArchive={offerIdSeterForArchive}
-                                isPricePerMonthAbsolute={i.isPricePerMonthAbsolute}
+                                section={0}
+                                {...i}
                             />
                         ))
                     ) : (

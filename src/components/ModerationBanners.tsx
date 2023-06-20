@@ -13,12 +13,8 @@ import {showAlert} from "../store/reducers/alertSlice";
 import BannerCard from "../pages/profile/BannerCard";
 import Loader from "./utils/Loader";
 import Pagination from "./utils/Pagination";
-type Props = {
-    tab: number
-    section: number
-}
 
-const ModerationBanners: FC<Props> = ({ tab, section }) => {
+const ModerationBanners = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const generalLimit = 5
     const [currentPage, setCurrentPage] = useState(0)
@@ -26,16 +22,16 @@ const ModerationBanners: FC<Props> = ({ tab, section }) => {
     const dispatch = useAppDispatch()
     const queryClient = useQueryClient()
     let text = 'Ничего нет'
-    if (tab === 4 && user?.typeForUser === 'Физ лицо')
+    if (user?.typeForUser === 'Физ лицо')
         text = 'Разместить объявление раздела "Франшиз" можно с учетной записи ИП или ООО'
     const notArchiveOffers = useQuery({
-        queryKey: ['moderationBanners', user?.id, tab, currentPage],
+        queryKey: ['moderationBanners', user?.id, currentPage],
         queryFn: async () => {
             try {
                 if (user?.id) {
                     const response = await $authApi.get<IOffersBodyRequest>(
                         `${apiRoutes.GET_MY_MODERATION_ADS}?page=${currentPage + 1
-                        }&limit=${generalLimit}&orderBy=${'desc'}${tab || tab === 0 ? `&category=${tab}` : ''}`
+                        }&limit=${generalLimit}&orderBy=desc&category=0`
                     )
                     return response?.data?.body
                 }
@@ -51,15 +47,11 @@ const ModerationBanners: FC<Props> = ({ tab, section }) => {
         (page: number) => {
             setCurrentPage(page)
         },
-        [section, tab]
+        []
     )
 
     const { paginationItems, pageCount, selectedPage, setSelectedPage, handlePageClick }: IPagination<IOffersItem> =
         usePagination(notArchiveOffers?.data?.data, generalLimit, notArchiveOffers?.data?.meta.total, currPage)
-
-    const offerIdSeterForArchive = useCallback((id: number) => {
-        setOfferId(id)
-    }, [])
 
     const mutation = useMutation({
         mutationFn: () =>
@@ -87,7 +79,7 @@ const ModerationBanners: FC<Props> = ({ tab, section }) => {
     useEffect(() => {
         setSelectedPage(0)
         setCurrentPage(0)
-    }, [tab])
+    }, [])
 
     return (
         <>
@@ -96,21 +88,9 @@ const ModerationBanners: FC<Props> = ({ tab, section }) => {
                     paginationItems?.length > 0 ? (
                         paginationItems?.map((i: any) => (
                             <BannerCard
-                                timeBeforeArchive={i.timeBeforeArchive}
-                                id={i.id}
                                 key={i.id}
-                                type={tab}
-                                section={section}
-                                imgURL={i.image}
-                                title={i.title}
-                                isVerified={i.isVerified}
-                                isArchived={i.isArchived}
-                                scope={i.subsection?.area?.name}
-                                investments={i?.investments}
-                                validity={i?.archiveExpire}
-
-                                offerIdSeterForArchive={offerIdSeterForArchive}
-                                isPricePerMonthAbsolute={i.isPricePerMonthAbsolute}
+                                section={3}
+                                {...i}
                             />
                         ))
                     ) : (

@@ -1,4 +1,4 @@
-import React, {BaseSyntheticEvent, useState} from 'react';
+import React, {BaseSyntheticEvent, createContext, useContext, useEffect, useState} from 'react';
 import {IUser} from "../../types/user";
 import {useAppSelector} from "../../hooks/store";
 import {Link, useLocation} from "react-router-dom";
@@ -8,16 +8,29 @@ import ModerationBanners from "../../components/ModerationBanners";
 import ActiveBanners from "../../components/ActiveBanners";
 import ArchiveBanners from "../../components/ArchiveBanners";
 import CustomModal from "../../components/utils/CustomModal";
+import {IBannerCard} from "../../types/Banner";
+
+export type BannerContent = {
+    setBanner:(value:IBannerCard)=>void
+}
+export const MyBannerContext = createContext<BannerContent | null>(null)
+export const useBannerContext = () => useContext(MyBannerContext)
+
 
 const Banners = () => {
     const {state} = useLocation()
     const [section, setSection] = useState<number>(state?.section?state?.section:0)
-    const [tab, setTab] = useState<number>(0)
     const [isShowMessageModal, setIsShowMessageModal] = useState(false)
-    const [idForDelBanner, setIdForDelBanner] = useState()
-    const user: IUser | null = useAppSelector((state) => state?.user?.user)
-    const DelBanner = () =>{
 
+    const [banner, setBanner] = useState<IBannerCard>()
+    const user: IUser | null = useAppSelector((state) => state?.user?.user)
+
+    useEffect(()=>{
+        setIsShowMessageModal(banner?true:false)
+    }, [banner])
+
+    const DelBanner = (e:BaseSyntheticEvent) =>{
+        e.preventDefault()
     }
     return (
         <>{user ?
@@ -59,28 +72,31 @@ const Banners = () => {
                             Новый баннер
                         </Link>
                     </div>
-                    {/* Тут нужно прокинуть контекст, чтобы можно было удалять */}
-                    {section === 0 ?
-                        <ActiveBanners tab={tab} section={section}/>
-                        : section === 1 ?
-                            <ArchiveBanners tab={tab} section={section}/>
-                            : <ModerationBanners tab={tab} section={section}/>
-                    }
+                    <MyBannerContext.Provider value={{setBanner}}>
+                        {/* Тут нужно прокинуть контекст, чтобы можно было удалять */}
+                        {section === 0 ?
+                            <ActiveBanners/>
+                            : section === 1 ?
+                                <ArchiveBanners/>
+                                : <ModerationBanners/>
+                        }
+                    </MyBannerContext.Provider>
                 </div>
                 <CustomModal
                     isShow={isShowMessageModal}
-                    setIsShow={setIsShowMessageModal}
+                    setIsShow={()=>setBanner(undefined)}
                     centered={false}
                     closeButton={true}
                     className="modal__messages"
                 >
                     <form>
-                        <div>Вы уверены, что хотите удалить диалог?</div>
+                        <div>Вы уверены, что хотите удалить рекламный баннер?</div>
+                        <div>На счёт будет возращено 500 рублей.</div>
                         <div className="d-flex justify-content-center mt-5">
                             <button
                                 className="btn_main btn_1"
                                 onClick={(event: BaseSyntheticEvent) =>
-                                    DelBanner()
+                                    DelBanner(event)
                                 }
                             >
                                 Удалить
