@@ -22,6 +22,7 @@ import PayHistory from "../pages/PayHistory";
 import {IUser} from "../types/user";
 import {useAppSelector} from "../hooks/store";
 import ProfileBanned from "../wrapper/ProfileBanned";
+import AdvertisingEdit from "../pages/AdvertisingEdit/AdvertisingEdit";
 
 type Props = {
     isMobile: boolean
@@ -56,6 +57,7 @@ const PersonalAccountRouter: FC<Props> = ({isMobile}) => {
                 {path: 'wallet', element:isVerify(<ProfileBanned><MyWallet /></ProfileBanned>)},
                 {path: 'banners', element:isVerify(<ProfileBanned><Banners /></ProfileBanned>)},
                 {path: 'advertising-section', element:isVerify(<ProfileBanned><AdvertisingSection /></ProfileBanned>)},
+                {path: 'advertising-section/:id', element:isVerify(<ProfileBanned><AdvertisingEdit /></ProfileBanned>)},
 
                 {path: '*', element: <NotFound />},
             ],

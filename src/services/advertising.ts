@@ -11,6 +11,26 @@ export const getAdvertisings =
     }
 }
 
+export const getOneAdvertising =
+    async (id:string)=> {
+    try {
+        const response = await $api.get(`${apiRoutes.SET_ADVERTISING}/${id}`)
+        return response.data.body
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const changeOneAdvertising =
+    async (id:number, payload:any)=> {
+    try {
+        const response = await $authApi.patch(`${apiRoutes.SET_ADVERTISING}/${id}`, payload)
+        return response.data.body
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const getAdvertisingsPrices =
     async ()=> {
     try {

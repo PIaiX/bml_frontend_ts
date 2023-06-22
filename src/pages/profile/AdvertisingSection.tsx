@@ -343,15 +343,16 @@ const AdvertisingSection = () => {
                     </div>
                     <div className="col-sm-8 col-xxl-9 mb-3 mb-sm-0">
                         <ValidateWrapper error={errors.link}>
-                            <input type={'text'}
-                                   placeholder={'Введите ссылку'}
-                                   {...register('link', {
-                                       required: 'Поле обязательно к заполнению',
-                                       minLength: {
-                                           value: 6,
-                                           message: 'Минимум 6 символов',
-                                       },
-                                   })}
+                            <input
+                                type={'text'}
+                                placeholder={'Введите ссылку'}
+                                {...register('link', {
+                                    required: 'Поле обязательно к заполнению',
+                                    minLength: {
+                                        value: 6,
+                                        message: 'Минимум 6 символов',
+                                    },
+                                })}
                             />
                         </ValidateWrapper>
                     </div>
