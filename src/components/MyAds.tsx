@@ -51,9 +51,6 @@ const MyAds:FC<propsType> = ({section, bannersType}) => {
         keepPreviousData: true,
 
     })
-    useEffect(()=>{
-        console.log(section)
-    }, [section])
 
     const currPage = useCallback(
         (page: number) => {

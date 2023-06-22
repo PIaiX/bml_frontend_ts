@@ -50,7 +50,7 @@ const apiRoutes: ApiRoutesTypes = {
     ACTIONS_OFFER: 'offer',
     DELETE_OFFER_IMAGE: 'offer/deleteImage',
     GET_ALL_SUBSECTIONS: 'offer/subsection',
-    GET_PREMIUM_SLOTS:'offer/premium/slots?page=1',
+    GET_PREMIUM_SLOTS:'offer/premium/slots?page=1&limit=100&orderBy=asc',
     SET_PREMIUM_FRANCHISES: 'offer/premium/franchises',
 
     //reports
