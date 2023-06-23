@@ -1,40 +1,18 @@
 import React, {FC} from 'react';
 import {IAdvertising} from "../../types/advertising";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {MdOutlineArrowBack} from "react-icons/md";
-import {onSubmit, useImage} from "./functions";
+import {useImage, useOnSubmit} from "./functions";
 import {onImageHandler} from "../../helpers/formHandlers";
 import {checkPhotoPath} from "../../helpers/photoLoader";
 import {useForm} from "react-hook-form";
 import ValidateWrapper from "../../components/utils/ValidateWrapper";
-import {showAlert} from "../../store/reducers/alertSlice";
-import {useDispatch} from "react-redux";
-
 
 const AdvertisingForm: FC<{ conversation: IAdvertising }> = ({conversation}) => {
 
     const {register, getValues, handleSubmit, formState: {errors}} = useForm({defaultValues: conversation})
     const [image, adCoverViewer, setFormInfo] = useImage()
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
-
-    const EnterSubmit = (data: any) => {
-        onSubmit(data, image)
-            .then(res => {
-                if (res) {
-                    dispatch(
-                        showAlert({
-                            message: 'Реклама успешно отредактирована! Ждите одобрения модерации...',
-                            typeAlert: 'good',
-                        }))
-                    navigate(-1)
-                } else
-                    dispatch(showAlert({message: 'Произошла ошибка!', typeAlert: 'bad'}))
-            })
-            .catch((error) => {
-                dispatch(showAlert({message: 'Произошла ошибка!', typeAlert: 'bad'}))
-            })
-    }
+    const [OnSubmit]=useOnSubmit(image);
 
     return (
         <>
@@ -43,7 +21,7 @@ const AdvertisingForm: FC<{ conversation: IAdvertising }> = ({conversation}) => 
                 <span className="ms-2">Назад</span>
             </Link>
             <h4>{'Редактирование рекламы'}</h4>
-            <form onSubmit={handleSubmit(EnterSubmit)}>
+            <form onSubmit={handleSubmit(OnSubmit)}>
                 <fieldset className="row align-items-center mb-4 mb-sm-5">
                     <div className="row mb-3 mb-sm-4">
                         <div className="col-sm-6 col-lg-4">
@@ -128,7 +106,7 @@ const AdvertisingForm: FC<{ conversation: IAdvertising }> = ({conversation}) => 
                         </div>
                     </div>
 
-                    {
+                    {conversation?.description &&
                         <div className="row mb-3 mb-sm-4">
                             <div className="row mb-3 mb-sm-4">
                                 <div className="col-sm-6 col-lg-4">
