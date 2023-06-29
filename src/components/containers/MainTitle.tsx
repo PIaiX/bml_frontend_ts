@@ -34,6 +34,7 @@ const MainTitle: FC<IMainTitle> = ({ title, description, videoPath, imagePath })
                         <div className="f_20 pt">
                             {title ?? ''}
                         </div>
+                        <br/>
                         <div
                             className="f_12 pt"
                             dangerouslySetInnerHTML={{

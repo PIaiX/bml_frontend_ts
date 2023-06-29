@@ -50,7 +50,7 @@ const ProfileSettings = () => {
                             <input type="file" onChange={(e) => onImageHandler(e, setAvatar)} />
                         </div>
                         <div className="f_08 gray">
-                            (К загрузке разрешены файлы формата PNG, JPG, JPEG и весом не более 1 МБ.
+                            (К загрузке разрешены файлы формата PNG, JPG, JPEG и весом не более 5 МБ.
                             <br />
                             Рекомендуем загружать фото не менее 300px в ширину и высоту.)
                         </div>

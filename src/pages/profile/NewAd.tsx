@@ -573,7 +573,7 @@ const NewAd = () => {
                                         <Controller
                                             name="benefits"
                                             control={control}
-                                            rules={{required: 'Обязательное поле'}}
+                                            rules={{required: false}}
                                             render={({field: {value, onChange}}: any) =>
                                                 <MyEditor value={value} onChange={onChange}
                                                           placeholder="Преимущества франшизы"/>

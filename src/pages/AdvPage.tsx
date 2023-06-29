@@ -33,6 +33,7 @@ import {Advertisings} from "../types/advertising";
 import {MyEditor} from "../components/MyEditor/MyEditor";
 import CustomModal from "../components/utils/CustomModal";
 import ValidateWrapper from "../components/utils/ValidateWrapper";
+import {correctLink} from "../helpers/correctLink";
 
 const AdvPage: FC = () => {
     const navigate = useNavigate()
@@ -220,7 +221,7 @@ const AdvPage: FC = () => {
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
-                <Breadcrumbs/>
+                <Breadcrumbs id={offer?.item?.category}/>
             </div>
             <section id="offer-page" className="container">
                 <h1>{offer?.item?.title}</h1>
@@ -550,7 +551,7 @@ const AdvPage: FC = () => {
                                 {advertising && advertising[0] &&
                                     <div className="col-8 col-sm-6 col-md-12 promo">
                                         <div className={'position-relative'} style={{width: '250px', height: '160px'}}>
-                                            <img src={checkPhotoPath(advertising[0].image)} alt="img" onClick={()=>window.open(`${advertising[0].link}`)} className="img-fluid mb-2"/>
+                                            <img src={checkPhotoPath(advertising[0].image)} alt="img" onClick={()=>window.open(correctLink(advertising[0].link), "_blank")} className="img-fluid mb-2"/>
                                             {user &&
                                                 <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
                                                     setIdAdvForBad(advertising[0].id)
@@ -566,7 +567,7 @@ const AdvPage: FC = () => {
                                 {advertising && advertising[1] &&
                                     <div className="col-8 col-sm-6 col-md-12 promo">
                                             <div className={'position-relative'} style={{width: '250px', height: '160px'}}>
-                                                <img src={checkPhotoPath(advertising[1].image)} alt="img" onClick={()=>window.open(`${advertising[1].link}`)} className="img-fluid mb-2"/>
+                                                <img src={checkPhotoPath(advertising[1].image)} alt="img" onClick={()=>window.open(correctLink(advertising[1].link), "_blank")} className="img-fluid mb-2"/>
                                                 {user &&
                                                     <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
                                                         setIdAdvForBad(advertising[0].id)
@@ -673,7 +674,7 @@ const AdvPage: FC = () => {
                                             <div className="acc-video2 position-relative d-flex align-items-center" style={{cursor:'pointer'}}>
                                                 <div
                                                     className={'position-absolute w-100 h-100 d-flex justify-content-center align-items-center'}
-                                                    onClick={()=>window.open(offer?.item?.video)}
+                                                    onClick={()=>window.open(correctLink(offer?.item?.video), '_blank')}
                                                 >
                                                     <img
                                                         src='../images/icons/buttonVideo.png'

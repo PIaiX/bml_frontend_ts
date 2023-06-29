@@ -4,7 +4,7 @@ import { MdAddCircle, MdOutlineArrowBack } from 'react-icons/md'
 import { useAppSelector } from '../../hooks/store'
 import { IUser } from '../../types/user'
 import { checkPhotoPath } from '../../helpers/photoLoader'
-import { getCurrentFriends } from '../../services/friends'
+import {getCurrentFriends, getIncomingFriends} from '../../services/friends'
 import { IUseStateItems } from '../../types'
 import { IFriendsItem, IFriendsMeta } from '../../types/friends'
 import Loader from '../../components/utils/Loader'
@@ -14,6 +14,7 @@ import { IOffersItem, IOffersMeta } from '../../types/offers'
 const UserProfile: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [sliceNumber, setSliceNumber] = useState(6)
+    const [incomingFriends, setIncomingFriends] =useState<number>()
     const [currentFriends, setCurrentFriends] = useState<IUseStateItems<IFriendsItem, IFriendsMeta>>({
         isLoaded: false,
         meta: null,
@@ -27,6 +28,10 @@ const UserProfile: FC = () => {
 
     useEffect(() => {
         if (user?.id) {
+
+            getIncomingFriends(user?.id, 1, 1000, 'desc')
+                .then((res) => res && setIncomingFriends(res.meta?.total ))
+
             getCurrentFriends(user?.id, 1, 6, 'desc')
                 .then((res) => res && setCurrentFriends({ isLoaded: true, items: res.data, meta: res.meta }))
                 .catch((error) => setCurrentFriends({ isLoaded: true, items: null, meta: null }))
@@ -121,7 +126,7 @@ const UserProfile: FC = () => {
                             <div className="d-flex flex-column align-items-center">
                                 <Link to="/account/profile/partners">
                                     <span>Бизнес-партнёры</span>
-                                    <div className="notificationAll d-inline mx-2">{currentFriends?.meta?.total || 0}</div>
+                                    <div className="notificationAll d-inline mx-2">{incomingFriends || ''}</div>
                                 </Link>
                                 <NavLink
                                     to="/account/profile/partners"

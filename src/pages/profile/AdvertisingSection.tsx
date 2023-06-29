@@ -202,7 +202,7 @@ const AdvertisingSection = () => {
                         <img
                             src="/images/banner-1.jpg"
                             alt="Приоритетное размещение"
-                            className="img-fluid d-block mx-auto"
+                            className="img-fluid-advertising d-block mx-auto"
                         />
                     </div>
                 </div>
@@ -253,7 +253,7 @@ const AdvertisingSection = () => {
                         <img
                             src="/images/banner-2.jpg"
                             alt="Рекламный баннер  (1200х400)"
-                            className="img-fluid d-block mx-auto"
+                            className="img-fluid-advertising d-block mx-auto"
                         />
                     </div>
                 </div>
@@ -310,7 +310,7 @@ const AdvertisingSection = () => {
                         <img
                             src="/images/banner-3.jpg"
                             alt="Рекламный баннер  (250х160)"
-                            className="img-fluid d-block mx-auto"
+                            className="img-fluid-advertising d-block mx-auto"
                         />
                     </div>
                 </div>

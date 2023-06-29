@@ -71,12 +71,6 @@ const NewsItem = () => {
                             <hr/>
                             <div className="text">
                                 <img className="new-page-img" src={checkPhotoPath(newsItem?.image)} onLoad={()=>window.scrollTo(0,0)} />
-                                <div className="time">
-                                    <div className="lh_1">
-                                        {newsItem?.readingTimeFrom} - {newsItem?.readingTimeTo}
-                                    </div>
-                                    <div className="lh_1 gray">мин</div>
-                                </div>
                                 <h3>{newsItem?.suptitle}</h3>
                                 <div
                                     dangerouslySetInnerHTML={{__html: newsItem?.description ? newsItem?.description : ''}}>

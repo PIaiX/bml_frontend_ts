@@ -193,11 +193,10 @@ const RegistrationForm: FC = () => {
                             })}
                         />
                     </ValidateWrapper>
-                    <div className="confirm_email">
+                    <div className="confirm_email d-flex align-items-center mt-3">
                         <ValidateWrapper error={errors.email}>
                             <input
                                 type="email"
-                                className="mt-3"
                                 placeholder="Введите почту"
                                 {...register('email', {
                                     required: 'Поле обязательно к заполнению',
@@ -214,7 +213,7 @@ const RegistrationForm: FC = () => {
                         <button
                             style={{width: 100 + '%'}}
                             type="button"
-                            className={`btn_main btn_1 ms-4 ${classReturner()}`}
+                            className={`btn_main btn_1 ms-4 ${classReturner()} `}
                             disabled={
                                 buttonText.includes('Проверьте почту') ||
                                 buttonText.includes('Значение уже занято') ||

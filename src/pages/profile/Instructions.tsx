@@ -6,6 +6,7 @@ import {getPartners, getTutorials} from '../../services/instructions'
 import {checkPhotoPath} from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'
 import {IPartnersItem, ITutorialsItem} from "../../types/instructions";
+import {correctLink} from "../../helpers/correctLink";
 
 const Instructions: FC = () => {
 
@@ -34,10 +35,10 @@ const Instructions: FC = () => {
                         tutorial?.map(i =>
                             i?.isEmbed ? (
                                 <div key={i?.id}>
-                                    <div className="acc-video position-relative" onClick={()=>window.open(i.link)}>
-                                        <div id={'imgForVideo'} className={'position-absolute w-100 h-100 d-flex justify-content-center align-items-center'}>
-                                            <img src='../images/icons/buttonVideo.png' style={{width:'80px', height:'80px'}} />
-                                        </div>
+                                    <div className="acc-video position-relative" onClick={()=>window.open(correctLink(i.link), "_blank")}>
+                                        {/*<div id={'imgForVideo'} className={'position-absolute w-100 h-100 d-flex justify-content-center align-items-center'}>*/}
+                                        {/*    <img src='../images/icons/buttonVideo.png' style={{width:'80px', height:'80px'}} />*/}
+                                        {/*</div>*/}
                                         <img src={checkPhotoPath(i.image)} style={{width:'100%', objectFit:'cover', cursor:'pointer'}} />
                                     </div>
                                     {i?.isTitleLink ? (
@@ -48,10 +49,10 @@ const Instructions: FC = () => {
                                 </div>
                             ) : (
                                 <div key={i?.id} className="acc-video-block position-relative">
-                                    <div className="acc-video" onClick={()=>window.open(i.link)}>
-                                        <div id={'imgForVideo'} className={'position-absolute w-100 h-100 d-flex justify-content-center align-items-center'}>
-                                            <img src='../images/icons/buttonVideo.png' style={{width:'80px', height:'80px'}} />
-                                        </div>
+                                    <div className="acc-video" onClick={()=>window.open(correctLink(i.link), "_blank")}>
+                                        {/*<div id={'imgForVideo'} className={'position-absolute w-100 h-100 d-flex justify-content-center align-items-center'}>*/}
+                                        {/*    <img src='../images/icons/buttonVideo.png' style={{width:'80px', height:'80px'}} />*/}
+                                        {/*</div>*/}
                                         <img src={checkPhotoPath(i.image)} style={{width:'100%', objectFit:'cover', cursor:'pointer'}} />
                                     </div>
                                     {i?.isTitleLink ? (
@@ -74,9 +75,9 @@ const Instructions: FC = () => {
                     {partners ? (
                         partners?.map((i) =>
                             i?.mediaType ? (
-                                <div key={i?.id}>
+                                <div key={i?.id}  onClick={()=>window.open(correctLink(i.link), "_blank")} style={{cursor:'pointer'}}>
                                     <div className="acc-video">
-                                        <img src={checkPhotoPath(i?.videoThumbnail)} height={100 + '%'} width={100 + '%'}/>
+                                        <img src={checkPhotoPath(i?.videoThumbnail)} height={100 + '%'} width={100 + '%'} alt={i.title}/>
                                         {/*<iframe*/}
                                         {/*    src={i?.media?.replace('/watch?v=', '/embed/')}*/}
                                         {/*    title="YouTube video player"*/}
@@ -92,12 +93,12 @@ const Instructions: FC = () => {
                                     )}
                                 </div>
                             ) : (
-                                <div key={i?.id}>
-                                    <div className="acc-video position-relative" onClick={()=>window.open(i.link)}>
-                                        <div id={'imgForVideo'} className={'position-absolute w-100 h-100 d-flex justify-content-center align-items-center'}>
-                                            <img src='../images/icons/buttonVideo.png' style={{width:'80px', height:'80px'}} />
-                                        </div>
-                                        <img src={checkPhotoPath(i?.media)} height={100 + '%'} width={100 + '%'}/>
+                                <div key={i?.id} onClick={()=>window.open(correctLink(i.link), "_blank")} style={{cursor:'pointer'}}>
+                                    <div className="acc-video position-relative">
+                                        {/*<div id={'imgForVideo'} className={'position-absolute w-100 h-100 d-flex justify-content-center align-items-center'}>*/}
+                                        {/*    <img src='../images/icons/buttonVideo.png' style={{width:'80px', height:'80px'}} />*/}
+                                        {/*</div>*/}
+                                        <img src={checkPhotoPath(i?.media)} height={100 + '%'} width={100 + '%'} alt={i.title}/>
                                     </div>
                                     {i?.isTitleLink ? (
                                         <a href={i?.link} target="_blank" rel="noopener noreferrer">{i?.title}</a>
