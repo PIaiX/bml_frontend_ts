@@ -34,7 +34,6 @@ import {MyEditor} from "../components/MyEditor/MyEditor";
 import CustomModal from "../components/utils/CustomModal";
 import ValidateWrapper from "../components/utils/ValidateWrapper";
 import {correctLink} from "../helpers/correctLink";
-
 const AdvPage: FC = () => {
     const navigate = useNavigate()
     const {id} = useParams()
@@ -221,7 +220,7 @@ const AdvPage: FC = () => {
     return (
         <main>
             <div className="container pt-3 pt-sm-4">
-                <Breadcrumbs id={offer?.item?.category}/>
+                <Breadcrumbs offer={offer?.item}/>
             </div>
             <section id="offer-page" className="container">
                 <h1>{offer?.item?.title}</h1>
@@ -296,7 +295,11 @@ const AdvPage: FC = () => {
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
                                                 <span
-                                                    className="f_13 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                                    style={{textAlign:'right'}}
+                                                    className="f_13 fw_5 text-nowrap d-flex justify-content-end"
+                                                >
+                                                    {offer?.item?.paybackTimeForUser}
+                                                </span>
                                             </div>}
 
                                         {offer?.item?.projectStage != 0 &&
@@ -326,7 +329,10 @@ const AdvPage: FC = () => {
                                         {offer?.item?.paybackTimeForUser != '' &&
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
-                                                <span className="f_13 fw_5 d-flex">
+                                                <span
+                                                    style={{textAlign:'right'}}
+                                                    className="f_13 fw_5 d-flex "
+                                                >
                                                     {offer?.item?.paybackTimeForUser}
                                                 </span>
                                             </div>
@@ -363,7 +369,11 @@ const AdvPage: FC = () => {
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
                                                 <span
-                                                    className="f_13 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                                    style={{textAlign:'right'}}
+                                                    className="f_13 fw_5 text-nowrap"
+                                                >
+                                                    {offer?.item?.paybackTimeForUser}
+                                                </span>
                                             </div>
                                         }
 
@@ -394,15 +404,20 @@ const AdvPage: FC = () => {
                                             <div className="d-flex align-items-center mb-3 justify-content-between">
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
                                                 <span
-                                                    className="f_13 fw_5 text-nowrap">{offer?.item?.paybackTimeForUser}</span>
+                                                    style={{textAlign:'right'}}
+                                                    className="f_13 fw_5 text-nowrap"
+                                                >
+                                                    {offer?.item?.paybackTimeForUser}
+                                                </span>
                                             </div>
                                         }
-
-                                        <div className="d-flex align-items-center mb-3 justify-content-between">
-                                            <span className="pt fw_7 gray f_11 me-2 me-sm-4">Оборот в месяц:</span>
-                                            <span
-                                                className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
-                                        </div>
+                                        {offer?.item?.profitPerMonth &&
+                                            <div className="d-flex align-items-center mb-3 justify-content-between">
+                                                <span className="pt fw_7 gray f_11 me-2 me-sm-4">Оборот в месяц:</span>
+                                                <span
+                                                    className="f_13 fw_5 text-nowrap">{FunctionForPrice(offer?.item?.profitPerMonth)} ₽</span>
+                                            </div>
+                                        }
 
                                         <div className="d-flex align-items-center mb-3 justify-content-between">
                                             <span className="pt fw_7 gray f_11 me-2 me-sm-4">Чистая прибыль:</span>
@@ -458,6 +473,7 @@ const AdvPage: FC = () => {
                                                 <span
                                                     className="pt fw_7 gray f_11 me-2 me-sm-4">Срок окупаемости:</span>
                                                 <span
+                                                    style={{textAlign:'right'}}
                                                     className="f_13 fw_5 text-nowrap"><div dangerouslySetInnerHTML={{__html:offer?.item?.paybackTimeForUser?.replace('цев до', 'цев<br/>до')}}></div></span>
                                             </div>}
                                         {offer?.item?.profitPerMonth &&

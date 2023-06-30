@@ -225,8 +225,8 @@ const EditProfileFormForOoo: FC<Props> = ({ avatar, setImageError }) => {
                             {...register('taxpayerIdentificationNumber', {
                                 required: 'поле обязательно к заполнению',
                                 minLength: {
-                                    value: 11,
-                                    message: 'Минимум 11 символов',
+                                    value: 8,
+                                    message: 'Минимум 8 символов',
                                 },
                                 maxLength: {
                                     value: 16,

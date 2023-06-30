@@ -855,10 +855,10 @@ nav>ul.pagination .page-item:last-child .page-link {
 #block 5 Партнеры
 ************/
 #block_5 .swiper-slide img {
-    height: 90px;
     object-fit: cover;
     cursor:pointer;
     width:100%;
+    aspect-ratio: 5/2;
     object-position: center;
     border: 1px solid #DDDDDD;
     border-radius: 5px;
@@ -868,23 +868,6 @@ nav>ul.pagination .page-item:last-child .page-link {
 #block_5 .swiper-slide img:hover {
     box-shadow: 10px 10px 30px rgba(60, 100, 177, 0.15);
 }
-
-@media (max-width: 575px) {
-    #block_5 .swiper-slide img {
-        height: 28vw;
-    }
-}
-@media (min-width: 992px) {
-    #block_5 .swiper-slide img {
-        height: 100px;
-    }
-}
-@media (min-width: 1200px) {
-    #block_5 .swiper-slide img {
-        height: 120px;
-    }
-}
-
 
 /*** news page ***/
 article.full,

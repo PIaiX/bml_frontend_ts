@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {onImageHandler} from '../../helpers/formHandlers'
-import {Link, useNavigate, useParams} from 'react-router-dom'
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import {useImageViewer} from '../../hooks/imageViewer'
 import {useImagesViewer} from '../../hooks/imagesViewer'
@@ -40,6 +40,8 @@ const NewAd = () => {
         category: 0,
     })
     const [anchor, functionForAnchor]: any = useAnchor()
+    const {state} = useLocation()
+    const isBuyAgain=state?.isBuyAgain
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [loadPhotoModal, setLoadPhotoModal] = useState<boolean>(false)
     const photoInfo = useImageViewer(formInfo?.image)
@@ -416,7 +418,7 @@ const NewAd = () => {
             city: city,
             promoCode: promoData ? promoData?.code : ''
         }
-        if (id) {
+        if (id && !isBuyAgain) {
             saveChanges(data)
         } else {
             if (!premium || user?.balance && user?.balance >= ((placedForMonths === 3 ? 6000 : 11000) + premiumInf.sum))
@@ -426,7 +428,7 @@ const NewAd = () => {
         }
     }
     const returnText = () => {
-        if (id) {
+        if (id && !isBuyAgain) {
             return 'Сохранить изменения'
         } else if (category !== 4) {
             return 'Отправить на модерацию'
@@ -1283,7 +1285,7 @@ const NewAd = () => {
                     )}
                 </fieldset>
 
-                {!id && category === 4 && (
+                {(!id || isBuyAgain) && category === 4 && (
                     <fieldset className="mt-3 mt-sm-4 mt-md-5">
                         <legend className="fw_7 f_10 text-uppercase mb-2 mb-sm-4">
                             Размещение объявления на 30 дней
@@ -1328,16 +1330,20 @@ const NewAd = () => {
                         </div>
                     </fieldset>
                 )}
-                {!id && premium && <div className={"pt-4"}>
+                {(!id || isBuyAgain) && premium && <div className={"pt-4"}>
                     <Premium setPayment={setPaymentType}
                              setChange={setPremiumInf}
                              promo={promoData ? promoData?.discountPrice : 0}
                              priceWithoutPremium={placedForMonths === 3 ? 6000 : 11000}
+                             text={` + ${placedForMonths === 3? 
+                                 'оплата 6 000 ₽ за размещения на 3 месяца'
+                                 : 'оплата 11 000 ₽ за размещения на 6 месяцев'
+                             }`}
                     />
                 </div>}
 
 
-                {!id && !premium && category === 4 && <div className="row align-items-center mb-3 mb-sm-4">
+                {(!id || isBuyAgain) && !premium && category === 4 && <div className="row align-items-center mb-3 mb-sm-4">
                     <div className="col-sm-6 col-lg-4">
                         <div>Способ оплаты:</div>
                     </div>
@@ -1363,7 +1369,7 @@ const NewAd = () => {
                     </div>
                 </div>}
 
-                {category === 4 && (
+                {(!id || isBuyAgain) && category === 4 && (
                     promoData
                     && <div>Промокод активирован!</div>
                     || <div className="promo mt-3 d-block col-5 col-lg-3">
@@ -1376,7 +1382,7 @@ const NewAd = () => {
                     </div>
                 )
                 }
-                {!id && !premium && category === 4 &&
+                {(!id || isBuyAgain) && !premium && category === 4 &&
                     <div className="col-sm-6 col-lg-4 mb-2 mt-2 mb-sm-0">
                         <div className="f_12 fw_6">Сумма к оплате: {
                             promoData?.discountPrice ?
@@ -1386,7 +1392,6 @@ const NewAd = () => {
                         </div>
                     </div>
                 }
-
 
                 <button className={`btn_main btn_1 fw_4 mt-4`} type="submit" onClick={() => {
                     funcForCityEr(city)
@@ -1399,7 +1404,6 @@ const NewAd = () => {
                     {returnText()}
                 </button>
             </form>
-
         </>
     )
 }

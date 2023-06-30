@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC, memo, useEffect, useState} from 'react'
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
 import AdvPrice from './AdvPrice'
@@ -17,8 +17,9 @@ interface propsType{
     priceWithoutPremium?:number
     promo?:number
     setPayment?:(s:string)=>void
+    text?:string
 }
-const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment, promo=0}) => {
+const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment, promo=0, text}) => {
     const loc: any = useLocation()
     const [data, setData] = useState<any>({littleBanner: null, sum: 0, placedForMonths: '1'})
     const lookBigPicture = useImageViewer(data?.bigBanner)
@@ -161,8 +162,8 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment, pro
                             <option value={0} hidden disabled>
                                 Срок размещения
                             </option>
-                            <option value={1}>3 месяца – {functionForPrice(banners[data.slot-1].priceThreeMonths)} ₽</option>
-                            <option value={2}>6 месяцев – {functionForPrice(banners[data.slot-1].priceSixMonths)} ₽</option>
+                            <option value={1}>3 месяца – {functionForPrice(banners[data.slot-1].priceThreeMonths)} ₽{text}</option>
+                            <option value={2}>6 месяцев – {functionForPrice(banners[data.slot-1].priceSixMonths)} ₽{text}</option>
                         </select>
                     </div></>}
                     <div className="col-sm-6 col-lg-4 mb-2 mb-sm-0">
@@ -207,4 +208,4 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment, pro
     )
 }
 
-export default Premium
+export default memo(Premium)

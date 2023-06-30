@@ -1,5 +1,5 @@
 import React, {FC} from 'react'
-import {Link, NavLink} from 'react-router-dom'
+import {Link, NavLink, useNavigate} from 'react-router-dom'
 import {checkPhotoPath} from '../../helpers/photoLoader'
 import FunctionForPrice from '../../helpers/FunctionForPrice'
 import {AiOutlineQuestionCircle} from 'react-icons/ai'
@@ -37,6 +37,8 @@ const OfferCard: FC<Props> = (props: any) => {
         timeBeforeArchive,
         blockDescription
     } = props
+
+    const navigate = useNavigate()
 
     return (
         <div className={'mx-sm-4 my-md-5 my-sm-3 py-1 ad-preview ' + className}>
@@ -99,7 +101,10 @@ const OfferCard: FC<Props> = (props: any) => {
                             <button
                                 className="btn_main btn_3 w-100 px-1 px-sm-2 px-xl-3"
                                 onClick={() => {
-                                    props?.offerIdSeterForUnArchive(id)
+                                    if(isArchived && timeBeforeArchive?.search('Архивирован') && section===4)
+                                        navigate(`new-ad/${id}`, {state:{isBuyAgain:true}})
+                                    else
+                                        props?.offerIdSeterForUnArchive(id)
                                 }}
                             >
                                 Опубликовать
