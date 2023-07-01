@@ -296,7 +296,7 @@ const AdvPage: FC = () => {
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
                                                 <span
                                                     style={{textAlign:'right'}}
-                                                    className="f_13 fw_5 text-nowrap d-flex justify-content-end"
+                                                    className="f_13 fw_5 d-flex justify-content-end"
                                                 >
                                                     {offer?.item?.paybackTimeForUser}
                                                 </span>
@@ -331,7 +331,7 @@ const AdvPage: FC = () => {
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
                                                 <span
                                                     style={{textAlign:'right'}}
-                                                    className="f_13 fw_5 d-flex "
+                                                    className="f_13 fw_5 d-flex"
                                                 >
                                                     {offer?.item?.paybackTimeForUser}
                                                 </span>
@@ -370,7 +370,7 @@ const AdvPage: FC = () => {
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
                                                 <span
                                                     style={{textAlign:'right'}}
-                                                    className="f_13 fw_5 text-nowrap"
+                                                    className="f_13 fw_5"
                                                 >
                                                     {offer?.item?.paybackTimeForUser}
                                                 </span>
@@ -405,7 +405,7 @@ const AdvPage: FC = () => {
                                                 <span className="pt fw_7 gray f_11 me-2 me-sm-4">Окупаемость:</span>
                                                 <span
                                                     style={{textAlign:'right'}}
-                                                    className="f_13 fw_5 text-nowrap"
+                                                    className="f_13 fw_5"
                                                 >
                                                     {offer?.item?.paybackTimeForUser}
                                                 </span>
