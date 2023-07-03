@@ -307,7 +307,7 @@ const NewAd = () => {
                                     typeAlert: 'good'
                                 }))
                                 setTimeout(() => {
-                                    navigate(-1)
+                                    navigate('/account/my-ads')
                                 }, 1000)
                             })
                         }
@@ -316,7 +316,7 @@ const NewAd = () => {
                             dispatch(setBalance(res))
                             dispatch(showAlert({message: 'Ошибка с премиум размещением!', typeAlert: 'bad'}))
                             setTimeout(() => {
-                                navigate(-1)
+                                navigate('/account/my-ads')
                             }, 1000)
                         })
                     })
@@ -328,7 +328,7 @@ const NewAd = () => {
                             typeAlert: 'good'
                         }))
                         setTimeout(() => {
-                            navigate(-1)
+                            navigate('/account/my-ads')
                         }, 1000)
                     })
                 }
@@ -366,16 +366,27 @@ const NewAd = () => {
             formData.append('images[]', image?.initialFile)
         })
         updateOffer(id && id, formData)
-            .then(() => {
-                dispatch(
-                    showAlert({
-                        message: 'Объявление успешно отредактировано! Ждите одобрения модерации...',
-                        typeAlert: 'good',
+            .then(res => {
+                if(res){
+                    getBalance().then(res => {dispatch(setBalance(res))})
+                    dispatch(
+                        showAlert({
+                            message: 'Объявление успешно отредактировано! Ждите одобрения модерации...',
+                            typeAlert: 'good',
+                        })
+                    )
+                    setTimeout(() => {
+                        navigate('/account/my-ads')
+                    }, 1000)
+                }
+                else {
+                    dispatch(
+                        showAlert({
+                        message: 'Оплата не прошла',
+                        typeAlert: 'bad',
                     })
-                )
-                setTimeout(() => {
-                    navigate(-1)
-                }, 1000)
+                    )
+                }
             })
             .catch((error) => {
                 dispatch(showAlert({message: 'Произошла ошибка!', typeAlert: 'bad'}))
@@ -394,31 +405,22 @@ const NewAd = () => {
     const filterFunc = (data: any) => {
         if (city === '') return 0
 
-        let ValuesFroPrice: Array<Array<any>> = [
-            ['branchCount'],
-            ['price'],
-            ['investments'],
-            ['pricePerMonth'],
-            ['profitPerMonth'],
-            ['profit'],
-            ['isoldBranchCount'],
-        ]
-
-        ValuesFroPrice.forEach((i) => i.push(FromStringToNumber(watch(i[0])) ?? ''))
-
+        // избавляем наши числа от пробелов
+        let ValuesFroPrice = ['branchCount', 'price', 'investments', 'pricePerMonth', 'profitPerMonth', 'profit', 'soldBranchCount']
+            .reduce((oldValue, element) => {
+                // @ts-ignore
+                const x = watch(element).toString()
+                const el = FromStringToNumber(x)
+                return el ? {...oldValue, [element]: el} : oldValue
+    }, {})
+        console.log(ValuesFroPrice)
         data = {
             ...data,
-            [ValuesFroPrice[0][0]]: ValuesFroPrice[0][1],
-            [ValuesFroPrice[1][0]]: ValuesFroPrice[1][1],
-            [ValuesFroPrice[2][0]]: ValuesFroPrice[2][1],
-            [ValuesFroPrice[3][0]]: ValuesFroPrice[3][1],
-            [ValuesFroPrice[4][0]]: ValuesFroPrice[4][1],
-            [ValuesFroPrice[5][0]]: ValuesFroPrice[5][1],
-            [ValuesFroPrice[6][0]]: ValuesFroPrice[6][1],
+            ...ValuesFroPrice,
             city: city,
             promoCode: promoData ? promoData?.code : ''
         }
-        if (id && !isBuyAgain) {
+        if (id) {
             saveChanges(data)
         } else {
             if (!premium || user?.balance && user?.balance >= ((placedForMonths === 3 ? 6000 : 11000) + premiumInf.sum))
@@ -451,7 +453,6 @@ const NewAd = () => {
         let val = FromStringToNumber(o.target.value)
         setValue(o.target.name, FunctionForPrice(val))
     }
-
 
     useEffect(() => {
         formInfo?.image && setAdCover([formInfo.image])

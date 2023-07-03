@@ -9,7 +9,7 @@ const ProfileBanned:FC<propsType> = ({children}) => {
     if(user?.blockedUntil)
         return (
             <div className="not-found">
-                <h1 className="not-found__title">Ваш аккаунт заблокирован до {user?.blockedUntil}</h1>
+                <h1 className="not-found__title">Ваш аккаунт заблокирован до {user?.blockedUntilForUser}</h1>
                 <h4>Причина: {user?.blockDescription}</h4>
             </div>
         );

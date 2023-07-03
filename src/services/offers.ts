@@ -133,6 +133,7 @@ export const createOffer = async (payloads: any) => {
 export const updateOffer = async (offerId: undefined | string, payloads: any) => {
     try {
         const response = await $authApi.patch(`${apiRoutes.ACTIONS_OFFER}/${offerId}`, payloads)
+        return response.data
     } catch (error) {
         console.log(error)
     }

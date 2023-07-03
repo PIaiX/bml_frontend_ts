@@ -175,7 +175,7 @@ const AdvPage: FC = () => {
     }
     let swiperPB = 50;
 
-    // if (window.innerWidth > 1400) swiperPB = 50
+    // console.log(offer.item?.description)
     const createWithOfferTopicMessage = () => {
         if (offer.item) {
             emitCreateMessage({userId: offer.item?.userId, text: messagePayload?.text, topic: offer.item?.title})
@@ -559,7 +559,7 @@ const AdvPage: FC = () => {
                 </div>
 
                 <div className="row">
-                    <div className="col-md-4 col-lg-3 position-relative">
+                    <div className="col-md-5 col-lg-4 col-xl-3 position-relative">
                         <div className="left_menu">
                             <LeftMenuInOfferContainer category={offer?.item?.category} video={offer?.item?.video}/>
 
@@ -599,7 +599,7 @@ const AdvPage: FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-8 col-lg-9">
+                    <div className="col-md-7 col-lg-8 col-xl-9">
                         <div className="offer-page-main">
                             <hr className="mt-md-0"/>
                             <div className="d-flex align-items-center f_09 mb-4 mb-lg-5">

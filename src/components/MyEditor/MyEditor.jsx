@@ -2,8 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Editor, EditorState, RichUtils, convertFromRaw, convertToRaw} from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import './index.css'
-import InlineStyleControls from "./Components/InlineStyleControls";
-import BlockStyleControls from "./Components/BlockStyleControls";
 
 export const MyEditor = (props) => {
     const {value, onChange, readOnly, placeholder} = props
@@ -12,7 +10,7 @@ export const MyEditor = (props) => {
 
     let forOldEvent=EditorState.createEmpty()
     try {
-        forOldEvent = value ?
+        forOldEvent === value ?
             EditorState.createWithContent(convertFromRaw(JSON.parse(value)))
             : EditorState.createEmpty()
     }catch (e){
@@ -24,7 +22,7 @@ export const MyEditor = (props) => {
 
     useEffect(() => {
         try {
-            if (value && !editorState.getCurrentContent().hasText()) {
+            if (value && (!editorState.getCurrentContent().hasText() || readOnly)) {
                 setEditorState(value ?
                     EditorState.createWithContent(convertFromRaw(JSON.parse(value)))
                     : EditorState.createEmpty())
@@ -66,14 +64,6 @@ export const MyEditor = (props) => {
     const onTab = (e) => {
         const maxDepth = 4;
         setEditorState(RichUtils.onTab(e, editorState, maxDepth));
-    }
-
-    const toggleBlockType = (blockType) => {
-        setEditorState(RichUtils.toggleBlockType(editorState, blockType));
-    }
-
-    const toggleInlineStyle = (inlineStyle) => {
-        setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
     }
 
     const getBlockStyle = (block) => {
