@@ -83,6 +83,7 @@ const Service: FC = () => {
     }, [])
 
     useEffect(() => {
+        console.log(12)
         if (currentArea) {
             getAllSubsections(currentArea).then((res) => res && setSubSections(res))
         }
@@ -124,15 +125,13 @@ const Service: FC = () => {
 
     const onApplyFilters = (data: IPayloadsFilter) => {
         setSelectedPage(0)
-        if (user) {
-            getOffers(1, limit, categoryId, user?.id, data, false)
+            getOffers(1, limit, categoryId, 2, data, false)
                 .then((res) => {
                     res && setOffers({isLoaded: true, items: res?.data, meta: res?.meta})
                 })
                 .catch((error) => {
                     setOffers({isLoaded: true, items: null, meta: null})
                 })
-        }
     }
 
     const onReset = (data: IPayloadsFilter) => {
@@ -219,6 +218,7 @@ const Service: FC = () => {
                 {categoryId === 4 && (
                     <SearchForm
                         onReset={onReset}
+                        selectCurrentArea={selectCurrentArea}
                         areas={areas}
                         cities={cities}
                         subSections={subSections}

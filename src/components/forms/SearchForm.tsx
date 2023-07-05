@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, {useState} from 'react'
 import Collapse from 'react-bootstrap/Collapse'
-import { MdCached } from 'react-icons/md'
-import { IOffersAreaItem, IOffersSubSectionsItem, IPayloadsFilter } from '../../types/offers'
-import { useForm } from 'react-hook-form'
+import {MdCached} from 'react-icons/md'
+import {IOffersAreaItem, IOffersSubSectionsItem, IPayloadsFilter} from '../../types/offers'
+import {useForm} from 'react-hook-form'
 import ValidateWrapper from '../utils/ValidateWrapper'
 // import CitiesForm from "./CitiesForm";
 import FunctionForPrice from '../../helpers/FunctionForPrice'
-import { FromStringToNumber } from '../../helpers/FromStringToNumber'
+import {FromStringToNumber} from '../../helpers/FromStringToNumber'
 import CitiesForm from './CitiesForm'
 
 type Props = {
@@ -22,19 +22,19 @@ type Props = {
 }
 
 const SearchForm: React.FC<Props> = ({
-    foundCount,
-    onApplyFilters,
-    modules = [],
-    areas,
-    cities,
-    subSections,
-    selectCurrentArea,
-    onReset,
-}) => {
+                                         foundCount,
+                                         onApplyFilters,
+                                         modules = [],
+                                         areas,
+                                         cities,
+                                         subSections,
+                                         selectCurrentArea,
+                                         onReset,
+                                     }) => {
     const [isShowCollapse, setIsShowCollapse] = useState(true)
     const {
         register,
-        formState: { errors },
+        formState: {errors},
         handleSubmit,
         getValues,
         reset,
@@ -52,7 +52,7 @@ const SearchForm: React.FC<Props> = ({
             investmentsFrom: null,
             investmentsTo: null,
             projectStage: '',
-            paybackTime: '0',
+            paybackTime: null,
             priceFrom: null,
             priceTo: null,
             profitFrom: null,
@@ -109,7 +109,8 @@ const SearchForm: React.FC<Props> = ({
             <Collapse className="collapse-filter" in={isShowCollapse} dimension="height">
                 <div id="collapse-content">
                     <div className="row">
-                        <div className="col-sm-6 col-md-4 mb-2 mb-lg-2 collapse-content__module collapse-content__module_business">
+                        <div
+                            className="col-sm-6 col-md-4 mb-2 mb-lg-2 collapse-content__module collapse-content__module_business">
                             <ValidateWrapper error={errors?.areaId}>
                                 <select
                                     {...register('areaId', {
@@ -138,34 +139,33 @@ const SearchForm: React.FC<Props> = ({
                                 </select>
                             </ValidateWrapper>
                         </div>
-                        <div className="col-sm-6 col-md-4 mb-2 mb-lg-2 collapse-content__module collapse-content__module_category">
-                            <ValidateWrapper error={errors?.subsectionId}>
-                                <select
-                                    {...register('subsectionId', {
-                                        required: 'Выберите значение!',
-                                    })}
-                                >
-                                    <option value={''} disabled>
-                                        Категория
-                                    </option>
-                                    {subSections ? (
-                                        subSections.map((i) => (
-                                            <option key={i?.id} value={i?.id}>
-                                                {i?.name}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option disabled>Пусто</option>
-                                    )}
-                                </select>
-                            </ValidateWrapper>
+                        <div
+                            className="col-sm-6 col-md-4 mb-2 mb-lg-2 collapse-content__module collapse-content__module_category">
+                            <select
+                                {...register('subsectionId')}
+                            >
+                                <option value={''} disabled>
+                                    Категория
+                                </option>
+                                {subSections ? (
+                                    subSections.map((i) => (
+                                        <option key={i?.id} value={i?.id}>
+                                            {i?.name}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option disabled>Пусто</option>
+                                )}
+                            </select>
                         </div>
-                        <div className="col-sm-6 col-md-4 mb-2 mb-lg-2 collapse-content__module collapse-content__module_city">
+                        <div
+                            className="col-sm-6 col-md-4 mb-2 mb-lg-2 collapse-content__module collapse-content__module_city">
                             {/*<CitiesForm/>*/}
-                            <CitiesForm setVal={setCity} />
+                            <CitiesForm setVal={setCity}/>
                         </div>
                         {modules.includes('projectStage') && (
-                            <div className="col-sm-6 mb-2 mb-lg-2 collapse-content__module collapse-content__module_project">
+                            <div
+                                className="col-sm-6 mb-2 mb-lg-2 collapse-content__module collapse-content__module_project">
                                 <select {...register('projectStage')}>
                                     <option value={''} disabled>
                                         Стадия реализации проекта
@@ -177,9 +177,10 @@ const SearchForm: React.FC<Props> = ({
                             </div>
                         )}
                         {modules.includes('paybackTime') && (
-                            <div className="col-sm-6 mb-2 mb-lg-2 collapse-content__module collapse-content__module_payback">
-                                <select defaultValue={0} {...register('paybackTime')}>
-                                    <option value={0}>
+                            <div
+                                className="col-sm-6 mb-2 mb-lg-2 collapse-content__module collapse-content__module_payback">
+                                <select {...register('paybackTime')}>
+                                    <option value={''}>
                                         Срок окупаемости
                                     </option>
                                     <option value={1}>до 3 месяцев</option>
@@ -196,12 +197,13 @@ const SearchForm: React.FC<Props> = ({
                             <div className=" mb-2 mb-lg-2 collapse-content__module collapse-content__module_word">
                                 <div className={'col-sm-6 mb-2 mb-lg-2'}>
                                     <div className="d-none d-md-block mb-1">Содержит слова:</div>
-                                    <input type="text" {...register('query')} placeholder="Введите поисковую фразу" />
+                                    <input type="text" {...register('query')} placeholder="Введите поисковую фразу"/>
                                 </div>
                             </div>
                         )}
                         {modules.includes('investments') && (
-                            <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_investment">
+                            <div
+                                className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_investment">
                                 <div className="mb-1">Объем инвестиций, руб.:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
@@ -228,7 +230,8 @@ const SearchForm: React.FC<Props> = ({
                             </div>
                         )}
                         {modules.includes('price') && (
-                            <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_net">
+                            <div
+                                className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_net">
                                 <div className="mb-1">Стоимость бизнеса:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
@@ -255,7 +258,8 @@ const SearchForm: React.FC<Props> = ({
                             </div>
                         )}
                         {modules.includes('profit') && (
-                            <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_net">
+                            <div
+                                className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_net">
                                 <div className="mb-1">Чистая прибыль, руб.:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
@@ -282,7 +286,8 @@ const SearchForm: React.FC<Props> = ({
                             </div>
                         )}
                         {modules.includes('profitPerMonth') && (
-                            <div className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_turnover">
+                            <div
+                                className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_turnover">
                                 <div className="mb-1">Оборот в месяц, руб.:</div>
                                 <div className="d-flex align-items-center">
                                     <span className="me-2">от</span>
@@ -308,7 +313,8 @@ const SearchForm: React.FC<Props> = ({
                                 </div>
                             </div>
                         )}
-                        <div className="col-sm-7 col-md-5 col-lg-4 d-flex justify-content-end align-items-center ms-auto">
+                        <div
+                            className="col-sm-7 col-md-5 col-lg-4 d-flex justify-content-end align-items-center ms-auto">
                             <button
                                 type="reset"
                                 className="d-flex align-items-center"
@@ -318,10 +324,11 @@ const SearchForm: React.FC<Props> = ({
                                     onReset(getValues())
                                 }}
                             >
-                                <MdCached className="f_15" />
+                                <MdCached className="f_15"/>
                                 <span className="f_09 ms-2 text-nowrap">Очистить фильтр</span>
                             </button>
-                            <button className="btn_main btn_2 ms-3 ms-sm-4" onClick={handleSubmit(BeforeOnApplyFilters)}>
+                            <button className="btn_main btn_2 ms-3 ms-sm-4"
+                                    onClick={handleSubmit(BeforeOnApplyFilters)}>
                                 Показать
                             </button>
                         </div>

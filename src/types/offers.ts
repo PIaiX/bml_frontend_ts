@@ -97,7 +97,7 @@ export type IPayloadsFilter = {
     investmentsFrom?: number | null
     investmentsTo?: number | null
     projectStage?: string
-    paybackTime?: string
+    paybackTime?: string | null
     priceFrom?: number | null
     priceTo?: number | null
     profitFrom?: number | null
