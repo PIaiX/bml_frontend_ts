@@ -132,7 +132,6 @@ const AdvertisingSection = () => {
         const req: any = {
             ...dat,
             userId: user?.id,
-            subsectionId: 86,
             image: data.image,
             adsTypeId: data.adv + 1,
             paymentMethod: data.paymentType,

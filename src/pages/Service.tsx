@@ -5,12 +5,12 @@ import 'swiper/css/pagination'
 import Loader from '../components/utils/Loader'
 import ServicePagination from '../components/utils/Pagination'
 import usePagination from '../hooks/pagination'
-import {useLocation, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import SearchForm from '../components/forms/SearchForm'
 import PartnersSite from '../components/PartnersSite'
 import NewsContainer from '../components/containers/News'
 import BannerContainer from '../components/containers/Banner'
-import {getAllAreas, getAllSubsections, getOffers} from '../services/offers'
+import {getAllAreas, getAllSubsections, getOffers, getPremiumSlots} from '../services/offers'
 import {getCity} from '../services/city'
 import {IOffersAreaItem, IOffersItem, IOffersMeta, IOffersSubSectionsItem, IPayloadsFilter} from '../types/offers'
 import {useAppDispatch, useAppSelector} from '../hooks/store'
@@ -26,13 +26,13 @@ import {useForm} from "react-hook-form";
 import {IUseStateReportType} from "../types/report";
 import {createReport, getAdvReportType} from "../services/reports";
 import {showAlert} from "../store/reducers/alertSlice";
+import AdvPreviewEmpty from "../components/AdvPreviewEmpty";
 
 const Service: FC = () => {
     const params = useParams()
     const categoryId = params.categoryId ? parseInt(params.categoryId) : 0
-    const [orderBy, setOrderBy] = useState<string>('')
+    const [orderBy, setOrderBy] = useState<string>('desc')
     const limit = 36
-    const {pathname} = useLocation()
     const dispatch = useAppDispatch()
 
     const ref = useRef<HTMLElement>(null)
@@ -83,7 +83,6 @@ const Service: FC = () => {
     }, [])
 
     useEffect(() => {
-        console.log(12)
         if (currentArea) {
             getAllSubsections(currentArea).then((res) => res && setSubSections(res))
         }
@@ -97,41 +96,50 @@ const Service: FC = () => {
         getAdvertisings(1).then(res => {
             res && setAdvertising(res)
         })
-
-        if (localStorage.getItem('token')) {
-            if (user?.id) {
-                getOffers(selectedPage + 1, limit, categoryId, user?.id, filters, false)
-                    .then((res) => {
-                        res && setOffers({isLoaded: true, items: res?.data, meta: res?.meta})
-                    })
-                    .catch((error) => {
-                        setOffers({isLoaded: true, items: null, meta: null})
-                    })
-            }
-        } else {
+        setOffers(prevState => ({...prevState, isLoaded: false}))
+        if (categoryId == 4 && selectedPage == 0) {
             getOffers(selectedPage + 1, limit, categoryId, null, filters, false)
                 .then((res) => {
-                    res && setOffers({isLoaded: true, items: res?.data, meta: res?.meta})
+                    if (res) {
+                        getPremiumSlots().then(res2 => {
+                            if (res2) {
+                                const offers = res2?.map((item: any) => item?.premiumFranchise?.offer)
+                                setOffers({
+                                    isLoaded: true,
+                                    items: offers,
+                                    meta: {...res?.meta, total: 36 + res?.meta?.total}
+                                })
+                            }
+                        })
+                    }
+                })
+        } else {
+            getOffers(selectedPage+(categoryId === 4 ? 0 : 1), limit, categoryId, null, {...filters, orderBy}, false)
+                .then((res) => {
+                    res && setOffers({
+                        isLoaded: true,
+                        items: res?.data,
+                        meta: {...res?.meta, total: (res?.meta?.total + (categoryId === 4 ? 36 :0))}
+                    })
                 })
                 .catch((error) => {
                     setOffers({isLoaded: true, items: null, meta: null})
                 })
         }
-    }, [selectedPage, orderBy, categoryId, user?.id, filters])
-
+    }, [selectedPage, orderBy, categoryId, filters])
     const selectCurrentArea = useCallback((areaId: number) => {
         setCurrentArea(areaId)
     }, [])
 
     const onApplyFilters = (data: IPayloadsFilter) => {
         setSelectedPage(0)
-            getOffers(1, limit, categoryId, 2, data, false)
-                .then((res) => {
-                    res && setOffers({isLoaded: true, items: res?.data, meta: res?.meta})
-                })
-                .catch((error) => {
-                    setOffers({isLoaded: true, items: null, meta: null})
-                })
+        getOffers(1, limit, categoryId, 2, data, false)
+            .then((res) => {
+                res && setOffers({isLoaded: true, items: res?.data, meta: res?.meta})
+            })
+            .catch((error) => {
+                setOffers({isLoaded: true, items: null, meta: null})
+            })
     }
 
     const onReset = (data: IPayloadsFilter) => {
@@ -153,8 +161,6 @@ const Service: FC = () => {
             })
             .catch(() => dispatch(showAlert({message: 'Произошла ошибка', typeAlert: 'bad'})))
     }
-    if(!offers.isLoaded)
-        return <main className={'d-flex justify-content-center py-5'}><Loader color={'#2E5193'} /></main>
     return (
         <main>
             <BannerContainer/>
@@ -227,154 +233,166 @@ const Service: FC = () => {
                         modules={['paybackTime', 'investments', 'query']}
                     />
                 )}
-                {offers.isLoaded && (
-                    <div className="sort mb-4">
-                        <ServicePagination
-                            nextLabel="❯"
-                            onPageChange={handlePageClick}
-                            forcePage={selectedPage}
-                            pageRangeDisplayed={3}
-                            marginPagesDisplayed={1}
-                            pageCount={pageCount}
-                            previousLabel="❮"
-                        />
-                        <div className="mr-2 mr-sm-0">
-                            Показано {paginationItems && paginationItems.length}{' '}
-                            <span className="d-none d-xl-inline">предложений из</span>
-                            <span className="d-inline d-xl-none">/</span> {offers?.items && offers?.meta?.total}
-                        </div>
-                        <div className="d-flex align-items-center">
-                            <span className="f_09 d-none d-lg-block">Сортировать:</span>
-                            <select
-                                name="orderBy"
-                                value={filters?.orderBy}
-                                className="f_08 ms-2 pe-4"
-                                onChange={(e) => setFilters((prevState) => ({...prevState, orderBy: e.target.value}))}
-                            >
-                                <option value={''} disabled>
-                                    по дате публикации
-                                </option>
-                                <option value={'desc'}>сначала новые</option>
-                                <option value={'asc'}>сначала старые</option>
-                            </select>
-                        </div>
-                    </div>
-                )}
-
-                {offers.isLoaded && (
-                    <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
-                        {offers?.isLoaded ? (
-                            offers?.items && offers?.items?.length ? (
-                                paginationItems?.slice(0, 12).map((item: IOffersItem) => (
-                                    <div className="col position-relative" key={item.id}>
-                                        <AdvPreview
-                                            id={item.id}
-                                            image={item.image}
-                                            title={item.title}
-                                            investments={item.investments}
-                                            favorite={item.isFavorite}
-                                            price={categoryId === 3 ? item.price : undefined}
-                                            isPricePerMonthAbsolute={true}
-                                        />
-                                    </div>
-                                ))
-                            ) : (
-                                <h6 className="w-100 p-5 text-center">Ничего нет</h6>
-                            )
-                        ) : (
-                            <div className="p-5 w-100 d-flex justify-content-center">
-                                <Loader color="#343434"/>
+                {
+                    offers.isLoaded ?
+                        <>
+                            <div className="sort mb-4">
+                                <ServicePagination
+                                    nextLabel="❯"
+                                    onPageChange={handlePageClick}
+                                    forcePage={selectedPage}
+                                    pageRangeDisplayed={3}
+                                    marginPagesDisplayed={1}
+                                    pageCount={pageCount}
+                                    previousLabel="❮"
+                                />
+                                <div className="mr-2 mr-sm-0">
+                                    Показано {paginationItems && paginationItems.length}{' '}
+                                    <span className="d-none d-xl-inline">предложений из</span>
+                                    <span className="d-inline d-xl-none">/</span> {offers?.items && offers?.meta?.total}
+                                </div>
+                                <div className="d-flex align-items-center">
+                                    <span className="f_09 d-none d-lg-block">Сортировать:</span>
+                                    <select
+                                        name="orderBy"
+                                        value={orderBy}
+                                        className="f_08 ms-2 pe-4"
+                                        onChange={(e) => setOrderBy(e.target.value)}
+                                    >
+                                        <option value={''} disabled>
+                                            по дате публикации
+                                        </option>
+                                        <option value={'desc'}>сначала новые</option>
+                                        <option value={'asc'}>сначала старые</option>
+                                    </select>
+                                </div>
                             </div>
-                        )}
-                        {advertising && advertising[0] && advertising[0].image &&
-                            <div className="blockAdvertising position-relative">
-                                <img className={"img-advertising"} src={checkPhotoPath(advertising[0].image)} alt="" onClick={()=>window.open(`${advertising[0]?.link}`)} />
-                                {user &&
-                                    <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
-                                        setIdAdvForBad(advertising[0].id)
-                                        setIsShowModalReport(true)
-                                    }}>
-                                        <MdInfoOutline className="f_11 gray"/>
-                                    </div>
+                            <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 g-sm-3 g-xl-4">
+                                {offers?.items && offers?.items?.length ? (
+                                        paginationItems?.slice(0, 12).map((item: IOffersItem, index) => (
+                                            <div className="col position-relative" key={item?.id || index}>
+                                                {
+                                                    (item?.isVerified && !item?.isArchived && !item?.isBanned) ?
+                                                        <AdvPreview
+                                                            id={item.id}
+                                                            image={item.image}
+                                                            title={item.title}
+                                                            investments={item.investments}
+                                                            favorite={item.isFavorite}
+                                                            price={categoryId === 3 ? item.price : undefined}
+                                                            isPricePerMonthAbsolute={true}
+                                                        />
+                                                        : <AdvPreviewEmpty/>
+                                                }
+                                            </div>
+                                        ))
+                                    )
+                                    : <h6 className="w-100 p-5 text-center">Ничего нет</h6>
                                 }
-                            </div>}
-                        {offers?.items && offers?.items?.length
-                            ? paginationItems?.slice(12, 24).map((item: IOffersItem) => (
-                                <div className="col position-relative" key={item.id}>
-                                    <AdvPreview
-                                        id={item.id}
-                                        image={item.image}
-                                        title={item.title}
-                                        favorite={item.isFavorite}
-                                        investments={item.investments}
-                                        price={categoryId === 3 ? item.price : undefined}
-                                        isPricePerMonthAbsolute={true}
-                                    />
+                                {advertising && advertising[0] && advertising[0].image &&
+                                    <div className="blockAdvertising position-relative">
+                                        <img className={"img-advertising"} src={checkPhotoPath(advertising[0].image)}
+                                             alt=""
+                                             onClick={() => window.open(`${advertising[0]?.link}`)}/>
+                                        {user &&
+                                            <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
+                                                setIdAdvForBad(advertising[0].id)
+                                                setIsShowModalReport(true)
+                                            }}>
+                                                <MdInfoOutline className="f_11 gray"/>
+                                            </div>
+                                        }
+                                    </div>}
+                                {offers?.items && offers?.items?.length
+                                    ? paginationItems?.slice(12, 24).map((item: IOffersItem, index) => (
+                                        <div className="col position-relative" key={item?.id || index}>
+                                            {
+                                                (item?.isVerified && !item?.isArchived && !item?.isBanned) ?
+                                                    <AdvPreview
+                                                        id={item.id}
+                                                        image={item.image}
+                                                        title={item.title}
+                                                        favorite={item.isFavorite}
+                                                        investments={item.investments}
+                                                        price={categoryId === 3 ? item.price : undefined}
+                                                        isPricePerMonthAbsolute={true}
+                                                    />
+                                                    : <AdvPreviewEmpty/>
+                                            }
+                                        </div>
+                                    ))
+                                    : null}
+                                {advertising && advertising[1] && advertising[1]?.image &&
+                                    <div className={"blockAdvertising position-relative"}>
+                                        <img className={"img-advertising"} src={checkPhotoPath(advertising[1].image)}
+                                             alt=""
+                                             onClick={() => window.open(`${advertising[1]?.link}`)}/>
+                                        {user &&
+                                            <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
+                                                setIdAdvForBad(advertising[0].id)
+                                                setIsShowModalReport(true)
+                                            }}>
+                                                <MdInfoOutline className="f_11 gray"/>
+                                            </div>
+                                        }
+                                    </div>}
+                                {offers?.items && offers?.items?.length
+                                    ? paginationItems?.slice(24, offers?.items?.length).map((item: IOffersItem, index) => (
+                                        <div className="col position-relative" key={index}>
+                                            {
+                                                (item?.isVerified && !item?.isArchived && !item?.isBanned) ?
+                                                    <AdvPreview
+                                                        id={item.id}
+                                                        image={item.image}
+                                                        title={item.title}
+                                                        favorite={item.isFavorite}
+                                                        investments={item.investments}
+                                                        price={categoryId === 3 ? item.price : undefined}
+                                                        isPricePerMonthAbsolute={true}
+                                                    />
+                                                    : <AdvPreviewEmpty/>
+                                            }
+                                        </div>
+                                    ))
+                                    : null}
+                            </div>
+                            <div className="sort mt-4">
+                                <ServicePagination
+                                    nextLabel="❯"
+                                    onPageChange={handlePageClick}
+                                    forcePage={selectedPage}
+                                    pageRangeDisplayed={3}
+                                    marginPagesDisplayed={1}
+                                    pageCount={pageCount}
+                                    previousLabel="❮"
+                                />
+                                <div className="mr-2 mr-sm-0">
+                                    Показано {paginationItems && paginationItems.length}{' '}
+                                    <span className="d-none d-xl-inline">предложений из</span>
+                                    <span className="d-inline d-xl-none">/</span> {offers?.items && offers?.meta?.total}
                                 </div>
-                            ))
-                            : null}
-                        {advertising && advertising[1] && advertising[1]?.image &&
-                            <div className={"blockAdvertising position-relative"}>
-                                <img className={"img-advertising"} src={checkPhotoPath(advertising[1].image)} alt="" onClick={()=>window.open(`${advertising[1]?.link}`)} />
-                                {user &&
-                                    <div className={'badAdv'} title={'Пожаловаться'} onClick={() => {
-                                        setIdAdvForBad(advertising[0].id)
-                                        setIsShowModalReport(true)
-                                    }}>
-                                        <MdInfoOutline className="f_11 gray"/>
-                                    </div>
-                                }
-                            </div>}
-                        {offers?.items && offers?.items?.length
-                            ? paginationItems?.slice(24, offers?.items?.length).map((item: IOffersItem) => (
-                                <div className="col position-relative" key={item.id}>
-                                    <AdvPreview
-                                        id={item.id}
-                                        image={item.image}
-                                        title={item.title}
-                                        favorite={item.isFavorite}
-                                        investments={item.investments}
-                                        price={categoryId === 3 ? item.price : undefined}
-                                        isPricePerMonthAbsolute={true}
-                                    />
+                                <div className="d-flex align-items-center">
+                                    <span className="f_09 d-none d-lg-block">Сортировать:</span>
+                                    <select
+                                        name="orderBy"
+                                        value={filters?.orderBy}
+                                        className="f_08 ms-2 pe-4"
+                                        onChange={(e) => setFilters((prevState) => ({
+                                            ...prevState,
+                                            orderBy: e.target.value
+                                        }))}
+                                    >
+                                        <option value={''} disabled>
+                                            по дате публикации
+                                        </option>
+                                        <option value={'desc'}>сначала новые</option>
+                                        <option value={'asc'}>сначала старые</option>
+                                    </select>
                                 </div>
-                            ))
-                            : null}
-                    </div>
-                )}
-                {offers.isLoaded && (
-                    <div className="sort mt-4">
-                        <ServicePagination
-                            nextLabel="❯"
-                            onPageChange={handlePageClick}
-                            forcePage={selectedPage}
-                            pageRangeDisplayed={3}
-                            marginPagesDisplayed={1}
-                            pageCount={pageCount}
-                            previousLabel="❮"
-                        />
-                        <div className="mr-2 mr-sm-0">
-                            Показано {paginationItems && paginationItems.length}{' '}
-                            <span className="d-none d-xl-inline">предложений из</span>
-                            <span className="d-inline d-xl-none">/</span> {offers?.items && offers?.meta?.total}
-                        </div>
-                        <div className="d-flex align-items-center">
-                            <span className="f_09 d-none d-lg-block">Сортировать:</span>
-                            <select
-                                name="orderBy"
-                                value={filters?.orderBy}
-                                className="f_08 ms-2 pe-4"
-                                onChange={(e) => setFilters((prevState) => ({...prevState, orderBy: e.target.value}))}
-                            >
-                                <option value={''} disabled>
-                                    по дате публикации
-                                </option>
-                                <option value={'desc'}>сначала новые</option>
-                                <option value={'asc'}>сначала старые</option>
-                            </select>
-                        </div>
-                    </div>
-                )}
+                            </div>
+                        </>
+                        : <main className={'d-flex justify-content-center py-5'}><Loader color={'#2E5193'}/></main>
+                }
             </section>
             <CustomModal
                 isShow={isShowModalReport}

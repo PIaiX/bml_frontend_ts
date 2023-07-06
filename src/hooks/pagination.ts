@@ -7,9 +7,7 @@ const usePagination = (items: any, limit: number, total: number | undefined, cur
     const [selectedPage, setSelectedPage] = useState<number>(0)
 
     useEffect(() => {
-        const endOffset = itemOffset + limit
-
-        setPaginationItems(items?.slice(itemOffset, endOffset))
+        setPaginationItems(items)
         if ((total && limit) || (total === 0 && limit)) {
             setPageCount(Math.ceil(total / limit))
         }

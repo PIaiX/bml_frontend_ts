@@ -71,7 +71,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment, pro
     }
     const [paymentType, setPaymentType] = useState('INTERNAL');
     const clickPay=()=>{
-       setPremiumSlot({paymentMethod:paymentType, offerId:data?.id, slot:data?.slot, placedForMonths:data?.placedForMonths*3})
+       setPremiumSlot(paymentType, data?.id, data?.slot, data?.placedForMonths*3)
            .then(res=>{
                if(res){
                    getBalance().then(res=>{
@@ -108,7 +108,7 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment, pro
                             key={i.id}
                             onClick={() => {
                                 currentId(i.id)
-                                if(!i.isBlocked && idPost!==i.id && i.employedUntillForUser===undefined && i.type!=='big'  && !i.premiumFranchise){
+                                if(!i.isBlocked && idPost!==i.id && i.employedUntillForUser===undefined && i.type!=='big'  && (!i.premiumFranchise || i?.premiumFranchise?.canOutbid==true)){
                                     const newSum=data.placedForMonths==='1'?banners[i.id-1].priceThreeMonths:banners[i.id-1].priceSixMonths
                                     setData((prevState: any) => ({
                                         ...prevState,

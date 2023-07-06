@@ -57,7 +57,6 @@ const AdvPreview: FC<Props> = (props) => {
                         </div>
                     </div>
                 </div>
-
             </Link>
         </>
     )

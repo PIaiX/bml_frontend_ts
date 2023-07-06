@@ -1,11 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react'
-import {onImageHandler} from '../../helpers/formHandlers'
+import {onImageHandler} from '../../../helpers/formHandlers'
 import {Link, useLocation, useNavigate, useParams} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
-import {useImageViewer} from '../../hooks/imageViewer'
-import {useImagesViewer} from '../../hooks/imagesViewer'
-import CustomModal from '../../components/utils/CustomModal'
-import {getCity} from '../../services/city'
+import {useImageViewer} from '../../../hooks/imageViewer'
+import {useImagesViewer} from '../../../hooks/imagesViewer'
+import CustomModal from '../../../components/utils/CustomModal'
+import {getCity} from '../../../services/city'
 import {
     createOffer,
     deleteImageOffer,
@@ -14,25 +14,26 @@ import {
     getOneOffer,
     setPremiumSlot,
     updateOffer,
-} from '../../services/offers'
-import {IOfferForm, IOfferItem, IOffersAreaItem, IOffersSubSectionsItem} from '../../types/offers'
-import {useAppDispatch, useAppSelector} from '../../hooks/store'
-import {IUser} from '../../types/user'
-import ValidateWrapper from '../../components/utils/ValidateWrapper'
+} from '../../../services/offers'
+import {IOfferForm, IOfferItem, IOffersAreaItem, IOffersSubSectionsItem} from '../../../types/offers'
+import {useAppDispatch, useAppSelector} from '../../../hooks/store'
+import {IUser} from '../../../types/user'
+import ValidateWrapper from '../../../components/utils/ValidateWrapper'
 import {useForm, Controller} from 'react-hook-form'
-import {convertLocaleDate} from '../../helpers/convertLocaleDate'
-import {showAlert} from '../../store/reducers/alertSlice'
-import {IUseStateItem} from '../../types'
-import {checkPhotoPath} from '../../helpers/photoLoader'
-import {FromStringToNumber} from '../../helpers/FromStringToNumber'
-import FunctionForPrice from '../../helpers/FunctionForPrice'
-import CitiesForm from '../../components/forms/CitiesForm'
-import Premium from "./Premium";
-import {setBalance} from "../../store/reducers/userSlice";
-import {GetPromo} from "../../services/Promo";
-import {getBalance} from "../../services/users";
-import {MyEditor} from "../../components/MyEditor/MyEditor";
-import useAnchor from "../../hooks/useAnchor";
+import {convertLocaleDate} from '../../../helpers/convertLocaleDate'
+import {showAlert} from '../../../store/reducers/alertSlice'
+import {IUseStateItem} from '../../../types'
+import {checkPhotoPath} from '../../../helpers/photoLoader'
+import {FromStringToNumber} from '../../../helpers/FromStringToNumber'
+import FunctionForPrice from '../../../helpers/FunctionForPrice'
+import CitiesForm from '../../../components/forms/CitiesForm'
+import Premium from "../Premium";
+import {setBalance} from "../../../store/reducers/userSlice";
+import {GetPromo} from "../../../services/Promo";
+import {getBalance} from "../../../services/users";
+import {MyEditor} from "../../../components/MyEditor/MyEditor";
+import useAnchor from "../../../hooks/useAnchor";
+import usePay from "./hooks/usePay";
 
 const NewAd = () => {
     const [category, setCategory] = useState<number | undefined>(0)
@@ -72,6 +73,8 @@ const NewAd = () => {
         isLoaded: false,
         item: null,
     })
+    const afterPay= usePay()
+
     const getPromo = (value: string) => {
         GetPromo(value)
             .then((res: any) => {
@@ -284,58 +287,20 @@ const NewAd = () => {
         if(formInfo?.videoThumbnail)
             req={...req, videoThumbnail:formInfo?.videoThumbnail}
 
-        for (const key in req) {
+        for (const key in req)
             formData.append(key, req[key])
-        }
-        imageViewer.forEach((image: any) => {
-            formData.append('images[]', image?.initialFile)
-        })
+        imageViewer.forEach((image: any) => formData.append('images[]', image?.initialFile))
+
         createOffer(formData)
             .then((res) => {
-                if (premium) setPremiumSlot({
-                    paymentMethod: paymentType,
-                    offerId: res.id,
-                    slot: premiumInf?.slot,
-                    placedForMonths: premiumInf?.placedForMonths * 3
-                })
-                    .then(res => {
-                        if (res) {
-                            getBalance().then(res => {
-                                dispatch(setBalance(res))
-                                dispatch(showAlert({
-                                    message: 'Объявление успешно создано! Ждите одобрения модерации...',
-                                    typeAlert: 'good'
-                                }))
-                                setTimeout(() => {
-                                    navigate('/account/my-ads')
-                                }, 1000)
-                            })
-                        }
-                    }).catch(() => {
-                        getBalance().then(res => {
-                            dispatch(setBalance(res))
-                            dispatch(showAlert({message: 'Ошибка с премиум размещением!', typeAlert: 'bad'}))
-                            setTimeout(() => {
-                                navigate('/account/my-ads')
-                            }, 1000)
-                        })
-                    })
-                else {
-                    getBalance().then(res => {
-                        dispatch(setBalance(res))
-                        dispatch(showAlert({
-                            message: 'Объявление успешно создано! Ждите одобрения модерации...',
-                            typeAlert: 'good'
-                        }))
-                        setTimeout(() => {
-                            navigate('/account/my-ads')
-                        }, 1000)
-                    })
+                if (res && premium)
+                    setPremiumSlot(paymentType, res.id, premiumInf?.slot, premiumInf?.placedForMonths * 3)
+                        .finally(()=>afterPay(res))
+                else{
+                    afterPay(res)
                 }
             })
-            .catch((error) => {
-                dispatch(showAlert({message: 'Произошла ошибка!', typeAlert: 'bad'}))
-            })
+            .catch(() => afterPay(null))
     }
 
     const saveChanges = (props:IOfferForm) => {
@@ -350,8 +315,11 @@ const NewAd = () => {
             dateOfCreation: dateNew ? dateNew : '',
             userId: user?.id,
             image: formInfo?.image || '',
-            isPricePerMonthAbsolute
+            isPricePerMonthAbsolute,
+            placedForMonths,
+            paymentType
         }
+
 
         if(video!=''){
             if(formInfo?.videoThumbnail)
@@ -365,32 +333,19 @@ const NewAd = () => {
         imageViewer.forEach((image: any) => {
             formData.append('images[]', image?.initialFile)
         })
-        updateOffer(id && id, formData)
+
+        updateOffer(id, formData)
             .then(res => {
-                if(res){
-                    getBalance().then(res => {dispatch(setBalance(res))})
-                    dispatch(
-                        showAlert({
-                            message: 'Объявление успешно отредактировано! Ждите одобрения модерации...',
-                            typeAlert: 'good',
-                        })
-                    )
-                    setTimeout(() => {
-                        navigate('/account/my-ads')
-                    }, 1000)
-                }
-                else {
-                    dispatch(
-                        showAlert({
-                        message: 'Оплата не прошла',
-                        typeAlert: 'bad',
-                    })
-                    )
+                if (res){
+                    if (premium)
+                        setPremiumSlot(paymentType, res.body?.id, premiumInf?.slot, premiumInf?.placedForMonths * 3)
+                            .finally(()=>afterPay(res))
+                    else{
+                        afterPay(res, 'Объявление успешно отредактировано! Ждите одобрения модерации...')
+                    }
                 }
             })
-            .catch((error) => {
-                dispatch(showAlert({message: 'Произошла ошибка!', typeAlert: 'bad'}))
-            })
+            .catch(() => afterPay(null))
     }
 
     const [city, setCity] = useState<string>('')
@@ -404,7 +359,6 @@ const NewAd = () => {
 
     const filterFunc = (data: any) => {
         if (city === '') return 0
-
         // избавляем наши числа от пробелов
         let ValuesFroPrice = ['branchCount', 'price', 'investments', 'pricePerMonth', 'profitPerMonth', 'profit', 'soldBranchCount']
             .reduce((oldValue, element) => {
@@ -413,7 +367,6 @@ const NewAd = () => {
                 const el = FromStringToNumber(x)
                 return el ? {...oldValue, [element]: el} : oldValue
     }, {})
-        console.log(ValuesFroPrice)
         data = {
             ...data,
             ...ValuesFroPrice,
@@ -482,6 +435,7 @@ const NewAd = () => {
                                     setFormInfo({category: +e.target.value})
                                 },
                             })}
+                            disabled={id?true:false}
                         >
                             <option value={0}>Поиск инвесторов</option>
                             <option value={1}>Предложения инвесторов</option>

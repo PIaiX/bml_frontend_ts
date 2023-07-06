@@ -6,7 +6,7 @@ import ViewProfile from '../pages/profile/ViewProfile'
 import Instructions from '../pages/profile/Instructions'
 import ProfileSettings from '../pages/profile/ProfileSettings'
 import UserAds from '../pages/profile/UserAds'
-import NewAd from '../pages/profile/NewAd'
+import NewAd from '../pages/profile/NewAd/NewAd'
 import Premium from '../pages/profile/Premium'
 import Favorites from '../pages/profile/Favorites'
 import Chat from '../pages/profile/Chat'
@@ -19,7 +19,6 @@ import Partners from '../pages/profile/Partners'
 import ChatWindowEmpty from "../pages/profile/ChatWindowEmpty";
 import Banners from "../pages/profile/Banners";
 import PayHistory from "../pages/PayHistory";
-import {IUser} from "../types/user";
 import {useAppSelector} from "../hooks/store";
 import ProfileBanned from "../wrapper/ProfileBanned";
 import AdvertisingEdit from "../pages/AdvertisingEdit/AdvertisingEdit";

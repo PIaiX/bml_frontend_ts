@@ -68,16 +68,16 @@ export const getOneOffer = async (id: string, userId: number | string = '') => {
 
 export const getPremiumSlots = async () => {
     try {
-        const response = await $authApi.get(`${apiRoutes.GET_PREMIUM_SLOTS}`)
+        const response = await $api.get(`${apiRoutes.GET_PREMIUM_SLOTS}`)
         return response?.data?.body.data
     } catch (error) {
         console.log(error)
     }
 }
 
-export const setPremiumSlot = async (payload:any) => {
+export const setPremiumSlot = async (paymentMethod:any, offerId:any, slot:any, placedForMonths:any) => {
     try {
-        const response = await $authApi.post(`${apiRoutes.SET_PREMIUM_FRANCHISES}`, payload)
+        const response = await $authApi.post(`${apiRoutes.SET_PREMIUM_FRANCHISES}`, {paymentMethod, offerId, slot, placedForMonths})
         return response?.data?.body
     } catch (error) {
         console.log(error)

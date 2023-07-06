@@ -24,6 +24,7 @@ export type IOffersSubSectionsItem = {
 
 export type IOffersItem = {
     id: number
+    isBanned:boolean
     isArchived: boolean
     viewsCount: number
     slug: string

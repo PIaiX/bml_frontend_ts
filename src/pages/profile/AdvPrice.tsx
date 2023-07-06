@@ -21,7 +21,7 @@ const AdvPrice = (props:IOPremium) => {
             <div className='text'>
                 <h6 className='mt-1 mb-2 overflow-hidden' style={{textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{props.premiumFranchise? props.premiumFranchise.offer.title : props.title}</h6>
                 {
-                    (props.premiumFranchise)
+                    (props?.premiumFranchise?.canOutbid==false)
                         ? <div className='red mb-2 mb-sm-3'>Занято{lastDate?.slice(lastDate?.indexOf('-')+1)}</div>
                         : <div className='mb-2 mb-sm-3'>Свободно</div>
                 }

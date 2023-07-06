@@ -16,13 +16,13 @@ const BannerCard: FC<propsInterFace> = (props) => {
         <div className={'mx-sm-4 my-md-5 my-sm-3 py-1 ad-preview'}>
             <div className="d-flex flex-column flex-sm-row align-items-stretch flex-1">
                 <div className="img acc-box">
-                    <NavLink to={`/adv-page/${props?.id}`}>
+                    <NavLink to={`/account/advertising-section/${props?.id}`}>
                         <img src={checkPhotoPath(props?.image)} alt={props.title}/>
                     </NavLink>
                 </div>
                 <div className="text mx-md-4 mx-sm-4">
                     <div>
-                        <NavLink to={`/adv-page/${props?.id}`}>
+                        <NavLink to={`/account/advertising-section/${props?.id}`}>
                             <div>
                                 {props?.title?.slice(0,15)}
                                 {props?.title?.length>15 && '...'}

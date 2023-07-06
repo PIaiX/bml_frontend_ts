@@ -37,6 +37,7 @@ export type IOPremium={
     premiumFranchise?:premiumFranchise
 }
 interface premiumFranchise{
+    canOutbid:boolean
     timeBeforeArchive:string
     offer:IOfferItem
 }
