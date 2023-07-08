@@ -1,20 +1,20 @@
-import React, { FC, useEffect, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
-import { MdAddCircle, MdOutlineArrowBack } from 'react-icons/md'
-import { useAppSelector } from '../../hooks/store'
-import { IUser } from '../../types/user'
-import { checkPhotoPath } from '../../helpers/photoLoader'
+import React, {FC, useEffect, useState} from 'react'
+import {Link, NavLink} from 'react-router-dom'
+import {MdAddCircle, MdOutlineArrowBack} from 'react-icons/md'
+import {useAppSelector} from '../../hooks/store'
+import {IUser} from '../../types/user'
+import {checkPhotoPath} from '../../helpers/photoLoader'
 import {getCurrentFriends, getIncomingFriends} from '../../services/friends'
-import { IUseStateItems } from '../../types'
-import { IFriendsItem, IFriendsMeta } from '../../types/friends'
+import {IUseStateItems} from '../../types'
+import {IFriendsItem, IFriendsMeta} from '../../types/friends'
 import Loader from '../../components/utils/Loader'
-import { getUsersOffersNotArchive } from '../../services/offers'
-import { IOffersItem, IOffersMeta } from '../../types/offers'
+import {getUsersOffersNotArchive} from '../../services/offers'
+import {IOffersItem, IOffersMeta} from '../../types/offers'
 
 const UserProfile: FC = () => {
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
     const [sliceNumber, setSliceNumber] = useState(6)
-    const [incomingFriends, setIncomingFriends] =useState<number>()
+    const [incomingFriends, setIncomingFriends] = useState<number>(0)
     const [currentFriends, setCurrentFriends] = useState<IUseStateItems<IFriendsItem, IFriendsMeta>>({
         isLoaded: false,
         meta: null,
@@ -30,19 +30,19 @@ const UserProfile: FC = () => {
         if (user?.id) {
 
             getIncomingFriends(user?.id, 1, 1000, 'desc')
-                .then((res) => res && setIncomingFriends(res.meta?.total ))
+                .then((res) => res && setIncomingFriends(res.meta?.total))
 
             getCurrentFriends(user?.id, 1, 6, 'desc')
-                .then((res) => res && setCurrentFriends({ isLoaded: true, items: res.data, meta: res.meta }))
-                .catch((error) => setCurrentFriends({ isLoaded: true, items: null, meta: null }))
+                .then((res) => res && setCurrentFriends({isLoaded: true, items: res.data, meta: res.meta}))
+                .catch((error) => setCurrentFriends({isLoaded: true, items: null, meta: null}))
         }
     }, [user?.id])
 
     useEffect(() => {
         if (user?.id) {
             getUsersOffersNotArchive(user?.id, 1, 100, 'desc')
-                .then((res) => res && setUserOffers({ isLoaded: true, items: res.data, meta: res.meta }))
-                .catch((error) => setUserOffers({ isLoaded: true, items: null, meta: null }))
+                .then((res) => res && setUserOffers({isLoaded: true, items: res.data, meta: res.meta}))
+                .catch((error) => setUserOffers({isLoaded: true, items: null, meta: null}))
         }
     }, [user?.id])
     const getAddsContent = () => {
@@ -53,56 +53,59 @@ const UserProfile: FC = () => {
                     <div className={'row row-cols-3 g-1 g-sm-2 g-xl-4 text-center mt-1'} key={`user-offer-1112255${i}`}>
                         {userOffers?.items[i] && (
                             <div key={i}>
-                                <NavLink to={`/adv-page/${userOffers?.items[i].id}`} >
-                                <div className="acc-box ads d-flex flex-column justify-content-between h-100">
-                                    <div>
-                                        <img
-                                            src={checkPhotoPath(userOffers?.items[i]?.image)}
-                                            alt={userOffers?.items[i]?.categoryForUser}
-                                            className="ads-img"
-                                        />
+                                <NavLink to={`/adv-page/${userOffers?.items[i].id}`}>
+                                    <div className="acc-box ads d-flex flex-column justify-content-between h-100">
+                                        <div>
+                                            <img
+                                                src={checkPhotoPath(userOffers?.items[i]?.image)}
+                                                alt={userOffers?.items[i]?.categoryForUser}
+                                                className="ads-img"
+                                            />
+                                        </div>
+                                        <div className="fw_5 f_09 mt-2">{userOffers?.items[i]?.categoryForUser}</div>
+                                        <div
+                                            className="gray f_09 mt-1">{userOffers?.items[i]?.subsection?.area?.name}</div>
                                     </div>
-                                    <div className="fw_5 f_09 mt-2">{userOffers?.items[i]?.categoryForUser}</div>
-                                    <div className="gray f_09 mt-1">{userOffers?.items[i]?.subsection?.area?.name}</div>
-                                </div>
-                            </NavLink>
+                                </NavLink>
                             </div>
                         )}
                         {userOffers?.items[i + 1] && (
-                            <div key={i+1}>
-                                <NavLink to={`/adv-page/${userOffers?.items[i+1].id}`} >
-                                <div className="acc-box ads d-flex flex-column justify-content-between h-100">
-                                    <div>
-                                        <img
-                                            src={checkPhotoPath(userOffers?.items[i + 1]?.image)}
-                                            alt={userOffers?.items[i + 1]?.categoryForUser}
-                                            className="ads-img"
-                                        />
+                            <div key={i + 1}>
+                                <NavLink to={`/adv-page/${userOffers?.items[i + 1].id}`}>
+                                    <div className="acc-box ads d-flex flex-column justify-content-between h-100">
+                                        <div>
+                                            <img
+                                                src={checkPhotoPath(userOffers?.items[i + 1]?.image)}
+                                                alt={userOffers?.items[i + 1]?.categoryForUser}
+                                                className="ads-img"
+                                            />
+                                        </div>
+                                        <div
+                                            className="fw_5 f_09 mt-2">{userOffers?.items[i + 1]?.categoryForUser}</div>
+                                        <div className="gray f_09 mt-1">
+                                            {userOffers?.items[i + 1]?.subsection?.area?.name}
+                                        </div>
                                     </div>
-                                    <div className="fw_5 f_09 mt-2">{userOffers?.items[i + 1]?.categoryForUser}</div>
-                                    <div className="gray f_09 mt-1">
-                                        {userOffers?.items[i + 1]?.subsection?.area?.name}
-                                    </div>
-                                </div>
                                 </NavLink>
                             </div>
                         )}
                         {userOffers?.items[i + 2] && (
-                            <div key={i+2}>
-                                <NavLink to={`/adv-page/${userOffers?.items[i+2].id}`} >
-                                <div className="acc-box ads d-flex flex-column justify-content-between h-100">
-                                    <div>
-                                        <img
-                                            src={checkPhotoPath(userOffers?.items[i + 2]?.image)}
-                                            alt={userOffers?.items[i + 2]?.categoryForUser}
-                                            className="ads-img"
-                                        />
+                            <div key={i + 2}>
+                                <NavLink to={`/adv-page/${userOffers?.items[i + 2].id}`}>
+                                    <div className="acc-box ads d-flex flex-column justify-content-between h-100">
+                                        <div>
+                                            <img
+                                                src={checkPhotoPath(userOffers?.items[i + 2]?.image)}
+                                                alt={userOffers?.items[i + 2]?.categoryForUser}
+                                                className="ads-img"
+                                            />
+                                        </div>
+                                        <div
+                                            className="fw_5 f_09 mt-2">{userOffers?.items[i + 2]?.categoryForUser}</div>
+                                        <div className="gray f_09 mt-1">
+                                            {userOffers?.items[i + 2]?.subsection?.area?.name}
+                                        </div>
                                     </div>
-                                    <div className="fw_5 f_09 mt-2">{userOffers?.items[i + 2]?.categoryForUser}</div>
-                                    <div className="gray f_09 mt-1">
-                                        {userOffers?.items[i + 2]?.subsection?.area?.name}
-                                    </div>
-                                </div>
                                 </NavLink>
                             </div>
                         )}
@@ -115,24 +118,26 @@ const UserProfile: FC = () => {
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
-                <MdOutlineArrowBack /> <span className="ms-2">Назад</span>
+                <MdOutlineArrowBack/> <span className="ms-2">Назад</span>
             </Link>
             <div className="acc-box">
                 <div className="row">
                     <div className="col-md-4 mb-3 mb-sm-4 mb-md-0">
                         <h4 className="fw_7 text-center">{user?.fullName}</h4>
-                        <img src={checkPhotoPath(user?.avatar)} alt={user?.fullName} className="user-photo" />
+                        <img src={checkPhotoPath(user?.avatar)} alt={user?.fullName} className="user-photo"/>
                         <div className="acc-box acc-friends mt-3 mt-xl-4">
                             <div className="d-flex flex-column align-items-center">
-                                <Link to="/account/profile/partners">
-                                    <span>Бизнес-партнёры</span>
-                                    <div className="notificationAll d-inline mx-2">{incomingFriends || ''}</div>
-                                </Link>
+                                    <Link to="/account/profile/partners">
+                                        <span>Бизнес-партнёры</span>
+                                        {incomingFriends>0 &&
+                                            <div className="notificationAll d-inline mx-2">{incomingFriends}</div>
+                                        }
+                                    </Link>
                                 <NavLink
                                     to="/account/profile/partners"
                                     className="blue mx-md-auto mx-xl-0 mt-md-2 mt-xl-0"
                                 >
-                                    <MdAddCircle className="f_12" />
+                                    <MdAddCircle className="f_12"/>
                                     <span className="ms-1">Добавить</span>
                                 </NavLink>
                             </div>
@@ -149,8 +154,8 @@ const UserProfile: FC = () => {
                                         currentFriends?.items?.map((friend, index) => (
                                             <NavLink key={index} to={`/account/profile/user/${friend.id}`}>
                                                 <div>
-                                                    <img src={checkPhotoPath(friend?.avatar)} alt={friend?.fullName} />
-                                                    <br />
+                                                    <img src={checkPhotoPath(friend?.avatar)} alt={friend?.fullName}/>
+                                                    <br/>
 
                                                     {friend.fullName}
                                                 </div>
@@ -164,7 +169,7 @@ const UserProfile: FC = () => {
                                     )
                                 ) : (
                                     <div className="p-5 w-100 d-flex justify-content-center">
-                                        <Loader color="#343434" />
+                                        <Loader color="#343434"/>
                                     </div>
                                 )}
                             </div>
@@ -180,142 +185,142 @@ const UserProfile: FC = () => {
                                     <table className="table table-borderless acc-table mb-0">
                                         {user?.type === 0 && (
                                             <tbody>
+                                            <tr>
+                                                <td className="l-gray">Дата рождения:</td>
+                                                <td className="color-1">
+                                                    {user?.birthday ? user?.birthdayForUser : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">Город:</td>
+                                                <td className="color-1">
+                                                    {user?.city ? user?.city : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">Номер телефона:</td>
+                                                <td className="color-1">
+                                                    {user?.phone ? user?.phone : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">Адрес эл. почты:</td>
+                                                <td className="color-1">
+                                                    {user?.email ? user?.email : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            {user.type !== 0 && (
                                                 <tr>
-                                                    <td className="l-gray">Дата рождения:</td>
+                                                    <td className="l-gray">ИНН:</td>
                                                     <td className="color-1">
-                                                        {user?.birthday ? user?.birthdayForUser : 'Не установлено'}
+                                                        {user?.taxpayerIdentificationNumber
+                                                            ? user?.taxpayerIdentificationNumber
+                                                            : 'Не установлено'}
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td className="l-gray">Город:</td>
-                                                    <td className="color-1">
-                                                        {user?.city ? user?.city : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="l-gray">Номер телефона:</td>
-                                                    <td className="color-1">
-                                                        {user?.phone ? user?.phone : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="l-gray">Адрес эл. почты:</td>
-                                                    <td className="color-1">
-                                                        {user?.email ? user?.email : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                {user.type !== 0 && (
-                                                    <tr>
-                                                        <td className="l-gray">ИНН:</td>
-                                                        <td className="color-1">
-                                                            {user?.taxpayerIdentificationNumber
-                                                                ? user?.taxpayerIdentificationNumber
-                                                                : 'Не установлено'}
-                                                        </td>
-                                                    </tr>
-                                                )}
+                                            )}
                                             </tbody>
                                         )}
                                         {user?.type === 1 && (
                                             <tbody>
-                                                <tr>
-                                                    <td className="l-gray">Компания:</td>
-                                                    <td className="color-1">
-                                                        {user?.companyName ? user?.companyName : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="l-gray">ОГРНИП:</td>
-                                                    <td className="color-1">
-                                                        {user?.mainStateRegistrationNumber
-                                                            ? user?.mainStateRegistrationNumber
-                                                            : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="l-gray">ИНН:</td>
-                                                    <td className="color-1">
-                                                        {user?.taxpayerIdentificationNumber
-                                                            ? user?.taxpayerIdentificationNumber
-                                                            : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="l-gray">Город:</td>
-                                                    <td className="color-1">
-                                                        {user?.city ? user?.city : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="l-gray">Номер телефона:</td>
-                                                    <td className="color-1">
-                                                        {user?.phone ? user?.phone : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="l-gray">Адрес эл. почты:</td>
-                                                    <td className="color-1">
-                                                        {user?.email ? user?.email : 'Не установлено'}
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <td className="l-gray">Компания:</td>
+                                                <td className="color-1">
+                                                    {user?.companyName ? user?.companyName : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">ОГРНИП:</td>
+                                                <td className="color-1">
+                                                    {user?.mainStateRegistrationNumber
+                                                        ? user?.mainStateRegistrationNumber
+                                                        : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">ИНН:</td>
+                                                <td className="color-1">
+                                                    {user?.taxpayerIdentificationNumber
+                                                        ? user?.taxpayerIdentificationNumber
+                                                        : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">Город:</td>
+                                                <td className="color-1">
+                                                    {user?.city ? user?.city : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">Номер телефона:</td>
+                                                <td className="color-1">
+                                                    {user?.phone ? user?.phone : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">Адрес эл. почты:</td>
+                                                <td className="color-1">
+                                                    {user?.email ? user?.email : 'Не установлено'}
+                                                </td>
+                                            </tr>
                                             </tbody>
                                         )}
                                         {user?.type === 2 && (
                                             <tbody>
+                                            <tr>
+                                                <td className="l-gray">Компания:</td>
+                                                <td className="color-1">
+                                                    {user?.companyName ? user?.companyName : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">ОГРН:</td>
+                                                <td className="color-1">
+                                                    {user?.mainStateRegistrationNumber
+                                                        ? user?.mainStateRegistrationNumber
+                                                        : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">ИНН:</td>
+                                                <td className="color-1">
+                                                    {user?.taxpayerIdentificationNumber
+                                                        ? user?.taxpayerIdentificationNumber
+                                                        : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            {user?.legalAddress &&
                                                 <tr>
-                                                    <td className="l-gray">Компания:</td>
+                                                    <td className="l-gray">Юридический адрес:</td>
                                                     <td className="color-1">
-                                                        {user?.companyName ? user?.companyName : 'Не установлено'}
+                                                        {user?.legalAddress ? user?.legalAddress : 'Не установлено'}
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td className="l-gray">ОГРН:</td>
-                                                    <td className="color-1">
-                                                        {user?.mainStateRegistrationNumber
-                                                            ? user?.mainStateRegistrationNumber
-                                                            : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="l-gray">ИНН:</td>
-                                                    <td className="color-1">
-                                                        {user?.taxpayerIdentificationNumber
-                                                            ? user?.taxpayerIdentificationNumber
-                                                            : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                {user?.legalAddress &&
-                                                    <tr>
-                                                        <td className="l-gray">Юридический адрес:</td>
-                                                        <td className="color-1">
-                                                            {user?.legalAddress ? user?.legalAddress : 'Не установлено'}
-                                                        </td>
-                                                    </tr>
-                                                }
-                                                <tr>
-                                                    <td className="l-gray">Город:</td>
-                                                    <td className="color-1">
-                                                        {user?.city ? user?.city : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="l-gray">Номер телефона:</td>
-                                                    <td className="color-1">
-                                                        {user?.phone ? user?.phone : 'Не установлено'}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="l-gray">Адрес эл. почты:</td>
-                                                    <td className="color-1">
-                                                        {user?.email ? user?.email : 'Не установлено'}
-                                                    </td>
-                                                </tr>
+                                            }
+                                            <tr>
+                                                <td className="l-gray">Город:</td>
+                                                <td className="color-1">
+                                                    {user?.city ? user?.city : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">Номер телефона:</td>
+                                                <td className="color-1">
+                                                    {user?.phone ? user?.phone : 'Не установлено'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="l-gray">Адрес эл. почты:</td>
+                                                <td className="color-1">
+                                                    {user?.email ? user?.email : 'Не установлено'}
+                                                </td>
+                                            </tr>
                                             </tbody>
                                         )}
                                     </table>
                                 ) : (
                                     <div className="p-5 w-100 d-flex justify-content-center">
-                                        <Loader color="#343434" />
+                                        <Loader color="#343434"/>
                                     </div>
                                 )}
                             </div>
@@ -349,7 +354,7 @@ const UserProfile: FC = () => {
                                     )
                                 ) : (
                                     <div className="p-5 w-100 d-flex justify-content-center">
-                                        <Loader color="#343434" />
+                                        <Loader color="#343434"/>
                                     </div>
                                 )}
                             </div>
