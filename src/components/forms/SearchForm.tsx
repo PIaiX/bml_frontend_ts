@@ -205,7 +205,7 @@ const SearchForm: React.FC<Props> = ({
                             <div
                                 className="col-sm-6 col-md-4 col-lg-3 mb-2 mb-lg-2 collapse-content__module collapse-content__module_investment">
                                 <div className="mb-1">Объем инвестиций, руб.:</div>
-                                <div className="d-flex align-items-center">
+                                <div className={'d-flex align-items-center'}>
                                     <span className="me-2">от</span>
                                     <ValidateWrapper error={errors.investmentsFrom}>
                                         <input
@@ -216,7 +216,9 @@ const SearchForm: React.FC<Props> = ({
                                             })}
                                         />
                                     </ValidateWrapper>
-                                    <span className="mx-2">до</span>
+                                </div>
+                                <div className={'d-flex my-1 align-items-center'}>
+                                    <span className="me-2">до</span>
                                     <ValidateWrapper error={errors.investmentsTo}>
                                         <input
                                             type={'text'}

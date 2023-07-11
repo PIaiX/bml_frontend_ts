@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {MdOutlineArrowBack} from 'react-icons/md'
-import {useQuery} from 'react-query'
 import {getPartners, getTutorials} from '../../services/instructions'
 import {checkPhotoPath} from '../../helpers/photoLoader'
 import Loader from '../../components/utils/Loader'

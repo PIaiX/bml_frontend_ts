@@ -18,8 +18,6 @@ const NewsPreview: FC<Props> = (props) => {
                 <img src={checkPhotoPath(props.imgUrl)} alt={props.title}/>
                 <div className="px-2">
                     <p className="title">{props.title}</p>
-                    <div className="text" dangerouslySetInnerHTML={{__html: props?.text ? props?.text : ''}}>
-                    </div>
                     <div className={'p-3 '}>
                         Подробнее
                     </div>
