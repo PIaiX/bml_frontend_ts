@@ -41,6 +41,7 @@ const NewAd = () => {
         category: 0,
     })
     const [anchor, functionForAnchor]: any = useAnchor()
+    const [isNotSended, setIsNotSended] = useState<boolean>(true)
     const {state} = useLocation()
     const isBuyAgain=state?.isBuyAgain
     const user: IUser | null = useAppSelector((state) => state?.user?.user)
@@ -291,6 +292,7 @@ const NewAd = () => {
             formData.append(key, req[key])
         imageViewer.forEach((image: any) => formData.append('images[]', image?.initialFile))
 
+        setIsNotSended(false)
         createOffer(formData)
             .then((res) => {
                 if (res && premium)
@@ -300,7 +302,10 @@ const NewAd = () => {
                     afterPay(res)
                 }
             })
-            .catch(() => afterPay(null))
+            .catch(() => {
+                setIsNotSended(true)
+                afterPay(null)
+            })
     }
 
     const saveChanges = (props:IOfferForm) => {
@@ -320,7 +325,6 @@ const NewAd = () => {
             paymentType
         }
 
-
         if(video!=''){
             if(formInfo?.videoThumbnail)
                 formData.append('videoThumbnail', formInfo?.videoThumbnail)
@@ -333,7 +337,7 @@ const NewAd = () => {
         imageViewer.forEach((image: any) => {
             formData.append('images[]', image?.initialFile)
         })
-
+        setIsNotSended(false)
         updateOffer(id, formData)
             .then(res => {
                 if (res){
@@ -345,7 +349,10 @@ const NewAd = () => {
                     }
                 }
             })
-            .catch(() => afterPay(null))
+            .catch(() =>{
+                setIsNotSended(true)
+                afterPay(null)
+            })
     }
 
     const [city, setCity] = useState<string>('')
@@ -358,6 +365,8 @@ const NewAd = () => {
     }
 
     const filterFunc = (data: any) => {
+        if(!isNotSended)
+            return
         if (city === '') return 0
         // избавляем наши числа от пробелов
         let ValuesFroPrice = ['branchCount', 'price', 'investments', 'pricePerMonth', 'profitPerMonth', 'profit', 'soldBranchCount']
