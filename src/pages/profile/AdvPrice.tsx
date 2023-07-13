@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {IOPremium} from "../../models/offers";
 import {checkPhotoPath} from "../../helpers/photoLoader";
 
@@ -13,6 +13,7 @@ const AdvPrice = (props:IOPremium) => {
             return '/images/photo-replacer.jpg'
         }
     }
+
     return (
         <div
             className={(props.selected) ? 'ad-price picked' : 'ad-price'}
@@ -38,4 +39,4 @@ const AdvPrice = (props:IOPremium) => {
 }
 
 
-export default AdvPrice;
+export default memo(AdvPrice);

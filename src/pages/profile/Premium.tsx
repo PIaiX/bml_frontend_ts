@@ -10,6 +10,7 @@ import {useAppDispatch} from "../../hooks/store";
 import {setBalance} from "../../store/reducers/userSlice";
 import {showAlert} from "../../store/reducers/alertSlice";
 import {getBalance} from "../../services/users";
+import AdvBannerNotClickable from "./AdvBannerNotClickable";
 
 
 interface propsType{
@@ -86,6 +87,26 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment, pro
                    dispatch(showAlert({message: 'Оплата не прошла', typeAlert: 'bad'}))
            })
     }
+
+    const clickOnPremium = (i:IOPremium)=>{
+        if(banners){
+            currentId(i.id)
+            if(!i.isBlocked && idPost!==i.id && i.employedUntillForUser===undefined && i.type!=='big'  && (!i.premiumFranchise || i?.premiumFranchise?.canOutbid!==false)){
+                const newSum=data.placedForMonths==='1'?banners[i.id-1].priceThreeMonths:banners[i.id-1].priceSixMonths
+                setData((prevState: any) => ({
+                    ...prevState,
+                    slot: prevState === i.id ? '' : i.id,
+                    sum:newSum
+                }))
+            }
+            else {
+                const { slot,...dat}=data;
+                const da={...dat, sum:0}
+                setData(da)
+            }
+        }
+    }
+
     return (
         <>
             <Link to="/account" className="color-1 f_11 fw_5 d-flex align-items-center d-lg-none mb-3 mb-sm-4">
@@ -102,34 +123,45 @@ const Premium: FC<propsType> = ({setChange, priceWithoutPremium, setPayment, pro
                     напомните пользователю о том, что он забыл оформить заявку или подписаться на вас.
                 </p>
                 <div className="row g-2 g-sm-3 mb-4 mb-sm-5">
-                    {banners.map((i, index) => (
+                    {banners?.slice(0,12)?.map((i, index) => (
                         <div
                             className={i.type==='big' ? 'col-12' : 'col-6 col-md-4 col-xxl-3'}
                             key={i.id}
-                            onClick={() => {
-                                currentId(i.id)
-                                if(!i.isBlocked && idPost!==i.id && i.employedUntillForUser===undefined && i.type!=='big'  && (!i.premiumFranchise || i?.premiumFranchise?.canOutbid==true)){
-                                    const newSum=data.placedForMonths==='1'?banners[i.id-1].priceThreeMonths:banners[i.id-1].priceSixMonths
-                                    setData((prevState: any) => ({
-                                        ...prevState,
-                                        slot: prevState === i.id ? '' : i.id,
-                                        sum:newSum
-                                    }))
-                                }
-                                else {
-                                    const { slot,...dat}=data;
-                                    const da={...dat, sum:0}
-                                    setData(da)
-                                    }
-                            }}
-                        >
+                            onClick={() => clickOnPremium(i)}>
                             <AdvPrice {...{
                                 ...i,
                                 bigPicture: validBigPhoto(lookBigPicture)[1],
                                 littlePicture:validLittlePhoto(lookLittleBanner)[1],
-                                selected:filterType((i.type!=='big' && !i.isBlocked && i.employedUntillForUser!=='' && !i.premiumFranchise), i.id)
+                                selected:filterType((i.type!=='big' && !i.isBlocked && i.employedUntillForUser!=='' && (i.premiumFranchise?.canOutbid || !i.premiumFranchise)), i.id)
                             }} />
-
+                        </div>
+                    ))}
+                    <AdvBannerNotClickable/>
+                    {banners?.slice(12,24)?.map((i, index) => (
+                        <div
+                            className={i.type==='big' ? 'col-12' : 'col-6 col-md-4 col-xxl-3'}
+                            key={i.id}
+                            onClick={() => clickOnPremium(i)}>
+                            <AdvPrice {...{
+                                ...i,
+                                bigPicture: validBigPhoto(lookBigPicture)[1],
+                                littlePicture:validLittlePhoto(lookLittleBanner)[1],
+                                selected:filterType((i.type!=='big' && !i.isBlocked && i.employedUntillForUser!=='' && (i.premiumFranchise?.canOutbid || !i.premiumFranchise)), i.id)
+                            }} />
+                        </div>
+                    ))}
+                    <AdvBannerNotClickable/>
+                    {banners?.slice(24,36).map((i, index) => (
+                        <div
+                            className={i.type==='big' ? 'col-12' : 'col-6 col-md-4 col-xxl-3'}
+                            key={i.id}
+                            onClick={() => clickOnPremium(i)}>
+                            <AdvPrice {...{
+                                ...i,
+                                bigPicture: validBigPhoto(lookBigPicture)[1],
+                                littlePicture:validLittlePhoto(lookLittleBanner)[1],
+                                selected:filterType((i.type!=='big' && !i.isBlocked && i.employedUntillForUser!=='' && (i.premiumFranchise?.canOutbid || !i.premiumFranchise)), i.id)
+                            }} />
                         </div>
                     ))}
 
