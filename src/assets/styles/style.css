@@ -2075,6 +2075,7 @@ CHAT
 **************/
 .chat-preview {
     display: flex;
+    cursor:pointer;
     justify-content: space-between;
     align-items: center;
     padding: 1em 2em;

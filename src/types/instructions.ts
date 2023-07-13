@@ -5,6 +5,7 @@ export type IPartnersItem = {
     media: string
     mediaType: boolean
     link:string
+    embed:string
     videoThumbnail:string
     createdAt: string
     updatedAt: string
