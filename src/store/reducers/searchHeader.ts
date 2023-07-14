@@ -4,7 +4,7 @@ type Propstype={
     input:string
 }
 
-const initialState = {
+const initialState:Propstype = {
     input: ""
 }
 

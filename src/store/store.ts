@@ -1,14 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { newsApi } from '../services/RTK/newsApi'
-import { bannerApi } from '../services/RTK/bannerApi'
-import { userSlice } from './reducers/userSlice'
-import { alertSlice } from './reducers/alertSlice'
-import { offersApi } from '../services/RTK/offersApi'
-import { citySlice } from './reducers/citySlice'
-import { favoriteCountSlice } from './reducers/favoriteCountSlice'
-import { searchHeaderSlice } from './reducers/searchHeader'
+import {configureStore} from '@reduxjs/toolkit'
+import {newsApi} from '../services/RTK/newsApi'
+import {bannerApi} from '../services/RTK/bannerApi'
+import {userSlice} from './reducers/userSlice'
+import {alertSlice} from './reducers/alertSlice'
+import {offersApi} from '../services/RTK/offersApi'
+import {citySlice} from './reducers/citySlice'
+import {favoriteCountSlice} from './reducers/favoriteCountSlice'
+import {searchHeaderSlice} from './reducers/searchHeader'
 import notificationReducer from './reducers/notificationSlice'
-import {PartnersReducers,PartnersActions} from './reducers/partnersSlice'
+import {PartnersReducers} from './reducers/partnersSlice'
+
 const store = configureStore({
     reducer: {
         [newsApi.reducerPath]: newsApi.reducer,
